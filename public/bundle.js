@@ -54,23 +54,23 @@
 	
 	var _components2 = _interopRequireDefault(_components);
 	
-	__webpack_require__(36);
+	var _services = __webpack_require__(44);
 	
-	var _angularUiRouter = __webpack_require__(38);
+	var _services2 = _interopRequireDefault(_services);
+	
+	__webpack_require__(47);
+	
+	var _angularUiRouter = __webpack_require__(49);
 	
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 	
-	var _routes = __webpack_require__(39);
+	var _routes = __webpack_require__(50);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var app = _angular2.default.module('myApp', [_components2.default,
-	// services,
-	_angularUiRouter2.default]);
-	// import services from './services';
-	
+	var app = _angular2.default.module('myApp', [_components2.default, _services2.default, _angularUiRouter2.default]);
 	
 	var dev = 'http://localhost:3000/api';
 	
@@ -33504,13 +33504,15 @@
 	var map = {
 		"./app/app.js": 8,
 		"./articles/articles.js": 10,
-		"./buy/buy.js": 16,
-		"./footer-content/footer-content.js": 20,
-		"./header-content/header-content.js": 24,
-		"./hero-image/hero-image.js": 26,
-		"./home/home.js": 28,
-		"./landing/landing.js": 30,
-		"./nav-bar/nav-bar.js": 34
+		"./buy/buy-head/buy-head.js": 16,
+		"./buy/buy.js": 20,
+		"./buy/item/item.js": 24,
+		"./footer-content/footer-content.js": 28,
+		"./header-content/header-content.js": 32,
+		"./hero-image/hero-image.js": 34,
+		"./home/home.js": 36,
+		"./landing/landing.js": 38,
+		"./nav-bar/nav-bar.js": 42
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -33944,20 +33946,20 @@
 	    value: true
 	});
 	
-	var _buy = __webpack_require__(17);
+	var _buyHead = __webpack_require__(17);
 	
-	var _buy2 = _interopRequireDefault(_buy);
+	var _buyHead2 = _interopRequireDefault(_buyHead);
 	
-	var _buy3 = __webpack_require__(18);
+	var _buyHead3 = __webpack_require__(18);
 	
-	var _buy4 = _interopRequireDefault(_buy3);
+	var _buyHead4 = _interopRequireDefault(_buyHead3);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = {
-	    template: _buy2.default,
+	    template: _buyHead2.default,
 	    controller: function controller() {
-	        this.styles = _buy4.default;
+	        this.styles = _buyHead4.default;
 	    }
 	};
 
@@ -33965,7 +33967,7 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "<img class=\"under-header\" src=\"https://github.com/willnickerson/earth-house-juice/blob/master/shop.jpeg?raw=true\">\n<section class=\"buy\">\n    <h1>Where to buy.</h1>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde laboriosam suscipit neque sit ea atque sint voluptate saepe soluta molestiae non ipsa, harum voluptatibus et eligendi vitae error, veritatis ab!</p>\n    <h2>Online store coming soon!</h2>\n</section>";
+	module.exports = "<img ng-class=\"$ctrl.styles.banner-img\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\">\n<h1>Shop</h1>";
 
 /***/ },
 /* 18 */
@@ -33975,6 +33977,137 @@
 	
 	// load the styles
 	var content = __webpack_require__(19);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(15)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./buy-head.scss", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./buy-head.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(14)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".UO2LFdj7pKFKXmdWBdZzy {\n  width: 100%; }\n", "", {"version":3,"sources":["/./src/components/buy/buy-head/src/components/buy/buy-head/buy-head.scss"],"names":[],"mappings":"AAAA;EACI,YACJ,EAAE","file":"buy-head.scss","sourcesContent":[":local(.banner-img) {\n    width: 100%\n};"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+	exports.locals = {
+		"banner-img": "UO2LFdj7pKFKXmdWBdZzy"
+	};
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _buy = __webpack_require__(21);
+	
+	var _buy2 = _interopRequireDefault(_buy);
+	
+	var _buy3 = __webpack_require__(22);
+	
+	var _buy4 = _interopRequireDefault(_buy3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _buy2.default,
+	    bindings: {
+	        juices: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	function controller() {
+	    this.styles = _buy4.default;
+	    // this.juices = [
+	    //     {
+	    //         name: 'juice1',
+	    //         imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1484691353/juice-cutout_xv4eaf.jpg',
+	    //         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis voluptates optio molestias aspernatur nulla eos suscipit vitae architecto earum minus quod praesentium vel, totam atque officiis neque. Culpa, dolorem, provident?',
+	    //         price: 6.00
+	    //     },
+	    //     {
+	    //         name: 'juice2',
+	    //         imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1484691353/juice-cutout_xv4eaf.jpg',
+	    //         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis voluptates optio molestias aspernatur nulla eos suscipit vitae architecto earum minus quod praesentium vel, totam atque officiis neque. Culpa, dolorem, provident?',
+	    //         price: 6.00
+	    //     },
+	    //     {
+	    //         name: 'juice3',
+	    //         imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1484691353/juice-cutout_xv4eaf.jpg',
+	    //         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis voluptates optio molestias aspernatur nulla eos suscipit vitae architecto earum minus quod praesentium vel, totam atque officiis neque. Culpa, dolorem, provident?',
+	    //         price: 6.00
+	    //     },
+	    //     {
+	    //         name: 'juice4',
+	    //         imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1484691353/juice-cutout_xv4eaf.jpg',
+	    //         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis voluptates optio molestias aspernatur nulla eos suscipit vitae architecto earum minus quod praesentium vel, totam atque officiis neque. Culpa, dolorem, provident?',
+	    //         price: 6.00
+	    //     },
+	    //     {
+	    //         name: 'juice5',
+	    //         imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1484691353/juice-cutout_xv4eaf.jpg',
+	    //         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis voluptates optio molestias aspernatur nulla eos suscipit vitae architecto earum minus quod praesentium vel, totam atque officiis neque. Culpa, dolorem, provident?',
+	    //         price: 6.00
+	    //     },
+	    //     {
+	    //         name: 'juice6',
+	    //         imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1484691353/juice-cutout_xv4eaf.jpg',
+	    //         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis voluptates optio molestias aspernatur nulla eos suscipit vitae architecto earum minus quod praesentium vel, totam atque officiis neque. Culpa, dolorem, provident?',
+	    //         price: 6.00
+	    //     },
+	    //     {
+	    //         name: 'juice7',
+	    //         imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1484691353/juice-cutout_xv4eaf.jpg',
+	    //         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis voluptates optio molestias aspernatur nulla eos suscipit vitae architecto earum minus quod praesentium vel, totam atque officiis neque. Culpa, dolorem, provident?',
+	    //         price: 6.00
+	    //     },
+	    //     {
+	    //         name: 'juice8',
+	    //         imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1484691353/juice-cutout_xv4eaf.jpg',
+	    //         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis voluptates optio molestias aspernatur nulla eos suscipit vitae architecto earum minus quod praesentium vel, totam atque officiis neque. Culpa, dolorem, provident?',
+	    //         price: 6.00
+	    //     },
+	    // ];
+	}
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	module.exports = "<!--<img class=\"under-header\" src=\"https://github.com/willnickerson/earth-house-juice/blob/master/shop.jpeg?raw=true\">-->\n<section class=\"buy\">\n    <h1>Where to buy.</h1>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde laboriosam suscipit neque sit ea atque sint voluptate saepe soluta molestiae non ipsa, harum voluptatibus et eligendi vitae error, veritatis ab!</p>\n    <h2>Online store coming soon!</h2>\n</section>\n<section class=\"items\">\n        <ul>\n            <li class=\"item\" ng-repeat=\"juice in $ctrl.juices\">\n                <img src=\"{{juice.imgUrl}}\">\n                <div class=\"item-info\">\n                    <h4 ui-sref=\"item({\n                    id: juice._id})\">{{juice.name}}</h4>\n                    <p>${{juice.price}}.00</p>\n                </div>\n            </li>\n        </ul>\n</section>";
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(23);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(15)(content, {});
@@ -33994,7 +34127,7 @@
 	}
 
 /***/ },
-/* 19 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(14)();
@@ -34002,13 +34135,13 @@
 	
 	
 	// module
-	exports.push([module.id, "section.buy {\n  width: 60%;\n  margin: 0 auto;\n  position: relative;\n  top: -360px; }\n  section.buy h1 {\n    font-size: 4em;\n    color: #8282ff;\n    margin: 0;\n    display: inline; }\n  section.buy p {\n    display: inline;\n    font-size: 1.25em; }\n  section.buy h2 {\n    font-size: 3em;\n    font-family: 'Montserrat', sans-serif;\n    text-align: center;\n    margin: 0; }\n\nimg.under-header {\n  z-index: -1;\n  position: relative;\n  top: -110px;\n  display: block; }\n", "", {"version":3,"sources":["/./src/components/buy/src/components/buy/buy.scss"],"names":[],"mappings":"AAAA;EACI,WAAU;EACV,eAAc;EACd,mBAAkB;EAClB,YAAW,EAkBd;EAtBD;IAMQ,eAAc;IACd,eAAuB;IACvB,UAAS;IACT,gBAAe,EAClB;EAVL;IAaQ,gBAAe;IACf,kBAAiB,EACpB;EAfL;IAiBQ,eAAc;IACd,sCAAqC;IACrC,mBAAkB;IAClB,UAAS,EACZ;;AAGL;EACI,YAAW;EACX,mBAAkB;EAClB,YAAW;EACX,eAAc,EACjB","file":"buy.scss","sourcesContent":["section.buy {\n    width: 60%;\n    margin: 0 auto;\n    position: relative;\n    top: -360px;\n    h1 {\n        font-size: 4em;\n        color: rgb(130,130,255);\n        margin: 0;\n        display: inline;\n    }\n\n    p{\n        display: inline;\n        font-size: 1.25em;\n    }\n    h2 {\n        font-size: 3em;\n        font-family: 'Montserrat', sans-serif; \n        text-align: center;\n        margin: 0;\n    }\n}\n\nimg.under-header {\n    z-index: -1;\n    position: relative;\n    top: -110px;\n    display: block;\n}\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "section.buy {\n  width: 60%;\n  margin: 0 auto;\n  position: relative;\n  top: -360px; }\n  section.buy h1 {\n    font-size: 4em;\n    color: #8282ff;\n    margin: 0;\n    display: inline; }\n  section.buy p {\n    display: inline;\n    font-size: 1.25em; }\n  section.buy h2 {\n    font-size: 3em;\n    font-family: 'Montserrat', sans-serif;\n    text-align: center;\n    margin: 0; }\n\nimg.under-header {\n  z-index: -1;\n  position: relative;\n  top: -110px;\n  display: block; }\n\n.items {\n  width: 80%;\n  margin: 0 auto; }\n\n.item {\n  margin-right: 10%;\n  width: 17%;\n  display: inline-block; }\n\n.item:nth-child(4) {\n  margin-right: 0; }\n\n.item:last-child {\n  margin-right: 0; }\n\n.item-info {\n  text-align: center; }\n  .item-info h4 {\n    margin-bottom: 0; }\n  .item-info p {\n    margin-top: 0; }\n", "", {"version":3,"sources":["/./src/components/buy/src/components/buy/buy.scss"],"names":[],"mappings":"AAAA;EACI,WAAU;EACV,eAAc;EACd,mBAAkB;EAClB,YAAW,EAkBd;EAtBD;IAMQ,eAAc;IACd,eAAuB;IACvB,UAAS;IACT,gBAAe,EAClB;EAVL;IAaQ,gBAAe;IACf,kBAAiB,EACpB;EAfL;IAiBQ,eAAc;IACd,sCAAqC;IACrC,mBAAkB;IAClB,UAAS,EACZ;;AAGL;EACI,YAAW;EACX,mBAAkB;EAClB,YAAW;EACX,eAAc,EACjB;;AAED;EACI,WAAU;EACV,eAAc,EACjB;;AAED;EACI,kBAAiB;EACjB,WAAU;EACV,sBAAqB,EACxB;;AAED;EACI,gBAAe,EAClB;;AAED;EACI,gBAAe,EAClB;;AAED;EACI,mBAAkB,EAOrB;EARD;IAGQ,iBAAgB,EACnB;EAJL;IAMQ,cAAa,EAChB","file":"buy.scss","sourcesContent":["section.buy {\n    width: 60%;\n    margin: 0 auto;\n    position: relative;\n    top: -360px;\n    h1 {\n        font-size: 4em;\n        color: rgb(130,130,255);\n        margin: 0;\n        display: inline;\n    }\n\n    p{\n        display: inline;\n        font-size: 1.25em;\n    }\n    h2 {\n        font-size: 3em;\n        font-family: 'Montserrat', sans-serif; \n        text-align: center;\n        margin: 0;\n    }\n}\n\nimg.under-header {\n    z-index: -1;\n    position: relative;\n    top: -110px;\n    display: block;\n}\n\n.items {\n    width: 80%;\n    margin: 0 auto;\n}\n\n.item {\n    margin-right: 10%;\n    width: 17%;\n    display: inline-block;\n}\n\n.item:nth-child(4) {\n    margin-right: 0;\n}\n\n.item:last-child {\n    margin-right: 0;\n}\n\n.item-info {\n    text-align: center;\n    h4 {\n        margin-bottom: 0;   \n    }\n    p {\n        margin-top: 0;\n    }\n}\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
 
 /***/ },
-/* 20 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34017,11 +34150,89 @@
 	    value: true
 	});
 	
-	var _footerContent = __webpack_require__(21);
+	var _item = __webpack_require__(25);
+	
+	var _item2 = _interopRequireDefault(_item);
+	
+	var _item3 = __webpack_require__(26);
+	
+	var _item4 = _interopRequireDefault(_item3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _item2.default,
+	    bindings: {
+	        item: '<'
+	    },
+	    controller: function controller() {
+	        this.styles = _item4.default;
+	    }
+	};
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	module.exports = "<div ng-class=\"$ctrl.styles.item\">\n    <h2>{{$ctrl.item.name}}</h2>\n    <p>{{$ctrl.item.description}}</p>\n    <img src=\"{{$ctrl.item.imgUrl}}\">\n</div>\n";
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(27);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(15)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(14)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "._1x_Tg18KFkiE-VXbzOVUy6 img {\n  width: 20%; }\n", "", {"version":3,"sources":["/./src/components/buy/item/src/components/buy/item/item.scss"],"names":[],"mappings":"AAAA;EAEQ,WAAU,EACb","file":"item.scss","sourcesContent":[":local(.item) {\n    img {\n        width: 20%;\n    }\n}"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+	exports.locals = {
+		"item": "_1x_Tg18KFkiE-VXbzOVUy6"
+	};
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _footerContent = __webpack_require__(29);
 	
 	var _footerContent2 = _interopRequireDefault(_footerContent);
 	
-	var _footerContent3 = __webpack_require__(22);
+	var _footerContent3 = __webpack_require__(30);
 	
 	var _footerContent4 = _interopRequireDefault(_footerContent3);
 	
@@ -34035,19 +34246,19 @@
 	};
 
 /***/ },
-/* 21 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"footer-container\">\n    <div>\n        <h3>Shop</h3>\n        <ul>\n            <li>Buy Online</li>\n            <li>Buy in Person</li>\n        </ul>\n    </div>\n\n    <div>\n        <h3>About</h3>\n        <ul>\n            <li>Our Juices</li>\n            <li>Our Mission</li>\n            <li>Our Customers</li>\n            <li>Our team</li>\n        </ul>\n    </div>\n\n    <div>\n        <h3>Social Media</h3>\n        <ul>\n            <li>Instagram</li>\n            <li>Facebook</li>\n            <li>Twitter</li>\n        </ul>\n    </div>\n\n    <div>\n        <h3>Contact</h3>\n        <ul>\n            <li>(XXX)XXX-XXXX</li>\n            <li>xxxxx@xxx.com</li>\n        </ul>\n    </div>\n</div>";
 
 /***/ },
-/* 22 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(23);
+	var content = __webpack_require__(31);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(15)(content, {});
@@ -34067,7 +34278,7 @@
 	}
 
 /***/ },
-/* 23 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(14)();
@@ -34081,7 +34292,7 @@
 
 
 /***/ },
-/* 24 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34090,7 +34301,7 @@
 	    value: true
 	});
 	
-	var _headerContent = __webpack_require__(25);
+	var _headerContent = __webpack_require__(33);
 	
 	var _headerContent2 = _interopRequireDefault(_headerContent);
 	
@@ -34101,13 +34312,13 @@
 	};
 
 /***/ },
-/* 25 */
+/* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"header-container\">\n    <img class=\"banner-img\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\">\n        <div class=\"left\">\n            <h1>Earth House</h1>\n            <nav-bar></nav-bar>\n        </div>\n        <div class=\"right\">\n            <a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n</div>";
+	module.exports = "\n<div class=\"header-container\">\n    <!--<img class=\"banner-img\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\">-->\n        <div class=\"left\">\n            <h1>Earth House</h1>\n            <nav-bar></nav-bar>\n        </div>\n        <div class=\"right\">\n            <a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n</div>";
 
 /***/ },
-/* 26 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34116,7 +34327,7 @@
 	    value: true
 	});
 	
-	var _heroImage = __webpack_require__(27);
+	var _heroImage = __webpack_require__(35);
 	
 	var _heroImage2 = _interopRequireDefault(_heroImage);
 	
@@ -34128,13 +34339,13 @@
 	};
 
 /***/ },
-/* 27 */
+/* 35 */
 /***/ function(module, exports) {
 
 	module.exports = "<section>\n    <img ng-src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867043/earth house/wood-spread-1_cda0uc.jpg\">\n</section>";
 
 /***/ },
-/* 28 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34143,7 +34354,7 @@
 	    value: true
 	});
 	
-	var _home = __webpack_require__(29);
+	var _home = __webpack_require__(37);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
@@ -34155,13 +34366,13 @@
 	};
 
 /***/ },
-/* 29 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<hero-image></hero-image>\n<articles></articles>\n";
 
 /***/ },
-/* 30 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34170,11 +34381,11 @@
 	    value: true
 	});
 	
-	var _landing = __webpack_require__(31);
+	var _landing = __webpack_require__(39);
 	
 	var _landing2 = _interopRequireDefault(_landing);
 	
-	var _landing3 = __webpack_require__(32);
+	var _landing3 = __webpack_require__(40);
 	
 	var _landing4 = _interopRequireDefault(_landing3);
 	
@@ -34188,19 +34399,19 @@
 	};
 
 /***/ },
-/* 31 */
+/* 39 */
 /***/ function(module, exports) {
 
 	module.exports = "<img src=\"https://github.com/willnickerson/earth-house-juice/blob/master/blue-spread.jpeg?raw=true\">\n";
 
 /***/ },
-/* 32 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(33);
+	var content = __webpack_require__(41);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(15)(content, {});
@@ -34220,7 +34431,7 @@
 	}
 
 /***/ },
-/* 33 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(14)();
@@ -34234,7 +34445,7 @@
 
 
 /***/ },
-/* 34 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34243,7 +34454,7 @@
 	    value: true
 	});
 	
-	var _navBar = __webpack_require__(35);
+	var _navBar = __webpack_require__(43);
 	
 	var _navBar2 = _interopRequireDefault(_navBar);
 	
@@ -34254,19 +34465,102 @@
 	};
 
 /***/ },
-/* 35 */
+/* 43 */
 /***/ function(module, exports) {
 
-	module.exports = "<nav>\n    <ul>\n        <li ui-sref=\"home\" class=\"link\">Home</li>\n        <li ui-sref=\"buy\" class=\"link\"link>Buy</li>\n        <li class=\"link\">About</li>\n        <li class=\"link\">Contact</li>\n    </ul>\n</nav>";
+	module.exports = "<nav>\n    <ul>\n        <li ui-sref=\"home\" class=\"link\">Home</li>\n        <li ui-sref=\"shop\" class=\"link\"link>Shop</li>\n        <li class=\"link\">About</li>\n        <li class=\"link\">Contact</li>\n    </ul>\n</nav>";
 
 /***/ },
-/* 36 */
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _angular = __webpack_require__(1);
+	
+	var _angular2 = _interopRequireDefault(_angular);
+	
+	var _camelcase = __webpack_require__(4);
+	
+	var _camelcase2 = _interopRequireDefault(_camelcase);
+	
+	var _path = __webpack_require__(5);
+	
+	var _path2 = _interopRequireDefault(_path);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var context = __webpack_require__(45);
+	
+	var _module = _angular2.default.module('services', []);
+	
+	context.keys().forEach(function (key) {
+	    var name = (0, _camelcase2.default)(_path2.default.basename(key, '.js'));
+	    _module.factory(name, context(key).default);
+	});
+	
+	exports.default = _module.name;
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./juice-service.js": 46
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 45;
+
+
+/***/ },
+/* 46 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = juiceService;
+	juiceService.$inject = ['$http', 'apiUrl'];
+	
+	function juiceService($http, apiUrl) {
+	    return {
+	        getAll: function getAll() {
+	            return $http.get(apiUrl + '/juices').then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        get: function get(id) {
+	            return $http.get(apiUrl + '/juices/' + id).then(function (res) {
+	                return res.data;
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(37);
+	var content = __webpack_require__(48);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(15)(content, {});
@@ -34286,7 +34580,7 @@
 	}
 
 /***/ },
-/* 37 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(14)();
@@ -34294,13 +34588,13 @@
 	
 	
 	// module
-	exports.push([module.id, "body {\n  font-family: sans-serif;\n  margin: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none; }\n\n.link {\n  transition: all 0.3s ease; }\n\n.link:hover {\n  -webkit-transform: scale(1.1);\n  -ms-transform: scale(1.1);\n  transform: scale(1.1);\n  color: #d4f442;\n  cursor: pointer; }\n\nhero-image {\n  margin: 0;\n  padding: 0;\n  border-top: 5px solid #AAA; }\n\n.banner-img {\n  display: block;\n  position: relative;\n  top: -10px;\n  border-bottom: 5px solid #AAA;\n  border-top: 5px solid #AAA; }\n\nheader {\n  width: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 125px; }\n  header div {\n    position: absolute;\n    top: 5px;\n    width: 100%; }\n  header .banner-img {\n    z-index: 0; }\n  header .left {\n    display: inline-block;\n    max-width: 350px;\n    z-index: 1; }\n  header .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right;\n    z-index: 1; }\n    header .right span {\n      margin-right: 20px; }\n  header h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white;\n    display: inline-block; }\n  header nav {\n    margin-left: 5px;\n    margin-top: 5px; }\n    header nav ul {\n      list-style-type: none;\n      margin: 0;\n      padding: 0; }\n      header nav ul li {\n        text-align: center;\n        border-right: 1px solid white;\n        width: 23%;\n        display: inline-block;\n        color: white; }\n      header nav ul li:last-child {\n        border: none; }\n", "", {"version":3,"sources":["/./src/scss/src/scss/main.scss"],"names":[],"mappings":"AAAA;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB,EACxB;;AACD;EACI,0BAAyB,EAC5B;;AACD;EACI,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB;EACrB,eAAc;EACd,gBAAe,EAClB;;AAGD;EACI,UAAS;EACT,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,eAAc;EACd,mBAAkB;EAClB,WAAU;EACV,8BAA6B;EAC7B,2BAA0B,EAC7B;;AAED;EACI,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,cAAa,EAoDhB;EAzDD;IAOQ,mBAAkB;IAClB,SAAQ;IACR,YAAW,EACd;EAVL;IAYQ,WAAU,EACb;EAbL;IAeQ,sBAAqB;IACrB,iBAAgB;IAChB,WAAU,EACb;EAlBL;IAoBQ,iBAAgB;IAChB,aAAY;IACZ,kBAAiB;IACjB,WAAU,EAIb;IA3BL;MAyBY,mBAAkB,EACrB;EA1BT;IA6BQ,iBAAgB;IAChB,eAAc;IAEd,kCAAiC;IAEjC,eAAc;IACd,aAAY;IACZ,sBACJ,EAAE;EArCN;IAuCQ,iBAAgB;IAChB,gBAAe,EAgBlB;IAxDL;MA0CY,sBAAqB;MACrB,UAAS;MACT,WAAU,EAWb;MAvDT;QA8CgB,mBAAkB;QAClB,8BAA6B;QAC7B,WAAU;QACV,sBAAqB;QACrB,aAAY,EACf;MAnDb;QAqDgB,aAAY,EACf","file":"main.scss","sourcesContent":["body {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n}\n.link {\n    transition: all 0.3s ease;\n}\n.link:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #d4f442;\n    cursor: pointer;\n}\n\n\nhero-image {\n    margin: 0;\n    padding: 0;\n    border-top: 5px solid #AAA; \n}\n\n.banner-img {\n    display: block;\n    position: relative;\n    top: -10px;\n    border-bottom: 5px solid #AAA;\n    border-top: 5px solid #AAA;    \n}\n\nheader {\n    width: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 125px;\n    div {\n        position: absolute;\n        top: 5px;\n        width: 100%;\n    }\n    .banner-img {\n        z-index: 0;\n    }\n    .left {\n        display: inline-block;\n        max-width: 350px;\n        z-index: 1;\n    }\n    .right {\n        margin-top: 20px;\n        float: right;\n        text-align: right;\n        z-index: 1;\n        span {\n            margin-right: 20px;\n        }\n    }\n    h1 {\n        text-align: left;\n        margin: 0 20px;\n        // font-family: 'Montserrat', sans-serif;\n        font-family: 'Amatic SC', cursive;\n        // font-size: 3.1em;\n        font-size: 6em;\n        color: white;\n        display: inline-block\n    }\n    nav {\n        margin-left: 5px;\n        margin-top: 5px;  \n        ul {\n            list-style-type: none;\n            margin: 0;\n            padding: 0;\n            li {\n                text-align: center;\n                border-right: 1px solid white;\n                width: 23%;\n                display: inline-block;\n                color: white;\n            }\n            li:last-child {\n                border: none;\n            }\n        }\n    }\n}\n\n// .icon-facebook2:before {\n//     content: \"\\ea91\";\n//     color: white;\n//     font-size: 30px;\n// }\n\n// .icon-instagram:before {\n//     content: \"\\ea92\";\n//     color: white;\n//     font-size: 30px;\n// }\n\n// .icon-twitter:before {\n//     content: \"\\ea96\";\n//     color: white;\n//     font-size: 30px;\n//     transition: all .3s ease;\n// }\n\n// .icon-twitter:hover {\n//     color: yellow;\n// }\n\n// .icon {\n//     transition: all .3s ease;\n// }\n\n// .icon:hover {\n//     color: yellow;\n//     cursor: crosshair;\n// }"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "body {\n  font-family: sans-serif;\n  margin: 0; }\n\nul {\n  list-style-type: none;\n  padding: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none; }\n\n.link {\n  transition: all 0.3s ease; }\n\n.link:hover {\n  -webkit-transform: scale(1.1);\n  -ms-transform: scale(1.1);\n  transform: scale(1.1);\n  color: #d4f442;\n  cursor: pointer; }\n\nhero-image {\n  margin: 0;\n  padding: 0;\n  border-top: 5px solid #AAA; }\n\n.banner-img {\n  display: block;\n  position: relative;\n  top: -10px;\n  border-bottom: 5px solid #AAA;\n  border-top: 5px solid #AAA; }\n\nheader {\n  width: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 125px; }\n  header div {\n    position: absolute;\n    top: 5px;\n    width: 100%; }\n  header .banner-img {\n    z-index: 0; }\n  header .left {\n    display: inline-block;\n    max-width: 350px;\n    z-index: 1; }\n  header .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right;\n    z-index: 1; }\n    header .right span {\n      margin-right: 20px; }\n  header h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white;\n    display: inline-block; }\n  header nav {\n    margin-left: 5px;\n    margin-top: 5px; }\n    header nav ul {\n      list-style-type: none;\n      margin: 0;\n      padding: 0; }\n      header nav ul li {\n        text-align: center;\n        border-right: 1px solid white;\n        width: 23%;\n        display: inline-block;\n        color: white; }\n      header nav ul li:last-child {\n        border: none; }\n\n.icon-facebook2:before {\n  content: \"\\EA91\";\n  color: white;\n  font-size: 30px; }\n\n.icon-instagram:before {\n  content: \"\\EA92\";\n  color: white;\n  font-size: 30px; }\n\n.icon-twitter:before {\n  content: \"\\EA96\";\n  color: white;\n  font-size: 30px;\n  transition: all .3s ease; }\n", "", {"version":3,"sources":["/./src/scss/src/scss/main.scss"],"names":[],"mappings":"AAAA;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,sBAAqB;EACrB,WAAU,EACb;;AACD;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB,EACxB;;AACD;EACI,0BAAyB,EAC5B;;AACD;EACI,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB;EACrB,eAAc;EACd,gBAAe,EAClB;;AAGD;EACI,UAAS;EACT,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,eAAc;EACd,mBAAkB;EAClB,WAAU;EACV,8BAA6B;EAC7B,2BAA0B,EAC7B;;AAED;EACI,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,cAAa,EAoDhB;EAzDD;IAOQ,mBAAkB;IAClB,SAAQ;IACR,YAAW,EACd;EAVL;IAYQ,WAAU,EACb;EAbL;IAeQ,sBAAqB;IACrB,iBAAgB;IAChB,WAAU,EACb;EAlBL;IAoBQ,iBAAgB;IAChB,aAAY;IACZ,kBAAiB;IACjB,WAAU,EAIb;IA3BL;MAyBY,mBAAkB,EACrB;EA1BT;IA6BQ,iBAAgB;IAChB,eAAc;IAEd,kCAAiC;IAEjC,eAAc;IACd,aAAY;IACZ,sBACJ,EAAE;EArCN;IAuCQ,iBAAgB;IAChB,gBAAe,EAgBlB;IAxDL;MA0CY,sBAAqB;MACrB,UAAS;MACT,WAAU,EAWb;MAvDT;QA8CgB,mBAAkB;QAClB,8BAA6B;QAC7B,WAAU;QACV,sBAAqB;QACrB,aAAY,EACf;MAnDb;QAqDgB,aAAY,EACf;;AAKb;EACI,iBAAgB;EAChB,aAAY;EACZ,gBAAe,EAClB;;AAED;EACI,iBAAgB;EAChB,aAAY;EACZ,gBAAe,EAClB;;AAED;EACI,iBAAgB;EAChB,aAAY;EACZ,gBAAe;EACf,yBAAwB,EAC3B","file":"main.scss","sourcesContent":["body {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nul {\n    list-style-type: none;\n    padding: 0;\n}\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n}\n.link {\n    transition: all 0.3s ease;\n}\n.link:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #d4f442;\n    cursor: pointer;\n}\n\n\nhero-image {\n    margin: 0;\n    padding: 0;\n    border-top: 5px solid #AAA; \n}\n\n.banner-img {\n    display: block;\n    position: relative;\n    top: -10px;\n    border-bottom: 5px solid #AAA;\n    border-top: 5px solid #AAA;    \n}\n\nheader {\n    width: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 125px;\n    div {\n        position: absolute;\n        top: 5px;\n        width: 100%;\n    }\n    .banner-img {\n        z-index: 0;\n    }\n    .left {\n        display: inline-block;\n        max-width: 350px;\n        z-index: 1;\n    }\n    .right {\n        margin-top: 20px;\n        float: right;\n        text-align: right;\n        z-index: 1;\n        span {\n            margin-right: 20px;\n        }\n    }\n    h1 {\n        text-align: left;\n        margin: 0 20px;\n        // font-family: 'Montserrat', sans-serif;\n        font-family: 'Amatic SC', cursive;\n        // font-size: 3.1em;\n        font-size: 6em;\n        color: white;\n        display: inline-block\n    }\n    nav {\n        margin-left: 5px;\n        margin-top: 5px;  \n        ul {\n            list-style-type: none;\n            margin: 0;\n            padding: 0;\n            li {\n                text-align: center;\n                border-right: 1px solid white;\n                width: 23%;\n                display: inline-block;\n                color: white;\n            }\n            li:last-child {\n                border: none;\n            }\n        }\n    }\n}\n\n.icon-facebook2:before {\n    content: \"\\ea91\";\n    color: white;\n    font-size: 30px;\n}\n\n.icon-instagram:before {\n    content: \"\\ea92\";\n    color: white;\n    font-size: 30px;\n}\n\n.icon-twitter:before {\n    content: \"\\ea96\";\n    color: white;\n    font-size: 30px;\n    transition: all .3s ease;\n}\n\n// .icon-twitter:hover {\n//     color: yellow;\n// }\n\n// .icon {\n//     transition: all .3s ease;\n// }\n\n// .icon:hover {\n//     color: yellow;\n//     cursor: crosshair;\n// }"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
 
 /***/ },
-/* 38 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -42649,7 +42943,7 @@
 	//# sourceMappingURL=angular-ui-router.js.map
 
 /***/ },
-/* 39 */
+/* 50 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -42673,9 +42967,25 @@
 	    });
 	
 	    $stateProvider.state({
-	        name: 'buy',
-	        url: '/buy',
+	        name: 'shop',
+	        url: '/shop',
+	        resolve: {
+	            juices: ['juiceService', function (juiceService) {
+	                return juiceService.getAll();
+	            }]
+	        },
 	        component: 'buy'
+	    });
+	
+	    $stateProvider.state({
+	        name: 'item',
+	        url: '/item/:id',
+	        resolve: {
+	            item: ['juiceService', '$transition$', function (juiceService, t) {
+	                return juiceService.get(t.params().id);
+	            }]
+	        },
+	        component: 'item'
 	    });
 	
 	    $urlRouterProvider.otherwise('/home');
