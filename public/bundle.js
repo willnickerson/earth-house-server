@@ -54,23 +54,27 @@
 	
 	var _components2 = _interopRequireDefault(_components);
 	
-	__webpack_require__(36);
+	var _services = __webpack_require__(46);
 	
-	var _angularUiRouter = __webpack_require__(38);
+	var _services2 = _interopRequireDefault(_services);
+	
+	__webpack_require__(49);
+	
+	var _angularUiRouter = __webpack_require__(51);
 	
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 	
-	var _routes = __webpack_require__(39);
+	var _angularUiRouterDefault = __webpack_require__(52);
+	
+	var _angularUiRouterDefault2 = _interopRequireDefault(_angularUiRouterDefault);
+	
+	var _routes = __webpack_require__(53);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var app = _angular2.default.module('myApp', [_components2.default,
-	// services,
-	_angularUiRouter2.default]);
-	// import services from './services';
-	
+	var app = _angular2.default.module('myApp', [_components2.default, _services2.default, _angularUiRouter2.default, _angularUiRouterDefault2.default]);
 	
 	var dev = 'http://localhost:3000/api';
 	
@@ -33504,13 +33508,16 @@
 	var map = {
 		"./app/app.js": 8,
 		"./articles/articles.js": 10,
-		"./buy/buy.js": 16,
-		"./footer-content/footer-content.js": 20,
-		"./header-content/header-content.js": 24,
-		"./hero-image/hero-image.js": 26,
-		"./home/home.js": 28,
-		"./landing/landing.js": 30,
-		"./nav-bar/nav-bar.js": 34
+		"./footer-content/footer-content.js": 16,
+		"./header-content/header-content.js": 20,
+		"./hero-image/hero-image.js": 22,
+		"./home/home.js": 24,
+		"./landing/landing.js": 26,
+		"./nav-bar/nav-bar.js": 30,
+		"./shop/all/all.js": 32,
+		"./shop/item/item.js": 34,
+		"./shop/shop-head/shop-head.js": 38,
+		"./shop/shop.js": 42
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -33944,84 +33951,11 @@
 	    value: true
 	});
 	
-	var _buy = __webpack_require__(17);
-	
-	var _buy2 = _interopRequireDefault(_buy);
-	
-	var _buy3 = __webpack_require__(18);
-	
-	var _buy4 = _interopRequireDefault(_buy3);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	exports.default = {
-	    template: _buy2.default,
-	    controller: function controller() {
-	        this.styles = _buy4.default;
-	    }
-	};
-
-/***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	module.exports = "<img class=\"under-header\" src=\"https://github.com/willnickerson/earth-house-juice/blob/master/shop.jpeg?raw=true\">\n<section class=\"buy\">\n    <h1>Where to buy.</h1>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde laboriosam suscipit neque sit ea atque sint voluptate saepe soluta molestiae non ipsa, harum voluptatibus et eligendi vitae error, veritatis ab!</p>\n    <h2>Online store coming soon!</h2>\n</section>";
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(19);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(15)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./buy.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./buy.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(14)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "section.buy {\n  width: 60%;\n  margin: 0 auto;\n  position: relative;\n  top: -360px; }\n  section.buy h1 {\n    font-size: 4em;\n    color: #8282ff;\n    margin: 0;\n    display: inline; }\n  section.buy p {\n    display: inline;\n    font-size: 1.25em; }\n  section.buy h2 {\n    font-size: 3em;\n    font-family: 'Montserrat', sans-serif;\n    text-align: center;\n    margin: 0; }\n\nimg.under-header {\n  z-index: -1;\n  position: relative;\n  top: -110px;\n  display: block; }\n", "", {"version":3,"sources":["/./src/components/buy/src/components/buy/buy.scss"],"names":[],"mappings":"AAAA;EACI,WAAU;EACV,eAAc;EACd,mBAAkB;EAClB,YAAW,EAkBd;EAtBD;IAMQ,eAAc;IACd,eAAuB;IACvB,UAAS;IACT,gBAAe,EAClB;EAVL;IAaQ,gBAAe;IACf,kBAAiB,EACpB;EAfL;IAiBQ,eAAc;IACd,sCAAqC;IACrC,mBAAkB;IAClB,UAAS,EACZ;;AAGL;EACI,YAAW;EACX,mBAAkB;EAClB,YAAW;EACX,eAAc,EACjB","file":"buy.scss","sourcesContent":["section.buy {\n    width: 60%;\n    margin: 0 auto;\n    position: relative;\n    top: -360px;\n    h1 {\n        font-size: 4em;\n        color: rgb(130,130,255);\n        margin: 0;\n        display: inline;\n    }\n\n    p{\n        display: inline;\n        font-size: 1.25em;\n    }\n    h2 {\n        font-size: 3em;\n        font-family: 'Montserrat', sans-serif; \n        text-align: center;\n        margin: 0;\n    }\n}\n\nimg.under-header {\n    z-index: -1;\n    position: relative;\n    top: -110px;\n    display: block;\n}\n"],"sourceRoot":"webpack://"}]);
-	
-	// exports
-
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _footerContent = __webpack_require__(21);
+	var _footerContent = __webpack_require__(17);
 	
 	var _footerContent2 = _interopRequireDefault(_footerContent);
 	
-	var _footerContent3 = __webpack_require__(22);
+	var _footerContent3 = __webpack_require__(18);
 	
 	var _footerContent4 = _interopRequireDefault(_footerContent3);
 	
@@ -34035,19 +33969,19 @@
 	};
 
 /***/ },
-/* 21 */
+/* 17 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"footer-container\">\n    <div>\n        <h3>Shop</h3>\n        <ul>\n            <li>Buy Online</li>\n            <li>Buy in Person</li>\n        </ul>\n    </div>\n\n    <div>\n        <h3>About</h3>\n        <ul>\n            <li>Our Juices</li>\n            <li>Our Mission</li>\n            <li>Our Customers</li>\n            <li>Our team</li>\n        </ul>\n    </div>\n\n    <div>\n        <h3>Social Media</h3>\n        <ul>\n            <li>Instagram</li>\n            <li>Facebook</li>\n            <li>Twitter</li>\n        </ul>\n    </div>\n\n    <div>\n        <h3>Contact</h3>\n        <ul>\n            <li>(XXX)XXX-XXXX</li>\n            <li>xxxxx@xxx.com</li>\n        </ul>\n    </div>\n</div>";
 
 /***/ },
-/* 22 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(23);
+	var content = __webpack_require__(19);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(15)(content, {});
@@ -34067,7 +34001,7 @@
 	}
 
 /***/ },
-/* 23 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(14)();
@@ -34081,7 +34015,7 @@
 
 
 /***/ },
-/* 24 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34090,7 +34024,7 @@
 	    value: true
 	});
 	
-	var _headerContent = __webpack_require__(25);
+	var _headerContent = __webpack_require__(21);
 	
 	var _headerContent2 = _interopRequireDefault(_headerContent);
 	
@@ -34101,13 +34035,13 @@
 	};
 
 /***/ },
-/* 25 */
+/* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"header-container\">\n    <img class=\"banner-img\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\">\n        <div class=\"left\">\n            <h1>Earth House</h1>\n            <nav-bar></nav-bar>\n        </div>\n        <div class=\"right\">\n            <a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n</div>";
+	module.exports = "\n<div class=\"header-container\">\n    <!--<img class=\"banner-img\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\">-->\n        <div class=\"left\">\n            <h1>Earth House</h1>\n            <nav-bar></nav-bar>\n        </div>\n        <div class=\"right\">\n            <a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n</div>";
 
 /***/ },
-/* 26 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34116,7 +34050,7 @@
 	    value: true
 	});
 	
-	var _heroImage = __webpack_require__(27);
+	var _heroImage = __webpack_require__(23);
 	
 	var _heroImage2 = _interopRequireDefault(_heroImage);
 	
@@ -34128,13 +34062,13 @@
 	};
 
 /***/ },
-/* 27 */
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = "<section>\n    <img ng-src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867043/earth house/wood-spread-1_cda0uc.jpg\">\n</section>";
 
 /***/ },
-/* 28 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34143,7 +34077,7 @@
 	    value: true
 	});
 	
-	var _home = __webpack_require__(29);
+	var _home = __webpack_require__(25);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
@@ -34155,13 +34089,13 @@
 	};
 
 /***/ },
-/* 29 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<hero-image></hero-image>\n<articles></articles>\n";
 
 /***/ },
-/* 30 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34170,11 +34104,11 @@
 	    value: true
 	});
 	
-	var _landing = __webpack_require__(31);
+	var _landing = __webpack_require__(27);
 	
 	var _landing2 = _interopRequireDefault(_landing);
 	
-	var _landing3 = __webpack_require__(32);
+	var _landing3 = __webpack_require__(28);
 	
 	var _landing4 = _interopRequireDefault(_landing3);
 	
@@ -34188,19 +34122,19 @@
 	};
 
 /***/ },
-/* 31 */
+/* 27 */
 /***/ function(module, exports) {
 
 	module.exports = "<img src=\"https://github.com/willnickerson/earth-house-juice/blob/master/blue-spread.jpeg?raw=true\">\n";
 
 /***/ },
-/* 32 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(33);
+	var content = __webpack_require__(29);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(15)(content, {});
@@ -34220,7 +34154,7 @@
 	}
 
 /***/ },
-/* 33 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(14)();
@@ -34234,7 +34168,7 @@
 
 
 /***/ },
-/* 34 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34243,7 +34177,7 @@
 	    value: true
 	});
 	
-	var _navBar = __webpack_require__(35);
+	var _navBar = __webpack_require__(31);
 	
 	var _navBar2 = _interopRequireDefault(_navBar);
 	
@@ -34254,10 +34188,75 @@
 	};
 
 /***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	module.exports = "<nav>\n    <ul>\n        <li ui-sref=\"home\" class=\"link\">Home</li>\n        <li ui-sref=\"shop\" class=\"link\"link>Shop</li>\n        <li class=\"link\">About</li>\n        <li class=\"link\">Contact</li>\n    </ul>\n</nav>";
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _all = __webpack_require__(33);
+	
+	var _all2 = _interopRequireDefault(_all);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _all2.default,
+	    bindings: {
+	        juices: '<'
+	    }
+	};
+
+/***/ },
+/* 33 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"shop-info\">\n    <h1>Where to buy.</h1>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde laboriosam suscipit neque sit ea atque sint voluptate saepe soluta molestiae non ipsa, harum voluptatibus et eligendi vitae error, veritatis ab!</p>\n    <h2>Online store coming soon!</h2>\n</section>\n\n<section class=\"items\">\n        <ul>\n            <li class=\"item\" ng-repeat=\"juice in $ctrl.juices\">\n                <img src=\"{{juice.imgUrl}}\">\n                <div class=\"item-info\">\n                    <h4 ui-sref=\"shop.item({\n                    id: juice._id})\">{{juice.name}}</h4>\n                    <p>${{juice.price}}.00</p>\n                </div>\n            </li>\n        </ul>\n</section>";
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _item = __webpack_require__(35);
+	
+	var _item2 = _interopRequireDefault(_item);
+	
+	var _item3 = __webpack_require__(36);
+	
+	var _item4 = _interopRequireDefault(_item3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _item2.default,
+	    bindings: {
+	        item: '<'
+	    },
+	    controller: function controller() {
+	        this.styles = _item4.default;
+	    }
+	};
+
+/***/ },
 /* 35 */
 /***/ function(module, exports) {
 
-	module.exports = "<nav>\n    <ul>\n        <li ui-sref=\"home\" class=\"link\">Home</li>\n        <li ui-sref=\"buy\" class=\"link\"link>Buy</li>\n        <li class=\"link\">About</li>\n        <li class=\"link\">Contact</li>\n    </ul>\n</nav>";
+	module.exports = "<div ng-class=\"$ctrl.styles.item\">\n    <section>\n        <h2>{{$ctrl.item.name}}</h2>\n        <p>{{$ctrl.item.description}}</p>\n        <a ui-sref=\"shop.all\">Back to juices</a>\n    </section>\n    <div class=\"clearfix\">\n        <img src=\"{{$ctrl.item.imgUrl}}\">\n        <ul>\n            <h3>Ingredients</h3>\n            <li ng-class=\"$ctrl.styles.ingredient\" ng-repeat=\"ingredient in $ctrl.item.ingredients\">\n                <img class=\"ingredient\" src=\"{{ingredient.imgUrl}}\">\n                <span>{{ingredient.name}}</span>\n                <p>{{ingredient.description}}</p>\n            </li>\n        </ul>\n    </div>\n</div>\n";
 
 /***/ },
 /* 36 */
@@ -34267,6 +34266,273 @@
 	
 	// load the styles
 	var content = __webpack_require__(37);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(15)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(14)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "._3h9JlplhoP1sjXURIB9eh5 {\n  margin-bottom: 5%; }\n  ._3h9JlplhoP1sjXURIB9eh5 section {\n    width: 90%;\n    margin: 0 auto; }\n  ._3h9JlplhoP1sjXURIB9eh5 h2 {\n    font-size: 2.5em;\n    margin: 0; }\n  ._3h9JlplhoP1sjXURIB9eh5 img {\n    width: 20%;\n    float: left;\n    margin: 5% 5%; }\n  ._3h9JlplhoP1sjXURIB9eh5 ul {\n    float: left;\n    width: 65%;\n    margin: 0 5% 0 0; }\n  ._3h9JlplhoP1sjXURIB9eh5 h3 {\n    font-size: 2em;\n    margin: 5% 0 0 0; }\n\n.UZVr3MSVsoVnMTYdr3ug4 {\n  display: inline-block;\n  width: 30%;\n  margin: 0 1.5%; }\n  .UZVr3MSVsoVnMTYdr3ug4 img {\n    width: 82%;\n    margin: 0; }\n  .UZVr3MSVsoVnMTYdr3ug4 span {\n    display: block;\n    font-size: 1.5em;\n    font-weight: bold; }\n  .UZVr3MSVsoVnMTYdr3ug4 p {\n    font-size: .75em; }\n", "", {"version":3,"sources":["/./src/components/shop/item/src/components/shop/item/item.scss"],"names":[],"mappings":"AAAA;EACI,kBAAiB,EA2BpB;EA5BD;IAIQ,WAAU;IACV,eAAc,EACjB;EANL;IASQ,iBAAgB;IAChB,UAAS,EACZ;EAXL;IAaQ,WAAU;IACV,YAAW;IACX,cAAa,EAChB;EAhBL;IAkBQ,YAAW;IACX,WAAU;IACV,iBAAgB,EACnB;EArBL;IAwBQ,eAAc;IACd,iBAAgB,EACnB;;AAGL;EACI,sBAAqB;EACrB,WAAU;EACV,eAAc,EAcjB;EAjBD;IAKQ,WAAU;IACV,UAAS,EACZ;EAPL;IASQ,eAAc;IACd,iBAAgB;IAChB,kBAAiB,EACpB;EAZL;IAcQ,iBAAgB,EAEnB","file":"item.scss","sourcesContent":[":local(.item) {\n    margin-bottom: 5%;\n\n    section {\n        width: 90%;\n        margin: 0 auto;\n    }\n\n    h2 {\n        font-size: 2.5em;\n        margin: 0;\n    }\n    img {\n        width: 20%;\n        float: left;\n        margin: 5% 5%;\n    }\n    ul {\n        float: left;\n        width: 65%;\n        margin: 0 5% 0 0;\n    }\n\n    h3 {\n        font-size: 2em;\n        margin: 5% 0 0 0;\n    }\n\n}\n:local(.ingredient) {\n    display: inline-block;\n    width: 30%;\n    margin: 0 1.5%;\n    img {\n        width: 82%;\n        margin: 0;\n    }\n    span {\n        display: block;\n        font-size: 1.5em;\n        font-weight: bold;\n    }\n    p {\n        font-size: .75em;\n\n    }\n}"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+	exports.locals = {
+		"item": "_3h9JlplhoP1sjXURIB9eh5",
+		"ingredient": "UZVr3MSVsoVnMTYdr3ug4"
+	};
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _shopHead = __webpack_require__(39);
+	
+	var _shopHead2 = _interopRequireDefault(_shopHead);
+	
+	var _shopHead3 = __webpack_require__(40);
+	
+	var _shopHead4 = _interopRequireDefault(_shopHead3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _shopHead2.default,
+	    controller: function controller() {
+	        this.styles = _shopHead4.default;
+	    }
+	};
+
+/***/ },
+/* 39 */
+/***/ function(module, exports) {
+
+	module.exports = "<img ng-class=\"$ctrl.styles.banner-img\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\">\n";
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(41);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(15)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(14)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "._2DpE6toQ8FmWBt3oR4PhrL {\n  width: 100%; }\n", "", {"version":3,"sources":["/./src/components/shop/shop-head/src/components/shop/shop-head/shop-head.scss"],"names":[],"mappings":"AAAA;EACI,YACJ,EAAE","file":"shop-head.scss","sourcesContent":[":local(.banner-img) {\n    width: 100%\n};"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+	exports.locals = {
+		"banner-img": "_2DpE6toQ8FmWBt3oR4PhrL"
+	};
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _shop = __webpack_require__(43);
+	
+	var _shop2 = _interopRequireDefault(_shop);
+	
+	var _shop3 = __webpack_require__(44);
+	
+	var _shop4 = _interopRequireDefault(_shop3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _shop2.default,
+	    bindings: {
+	        juices: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	function controller() {
+	    this.styles = _shop4.default;
+	}
+
+/***/ },
+/* 43 */
+/***/ function(module, exports) {
+
+	module.exports = "<shop-head></shop-head>\n\n<div class=\"image-text\">\n    <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867018/earth%20house/blue-spread_ixxxfx.jpg\">\n    <p>Test</p>\n</div>\n<!--<h2>Shop</h2>-->\n\n<ui-view name=\"main\"></ui-view>\n";
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(15)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 45 */,
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _angular = __webpack_require__(1);
+	
+	var _angular2 = _interopRequireDefault(_angular);
+	
+	var _camelcase = __webpack_require__(4);
+	
+	var _camelcase2 = _interopRequireDefault(_camelcase);
+	
+	var _path = __webpack_require__(5);
+	
+	var _path2 = _interopRequireDefault(_path);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var context = __webpack_require__(47);
+	
+	var _module = _angular2.default.module('services', []);
+	
+	context.keys().forEach(function (key) {
+	    var name = (0, _camelcase2.default)(_path2.default.basename(key, '.js'));
+	    _module.factory(name, context(key).default);
+	});
+	
+	exports.default = _module.name;
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./juice-service.js": 48
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 47;
+
+
+/***/ },
+/* 48 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = juiceService;
+	juiceService.$inject = ['$http', 'apiUrl'];
+	
+	function juiceService($http, apiUrl) {
+	    return {
+	        getAll: function getAll() {
+	            return $http.get(apiUrl + '/juices').then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        get: function get(id) {
+	            return $http.get(apiUrl + '/juices/' + id).then(function (res) {
+	                return res.data;
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(50);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(15)(content, {});
@@ -34286,7 +34552,7 @@
 	}
 
 /***/ },
-/* 37 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(14)();
@@ -34294,13 +34560,13 @@
 	
 	
 	// module
-	exports.push([module.id, "body {\n  font-family: sans-serif;\n  margin: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none; }\n\n.link {\n  transition: all 0.3s ease; }\n\n.link:hover {\n  -webkit-transform: scale(1.1);\n  -ms-transform: scale(1.1);\n  transform: scale(1.1);\n  color: #d4f442;\n  cursor: pointer; }\n\nhero-image {\n  margin: 0;\n  padding: 0;\n  border-top: 5px solid #AAA; }\n\n.banner-img {\n  display: block;\n  position: relative;\n  top: -10px;\n  border-bottom: 5px solid #AAA;\n  border-top: 5px solid #AAA; }\n\nheader {\n  width: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 125px; }\n  header div {\n    position: absolute;\n    top: 5px;\n    width: 100%; }\n  header .banner-img {\n    z-index: 0; }\n  header .left {\n    display: inline-block;\n    max-width: 350px;\n    z-index: 1; }\n  header .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right;\n    z-index: 1; }\n    header .right span {\n      margin-right: 20px; }\n  header h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white;\n    display: inline-block; }\n  header nav {\n    margin-left: 5px;\n    margin-top: 5px; }\n    header nav ul {\n      list-style-type: none;\n      margin: 0;\n      padding: 0; }\n      header nav ul li {\n        text-align: center;\n        border-right: 1px solid white;\n        width: 23%;\n        display: inline-block;\n        color: white; }\n      header nav ul li:last-child {\n        border: none; }\n", "", {"version":3,"sources":["/./src/scss/src/scss/main.scss"],"names":[],"mappings":"AAAA;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB,EACxB;;AACD;EACI,0BAAyB,EAC5B;;AACD;EACI,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB;EACrB,eAAc;EACd,gBAAe,EAClB;;AAGD;EACI,UAAS;EACT,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,eAAc;EACd,mBAAkB;EAClB,WAAU;EACV,8BAA6B;EAC7B,2BAA0B,EAC7B;;AAED;EACI,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,cAAa,EAoDhB;EAzDD;IAOQ,mBAAkB;IAClB,SAAQ;IACR,YAAW,EACd;EAVL;IAYQ,WAAU,EACb;EAbL;IAeQ,sBAAqB;IACrB,iBAAgB;IAChB,WAAU,EACb;EAlBL;IAoBQ,iBAAgB;IAChB,aAAY;IACZ,kBAAiB;IACjB,WAAU,EAIb;IA3BL;MAyBY,mBAAkB,EACrB;EA1BT;IA6BQ,iBAAgB;IAChB,eAAc;IAEd,kCAAiC;IAEjC,eAAc;IACd,aAAY;IACZ,sBACJ,EAAE;EArCN;IAuCQ,iBAAgB;IAChB,gBAAe,EAgBlB;IAxDL;MA0CY,sBAAqB;MACrB,UAAS;MACT,WAAU,EAWb;MAvDT;QA8CgB,mBAAkB;QAClB,8BAA6B;QAC7B,WAAU;QACV,sBAAqB;QACrB,aAAY,EACf;MAnDb;QAqDgB,aAAY,EACf","file":"main.scss","sourcesContent":["body {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n}\n.link {\n    transition: all 0.3s ease;\n}\n.link:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #d4f442;\n    cursor: pointer;\n}\n\n\nhero-image {\n    margin: 0;\n    padding: 0;\n    border-top: 5px solid #AAA; \n}\n\n.banner-img {\n    display: block;\n    position: relative;\n    top: -10px;\n    border-bottom: 5px solid #AAA;\n    border-top: 5px solid #AAA;    \n}\n\nheader {\n    width: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 125px;\n    div {\n        position: absolute;\n        top: 5px;\n        width: 100%;\n    }\n    .banner-img {\n        z-index: 0;\n    }\n    .left {\n        display: inline-block;\n        max-width: 350px;\n        z-index: 1;\n    }\n    .right {\n        margin-top: 20px;\n        float: right;\n        text-align: right;\n        z-index: 1;\n        span {\n            margin-right: 20px;\n        }\n    }\n    h1 {\n        text-align: left;\n        margin: 0 20px;\n        // font-family: 'Montserrat', sans-serif;\n        font-family: 'Amatic SC', cursive;\n        // font-size: 3.1em;\n        font-size: 6em;\n        color: white;\n        display: inline-block\n    }\n    nav {\n        margin-left: 5px;\n        margin-top: 5px;  \n        ul {\n            list-style-type: none;\n            margin: 0;\n            padding: 0;\n            li {\n                text-align: center;\n                border-right: 1px solid white;\n                width: 23%;\n                display: inline-block;\n                color: white;\n            }\n            li:last-child {\n                border: none;\n            }\n        }\n    }\n}\n\n// .icon-facebook2:before {\n//     content: \"\\ea91\";\n//     color: white;\n//     font-size: 30px;\n// }\n\n// .icon-instagram:before {\n//     content: \"\\ea92\";\n//     color: white;\n//     font-size: 30px;\n// }\n\n// .icon-twitter:before {\n//     content: \"\\ea96\";\n//     color: white;\n//     font-size: 30px;\n//     transition: all .3s ease;\n// }\n\n// .icon-twitter:hover {\n//     color: yellow;\n// }\n\n// .icon {\n//     transition: all .3s ease;\n// }\n\n// .icon:hover {\n//     color: yellow;\n//     cursor: crosshair;\n// }"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "body {\n  font-family: sans-serif;\n  margin: 0; }\n\nul {\n  list-style-type: none;\n  padding: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none; }\n\n.link {\n  transition: all 0.3s ease; }\n\n.link:hover {\n  -webkit-transform: scale(1.1);\n  -ms-transform: scale(1.1);\n  transform: scale(1.1);\n  color: #d4f442;\n  cursor: pointer; }\n\nhero-image {\n  margin: 0;\n  padding: 0;\n  border-top: 5px solid #AAA; }\n\n.banner-img {\n  display: block;\n  position: relative;\n  top: -10px;\n  border-bottom: 5px solid #AAA;\n  border-top: 5px solid #AAA; }\n\nheader {\n  width: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 125px; }\n  header div {\n    position: absolute;\n    top: 5px;\n    width: 100%; }\n  header .banner-img {\n    z-index: 0; }\n  header .left {\n    display: inline-block;\n    max-width: 350px;\n    z-index: 1; }\n  header .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right;\n    z-index: 1; }\n    header .right span {\n      margin-right: 20px; }\n  header h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white;\n    display: inline-block; }\n  header nav {\n    margin-left: 5px;\n    margin-top: 5px; }\n    header nav ul {\n      list-style-type: none;\n      margin: 0;\n      padding: 0; }\n      header nav ul li {\n        text-align: center;\n        border-right: 1px solid white;\n        width: 23%;\n        display: inline-block;\n        color: white; }\n      header nav ul li:last-child {\n        border: none; }\n\n.icon-facebook2:before {\n  content: \"\\EA91\";\n  color: white;\n  font-size: 30px; }\n\n.icon-instagram:before {\n  content: \"\\EA92\";\n  color: white;\n  font-size: 30px; }\n\n.icon-twitter:before {\n  content: \"\\EA96\";\n  color: white;\n  font-size: 30px;\n  transition: all .3s ease; }\n\n.clearfix {\n  overflow: auto; }\n", "", {"version":3,"sources":["/./src/scss/src/scss/main.scss"],"names":[],"mappings":"AAAA;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,sBAAqB;EACrB,WAAU,EACb;;AACD;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB,EACxB;;AACD;EACI,0BAAyB,EAC5B;;AACD;EACI,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB;EACrB,eAAc;EACd,gBAAe,EAClB;;AAGD;EACI,UAAS;EACT,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,eAAc;EACd,mBAAkB;EAClB,WAAU;EACV,8BAA6B;EAC7B,2BAA0B,EAC7B;;AAED;EACI,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,cAAa,EAoDhB;EAzDD;IAOQ,mBAAkB;IAClB,SAAQ;IACR,YAAW,EACd;EAVL;IAYQ,WAAU,EACb;EAbL;IAeQ,sBAAqB;IACrB,iBAAgB;IAChB,WAAU,EACb;EAlBL;IAoBQ,iBAAgB;IAChB,aAAY;IACZ,kBAAiB;IACjB,WAAU,EAIb;IA3BL;MAyBY,mBAAkB,EACrB;EA1BT;IA6BQ,iBAAgB;IAChB,eAAc;IAEd,kCAAiC;IAEjC,eAAc;IACd,aAAY;IACZ,sBACJ,EAAE;EArCN;IAuCQ,iBAAgB;IAChB,gBAAe,EAgBlB;IAxDL;MA0CY,sBAAqB;MACrB,UAAS;MACT,WAAU,EAWb;MAvDT;QA8CgB,mBAAkB;QAClB,8BAA6B;QAC7B,WAAU;QACV,sBAAqB;QACrB,aAAY,EACf;MAnDb;QAqDgB,aAAY,EACf;;AAKb;EACI,iBAAgB;EAChB,aAAY;EACZ,gBAAe,EAClB;;AAED;EACI,iBAAgB;EAChB,aAAY;EACZ,gBAAe,EAClB;;AAED;EACI,iBAAgB;EAChB,aAAY;EACZ,gBAAe;EACf,yBAAwB,EAC3B;;AAED;EACI,eAAc,EACjB","file":"main.scss","sourcesContent":["body {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nul {\n    list-style-type: none;\n    padding: 0;\n}\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n}\n.link {\n    transition: all 0.3s ease;\n}\n.link:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #d4f442;\n    cursor: pointer;\n}\n\n\nhero-image {\n    margin: 0;\n    padding: 0;\n    border-top: 5px solid #AAA; \n}\n\n.banner-img {\n    display: block;\n    position: relative;\n    top: -10px;\n    border-bottom: 5px solid #AAA;\n    border-top: 5px solid #AAA;    \n}\n\nheader {\n    width: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 125px;\n    div {\n        position: absolute;\n        top: 5px;\n        width: 100%;\n    }\n    .banner-img {\n        z-index: 0;\n    }\n    .left {\n        display: inline-block;\n        max-width: 350px;\n        z-index: 1;\n    }\n    .right {\n        margin-top: 20px;\n        float: right;\n        text-align: right;\n        z-index: 1;\n        span {\n            margin-right: 20px;\n        }\n    }\n    h1 {\n        text-align: left;\n        margin: 0 20px;\n        // font-family: 'Montserrat', sans-serif;\n        font-family: 'Amatic SC', cursive;\n        // font-size: 3.1em;\n        font-size: 6em;\n        color: white;\n        display: inline-block\n    }\n    nav {\n        margin-left: 5px;\n        margin-top: 5px;  \n        ul {\n            list-style-type: none;\n            margin: 0;\n            padding: 0;\n            li {\n                text-align: center;\n                border-right: 1px solid white;\n                width: 23%;\n                display: inline-block;\n                color: white;\n            }\n            li:last-child {\n                border: none;\n            }\n        }\n    }\n}\n\n.icon-facebook2:before {\n    content: \"\\ea91\";\n    color: white;\n    font-size: 30px;\n}\n\n.icon-instagram:before {\n    content: \"\\ea92\";\n    color: white;\n    font-size: 30px;\n}\n\n.icon-twitter:before {\n    content: \"\\ea96\";\n    color: white;\n    font-size: 30px;\n    transition: all .3s ease;\n}\n\n.clearfix {\n    overflow: auto;\n}"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
 
 /***/ },
-/* 38 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -42649,7 +42915,108 @@
 	//# sourceMappingURL=angular-ui-router.js.map
 
 /***/ },
-/* 39 */
+/* 52 */
+/***/ function(module, exports) {
+
+	/**
+	 * AngularJS module that adds support for specifying default child views for abstract states when using ui-router.
+	 *
+	 * @link https://github.com/nonplus/angular-ui-router-default
+	 *
+	 * @license angular-ui-router-default v0.0.6
+	 * (c) Copyright Stepan Riha <github@nonplus.net>
+	 * License MIT
+	 */
+	
+	(function(angular) {
+	
+	"use strict";
+	var moduleName = 'ui.router.default';
+	if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports) {
+	    module.exports = moduleName;
+	}
+	var max_redirects = 10;
+	angular.module(moduleName, ['ui.router'])
+	    .config(['$provide', function ($provide) {
+	        $provide.decorator('$state', ['$delegate', '$injector', '$q', function ($delegate, $injector, $q) {
+	                var transitionTo = $delegate.transitionTo;
+	                var pendingPromise;
+	                $delegate.transitionTo = function (to, toParams, options) {
+	                    var numRedirects = 0;
+	                    var $state = this;
+	                    var nextState = to.name || to;
+	                    var nextParams = toParams;
+	                    var nextOptions = options;
+	                    return fetchTarget();
+	                    function fetchTarget() {
+	                        var target = $state.get(nextState, $state.$current);
+	                        if (!target) {
+	                            // default specification is invalid, let ui-router report the problem...
+	                            return transitionTo.call($delegate, nextState, nextParams, nextOptions);
+	                        }
+	                        nextState = target.name;
+	                        var absRedirectPromise = getAbstractRedirect(target);
+	                        pendingPromise = absRedirectPromise;
+	                        return $q.when(absRedirectPromise)
+	                            .then(abstractTargetResolved);
+	                        function abstractTargetResolved(abstractTarget) {
+	                            if (absRedirectPromise !== pendingPromise) {
+	                                return $q.reject(new Error('transition superseded'));
+	                            }
+	                            // we didn't get anything from the abstract target
+	                            if (!abstractTarget) {
+	                                return transitionTo.call($delegate, nextState, nextParams, nextOptions);
+	                            }
+	                            checkForMaxRedirect();
+	                            nextState = abstractTarget;
+	                            return fetchTarget();
+	                        }
+	                        function checkForMaxRedirect() {
+	                            if (numRedirects === max_redirects) {
+	                                throw new Error('Too many abstract state default redirects');
+	                            }
+	                            numRedirects += 1;
+	                        }
+	                    }
+	                    function getAbstractRedirect(state) {
+	                        if (!state || !state.abstract || (state.abstract === true && !state.default)) {
+	                            return null;
+	                        }
+	                        return invokeAbstract(state).then(abstractInvoked);
+	                        function abstractInvoked(newState) {
+	                            if (newState[0] === '.') {
+	                                return nextState + newState;
+	                            }
+	                            else {
+	                                return newState;
+	                            }
+	                        }
+	                    }
+	                    function invokeAbstract(state) {
+	                        var defaultState;
+	                        if (state.default) {
+	                            defaultState = state.default;
+	                        }
+	                        else {
+	                            defaultState = state.abstract;
+	                        }
+	                        if (defaultState instanceof Function || defaultState instanceof Array) {
+	                            return $q.when($injector.invoke(defaultState));
+	                        }
+	                        else {
+	                            return $q.when(defaultState);
+	                        }
+	                    }
+	                };
+	                return $delegate;
+	            }]);
+	    }]);
+	
+	
+	})(window.angular);
+
+/***/ },
+/* 53 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -42673,9 +43040,44 @@
 	    });
 	
 	    $stateProvider.state({
-	        name: 'buy',
-	        url: '/buy',
-	        component: 'buy'
+	        name: 'shop',
+	        abstract: true,
+	        default: '.all',
+	        url: '/shop',
+	        resolve: {
+	            juices: ['juiceService', function (juiceService) {
+	                return juiceService.getAll();
+	            }]
+	        },
+	        component: 'shop'
+	    });
+	
+	    $stateProvider.state({
+	        name: 'shop.all',
+	        url: '/all',
+	        views: {
+	            main: {
+	                component: 'all'
+	            }
+	        }
+	    });
+	
+	    $stateProvider.state({
+	        name: 'shop.item',
+	        url: '/item/:id',
+	        resolve: {
+	            item: ['juiceService', '$transition$', function (juiceService, t) {
+	                return juiceService.get(t.params().id);
+	            }],
+	            ingredients: ['item', function (item) {
+	                return item.ingredients;
+	            }]
+	        },
+	        views: {
+	            main: {
+	                component: 'item'
+	            }
+	        }
 	    });
 	
 	    $urlRouterProvider.otherwise('/home');
