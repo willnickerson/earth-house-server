@@ -103,19 +103,20 @@
 	
 	var dev = 'http://localhost:3000/api';
 	var url = process.env.API_URL || dev;
+	var test = process.env.TEST_VAR;
 	
 	console.log('this is the api url', url);
-	app.value('apiUrl', url);
+	console.log('this is the test to see if we can access the env', test), app.value('apiUrl', url);
+	
+	// app.factory('apiUrl', function() {
+	//     return url;
+	// });
 	
 	app.config(_routes2.default);
 	app.config(function ($windowProvider) {
 	    var $window = $windowProvider.$get();
 	    $window.Stripe.setPublishableKey('pk_test_HS62OmJo7gCzA7fcN2ObL2rF');
 	});
-	
-	// app.factory('apiUrl', function() {
-	//     return url;
-	// });
 	
 	app.animation('.slide-animation', function ($window) {
 	
