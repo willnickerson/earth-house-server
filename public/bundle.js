@@ -106,21 +106,19 @@
 	// stripeCheckout
 	]);
 	
-	// const dev = 'http://localhost:3000/api';
-	var url = process.env.API_URL;
+	var dev = 'http://localhost:3000/api';
+	var url = process.env.API_URL || dev;
 	
+	app.value('apiUrl', url);
 	app.config(_routes2.default);
-	
 	app.config(function ($windowProvider) {
 	    var $window = $windowProvider.$get();
 	    $window.Stripe.setPublishableKey('pk_test_HS62OmJo7gCzA7fcN2ObL2rF');
 	});
 	
-	app.value('apiUrl', url);
-	
-	// app.factory('apiUrl', function() {
-	//     return dev;
-	// });
+	app.factory('apiUrl', function () {
+	    return url;
+	});
 	
 	app.animation('.slide-animation', function ($window) {
 	
