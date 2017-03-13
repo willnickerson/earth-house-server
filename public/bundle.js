@@ -106,8 +106,8 @@
 	// stripeCheckout
 	]);
 	
-	var dev = 'http://localhost:3000/api';
-	var url = process.env.API_URL || dev;
+	// const dev = 'http://localhost:3000/api';
+	var url = process.env.API_URL;
 	
 	app.config(_routes2.default);
 	
