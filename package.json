@@ -9,8 +9,8 @@
   "scripts": {
     "pretest": "eslint .",
     "test": "mocha",
-    "test:watch": "nodemon --exec mocha",
-    "start": "nodemon server.js"
+    "test:watch": "npm test:run -- -w",
+    "start": "node server.js"
   },
   "author": "Will Nickerson",
   "license": "ISC",
