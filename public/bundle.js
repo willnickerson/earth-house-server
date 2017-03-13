@@ -106,7 +106,7 @@
 	// stripeCheckout
 	]);
 	
-	var dev = 'http://localhost:3000/api';
+	var dev = 'http://earth-house.herokuapp.com/api';
 	var url = process.env.API_URL || dev;
 	
 	app.value('apiUrl', url);
