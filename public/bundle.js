@@ -95,33 +95,27 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	//eslint-disable-line
-	// import stripeCheckout from 'angular-stripe-checkout';
-	// import stripe from 'stripe';
+	
 	//TODO: figure out why things broken when a imported angular animate in the es6y way
 	
 	
-	var app = _angular2.default.module('myApp', [_components2.default, _services2.default, _angularUiRouter2.default, _angularScroll2.default, _angularAnimate2.default, _angularSanitize2.default, _angularUiRouterDefault2.default, 'angularPayments'
-	// 'angular-payments'
-	// stripe,
-	// stripeCheckout
-	]);
+	var app = _angular2.default.module('myApp', [_components2.default, _services2.default, _angularUiRouter2.default, _angularScroll2.default, _angularAnimate2.default, _angularSanitize2.default, _angularUiRouterDefault2.default, 'angularPayments']);
 	
 	var dev = 'http://localhost:3000/api';
 	var url = process.env.API_URL || dev;
 	
 	console.log('this is the api url', url);
-	
 	app.value('apiUrl', url);
+	
 	app.config(_routes2.default);
 	app.config(function ($windowProvider) {
 	    var $window = $windowProvider.$get();
 	    $window.Stripe.setPublishableKey('pk_test_HS62OmJo7gCzA7fcN2ObL2rF');
 	});
 	
-	app.factory('apiUrl', function () {
-	    return url;
-	});
-	console.log('this is the app value', app.value('apiUrl'));
+	// app.factory('apiUrl', function() {
+	//     return url;
+	// });
 	
 	app.animation('.slide-animation', function ($window) {
 	
