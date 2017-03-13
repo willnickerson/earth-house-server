@@ -106,8 +106,10 @@
 	// stripeCheckout
 	]);
 	
-	var dev = 'http://earth-house.herokuapp.com/api';
+	var dev = 'http://localhost:3000/api';
 	var url = process.env.API_URL || dev;
+	
+	console.log('this is the api url', url);
 	
 	app.value('apiUrl', url);
 	app.config(_routes2.default);
@@ -119,6 +121,7 @@
 	app.factory('apiUrl', function () {
 	    return url;
 	});
+	console.log('this is the app value', app.value('apiUrl'));
 	
 	app.animation('.slide-animation', function ($window) {
 	
