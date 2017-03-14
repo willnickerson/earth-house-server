@@ -102,7 +102,7 @@
 	var app = _angular2.default.module('myApp', [_components2.default, _services2.default, _angularUiRouter2.default, _angularScroll2.default, _angularAnimate2.default, _angularSanitize2.default, _angularUiRouterDefault2.default, 'angularPayments']);
 	
 	var dev = 'http://localhost:3000/api';
-	var url = process.env.API_URL || dev;
+	var url = ("https://earth-house.herokuapp.com/api") || dev;
 	var test = process.env.TEST_VAR;
 	
 	console.log('this is the api url', url);
