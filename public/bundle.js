@@ -44,13 +44,13 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	'use strict';
 	
-	var _angular = __webpack_require__(2);
+	var _angular = __webpack_require__(1);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _components = __webpack_require__(4);
+	var _components = __webpack_require__(3);
 	
 	var _components2 = _interopRequireDefault(_components);
 	
@@ -103,14 +103,8 @@
 	
 	var dev = 'http://localhost:3000/api';
 	var url = ("https://earth-house.herokuapp.com/api") || dev;
-	var test = process.env.TEST_VAR;
 	
-	console.log('this is the api url', url);
-	console.log('this is the test to see if we can access the env', test), app.value('apiUrl', url);
-	
-	// app.factory('apiUrl', function() {
-	//     return url;
-	// });
+	app.value('apiUrl', url);
 	
 	app.config(_routes2.default);
 	app.config(function ($windowProvider) {
@@ -151,204 +145,17 @@
 	        }
 	    };
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	// shim for using process in browser
-	var process = module.exports = {};
-	
-	// cached from whatever global is present so that test runners that stub it
-	// don't break things.  But we need to wrap it in a try catch in case it is
-	// wrapped in strict mode code which doesn't define any globals.  It's inside a
-	// function because try/catches deoptimize in certain engines.
-	
-	var cachedSetTimeout;
-	var cachedClearTimeout;
-	
-	function defaultSetTimout() {
-	    throw new Error('setTimeout has not been defined');
-	}
-	function defaultClearTimeout () {
-	    throw new Error('clearTimeout has not been defined');
-	}
-	(function () {
-	    try {
-	        if (typeof setTimeout === 'function') {
-	            cachedSetTimeout = setTimeout;
-	        } else {
-	            cachedSetTimeout = defaultSetTimout;
-	        }
-	    } catch (e) {
-	        cachedSetTimeout = defaultSetTimout;
-	    }
-	    try {
-	        if (typeof clearTimeout === 'function') {
-	            cachedClearTimeout = clearTimeout;
-	        } else {
-	            cachedClearTimeout = defaultClearTimeout;
-	        }
-	    } catch (e) {
-	        cachedClearTimeout = defaultClearTimeout;
-	    }
-	} ())
-	function runTimeout(fun) {
-	    if (cachedSetTimeout === setTimeout) {
-	        //normal enviroments in sane situations
-	        return setTimeout(fun, 0);
-	    }
-	    // if setTimeout wasn't available but was latter defined
-	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-	        cachedSetTimeout = setTimeout;
-	        return setTimeout(fun, 0);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedSetTimeout(fun, 0);
-	    } catch(e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-	            return cachedSetTimeout.call(null, fun, 0);
-	        } catch(e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-	            return cachedSetTimeout.call(this, fun, 0);
-	        }
-	    }
-	
-	
-	}
-	function runClearTimeout(marker) {
-	    if (cachedClearTimeout === clearTimeout) {
-	        //normal enviroments in sane situations
-	        return clearTimeout(marker);
-	    }
-	    // if clearTimeout wasn't available but was latter defined
-	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-	        cachedClearTimeout = clearTimeout;
-	        return clearTimeout(marker);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedClearTimeout(marker);
-	    } catch (e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-	            return cachedClearTimeout.call(null, marker);
-	        } catch (e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-	            return cachedClearTimeout.call(this, marker);
-	        }
-	    }
-	
-	
-	
-	}
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-	
-	function cleanUpNextTick() {
-	    if (!draining || !currentQueue) {
-	        return;
-	    }
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-	
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = runTimeout(cleanUpNextTick);
-	    draining = true;
-	
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    runClearTimeout(timeout);
-	}
-	
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        runTimeout(drainQueue);
-	    }
-	};
-	
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-	
-	function noop() {}
-	
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-	
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-	
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
-
-/***/ },
-/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(3);
+	__webpack_require__(2);
 	module.exports = angular;
 
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports) {
 
 	/**
@@ -33487,7 +33294,7 @@
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33496,15 +33303,15 @@
 	    value: true
 	});
 	
-	var _angular = __webpack_require__(2);
+	var _angular = __webpack_require__(1);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _camelcase = __webpack_require__(5);
+	var _camelcase = __webpack_require__(4);
 	
 	var _camelcase2 = _interopRequireDefault(_camelcase);
 	
-	var _path = __webpack_require__(6);
+	var _path = __webpack_require__(5);
 	
 	var _path2 = _interopRequireDefault(_path);
 	
@@ -33522,7 +33329,7 @@
 	exports.default = _module.name;
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33577,7 +33384,7 @@
 
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -33805,7 +33612,193 @@
 	    }
 	;
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+	var process = module.exports = {};
+	
+	// cached from whatever global is present so that test runners that stub it
+	// don't break things.  But we need to wrap it in a try catch in case it is
+	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// function because try/catches deoptimize in certain engines.
+	
+	var cachedSetTimeout;
+	var cachedClearTimeout;
+	
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
+	(function () {
+	    try {
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
+	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
+	    }
+	    try {
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
+	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
+	    }
+	} ())
+	function runTimeout(fun) {
+	    if (cachedSetTimeout === setTimeout) {
+	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
+	        return setTimeout(fun, 0);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedSetTimeout(fun, 0);
+	    } catch(e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+	            return cachedSetTimeout.call(null, fun, 0);
+	        } catch(e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+	            return cachedSetTimeout.call(this, fun, 0);
+	        }
+	    }
+	
+	
+	}
+	function runClearTimeout(marker) {
+	    if (cachedClearTimeout === clearTimeout) {
+	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
+	        return clearTimeout(marker);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedClearTimeout(marker);
+	    } catch (e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+	            return cachedClearTimeout.call(null, marker);
+	        } catch (e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+	            return cachedClearTimeout.call(this, marker);
+	        }
+	    }
+	
+	
+	
+	}
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+	
+	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+	
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = runTimeout(cleanUpNextTick);
+	    draining = true;
+	
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    runClearTimeout(timeout);
+	}
+	
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        runTimeout(drainQueue);
+	    }
+	};
+	
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+	
+	function noop() {}
+	
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+	
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+	
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
 
 /***/ },
 /* 7 */
@@ -34249,6 +34242,7 @@
 	    var _this = this;
 	
 	    this.$onInit = function () {
+	        _this.hasSeenLanding = false;
 	        _this.cart.initializeCart();
 	    };
 	
@@ -34283,7 +34277,7 @@
 /* 15 */
 /***/ function(module, exports) {
 
-	module.exports = "<header>\n    <header-content cart=\"$ctrl.cart\"></header-content>\n</header>\n\n<main>\n    <ui-view cart=\"$ctrl.cart\" initializeCart=\"$ctrl.initializeCart\"></ui-view>\n</main>\n\n<footer>\n    <footer-content></footer-content>\n</footer>";
+	module.exports = "<header>\n    <header-content cart=\"$ctrl.cart\"></header-content>\n</header>\n\n<main>\n    <ui-view cart=\"$ctrl.cart\" initializeCart=\"$ctrl.initializeCart\" hasSeenLanding=\"$ctrl.hasSeenLanding\"></ui-view>\n</main>\n\n<footer>\n    <footer-content></footer-content>\n</footer>";
 
 /***/ },
 /* 16 */
@@ -34329,7 +34323,7 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"loading-bar\" ng-init=\"$ctrl.loading = $ctrl.styles.start\" ng-class=\"$ctrl.loading\"></div>\n\n<section class=\"articles\">\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a>Follow Us on Instagram!</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_north,h_920,w_1080/v1488237699/14027299_622727931235134_1244126147_n_nzudku.jpg\">   \n        </div>\n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a>Farmer's markets</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"https://www.portlandfarmersmarket.org/wp-content/uploads/2016/04/PFM-Logo-Horizontal-Green.png\">\n                <p>We will be selling our juices at markets around the Portland Area all summer long! Come take a look at our schedule.</p>\n        </div>    \n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a>Learn about our Juices</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1488245973/14360103_955849944561168_6715517624580571136_n_xvdpj1.jpg\">\n        </div>    \n    </div>\n</section>";
+	module.exports = "<div class=\"loading-bar\" ng-init=\"$ctrl.loading = $ctrl.styles.start\" ng-class=\"$ctrl.loading\"></div>\n\n<section class=\"articles\">\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"https://www.instagram.com/earthhousejuice/?hl=en\">Follow Us on Instagram!</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_north,h_920,w_1080/v1488237699/14027299_622727931235134_1244126147_n_nzudku.jpg\">   \n        </div>\n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"http://www.portlandfarmersmarket.org/vendors/\">Farmer's markets</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"https://www.portlandfarmersmarket.org/wp-content/uploads/2016/04/PFM-Logo-Horizontal-Green.png\">\n                <p>We will be selling our juices at markets around the Portland Area all summer long! Come take a look at our schedule.</p>\n        </div>    \n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a ui-sref=\"about\">Learn about our Juices</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1488245973/14360103_955849944561168_6715517624580571136_n_xvdpj1.jpg\">\n        </div>    \n    </div>\n</section>";
 
 /***/ },
 /* 18 */
@@ -34731,7 +34725,7 @@
 /* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"header-container\">\n        <div class=\"left\">\n            <h1 class=\"main-title\">Earth House</h1>\n            <nav-bar></nav-bar>\n        </div>\n        <div class=\"right\">\n            <a ui-sref=\"checkout\" class=\"cart-icon\">\n                <h5 class=\"total-items\">{{$ctrl.cart.totalItems}}</h5>\n                <span class=\"icon-cart\"></span> \n            </a>\n            <a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n</div>";
+	module.exports = "<div class=\"header-container\">\n        <div class=\"left\">\n            <h1 class=\"main-title\">Earth House</h1>\n            <nav-bar></nav-bar>\n        </div>\n        <div class=\"right\">\n            \n            <!--<a ui-sref=\"checkout\" class=\"cart-icon\">\n                <h5 class=\"total-items\">{{$ctrl.cart.totalItems}}</h5>\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1489538579/cart-icon_zewzhg.png\">\n            </a>-->\n            \n            <a ui-sref=\"checkout\" class=\"cart-icon\">\n                <h5 class=\"total-items\">{{$ctrl.cart.totalItems}}</h5>\n                <span class=\"icon-cart\"></span> \n            </a>\n            <a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n</div>";
 
 /***/ },
 /* 34 */
@@ -34768,7 +34762,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".header-container {\n  width: 100%;\n  position: absolute;\n  top: 0;\n  left: 0; }\n  .header-container div {\n    position: absolute;\n    z-index: 1;\n    width: 100%; }\n  .header-container .left {\n    float: left;\n    margin-top: -5px; }\n  .header-container .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right; }\n    .header-container .right span {\n      margin-right: 20px; }\n  .header-container h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white; }\n  .header-container .cart-icon {\n    position: relative; }\n  .header-container .total-items {\n    display: inline-block;\n    position: relative;\n    bottom: 17px;\n    left: 33px;\n    color: #FFC107;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1em;\n    font-weight: bold;\n    margin: 0; }\n  .header-container .icon-facebook2:before {\n    content: \"\\EA91\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-instagram:before {\n    content: \"\\EA92\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-twitter:before {\n    content: \"\\EA96\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-cart:before {\n    content: \"\\E93A\";\n    color: white;\n    font-size: 1.9em; }\n\n@media all and (max-width: 550px) {\n  .header-container .left {\n    float: none;\n    margin-top: -5px;\n    width: 100%;\n    z-index: 1003; }\n    .header-container .left h1 {\n      float: left; }\n    .header-container .left nav-bar {\n      float: right; }\n  .header-container .right {\n    margin-top: 12px; }\n    .header-container .right span {\n      margin-right: 10px; }\n  .header-container h1 {\n    margin: 0 1%;\n    font-size: 3.5em; }\n  .header-container .icon-facebook2:before, .header-container .icon-twitter:before, .header-container .icon-instagram:before, .header-container .icon-cart:before {\n    font-size: 1.2em;\n    display: none; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  .header-container .left {\n    max-width: 250px; }\n    .header-container .left h1 {\n      font-size: 4em; }\n  .header-container .right {\n    margin-top: 15px; }\n    .header-container .right .icon-facebook2:before, .header-container .right .icon-instagram:before, .header-container .right .icon-twitter:before, .header-container .right .icon-cart:before {\n      font-size: 1.5em; }\n    .header-container .right span {\n      margin-right: 15px; } }\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n  .header-container .left {\n    width: 350px; } }\n\n@media all and (min-width: 1083px) {\n  .header-container .left {\n    width: 500px; }\n    .header-container .left h1 {\n      font-size: 7em; }\n  .header-container .right .icon-facebook2:before, .header-container .right .icon-twitter:before, .header-container .right .icon-instagram:before, .header-container .right .icon-cart:before {\n    font-size: 2.2em; } }\n", "", {"version":3,"sources":["/./src/components/header-content/src/components/header-content/header-content.scss","/./src/components/header-content/src/scss/partials/_colors.scss","/./src/components/header-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACQ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO,EAiEd;EArED;IAOY,mBAAkB;IAClB,WAAU;IACV,YAAW,EACd;EAVT;IAYY,YAAW;IACX,iBAAgB,EACnB;EAdT;IAgBY,iBAAgB;IAChB,aAAY;IACZ,kBAAiB,EAIpB;IAtBT;MAoBgB,mBAAkB,EACrB;EArBb;IAwBY,iBAAgB;IAChB,eAAc;IACd,kCAAiC;IACjC,eAAc;IACd,aAAY,EACf;EA7BT;IA+BY,mBAAkB,EACrB;EAhCT;IAkCY,sBAAqB;IACrB,mBAAkB;IAClB,aAAY;IACZ,WAAU;IACV,eCzCU;ID0CV,wCEzC0B;IF0C1B,eAAc;IACd,kBAAiB;IACjB,UAAS,EACZ;EA3CT;IA8CY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EAEnB;EAlDT;IAqDY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EAxDT;IA2DY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EA9DT;IAiEY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;;AAIT;EACI;IAEQ,YAAW;IACX,iBAAgB;IAChB,YAAW;IACX,cAAa,EAOhB;IAZL;MAOY,YAAW,EACd;IART;MAUY,aAAY,EACf;EAXT;IAcQ,iBAAgB,EAInB;IAlBL;MAgBY,mBAAkB,EACrB;EAjBT;IAoBQ,aAAY;IACZ,iBAAgB,EACnB;EAtBL;IAwBQ,iBAAgB;IAChB,cAAa,EAChB,EAAA;;AAIT;EACI;IAEQ,iBAAgB,EAInB;IANL;MAIY,eAAc,EACjB;EALT;IASQ,iBAAgB,EAOnB;IAhBL;MAWY,iBAAgB,EACnB;IAZT;MAcY,mBAAkB,EACrB,EAAA;;AAKb;EACI;IAEQ,aAAY,EACf,EAAA;;AAIT;EACI;IAEQ,aAAY,EAIf;IANL;MAIY,eAAc,EACjB;EALT;IASY,iBAAgB,EACnB,EAAA","file":"header-content.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.header-container {\n        width: 100%;\n        position: absolute;\n        top: 0;\n        left: 0;\n        // height: 125px;\n        div {\n            position: absolute;\n            z-index: 1;\n            width: 100%;\n        }\n        .left {\n            float: left;\n            margin-top: -5px;\n        }\n        .right {\n            margin-top: 20px;\n            float: right;\n            text-align: right;\n            span {\n                margin-right: 20px;\n            }\n        }\n        h1 {\n            text-align: left;\n            margin: 0 20px;\n            font-family: 'Amatic SC', cursive;\n            font-size: 6em;\n            color: white;\n        }\n        .cart-icon {\n            position: relative;\n        }\n        .total-items {\n            display: inline-block;\n            position: relative;\n            bottom: 17px;\n            left: 33px;\n            color: $accent-color;\n            font-family: $main-font;\n            font-size: 1em;\n            font-weight: bold;\n            margin: 0;\n        }\n\n        .icon-facebook2:before {\n            content: \"\\ea91\";\n            color: white;\n            font-size: 1.9em;\n            //used to be 30px\n        }\n\n        .icon-instagram:before {\n            content: \"\\ea92\";\n            color: white;\n            font-size: 1.9em;\n        }\n\n        .icon-twitter:before {\n            content: \"\\ea96\";\n            color: white;\n            font-size: 1.9em;\n        }\n\n        .icon-cart:before {\n            content: \"\\e93a\";\n            color: white;\n            font-size: 1.9em;\n        }\n}\n\n\n@media all and (max-width: 550px) {\n    .header-container {\n        .left {\n            float: none;\n            margin-top: -5px;\n            width: 100%;\n            z-index: 1003;\n            h1 {\n                float: left;\n            }\n            nav-bar {\n                float: right;\n            }\n        }\n        .right {\n            margin-top: 12px;\n            span {\n                margin-right: 10px;\n            }\n        }\n        h1 {\n            margin: 0 1%;\n            font-size: 3.5em;\n        }\n        .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n            font-size: 1.2em;\n            display: none;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    .header-container {\n        .left {\n            max-width: 250px;\n            h1 {\n                font-size: 4em;\n            }\n        }\n\n        .right {\n            margin-top: 15px;\n            .icon-facebook2:before, .icon-instagram:before, .icon-twitter:before, .icon-cart:before {\n                font-size: 1.5em;\n            }\n            span {\n                margin-right: 15px;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n    .header-container {\n        .left {\n            width: 350px;\n        }\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-container {\n        .left {\n            width: 500px;\n            h1 {\n                font-size: 7em;\n            }\n        }\n        .right {\n            .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n                font-size: 2.2em;\n            }\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".header-container {\n  width: 100%;\n  position: absolute;\n  top: 0;\n  left: 0; }\n  .header-container div {\n    position: absolute;\n    z-index: 1;\n    width: 100%; }\n  .header-container .left {\n    float: left;\n    margin-top: -5px; }\n  .header-container .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right; }\n    .header-container .right span {\n      margin-right: 20px; }\n  .header-container h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white; }\n  .header-container .cart-icon {\n    position: relative; }\n    .header-container .cart-icon img {\n      width: 30px; }\n  .header-container .total-items {\n    display: inline-block;\n    position: relative;\n    bottom: 17px;\n    left: 33px;\n    color: #FFC107;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1em;\n    font-weight: bold;\n    margin: 0; }\n  .header-container .icon-facebook2:before {\n    content: \"\\EA91\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-instagram:before {\n    content: \"\\EA92\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-twitter:before {\n    content: \"\\EA96\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-cart:before {\n    content: \"\\E93A\";\n    color: white;\n    font-size: 1.9em; }\n\n@media all and (max-width: 550px) {\n  .header-container .left {\n    float: none;\n    margin-top: -5px;\n    width: 100%;\n    z-index: 1003; }\n    .header-container .left h1 {\n      float: left; }\n    .header-container .left nav-bar {\n      float: right; }\n  .header-container .right {\n    margin-top: 12px; }\n    .header-container .right span {\n      margin-right: 10px; }\n  .header-container h1 {\n    margin: 0 1%;\n    font-size: 3.5em; }\n  .header-container .icon-facebook2:before, .header-container .icon-twitter:before, .header-container .icon-instagram:before, .header-container .icon-cart:before {\n    font-size: 1.2em;\n    display: none; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  .header-container .left {\n    max-width: 250px; }\n    .header-container .left h1 {\n      font-size: 4em; }\n  .header-container .right {\n    margin-top: 15px; }\n    .header-container .right .icon-facebook2:before, .header-container .right .icon-instagram:before, .header-container .right .icon-twitter:before, .header-container .right .icon-cart:before {\n      font-size: 1.5em; }\n    .header-container .right span {\n      margin-right: 15px; } }\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n  .header-container .left {\n    width: 350px; } }\n\n@media all and (min-width: 1083px) {\n  .header-container .left {\n    width: 500px; }\n    .header-container .left h1 {\n      font-size: 7em; }\n  .header-container .right .icon-facebook2:before, .header-container .right .icon-twitter:before, .header-container .right .icon-instagram:before, .header-container .right .icon-cart:before {\n    font-size: 2.2em; } }\n", "", {"version":3,"sources":["/./src/components/header-content/src/components/header-content/header-content.scss","/./src/components/header-content/src/scss/partials/_colors.scss","/./src/components/header-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACQ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO,EAoEd;EAxED;IAOY,mBAAkB;IAClB,WAAU;IACV,YAAW,EACd;EAVT;IAYY,YAAW;IACX,iBAAgB,EACnB;EAdT;IAgBY,iBAAgB;IAChB,aAAY;IACZ,kBAAiB,EAIpB;IAtBT;MAoBgB,mBAAkB,EACrB;EArBb;IAwBY,iBAAgB;IAChB,eAAc;IACd,kCAAiC;IACjC,eAAc;IACd,aAAY,EACf;EA7BT;IA+BY,mBAAkB,EAIrB;IAnCT;MAiCgB,YAAW,EACd;EAlCb;IAqCY,sBAAqB;IACrB,mBAAkB;IAClB,aAAY;IACZ,WAAU;IACV,eC5CU;ID6CV,wCE5C0B;IF6C1B,eAAc;IACd,kBAAiB;IACjB,UAAS,EACZ;EA9CT;IAiDY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EAEnB;EArDT;IAwDY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EA3DT;IA8DY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EAjET;IAoEY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;;AAIT;EACI;IAEQ,YAAW;IACX,iBAAgB;IAChB,YAAW;IACX,cAAa,EAOhB;IAZL;MAOY,YAAW,EACd;IART;MAUY,aAAY,EACf;EAXT;IAcQ,iBAAgB,EAInB;IAlBL;MAgBY,mBAAkB,EACrB;EAjBT;IAoBQ,aAAY;IACZ,iBAAgB,EACnB;EAtBL;IAwBQ,iBAAgB;IAChB,cAAa,EAChB,EAAA;;AAIT;EACI;IAEQ,iBAAgB,EAInB;IANL;MAIY,eAAc,EACjB;EALT;IASQ,iBAAgB,EAOnB;IAhBL;MAWY,iBAAgB,EACnB;IAZT;MAcY,mBAAkB,EACrB,EAAA;;AAKb;EACI;IAEQ,aAAY,EACf,EAAA;;AAIT;EACI;IAEQ,aAAY,EAIf;IANL;MAIY,eAAc,EACjB;EALT;IASY,iBAAgB,EACnB,EAAA","file":"header-content.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.header-container {\n        width: 100%;\n        position: absolute;\n        top: 0;\n        left: 0;\n        // height: 125px;\n        div {\n            position: absolute;\n            z-index: 1;\n            width: 100%;\n        }\n        .left {\n            float: left;\n            margin-top: -5px;\n        }\n        .right {\n            margin-top: 20px;\n            float: right;\n            text-align: right;\n            span {\n                margin-right: 20px;\n            }\n        }\n        h1 {\n            text-align: left;\n            margin: 0 20px;\n            font-family: 'Amatic SC', cursive;\n            font-size: 6em;\n            color: white;\n        }\n        .cart-icon {\n            position: relative;\n            img {\n                width: 30px;\n            }\n        }\n        .total-items {\n            display: inline-block;\n            position: relative;\n            bottom: 17px;\n            left: 33px;\n            color: $accent-color;\n            font-family: $main-font;\n            font-size: 1em;\n            font-weight: bold;\n            margin: 0;\n        }\n\n        .icon-facebook2:before {\n            content: \"\\ea91\";\n            color: white;\n            font-size: 1.9em;\n            //used to be 30px\n        }\n\n        .icon-instagram:before {\n            content: \"\\ea92\";\n            color: white;\n            font-size: 1.9em;\n        }\n\n        .icon-twitter:before {\n            content: \"\\ea96\";\n            color: white;\n            font-size: 1.9em;\n        }\n\n        .icon-cart:before {\n            content: \"\\e93a\";\n            color: white;\n            font-size: 1.9em;\n        }\n}\n\n\n@media all and (max-width: 550px) {\n    .header-container {\n        .left {\n            float: none;\n            margin-top: -5px;\n            width: 100%;\n            z-index: 1003;\n            h1 {\n                float: left;\n            }\n            nav-bar {\n                float: right;\n            }\n        }\n        .right {\n            margin-top: 12px;\n            span {\n                margin-right: 10px;\n            }\n        }\n        h1 {\n            margin: 0 1%;\n            font-size: 3.5em;\n        }\n        .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n            font-size: 1.2em;\n            display: none;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    .header-container {\n        .left {\n            max-width: 250px;\n            h1 {\n                font-size: 4em;\n            }\n        }\n\n        .right {\n            margin-top: 15px;\n            .icon-facebook2:before, .icon-instagram:before, .icon-twitter:before, .icon-cart:before {\n                font-size: 1.5em;\n            }\n            span {\n                margin-right: 15px;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n    .header-container {\n        .left {\n            width: 350px;\n        }\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-container {\n        .left {\n            width: 500px;\n            h1 {\n                font-size: 7em;\n            }\n        }\n        .right {\n            .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n                font-size: 2.2em;\n            }\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -34810,18 +34804,17 @@
 	    this.slides = [{
 	        name: 'img3',
 	        imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1488324567/IMG_1125.tiff_mt0jkc.jpg',
-	        text: '<a>Tranquil Fennel</a>'
-	        // text: 'Sit voluptatem accusantium doloremque laudantium, totam rem aperiam <a ui-sref="shop">Check out our online store</a>'
+	        text: 'Tranquil Fennel'
 	    }, {
 	        name: 'img1',
 	        imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_south_west,h_2603,w_3800/v1488324606/sumpreme-green-centered_wp639t.jpg',
 	        // text: 'Sed ut perspiciatis omnis iste natus error sit voluptatem accusantium doloremque laudantium. <a href="https://www.instagram.com">follow us on instagram!</a>'
-	        text: '<a>Supreme Green</a>'
+	        text: 'Supreme Green'
 	    }, {
 	        name: 'img2',
 	        imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1488324567/IMG_1125.tiff_mt0jkc.jpg',
 	        // text: 'Sed sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. <a>Read about our juices</a>'
-	        text: '<a>Pear-adise</a>'
+	        text: 'Pear-adise'
 	    }];
 	
 	    this.currIndex = 0;
@@ -34886,7 +34879,7 @@
 /* 37 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"slider\">\n    <div ng-repeat=\"slide in $ctrl.slides\">\n        <img ng-hide=\"!$ctrl.isCurrIndex($index)\"\n            ng-src=\"{{slide.imgUrl}}\"\n             class=\"slide-image slide-animation \">\n         <div ng-if=\"$ctrl.isCurrIndex($index)\"\n            class=\"slide-text fade\">\n            <p ng-bind-html=\"$ctrl.currText\"></p>\n         </div>\n    </div>\n\n    <!--<a class=\"arrow next\" href=\"#\" ng-click=\"$ctrl.nextSlide()\"><span class=\"icon-arrow-right2\"></span></a>\n    <a class=\"arrow prev\" href=\"#\" ng-click=\"$ctrl.prevSlide()\"><span class=\"icon-arrow-left2\"></span></a>-->\n    \n    <nav class=\"slider-nav\">\n        <div class=\"wrapper\">\n            <ul class=\"dots\">\n                <li class=\"dot\" ng-repeat=\"slide in $ctrl.slides\">\n                    <a href=\"#\" \n                        ng-class=\"{'active': $ctrl.isCurrIndex($index)}\"\n                        ng-click=\"$ctrl.setCurrIndex($index)\"></a>\n                </li>\n            </ul>\n            <!--<div id=\"progress-bar\" ng-class=\"$ctrl.progress\"></div>-->\n        </div>\n    </nav>\n</div>\n\n\n";
+	module.exports = "<div class=\"slider\">\n    <div ng-repeat=\"slide in $ctrl.slides\">\n        <img ng-hide=\"!$ctrl.isCurrIndex($index)\"\n            ng-src=\"{{slide.imgUrl}}\"\n             class=\"slide-image slide-animation \">\n         <div ng-if=\"$ctrl.isCurrIndex($index)\"\n            class=\"slide-text fade\">\n            <p><a ui-sref=\"shop\">{{$ctrl.currText}}</a></p>\n         </div>\n    </div>\n\n    <!--<a class=\"arrow next\" href=\"#\" ng-click=\"$ctrl.nextSlide()\"><span class=\"icon-arrow-right2\"></span></a>\n    <a class=\"arrow prev\" href=\"#\" ng-click=\"$ctrl.prevSlide()\"><span class=\"icon-arrow-left2\"></span></a>-->\n    \n    <nav class=\"slider-nav\">\n        <div class=\"wrapper\">\n            <ul class=\"dots\">\n                <li class=\"dot\" ng-repeat=\"slide in $ctrl.slides\">\n                    <a href=\"#\" \n                        ng-class=\"{'active': $ctrl.isCurrIndex($index)}\"\n                        ng-click=\"$ctrl.setCurrIndex($index)\"></a>\n                </li>\n            </ul>\n            <!--<div id=\"progress-bar\" ng-class=\"$ctrl.progress\"></div>-->\n        </div>\n    </nav>\n</div>\n\n\n";
 
 /***/ },
 /* 38 */
@@ -35132,24 +35125,18 @@
 	    template: _all2.default,
 	    bindings: {
 	        juices: '<',
-	        gotoItems: '<',
+	        gotoItem: '<',
 	        selectArray: '<',
 	        addToCart: '<',
 	        cart: '='
-	    },
-	    controller: controller
+	    }
 	};
-	
-	
-	function controller() {
-	    console.log(this);
-	}
 
 /***/ },
 /* 51 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"clearfix\">\n    <h2 class=\"item-header\">Our Juices</h2>\n    <!--<p class=\"item-text\"> Online store coming soon! In the meantime feel free to email us and place an order.</p>-->\n</div>\n<section class=\"items\">\n\n        <ul>\n            <li class=\"item\" ng-repeat=\"juice in $ctrl.juices\" ng-click=\"$ctrl.gotoItems\">\n                <img src=\"{{juice.imgUrl}}\"\n                    ui-sref=\"shop.item({\n                    id: juice._id})\">\n                <div class=\"item-info\">\n                    <h3 ui-sref=\"shop.item({\n                    id: juice._id})\">{{juice.name}}</h3>\n                    <p>${{juice.price}}.00</p>\n                    <select ng-model=\"juice.quantity\">\n                        <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                    </select>\n                    <button ng-click=\"$ctrl.addToCart(juice)\">Add to Cart</button>\n                    <p class=\"cart-message\" ng-if=\"juice.cartMessage\">{{juice.messageNum}} added to cart</p>\n                    <p class=\"cart-message\" ng-if=\"juice.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n                </div>\n            </li>\n        </ul>\n</section>";
+	module.exports = "<div class=\"clearfix\">\n    <h2 class=\"item-header\">Our Juices</h2>\n    <!--<p class=\"item-text\"> Online store coming soon! In the meantime feel free to email us and place an order.</p>-->\n</div>\n<section class=\"items\">\n\n        <ul>\n            <li class=\"item\" ng-repeat=\"juice in $ctrl.juices\">\n                <img src=\"{{juice.imgUrl}}\"\n                    ui-sref=\"shop.item({\n                    id: juice._id})\">\n                <div class=\"item-info\">\n                    <h3 ui-sref=\"shop.item({\n                    id: juice._id})\">{{juice.name}}</h3>\n                    <p>${{juice.price}}.00</p>\n                    <select ng-model=\"juice.quantity\">\n                        <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                    </select>\n                    <button ng-click=\"$ctrl.addToCart(juice)\">Add to Cart</button>\n                    <p class=\"cart-message\" ng-if=\"juice.cartMessage\">{{juice.messageNum}} added to cart</p>\n                    <p class=\"cart-message\" ng-if=\"juice.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n                </div>\n            </li>\n        </ul>\n</section>";
 
 /***/ },
 /* 52 */
@@ -35201,7 +35188,7 @@
 /* 53 */
 /***/ function(module, exports) {
 
-	module.exports = "<div ng-class=\"$ctrl.styles.item\" class=\"clearfix\">\n    <div class=\"description\">\n        <h2 class=\"item-name\">{{$ctrl.item.name}}</h2>\n        <p class=\"item-description\">{{$ctrl.item.description}} <a ui-sref=\"shop.all\">&larr;Back to all juices</a></p>    \n    </div>\n    <div class=\"item-img\">\n        <img src=\"{{$ctrl.item.imgUrl}}\">\n        <p>{{$ctrl.item.price}}.00</p>\n        <select ng-model=\"$ctrl.item.quantity\">\n            <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n        </select>\n        <button ng-click=\"$ctrl.addToCart($ctrl.item)\">Add to Cart</button>\n        <p class=\"cart-message\" ng-if=\"$ctrl.item.cartMessage\">{{$ctrl.item.messageNum}} added to cart</p>\n        <p class=\"cart-message\" ng-if=\"$ctrl.item.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n    </div>\n\n    <div ng-class=\"$ctrl.styles.ingredients\" class=\"clearfix\">\n        <h3>Ingredients</h3>\n        <div class=\"list\" ng-style=\"$ctrl.listHeight\">\n            <ul>\n                <li ng-repeat=\"ingredient in $ctrl.item.ingredients\">\n                    <img class=\"ingredient\" src=\"{{ingredient.imgUrl}}\">\n                    <p><span>{{ingredient.name}}. </span>{{ingredient.description}}</p>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n";
+	module.exports = "<div ng-class=\"$ctrl.styles.item\" class=\"clearfix\">\n    <div class=\"description\">\n        <div ng-class=\"$ctrl.styles.header\" class=\"clearfix\">\n            <h2 class=\"item-name\">{{$ctrl.item.name}}</h2>\n            <form ng-class=\"$ctrl.styles.purchase\" ng-submit=\"$ctrl.addToCart($ctrl.item)\">\n                <p>price: ${{$ctrl.item.price}}.00</p>\n                <select ng-model=\"$ctrl.item.quantity\">\n                    <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                </select>\n                <button type=\"submit\">Add to Cart</button>\n            </form>\n        </div>\n        <p class=\"item-description\">{{$ctrl.item.description}} <a ui-sref=\"shop.all\">&larr;Back to all juices</a></p>    \n    </div>\n    <div class=\"item-img\">\n        <p class=\"cart-message\" ng-if=\"$ctrl.item.cartMessage\">{{$ctrl.item.messageNum}} added to cart</p>\n        <p class=\"cart-message\" ng-if=\"$ctrl.item.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n        <img src=\"{{$ctrl.item.imgUrl}}\">\n    </div>\n\n    <div ng-class=\"$ctrl.styles.ingredients\" class=\"clearfix\">\n        <h3>Ingredients</h3>\n        <div class=\"list\" ng-style=\"$ctrl.listHeight\">\n            <ul>\n                <li ng-repeat=\"ingredient in $ctrl.item.ingredients\">\n                    <img class=\"ingredient\" src=\"{{ingredient.imgUrl}}\">\n                    <p><span>{{ingredient.name}}. </span>{{ingredient.description}}</p>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n";
 
 /***/ },
 /* 54 */
@@ -35238,10 +35225,12 @@
 	
 	
 	// module
-	exports.push([module.id, "._3h9JlplhoP1sjXURIB9eh5 {\n  margin-bottom: 5%;\n  width: 95%;\n  margin: 0 auto; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 3em;\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    margin: 0 0 3% 0; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.1em;\n    width: 50%;\n    float: right;\n    text-indent: 20px;\n    margin-top: 0;\n    margin-right: 2%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description a {\n      color: blue;\n      display: block; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 40%;\n    display: inline-block;\n    margin: -2% 4% 0 4%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img img {\n      width: 100%; }\n\n._3BnfWeDF7prcG64xUHo_PS {\n  width: 100%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 2.5em;\n    font-family: \"Amatic SC\", cursive;\n    text-align: center;\n    margin: 0; }\n  ._3BnfWeDF7prcG64xUHo_PS li {\n    float: left;\n    width: 49%;\n    margin-bottom: 5%; }\n  ._3BnfWeDF7prcG64xUHo_PS img {\n    width: 70%;\n    margin: 0 auto; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    width: 70%;\n    margin: 0 auto;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._3BnfWeDF7prcG64xUHo_PS span {\n    font-family: \"Amatic SC\", cursive;\n    font-size: 2em;\n    font-weight: bold; }\n\n@media all and (min-width: 450px) and (max-width: 619px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 4em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.5em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 32%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 3.5em; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    font-size: 1.3em; } }\n\n@media all and (min-width: 620px) and (max-width: 749px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 5em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 2em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 32%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 4.5em; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 750px) and (max-width: 819px) {\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 4.9em;\n      float: left;\n      width: 50%;\n      margin-top: 0;\n      margin-left: -2%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 50%;\n      font-size: 1.3em;\n      margin: 2% 0 0 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 45%;\n      margin: -1% 0 0 0; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) {\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 6em;\n      float: left;\n      width: 50%;\n      margin-top: 0;\n      margin-left: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 50%;\n      font-size: 1.3em;\n      margin: 2% 0 0 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 20%;\n      margin: 0% 10% 0 15%; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em;\n      width: 85%; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS img {\n      width: 60%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n", "", {"version":3,"sources":["/./src/components/shop/item/src/components/shop/item/item.scss","/./src/components/shop/item/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,kBAAiB;EACjB,WAAU;EACV,eAAc,EA+BjB;EAlCD;IAMQ,eAAc;IACd,mBAAkB;IAClB,kCCX8B;IDY9B,iBAAgB,EACnB;EAVL;IAaQ,wCCf8B;IDgB9B,iBAAgB;IAChB,WAAU;IACV,aAAY;IACZ,kBAAiB;IACjB,cAAa;IACb,iBAAgB,EAKnB;IAxBL;MAqBY,YAAW;MACX,eAAc,EACjB;EAvBT;IA2BQ,WAAU;IACV,sBAAqB;IACrB,oBAAmB,EAItB;IAjCL;MA+BY,YAAW,EACd;;AAKT;EACI,YAAW,EA6Bd;EA9BD;IAGQ,iBAAgB;IAChB,kCC5C8B;ID6C9B,mBAAkB;IAClB,UAAS,EACZ;EAPL;IAUQ,YAAW;IACX,WAAU;IACV,kBAAiB,EACpB;EAbL;IAgBQ,WAAU;IACV,eAAc,EACjB;EAlBL;IAoBQ,WAAU;IACV,eAAc;IACd,wCC7D8B,ED8DjC;EAvBL;IA0BQ,kCClE8B;IDmE9B,eAAc;IACd,kBAAiB,EACpB;;AAIL;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAQQ,WAAU,EACb;EAGL;IAEQ,iBAAgB,EACnB;EAHL;IAKQ,iBAAgB,EACnB,EAAA;;AAKT;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,eAAc,EACjB;EANL;IAQQ,WAAU,EACb;EAGL;IAEQ,iBAAgB,EACnB;EAHL;IAKQ,iBAAgB,EACnB,EAAA;;AAKT;EACI;IACI,mBAAkB;IAClB,WAAU,EAqBb;IAvBD;MAIQ,eAAc,EACjB;IALL;MAOQ,iBAAgB;MAChB,YAAW;MACX,WAAU;MACV,cAAa;MACb,iBAAgB,EACnB;IAZL;MAcQ,WAAU;MACV,iBAAgB;MAChB,iBAAgB,EACnB;IAjBL;MAmBQ,YAAW;MACX,WAAU;MACV,kBAAiB,EACpB;EAIL;IACI,WAAU;IACV,aAAY,EA2Bf;IA7BD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc,EACjB;IARL;MAUQ,kBAAiB,EACpB;IAXL;MAaQ,iBAAgB,EACnB;IAdL;MAgBQ,YAAW;MACX,UAAS,EACZ;IAlBL;MAqBQ,qDAAiD;MACjD,oBAAmB,EACtB;IAvBL;MA0BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAIT;EACQ;IACA,mBAAkB;IAClB,WAAU,EAqBb;IAvBG;MAII,eAAc,EACjB;IALD;MAOI,eAAc;MACd,YAAW;MACX,WAAU;MACV,cAAa;MACb,eAAc,EACjB;IAZD;MAcI,WAAU;MACV,iBAAgB;MAChB,iBAAgB,EACnB;IAjBD;MAmBI,YAAW;MACX,WAAU;MACV,qBAAoB,EACvB;EAIL;IACI,WAAU;IACV,aAAY,EA+Bf;IAjCD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc;MACd,WAAU,EACb;IATL;MAWQ,kBAAiB,EACpB;IAZL;MAcQ,WAAU,EACb;IAfL;MAiBQ,iBAAgB,EACnB;IAlBL;MAoBQ,YAAW;MACX,UAAS,EACZ;IAtBL;MAyBQ,qDAAiD;MACjD,oBAAmB,EACtB;IA3BL;MA8BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA","file":"item.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n:local(.item) {\n    margin-bottom: 5%;\n    width: 95%;\n    margin: 0 auto;\n\n    .item-name {\n        font-size: 3em;\n        text-align: center;\n        font-family: $decorative-font;\n        margin: 0 0 3% 0;\n    }\n\n    .item-description {\n        font-family: $main-font;\n        font-size: 1.1em;\n        width: 50%;\n        float: right;\n        text-indent: 20px;\n        margin-top: 0;\n        margin-right: 2%;\n        a {\n            color: blue;\n            display: block;\n        }\n    }\n\n    .item-img {\n        width: 40%;\n        display: inline-block;\n        margin: -2% 4% 0 4%;\n        img {\n            width: 100%;\n        }\n    }\n}\n\n\n:local(.ingredients) {\n    width: 100%;\n    h3 {\n        font-size: 2.5em;\n        font-family: $decorative-font;\n        text-align: center;\n        margin: 0;\n    }\n\n    li {\n        float: left;\n        width: 49%;\n        margin-bottom: 5%;\n    }\n\n    img {\n        width: 70%;\n        margin: 0 auto;\n    }\n    p {\n        width: 70%;\n        margin: 0 auto;\n        font-family: $main-font;\n    }\n\n    span {\n        font-family: $decorative-font;\n        font-size: 2em;\n        font-weight: bold;\n    }\n}\n\n\n@media all and (min-width: 450px) and (max-width: 619px) {\n    :local(.item) {\n        .item-name{\n            font-size: 4em;\n        }\n        .item-description {\n            font-size: 1.5em;\n        }  \n        .item-img {\n            width: 32%;\n        }    \n    }\n\n    :local(.ingredients) {\n        h3 {\n            font-size: 3.5em;\n        }\n        p {\n            font-size: 1.3em;\n        }\n    }\n}\n\n\n@media all and (min-width: 620px) and (max-width: 749px) {\n    :local(.item) {\n        .item-name{\n            font-size: 5em;\n        }\n        .item-description {\n            font-size: 2em;\n        }  \n        .item-img {\n            width: 32%;\n        }    \n    }\n\n    :local(.ingredients) {\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1.5em;\n        }\n    }\n}\n\n\n@media all and (min-width: 750px) and (max-width: 819px) {\n    :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n        .description {\n            overflow: auto;\n        }\n        .item-name {\n            font-size: 4.9em;\n            float: left;\n            width: 50%;\n            margin-top: 0;\n            margin-left: -2%;\n        }\n        .item-description {\n            width: 50%;\n            font-size: 1.3em;\n            margin: 2% 0 0 0;\n        }\n        .item-img {\n            float: left;\n            width: 45%;\n            margin: -1% 0 0 0;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n}\n\n@media all and (min-width: 820px) {\n        :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n        .description {\n            overflow: auto;\n        }\n        .item-name {\n            font-size: 6em;\n            float: left;\n            width: 50%;\n            margin-top: 0;\n            margin-left: 0;\n        }\n        .item-description {\n            width: 50%;\n            font-size: 1.3em;\n            margin: 2% 0 0 0;\n        }\n        .item-img {\n            float: left;\n            width: 20%;\n            margin: 0% 10% 0 15%;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n            width: 85%;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        img {\n            width: 60%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "._3OG3TBtarmYa_z6yiUJZd2 {\n  margin-bottom: 2%;\n  margin-top: 3%; }\n\n._3f2vxcW1iaK4PZrN4XVAAk {\n  float: right;\n  margin-top: 3%;\n  text-align: center; }\n  ._3f2vxcW1iaK4PZrN4XVAAk p {\n    margin-top: 0;\n    margin-bottom: 1.5%;\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n._3h9JlplhoP1sjXURIB9eh5 {\n  margin-bottom: 5%;\n  width: 93%;\n  margin: 0 auto; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 2.5em;\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    margin: 0 0 3% 0;\n    float: left; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.1em;\n    width: 45%;\n    float: right;\n    text-indent: 20px;\n    margin-top: 0;\n    margin-right: 3%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description a {\n      color: blue;\n      display: block; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 40%;\n    display: inline-block;\n    margin: -2% 4% 0 4%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img img {\n      width: 100%; }\n\n._3BnfWeDF7prcG64xUHo_PS {\n  width: 100%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 2.5em;\n    font-family: \"Amatic SC\", cursive;\n    text-align: center;\n    margin: 0; }\n  ._3BnfWeDF7prcG64xUHo_PS li {\n    float: left;\n    width: 49%;\n    margin-bottom: 5%; }\n  ._3BnfWeDF7prcG64xUHo_PS img {\n    width: 70%;\n    margin: 0 auto; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    width: 70%;\n    margin: 0 auto;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._3BnfWeDF7prcG64xUHo_PS span {\n    font-family: \"Amatic SC\", cursive;\n    font-size: 2em;\n    font-weight: bold; }\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS p {\n    font-size: 1.15em; } }\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 4em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.5em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 3.5em; } }\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0 0 0 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    float: none;\n    text-align: center; }\n    ._3f2vxcW1iaK4PZrN4XVAAk p {\n      margin-bottom: .5%; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 4.9em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: -2%;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 3% 0 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 45%;\n      margin: -1% 0 0 0; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    text-align: center;\n    float: none; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      margin-top: 1%;\n      margin-bottom: 1%;\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 ._3OG3TBtarmYa_z6yiUJZd2 {\n      width: 50%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 6em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: 0;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 2% 5% 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 22%;\n      margin: 0% 10% 0 13%; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em;\n      width: 85%; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS img {\n      width: 60%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) and (min-width: 1060px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 20%;\n    margin: 0 10% 0 15%; } }\n", "", {"version":3,"sources":["/./src/components/shop/item/src/components/shop/item/item.scss","/./src/components/shop/item/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAIA;EACI,kBAAiB;EACjB,eAAc,EACjB;;AACD;EACI,aAAY;EACZ,eAAc;EAQd,mBAAkB,EACrB;EAXD;IAIQ,cAAa;IACb,oBAAmB;IACnB,iBAAgB;IAChB,YAAW;IACX,+CCdqC,EDexC;;AAGL;EACI,kBAAiB;EACjB,WAAU;EACV,eAAc,EAgCjB;EAnCD;IAMQ,iBAAgB;IAChB,mBAAkB;IAClB,kCC5B8B;ID6B9B,iBAAgB;IAChB,YAAW,EACd;EAXL;IAcQ,wCCjC8B;IDkC9B,iBAAgB;IAChB,WAAU;IACV,aAAY;IACZ,kBAAiB;IACjB,cAAa;IACb,iBAAgB,EAKnB;IAzBL;MAsBY,YAAW;MACX,eAAc,EACjB;EAxBT;IA4BQ,WAAU;IACV,sBAAqB;IACrB,oBAAmB,EAItB;IAlCL;MAgCY,YAAW,EACd;;AAKT;EACI,YAAW,EA6Bd;EA9BD;IAGQ,iBAAgB;IAChB,kCC9D8B;ID+D9B,mBAAkB;IAClB,UAAS,EACZ;EAPL;IAUQ,YAAW;IACX,WAAU;IACV,kBAAiB,EACpB;EAbL;IAgBQ,WAAU;IACV,eAAc,EACjB;EAlBL;IAoBQ,WAAU;IACV,eAAc;IACd,wCC/E8B,EDgFjC;EAvBL;IA0BQ,kCCpF8B;IDqF9B,eAAc;IACd,kBAAiB,EACpB;;AAIL;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,kBAAiB,EACpB,EAAA;;AAKb;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,iBAAgB,EACnB,EAAA;;AAKb;EACI;IACI,YAAW;IACX,WAAU;IACV,gBAAe,EAClB;EAED;IACI,YAAW;IACX,mBAAkB,EAIrB;IAND;MAIQ,mBAAkB,EACrB;EAEL;IACI,mBAAkB;IAClB,WAAU,EAuBb;IAzBD;MAIQ,eAAc,EACjB;IALL;MAOQ,iBAAgB;MAChB,YAAW;MACX,YAAW;MACX,cAAa;MACb,iBAAgB;MAChB,iBAAgB,EACnB;IAbL;MAeQ,WAAU;MACV,iBAAgB;MAChB,iBAAgB;MAChB,aAAY,EACf;IAnBL;MAqBQ,YAAW;MACX,WAAU;MACV,kBAAiB,EACpB;EAIL;IACI,WAAU;IACV,aAAY,EA2Bf;IA7BD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc,EACjB;IARL;MAUQ,kBAAiB,EACpB;IAXL;MAaQ,iBAAgB,EACnB;IAdL;MAgBQ,YAAW;MACX,UAAS,EACZ;IAlBL;MAqBQ,qDAAiD;MACjD,oBAAmB,EACtB;IAvBL;MA0BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAIT;EACQ;IACI,YAAW;IACX,WAAU;IACV,UAAS,EACZ;EACD;IACI,mBAAkB;IAClB,YAAW,EACd;EACD;IACA,mBAAkB;IAClB,WAAU,EA6Bb;IA/BG;MAKI,eAAc;MACd,kBAAiB;MACjB,eAAc,EACjB;IARD;MAUI,WAAU,EACb;IAXD;MAaI,eAAc;MACd,YAAW;MACX,YAAW;MACX,cAAa;MACb,eAAc;MACd,iBAAgB,EACnB;IAnBD;MAqBI,WAAU;MACV,iBAAgB;MAChB,kBAAiB;MACjB,aAAY,EACf;IAzBD;MA2BI,YAAW;MACX,WAAU;MACV,qBAAoB,EACvB;EAIL;IACI,WAAU;IACV,aAAY,EA+Bf;IAjCD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc;MACd,WAAU,EACb;IATL;MAWQ,kBAAiB,EACpB;IAZL;MAcQ,WAAU,EACb;IAfL;MAiBQ,iBAAgB,EACnB;IAlBL;MAoBQ,YAAW;MACX,UAAS,EACZ;IAtBL;MAyBQ,qDAAiD;MACjD,oBAAmB,EACtB;IA3BL;MA8BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAGL;EACI;IAEQ,WAAU;IACV,oBAAmB,EACtB,EAAA","file":"item.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n\n:local(.header) {\n    margin-bottom: 2%;\n    margin-top: 3%;\n}\n:local(.purchase) {\n    float: right;\n    margin-top: 3%;\n    p {\n        margin-top: 0;\n        margin-bottom: 1.5%;\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n    text-align: center;\n}\n:local(.item) {\n    margin-bottom: 5%;\n    width: 93%;\n    margin: 0 auto;\n\n    .item-name {\n        font-size: 2.5em;\n        text-align: center;\n        font-family: $decorative-font;\n        margin: 0 0 3% 0;\n        float: left;\n    }\n\n    .item-description {\n        font-family: $main-font;\n        font-size: 1.1em;\n        width: 45%;\n        float: right;\n        text-indent: 20px;\n        margin-top: 0;\n        margin-right: 3%;\n        a {\n            color: blue;\n            display: block;\n        }\n    }\n\n    .item-img {\n        width: 40%;\n        display: inline-block;\n        margin: -2% 4% 0 4%;\n        img {\n            width: 100%;\n        }\n    }\n}\n\n\n:local(.ingredients) {\n    width: 100%;\n    h3 {\n        font-size: 2.5em;\n        font-family: $decorative-font;\n        text-align: center;\n        margin: 0;\n    }\n\n    li {\n        float: left;\n        width: 49%;\n        margin-bottom: 5%;\n    }\n\n    img {\n        width: 70%;\n        margin: 0 auto;\n    }\n    p {\n        width: 70%;\n        margin: 0 auto;\n        font-family: $main-font;\n    }\n\n    span {\n        font-family: $decorative-font;\n        font-size: 2em;\n        font-weight: bold;\n    }\n}\n\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n    :local(.item) {\n        .item-name{\n            font-size: 3em;\n        }\n        .item-description {\n            font-size: 1.3em;\n        }  \n  \n        :local(.ingredients) {\n            p {\n                font-size: 1.15em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n    :local(.item) {\n        .item-name {\n            font-size: 4em;\n        }\n        .item-description {\n            font-size: 1.5em;\n        }\n\n        :local(.ingredients) {\n            h3 {\n                font-size: 3.5em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n    :local(.header) {\n        float: left;\n        width: 50%;\n        margin: 0 0 0 0;\n    }\n\n    :local(.purchase) {\n        float: none;\n        text-align: center;\n        p {\n            margin-bottom: .5%;\n        }\n    }\n    :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n        .description {\n            overflow: auto;\n        }\n        .item-name {\n            font-size: 4.9em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: -2%;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 3% 0 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 45%;\n            margin: -1% 0 0 0;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n}\n\n@media all and (min-width: 820px) {\n        :local(.header) {\n            float: left;\n            width: 50%;\n            margin: 0;\n        }\n        :local(.purchase) {\n            text-align: center;\n            float: none;\n        }\n        :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n\n        .description {\n            margin-top: 1%;\n            margin-bottom: 1%;\n            overflow: auto;\n        }\n        :local(.header) {\n            width: 50%;\n        }\n        .item-name {\n            font-size: 6em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: 0;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 2% 5% 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 22%;\n            margin: 0% 10% 0 13%;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n            width: 85%;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        img {\n            width: 60%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n\n    @media all and (min-width: 1060px) {\n        :local(.item) {\n            .item-img {\n                width: 20%;\n                margin: 0 10% 0 15%;\n            }\n        }\n    }\n\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 	exports.locals = {
+		"header": "_3OG3TBtarmYa_z6yiUJZd2",
+		"purchase": "_3f2vxcW1iaK4PZrN4XVAAk",
 		"item": "_3h9JlplhoP1sjXURIB9eh5",
 		"ingredients": "_3BnfWeDF7prcG64xUHo_PS"
 	};
@@ -35345,7 +35334,8 @@
 	    template: _shop2.default,
 	    bindings: {
 	        juices: '<',
-	        cart: '='
+	        cart: '=',
+	        hasSeenLanding: '='
 	    },
 	    controller: controller
 	};
@@ -35356,13 +35346,13 @@
 	function controller($scope, $document, $timeout) {
 	    this.styles = _shop4.default;
 	    this.cartMessage = false;
+	    this.selectArray = [];
 	
 	    var items = angular.element(document.getElementById('items')); //eslint-disable-line
 	    this.gotoItems = function () {
+	        this.hasSeenLanding = true;
 	        $document.scrollToElement(items, 0, 600);
 	    };
-	
-	    this.selectArray = [];
 	
 	    for (var i = 0; i < 10; i++) {
 	        this.selectArray.push(i + 1);
@@ -35415,7 +35405,7 @@
 /* 61 */
 /***/ function(module, exports) {
 
-	module.exports = "<shop-head></shop-head>\n\n<div class=\"image-text\">\n    <div class=\"text-box\">\n        <button ng-click=\"$ctrl.gotoItems()\">Check out Our Juices</button>\n    </div>\n    <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_south,h_2530,w_4096/v1482867018/earth%20house/blue-spread_ixxxfx.jpg\">\n</div>\n\n\n\n<div id=\"items\">\n    <ui-view name=\"main\" select-array=\"$ctrl.selectArray\" add-to-cart=\"$ctrl.addToCart\" quantity=\"$ctrl.quantity\" cart=\"$ctrl.cart\"></ui-view>\n</div>\n\n<!-- TODO: work out some way to autoscroll when navigating from all items view to individual item view-->\n";
+	module.exports = "<div class=\"image-text\">\n    <div class=\"text-box\">\n        <button ng-click=\"$ctrl.gotoItems()\">Check out Our Juices</button>\n    </div>\n    <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_south,h_2530,w_4096/v1482867018/earth%20house/blue-spread_ixxxfx.jpg\">\n</div>\n\n<div id=\"items\">\n    <ui-view autoscroll=\"$ctrl.hasSeenLanding\" name=\"main\" select-array=\"$ctrl.selectArray\" add-to-cart=\"$ctrl.addToCart\" quantity=\"$ctrl.quantity\" cart=\"$ctrl.cart\" goToItem=\"$ctrl.goToItem\"></ui-view>\n</div>\n\n<!-- TODO: work out some way to autoscroll when navigating from all items view to individual item view-->\n";
 
 /***/ },
 /* 62 */
@@ -35467,15 +35457,15 @@
 	    value: true
 	});
 	
-	var _angular = __webpack_require__(2);
+	var _angular = __webpack_require__(1);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _camelcase = __webpack_require__(5);
+	var _camelcase = __webpack_require__(4);
 	
 	var _camelcase2 = _interopRequireDefault(_camelcase);
 	
-	var _path = __webpack_require__(6);
+	var _path = __webpack_require__(5);
 	
 	var _path2 = _interopRequireDefault(_path);
 	
@@ -43241,7 +43231,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ng_from_import = __webpack_require__(2);
+	var ng_from_import = __webpack_require__(1);
 	var ng_from_global = angular;
 	exports.ng = (ng_from_import && ng_from_import.module) ? ng_from_import : ng_from_global;
 	//# sourceMappingURL=angular.js.map
@@ -44958,7 +44948,7 @@
 	 * @module directives
 	 */ /** for typedoc */
 	var angular_1 = __webpack_require__(128);
-	var angular_2 = __webpack_require__(2);
+	var angular_2 = __webpack_require__(1);
 	var ui_router_core_1 = __webpack_require__(71);
 	var views_1 = __webpack_require__(129);
 	var services_1 = __webpack_require__(127);
@@ -45574,7 +45564,7 @@
 /* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(2);
+	__webpack_require__(1);
 	__webpack_require__(143);
 	
 	module.exports = 'duScroll';
