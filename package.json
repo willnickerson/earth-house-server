@@ -9,21 +9,24 @@
   "scripts": {
     "pretest": "eslint .",
     "test": "mocha",
-    "test:watch": "nodemon --exec mocha",
-    "start": "nodemon server.js"
+    "test:watch": "npm test:run -- -w",
+    "start": "node server.js"
   },
   "author": "Will Nickerson",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "dotenv": "^4.0.0",
     "express": "^4.14.0",
     "mongoose": "^4.7.1",
     "morgan": "^1.7.0",
+    "nodemailer": "^3.1.8",
     "stripe": "^4.15.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
+    "dotenv": "^4.0.0",
     "eslint": "^3.11.1",
     "mocha": "^3.2.0"
   }

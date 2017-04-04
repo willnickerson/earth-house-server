@@ -2,6 +2,7 @@ const http = require('http');
 const port = process.env.PORT || 3000;
 const app = require('./lib/app');
 require('./lib/setup-mongoose');
+require('dotenv').config();
 
 const server = http.createServer(app);
 
