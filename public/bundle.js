@@ -112,6 +112,14 @@
 	    $window.Stripe.setPublishableKey('pk_test_HS62OmJo7gCzA7fcN2ObL2rF');
 	});
 	
+	app.run(function ($rootScope, $state, $transitions, $anchorScroll) {
+	    console.log('in run block');
+	    $transitions.onSuccess({ to: '*' }, function () {
+	        console.log('state changing');
+	        $anchorScroll();
+	    });
+	});
+	
 	app.animation('.slide-animation', function ($window) {
 	
 	    return {
@@ -159,7 +167,7 @@
 /***/ function(module, exports) {
 
 	/**
-	 * @license AngularJS v1.6.2
+	 * @license AngularJS v1.6.3
 	 * (c) 2010-2017 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -198,31 +206,29 @@
 	function minErr(module, ErrorConstructor) {
 	  ErrorConstructor = ErrorConstructor || Error;
 	  return function() {
-	    var SKIP_INDEXES = 2;
-	
-	    var templateArgs = arguments,
-	      code = templateArgs[0],
+	    var code = arguments[0],
+	      template = arguments[1],
 	      message = '[' + (module ? module + ':' : '') + code + '] ',
-	      template = templateArgs[1],
+	      templateArgs = sliceArgs(arguments, 2).map(function(arg) {
+	        return toDebugString(arg, minErrConfig.objectMaxDepth);
+	      }),
 	      paramPrefix, i;
 	
 	    message += template.replace(/\{\d+\}/g, function(match) {
-	      var index = +match.slice(1, -1),
-	        shiftedIndex = index + SKIP_INDEXES;
+	      var index = +match.slice(1, -1);
 	
-	      if (shiftedIndex < templateArgs.length) {
-	        return toDebugString(templateArgs[shiftedIndex]);
+	      if (index < templateArgs.length) {
+	        return templateArgs[index];
 	      }
 	
 	      return match;
 	    });
 	
-	    message += '\nhttp://errors.angularjs.org/1.6.2/' +
+	    message += '\nhttp://errors.angularjs.org/1.6.3/' +
 	      (module ? module + '/' : '') + code;
 	
-	    for (i = SKIP_INDEXES, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
-	      message += paramPrefix + 'p' + (i - SKIP_INDEXES) + '=' +
-	        encodeURIComponent(toDebugString(templateArgs[i]));
+	    for (i = 0, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
+	      message += paramPrefix + 'p' + i + '=' + encodeURIComponent(templateArgs[i]);
 	    }
 	
 	    return new ErrorConstructor(message);
@@ -239,6 +245,9 @@
 	  splice,
 	  push,
 	  toString,
+	  minErrConfig,
+	  errorHandlingConfig,
+	  isValidObjectMaxDepth,
 	  ngMinErr,
 	  angularModule,
 	  uid,
@@ -353,6 +362,50 @@
 	
 	
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	
+	var minErrConfig = {
+	  objectMaxDepth: 5
+	};
+	
+	 /**
+	 * @ngdoc function
+	 * @name angular.errorHandlingConfig
+	 * @module ng
+	 * @kind function
+	 *
+	 * @description
+	 * Configure several aspects of error handling in AngularJS if used as a setter or return the
+	 * current configuration if used as a getter. The following options are supported:
+	 *
+	 * - **objectMaxDepth**: The maximum depth to which objects are traversed when stringified for error messages.
+	 *
+	 * Omitted or undefined options will leave the corresponding configuration values unchanged.
+	 *
+	 * @param {Object=} config - The configuration object. May only contain the options that need to be
+	 *     updated. Supported keys:
+	 *
+	 * * `objectMaxDepth`  **{Number}** - The max depth for stringifying objects. Setting to a
+	 *   non-positive or non-numeric value, removes the max depth limit.
+	 *   Default: 5
+	 */
+	function errorHandlingConfig(config) {
+	  if (isObject(config)) {
+	    if (isDefined(config.objectMaxDepth)) {
+	      minErrConfig.objectMaxDepth = isValidObjectMaxDepth(config.objectMaxDepth) ? config.objectMaxDepth : NaN;
+	    }
+	  } else {
+	    return minErrConfig;
+	  }
+	}
+	
+	/**
+	 * @private
+	 * @param {Number} maxDepth
+	 * @return {boolean}
+	 */
+	function isValidObjectMaxDepth(maxDepth) {
+	  return isNumber(maxDepth) && maxDepth > 0;
+	}
 	
 	/**
 	 * @ngdoc function
@@ -1076,9 +1129,10 @@
 	    </file>
 	  </example>
 	 */
-	function copy(source, destination) {
+	function copy(source, destination, maxDepth) {
 	  var stackSource = [];
 	  var stackDest = [];
+	  maxDepth = isValidObjectMaxDepth(maxDepth) ? maxDepth : NaN;
 	
 	  if (destination) {
 	    if (isTypedArray(destination) || isArrayBuffer(destination)) {
@@ -1101,35 +1155,39 @@
 	
 	    stackSource.push(source);
 	    stackDest.push(destination);
-	    return copyRecurse(source, destination);
+	    return copyRecurse(source, destination, maxDepth);
 	  }
 	
-	  return copyElement(source);
+	  return copyElement(source, maxDepth);
 	
-	  function copyRecurse(source, destination) {
+	  function copyRecurse(source, destination, maxDepth) {
+	    maxDepth--;
+	    if (maxDepth < 0) {
+	      return '...';
+	    }
 	    var h = destination.$$hashKey;
 	    var key;
 	    if (isArray(source)) {
 	      for (var i = 0, ii = source.length; i < ii; i++) {
-	        destination.push(copyElement(source[i]));
+	        destination.push(copyElement(source[i], maxDepth));
 	      }
 	    } else if (isBlankObject(source)) {
 	      // createMap() fast path --- Safe to avoid hasOwnProperty check because prototype chain is empty
 	      for (key in source) {
-	        destination[key] = copyElement(source[key]);
+	        destination[key] = copyElement(source[key], maxDepth);
 	      }
 	    } else if (source && typeof source.hasOwnProperty === 'function') {
 	      // Slow path, which must rely on hasOwnProperty
 	      for (key in source) {
 	        if (source.hasOwnProperty(key)) {
-	          destination[key] = copyElement(source[key]);
+	          destination[key] = copyElement(source[key], maxDepth);
 	        }
 	      }
 	    } else {
 	      // Slowest path --- hasOwnProperty can't be called as a method
 	      for (key in source) {
 	        if (hasOwnProperty.call(source, key)) {
-	          destination[key] = copyElement(source[key]);
+	          destination[key] = copyElement(source[key], maxDepth);
 	        }
 	      }
 	    }
@@ -1137,7 +1195,7 @@
 	    return destination;
 	  }
 	
-	  function copyElement(source) {
+	  function copyElement(source, maxDepth) {
 	    // Simple values
 	    if (!isObject(source)) {
 	      return source;
@@ -1166,7 +1224,7 @@
 	    stackDest.push(destination);
 	
 	    return needsRecurse
-	      ? copyRecurse(source, destination)
+	      ? copyRecurse(source, destination, maxDepth)
 	      : destination;
 	  }
 	
@@ -1709,33 +1767,50 @@
 	
 	function allowAutoBootstrap(document) {
 	  var script = document.currentScript;
-	  var src = script && script.getAttribute('src');
 	
-	  if (!src) {
+	  if (!script) {
+	    // IE does not have `document.currentScript`
 	    return true;
 	  }
 	
-	  var link = document.createElement('a');
-	  link.href = src;
-	
-	  if (document.location.origin === link.origin) {
-	    // Same-origin resources are always allowed, even for non-whitelisted schemes.
-	    return true;
+	  // If the `currentScript` property has been clobbered just return false, since this indicates a probable attack
+	  if (!(script instanceof window.HTMLScriptElement || script instanceof window.SVGScriptElement)) {
+	    return false;
 	  }
-	  // Disabled bootstrapping unless angular.js was loaded from a known scheme used on the web.
-	  // This is to prevent angular.js bundled with browser extensions from being used to bypass the
-	  // content security policy in web pages and other browser extensions.
-	  switch (link.protocol) {
-	    case 'http:':
-	    case 'https:':
-	    case 'ftp:':
-	    case 'blob:':
-	    case 'file:':
-	    case 'data:':
+	
+	  var attributes = script.attributes;
+	  var srcs = [attributes.getNamedItem('src'), attributes.getNamedItem('href'), attributes.getNamedItem('xlink:href')];
+	
+	  return srcs.every(function(src) {
+	    if (!src) {
 	      return true;
-	    default:
+	    }
+	    if (!src.value) {
 	      return false;
-	  }
+	    }
+	
+	    var link = document.createElement('a');
+	    link.href = src.value;
+	
+	    if (document.location.origin === link.origin) {
+	      // Same-origin resources are always allowed, even for non-whitelisted schemes.
+	      return true;
+	    }
+	    // Disabled bootstrapping unless angular.js was loaded from a known scheme used on the web.
+	    // This is to prevent angular.js bundled with browser extensions from being used to bypass the
+	    // content security policy in web pages and other browser extensions.
+	    switch (link.protocol) {
+	      case 'http:':
+	      case 'https:':
+	      case 'ftp:':
+	      case 'blob:':
+	      case 'file:':
+	      case 'data:':
+	        return true;
+	      default:
+	        return false;
+	    }
+	  });
 	}
 	
 	// Cached as it has to run during loading so that document.currentScript is available.
@@ -2332,6 +2407,9 @@
 	     * @returns {angular.Module} new module with the {@link angular.Module} api.
 	     */
 	    return function module(name, requires, configFn) {
+	
+	      var info = {};
+	
 	      var assertNotHasOwnProperty = function(name, context) {
 	        if (name === 'hasOwnProperty') {
 	          throw ngMinErr('badname', 'hasOwnProperty is not a valid {0} name', context);
@@ -2366,6 +2444,45 @@
 	          _invokeQueue: invokeQueue,
 	          _configBlocks: configBlocks,
 	          _runBlocks: runBlocks,
+	
+	          /**
+	           * @ngdoc method
+	           * @name angular.Module#info
+	           * @module ng
+	           *
+	           * @param {Object=} info Information about the module
+	           * @returns {Object|Module} The current info object for this module if called as a getter,
+	           *                          or `this` if called as a setter.
+	           *
+	           * @description
+	           * Read and write custom information about this module.
+	           * For example you could put the version of the module in here.
+	           *
+	           * ```js
+	           * angular.module('myModule', []).info({ version: '1.0.0' });
+	           * ```
+	           *
+	           * The version could then be read back out by accessing the module elsewhere:
+	           *
+	           * ```
+	           * var version = angular.module('myModule').info().version;
+	           * ```
+	           *
+	           * You can also retrieve this information during runtime via the
+	           * {@link $injector#modules `$injector.modules`} property:
+	           *
+	           * ```js
+	           * var version = $injector.modules['myModule'].info().version;
+	           * ```
+	           */
+	          info: function(value) {
+	            if (isDefined(value)) {
+	              if (!isObject(value)) throw ngMinErr('aobj', 'Argument \'{0}\' must be an object', 'value');
+	              info = value;
+	              return this;
+	            }
+	            return info;
+	          },
 	
 	          /**
 	           * @ngdoc property
@@ -2645,9 +2762,15 @@
 	
 	/* global toDebugString: true */
 	
-	function serializeObject(obj) {
+	function serializeObject(obj, maxDepth) {
 	  var seen = [];
 	
+	  // There is no direct way to stringify object until reaching a specific depth
+	  // and a very deep object can cause a performance issue, so we copy the object
+	  // based on this specific depth and then stringify it.
+	  if (isValidObjectMaxDepth(maxDepth)) {
+	    obj = copy(obj, null, maxDepth);
+	  }
 	  return JSON.stringify(obj, function(key, val) {
 	    val = toJsonReplacer(key, val);
 	    if (isObject(val)) {
@@ -2660,13 +2783,13 @@
 	  });
 	}
 	
-	function toDebugString(obj) {
+	function toDebugString(obj, maxDepth) {
 	  if (typeof obj === 'function') {
 	    return obj.toString().replace(/ \{[\s\S]*$/, '');
 	  } else if (isUndefined(obj)) {
 	    return 'undefined';
 	  } else if (typeof obj !== 'string') {
-	    return serializeObject(obj);
+	    return serializeObject(obj, maxDepth);
 	  }
 	  return obj;
 	}
@@ -2787,16 +2910,17 @@
 	var version = {
 	  // These placeholder strings will be replaced by grunt's `build` task.
 	  // They need to be double- or single-quoted.
-	  full: '1.6.2',
+	  full: '1.6.3',
 	  major: 1,
 	  minor: 6,
-	  dot: 2,
-	  codeName: 'llamacorn-lovehug'
+	  dot: 3,
+	  codeName: 'scriptalicious-bootstrapping'
 	};
 	
 	
 	function publishExternalAPI(angular) {
 	  extend(angular, {
+	    'errorHandlingConfig': errorHandlingConfig,
 	    'bootstrap': bootstrap,
 	    'copy': copy,
 	    'extend': extend,
@@ -2935,7 +3059,8 @@
 	        $$cookieReader: $$CookieReaderProvider
 	      });
 	    }
-	  ]);
+	  ])
+	  .info({ angularVersion: '1.6.3' });
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -4327,6 +4452,28 @@
 	 */
 	
 	/**
+	 * @ngdoc property
+	 * @name $injector#modules
+	 * @type {Object}
+	 * @description
+	 * A hash containing all the modules that have been loaded into the
+	 * $injector.
+	 *
+	 * You can use this property to find out information about a module via the
+	 * {@link angular.Module#info `myModule.info(...)`} method.
+	 *
+	 * For example:
+	 *
+	 * ```
+	 * var info = $injector.modules['ngAnimate'].info();
+	 * ```
+	 *
+	 * **Do not use this property to attempt to modify the modules after the application
+	 * has been bootstrapped.**
+	 */
+	
+	
+	/**
 	 * @ngdoc method
 	 * @name $injector#get
 	 *
@@ -4819,6 +4966,7 @@
 	      instanceInjector = protoInstanceInjector;
 	
 	  providerCache['$injector' + providerSuffix] = { $get: valueFn(protoInstanceInjector) };
+	  instanceInjector.modules = providerInjector.modules = createMap();
 	  var runBlocks = loadModules(modulesToLoad);
 	  instanceInjector = protoInstanceInjector.get('$injector');
 	  instanceInjector.strictDi = strictDi;
@@ -4914,6 +5062,7 @@
 	      try {
 	        if (isString(module)) {
 	          moduleFn = angularModule(module);
+	          instanceInjector.modules[module] = moduleFn;
 	          runBlocks = runBlocks.concat(loadModules(moduleFn.requires)).concat(moduleFn._runBlocks);
 	          runInvokeQueue(moduleFn._invokeQueue);
 	          runInvokeQueue(moduleFn._configBlocks);
@@ -5504,6 +5653,7 @@
 	 */
 	var $AnimateProvider = ['$provide', /** @this */ function($provide) {
 	  var provider = this;
+	  var classNameFilter = null;
 	
 	  this.$$registeredAnimations = Object.create(null);
 	
@@ -5572,15 +5722,16 @@
 	   */
 	  this.classNameFilter = function(expression) {
 	    if (arguments.length === 1) {
-	      this.$$classNameFilter = (expression instanceof RegExp) ? expression : null;
-	      if (this.$$classNameFilter) {
-	        var reservedRegex = new RegExp('(\\s+|\\/)' + NG_ANIMATE_CLASSNAME + '(\\s+|\\/)');
-	        if (reservedRegex.test(this.$$classNameFilter.toString())) {
-	          throw $animateMinErr('nongcls','$animateProvider.classNameFilter(regex) prohibits accepting a regex value which matches/contains the "{0}" CSS class.', NG_ANIMATE_CLASSNAME);
+	      classNameFilter = (expression instanceof RegExp) ? expression : null;
+	      if (classNameFilter) {
+	        var reservedRegex = new RegExp('[(\\s|\\/)]' + NG_ANIMATE_CLASSNAME + '[(\\s|\\/)]');
+	        if (reservedRegex.test(classNameFilter.toString())) {
+	          classNameFilter = null;
+	          throw $animateMinErr('nongcls', '$animateProvider.classNameFilter(regex) prohibits accepting a regex value which matches/contains the "{0}" CSS class.', NG_ANIMATE_CLASSNAME);
 	        }
 	      }
 	    }
-	    return this.$$classNameFilter;
+	    return classNameFilter;
 	  };
 	
 	  this.$get = ['$$animateQueue', function($$animateQueue) {
@@ -6498,8 +6649,8 @@
 	  self.onUrlChange = function(callback) {
 	    // TODO(vojta): refactor to use node's syntax for events
 	    if (!urlChangeInit) {
-	      // We listen on both (hashchange/popstate) when available, as some browsers (e.g. Opera)
-	      // don't fire popstate when user change the address bar and don't fire hashchange when url
+	      // We listen on both (hashchange/popstate) when available, as some browsers don't
+	      // fire popstate when user changes the address bar and don't fire hashchange when url
 	      // changed by push/replaceState
 	
 	      // html5 history api - popstate event
@@ -7288,10 +7439,12 @@
 	 * the directive's element. If multiple directives on the same element request a new scope,
 	 * only one new scope is created.
 	 *
-	 * * **`{...}` (an object hash):** A new "isolate" scope is created for the directive's element. The
-	 * 'isolate' scope differs from normal scope in that it does not prototypically inherit from its parent
-	 * scope. This is useful when creating reusable components, which should not accidentally read or modify
-	 * data in the parent scope.
+	 * * **`{...}` (an object hash):** A new "isolate" scope is created for the directive's template.
+	 * The 'isolate' scope differs from normal scope in that it does not prototypically
+	 * inherit from its parent scope. This is useful when creating reusable components, which should not
+	 * accidentally read or modify data in the parent scope. Note that an isolate scope
+	 * directive without a `template` or `templateUrl` will not apply the isolate scope
+	 * to its children elements.
 	 *
 	 * The 'isolate' scope object hash defines a set of local scope properties derived from attributes on the
 	 * directive's element. These local properties are useful for aliasing values for templates. The keys in
@@ -13259,8 +13412,8 @@
 	 * how they vary compared to the requested url.
 	 */
 	var $jsonpCallbacksProvider = /** @this */ function() {
-	  this.$get = ['$window', function($window) {
-	    var callbacks = $window.angular.callbacks;
+	  this.$get = function() {
+	    var callbacks = angular.callbacks;
 	    var callbackMap = {};
 	
 	    function createCallback(callbackId) {
@@ -13327,7 +13480,7 @@
 	        delete callbackMap[callbackPath];
 	      }
 	    };
-	  }];
+	  };
 	};
 	
 	/**
@@ -14434,6 +14587,15 @@
 	  };
 	
 	  this.$get = ['$window', function($window) {
+	    // Support: IE 9-11, Edge 12-14+
+	    // IE/Edge display errors in such a way that it requires the user to click in 4 places
+	    // to see the stack trace. There is no way to feature-detect it so there's a chance
+	    // of the user agent sniffing to go wrong but since it's only about logging, this shouldn't
+	    // break apps. Other browsers display errors in a sensible way and some of them map stack
+	    // traces along source maps if available so it makes sense to let browsers display it
+	    // as they want.
+	    var formatStackTrace = msie || /\bEdge\//.test($window.navigator && $window.navigator.userAgent);
+	
 	    return {
 	      /**
 	       * @ngdoc method
@@ -14491,7 +14653,7 @@
 	
 	    function formatError(arg) {
 	      if (arg instanceof Error) {
-	        if (arg.stack) {
+	        if (arg.stack && formatStackTrace) {
 	          arg = (arg.message && arg.stack.indexOf(arg.message) === -1)
 	              ? 'Error: ' + arg.message + '\n' + arg.stack
 	              : arg.stack;
@@ -17979,12 +18141,13 @@
 	          current = target;
 	
 	          // It's safe for asyncQueuePosition to be a local variable here because this loop can't
-	          // be reentered recursively. Calling $digest from a function passed to $applyAsync would
+	          // be reentered recursively. Calling $digest from a function passed to $evalAsync would
 	          // lead to a '$digest already in progress' error.
 	          for (var asyncQueuePosition = 0; asyncQueuePosition < asyncQueue.length; asyncQueuePosition++) {
 	            try {
 	              asyncTask = asyncQueue[asyncQueuePosition];
-	              asyncTask.scope.$eval(asyncTask.expression, asyncTask.locals);
+	              fn = asyncTask.fn;
+	              fn(asyncTask.scope, asyncTask.locals);
 	            } catch (e) {
 	              $exceptionHandler(e);
 	            }
@@ -18218,7 +18381,7 @@
 	          });
 	        }
 	
-	        asyncQueue.push({scope: this, expression: $parse(expr), locals: locals});
+	        asyncQueue.push({scope: this, fn: $parse(expr), locals: locals});
 	      },
 	
 	      $$postDigest: function(fn) {
@@ -20186,7 +20349,7 @@
 	 * URL will be resolved into an absolute URL in the context of the application document.
 	 * Parsing means that the anchor node's host, hostname, protocol, port, pathname and related
 	 * properties are all populated to reflect the normalized URL.  This approach has wide
-	 * compatibility - Safari 1+, Mozilla 1+, Opera 7+,e etc.  See
+	 * compatibility - Safari 1+, Mozilla 1+ etc.  See
 	 * http://www.aptana.com/reference/html/api/HTMLAnchorElement.html
 	 *
 	 * Implementation Notes for IE
@@ -20552,6 +20715,9 @@
 	 * Selects a subset of items from `array` and returns it as a new array.
 	 *
 	 * @param {Array} array The source array.
+	 * <div class="alert alert-info">
+	 *   **Note**: If the array contains objects that reference themselves, filtering is not possible.
+	 * </div>
 	 * @param {string|Object|function()} expression The predicate to be used for selecting items from
 	 *   `array`.
 	 *
@@ -20769,7 +20935,10 @@
 	      var key;
 	      if (matchAgainstAnyProp) {
 	        for (key in actual) {
-	          if ((key.charAt(0) !== '$') && deepCompare(actual[key], expected, comparator, anyPropertyKey, true)) {
+	          // Under certain, rare, circumstances, key may not be a string and `charAt` will be undefined
+	          // See: https://github.com/angular/angular.js/issues/15644
+	          if (key.charAt && (key.charAt(0) !== '$') &&
+	              deepCompare(actual[key], expected, comparator, anyPropertyKey, true)) {
 	            return true;
 	          }
 	        }
@@ -28046,32 +28215,57 @@
 	 * @property {*} $viewValue The actual value from the control's view. For `input` elements, this is a
 	 * String. See {@link ngModel.NgModelController#$setViewValue} for information about when the $viewValue
 	 * is set.
+	 *
 	 * @property {*} $modelValue The value in the model that the control is bound to.
+	 *
 	 * @property {Array.<Function>} $parsers Array of functions to execute, as a pipeline, whenever
-	       the control reads value from the DOM. The functions are called in array order, each passing
-	       its return value through to the next. The last return value is forwarded to the
-	       {@link ngModel.NgModelController#$validators `$validators`} collection.
+	 *  the control updates the ngModelController with a new {@link ngModel.NgModelController#$viewValue
+	    `$viewValue`} from the DOM, usually via user input.
+	    See {@link ngModel.NgModelController#$setViewValue `$setViewValue()`} for a detailed lifecycle explanation.
+	    Note that the `$parsers` are not called when the bound ngModel expression changes programmatically.
 	
-	Parsers are used to sanitize / convert the {@link ngModel.NgModelController#$viewValue
-	`$viewValue`}.
+	  The functions are called in array order, each passing
+	    its return value through to the next. The last return value is forwarded to the
+	    {@link ngModel.NgModelController#$validators `$validators`} collection.
 	
-	Returning `undefined` from a parser means a parse error occurred. In that case,
-	no {@link ngModel.NgModelController#$validators `$validators`} will run and the `ngModel`
-	will be set to `undefined` unless {@link ngModelOptions `ngModelOptions.allowInvalid`}
-	is set to `true`. The parse error is stored in `ngModel.$error.parse`.
+	  Parsers are used to sanitize / convert the {@link ngModel.NgModelController#$viewValue
+	    `$viewValue`}.
+	
+	  Returning `undefined` from a parser means a parse error occurred. In that case,
+	    no {@link ngModel.NgModelController#$validators `$validators`} will run and the `ngModel`
+	    will be set to `undefined` unless {@link ngModelOptions `ngModelOptions.allowInvalid`}
+	    is set to `true`. The parse error is stored in `ngModel.$error.parse`.
+	
+	  This simple example shows a parser that would convert text input value to lowercase:
+	 * ```js
+	 * function parse(value) {
+	 *   if (value) {
+	 *     return value.toLowerCase();
+	 *   }
+	 * }
+	 * ngModelController.$parsers.push(parse);
+	 * ```
 	
 	 *
 	 * @property {Array.<Function>} $formatters Array of functions to execute, as a pipeline, whenever
-	       the model value changes. The functions are called in reverse array order, each passing the value through to the
-	       next. The last return value is used as the actual DOM value.
-	       Used to format / convert values for display in the control.
+	    the bound ngModel expression changes programmatically. The `$formatters` are not called when the
+	    value of the control is changed by user interaction.
+	
+	  Formatters are used to format / convert the {@link ngModel.NgModelController#$modelValue
+	    `$modelValue`} for display in the control.
+	
+	  The functions are called in reverse array order, each passing the value through to the
+	    next. The last return value is used as the actual DOM value.
+	
+	  This simple example shows a formatter that would convert the model value to uppercase:
+	
 	 * ```js
-	 * function formatter(value) {
+	 * function format(value) {
 	 *   if (value) {
 	 *     return value.toUpperCase();
 	 *   }
 	 * }
-	 * ngModel.$formatters.push(formatter);
+	 * ngModel.$formatters.push(format);
 	 * ```
 	 *
 	 * @property {Object.<string, function>} $validators A collection of validators that are applied
@@ -28779,9 +28973,10 @@
 	   *
 	   * When `$setViewValue` is called, the new `value` will be staged for committing through the `$parsers`
 	   * and `$validators` pipelines. If there are no special {@link ngModelOptions} specified then the staged
-	   * value sent directly for processing, finally to be applied to `$modelValue` and then the
-	   * **expression** specified in the `ng-model` attribute. Lastly, all the registered change listeners,
-	   * in the `$viewChangeListeners` list, are called.
+	   * value is sent directly for processing through the `$parsers` pipeline. After this, the `$validators` and
+	   * `$asyncValidators` are called and the value is applied to `$modelValue`.
+	   * Finally, the value is set to the **expression** specified in the `ng-model` attribute and
+	   * all the registered change listeners, in the `$viewChangeListeners` list are called.
 	   *
 	   * In case the {@link ng.directive:ngModelOptions ngModelOptions} directive is used with `updateOn`
 	   * and the `default` trigger is not listed, all those actions will remain pending until one of the
@@ -29708,13 +29903,8 @@
 	 * is not matched against any `<option>` and the `<select>` appears as having no selected value.
 	 *
 	 *
-	 * @param {string} ngModel Assignable angular expression to data-bind to.
-	 * @param {string=} name Property name of the form under which the control is published.
-	 * @param {string=} required The control is considered valid only if value is entered.
-	 * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
-	 *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
-	 *    `required` when you want to data-bind to the `required` attribute.
-	 * @param {comprehension_expression=} ngOptions in one of the following forms:
+	 * @param {string} ngModel Assignable AngularJS expression to data-bind to.
+	 * @param {comprehension_expression} ngOptions in one of the following forms:
 	 *
 	 *   * for array data sources:
 	 *     * `label` **`for`** `value` **`in`** `array`
@@ -29753,6 +29943,13 @@
 	 *      used to identify the objects in the array. The `trackexpr` will most likely refer to the
 	 *     `value` variable (e.g. `value.propertyName`). With this the selection is preserved
 	 *      even when the options are recreated (e.g. reloaded from the server).
+	 * @param {string=} name Property name of the form under which the control is published.
+	 * @param {string=} required The control is considered valid only if value is entered.
+	 * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
+	 *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
+	 *    `required` when you want to data-bind to the `required` attribute.
+	 * @param {string=} ngAttrSize sets the size of the select element dynamically. Uses the
+	 * {@link guide/interpolation#-ngattr-for-binding-to-arbitrary-attributes ngAttr} directive.
 	 *
 	 * @example
 	    <example module="selectExample" name="select">
@@ -30564,6 +30761,7 @@
 	 * @ngdoc directive
 	 * @name ngRepeat
 	 * @multiElement
+	 * @restrict A
 	 *
 	 * @description
 	 * The `ngRepeat` directive instantiates a template once per item from a collection. Each template
@@ -32088,6 +32286,18 @@
 	
 	var noopNgModelController = { $setViewValue: noop, $render: noop };
 	
+	function setOptionSelectedStatus(optionEl, value) {
+	  optionEl.prop('selected', value); // needed for IE
+	  /**
+	   * When unselecting an option, setting the property to null / false should be enough
+	   * However, screenreaders might react to the selected attribute instead, see
+	   * https://github.com/angular/angular.js/issues/14419
+	   * Note: "selected" is a boolean attr and will be removed when the "value" arg in attr() is false
+	   * or null
+	   */
+	  optionEl.attr('selected', value);
+	}
+	
 	/**
 	 * @ngdoc type
 	 * @name  select.SelectController
@@ -32128,14 +32338,14 @@
 	    var unknownVal = self.generateUnknownOptionValue(val);
 	    self.unknownOption.val(unknownVal);
 	    $element.prepend(self.unknownOption);
-	    setOptionAsSelected(self.unknownOption);
+	    setOptionSelectedStatus(self.unknownOption, true);
 	    $element.val(unknownVal);
 	  };
 	
 	  self.updateUnknownOption = function(val) {
 	    var unknownVal = self.generateUnknownOptionValue(val);
 	    self.unknownOption.val(unknownVal);
-	    setOptionAsSelected(self.unknownOption);
+	    setOptionSelectedStatus(self.unknownOption, true);
 	    $element.val(unknownVal);
 	  };
 	
@@ -32150,7 +32360,7 @@
 	  self.selectEmptyOption = function() {
 	    if (self.emptyOption) {
 	      $element.val('');
-	      setOptionAsSelected(self.emptyOption);
+	      setOptionSelectedStatus(self.emptyOption, true);
 	    }
 	  };
 	
@@ -32186,7 +32396,7 @@
 	    // Make sure to remove the selected attribute from the previously selected option
 	    // Otherwise, screen readers might get confused
 	    var currentlySelectedOption = $element[0].options[$element[0].selectedIndex];
-	    if (currentlySelectedOption) currentlySelectedOption.removeAttribute('selected');
+	    if (currentlySelectedOption) setOptionSelectedStatus(jqLite(currentlySelectedOption), false);
 	
 	    if (self.hasOption(value)) {
 	      self.removeUnknownOption();
@@ -32196,7 +32406,7 @@
 	
 	      // Set selected attribute and property on selected option for screen readers
 	      var selectedOption = $element[0].options[$element[0].selectedIndex];
-	      setOptionAsSelected(jqLite(selectedOption));
+	      setOptionSelectedStatus(jqLite(selectedOption), true);
 	    } else {
 	      if (value == null && self.emptyOption) {
 	        self.removeUnknownOption();
@@ -32376,11 +32586,6 @@
 	      }
 	    });
 	  };
-	
-	  function setOptionAsSelected(optionEl) {
-	    optionEl.prop('selected', true); // needed for IE
-	    optionEl.attr('selected', true);
-	  }
 	}];
 	
 	/**
@@ -32450,6 +32655,8 @@
 	 *    interaction with the select element.
 	 * @param {string=} ngOptions sets the options that the select is populated with and defines what is
 	 * set on the model on selection. See {@link ngOptions `ngOptions`}.
+	 * @param {string=} ngAttrSize sets the size of the select element dynamically. Uses the
+	 * {@link guide/interpolation#-ngattr-for-binding-to-arbitrary-attributes ngAttr} directive.
 	 *
 	 * @example
 	 * ### Simple `select` elements with static options
@@ -32691,8 +32898,20 @@
 	        // Write value now needs to set the selected property of each matching option
 	        selectCtrl.writeValue = function writeMultipleValue(value) {
 	          forEach(element.find('option'), function(option) {
-	            option.selected = !!value && (includes(value, option.value) ||
-	                                          includes(value, selectCtrl.selectValueMap[option.value]));
+	            var shouldBeSelected = !!value && (includes(value, option.value) ||
+	                                               includes(value, selectCtrl.selectValueMap[option.value]));
+	            var currentlySelected = option.selected;
+	
+	            // IE and Edge, adding options to the selection via shift+click/UP/DOWN,
+	            // will de-select already selected options if "selected" on those options was set
+	            // more than once (i.e. when the options were already selected)
+	            // So we only modify the selected property if neccessary.
+	            // Note: this behavior cannot be replicated via unit tests because it only shows in the
+	            // actual user interface.
+	            if (shouldBeSelected !== currentlySelected) {
+	              setOptionSelectedStatus(jqLite(option), shouldBeSelected);
+	            }
+	
 	          });
 	        };
 	
@@ -33899,8 +34118,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./about.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./about.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./about.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./about.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -33918,7 +34137,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-img {\n  width: 100%;\n  border-bottom: 3px solid #AAA; }\n\n.container {\n  width: 80%;\n  margin: 0 auto 5% auto; }\n  .container img {\n    margin-top: 20px;\n    z-index: -1;\n    width: 100%; }\n  .container h1 {\n    font-size: 3em;\n    text-align: center; }\n  .container h2 {\n    margin-top: 0;\n    margin-bottom: 2%;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em; }\n  .container p {\n    width: 90%;\n    margin: 0 auto;\n    text-indent: 25px;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.4em;\n    margin-top: 16px;\n    font-weight: 600;\n    line-height: 1.3; }\n  .container .section-divider {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    width: 70%;\n    margin-left: auto;\n    margin-right: auto;\n    height: 1px;\n    background-color: rgba(200, 200, 200, 0.7);\n    border: none; }\n  .container .about-text {\n    position: relative; }\n  .container .behind-text {\n    position: absolute;\n    top: 0;\n    margin-top: 0; }\n", "", {"version":3,"sources":["/./src/components/about/src/scss/partials/_header-background.scss","/./src/components/about/src/scss/partials/_colors.scss","/./src/components/about/src/components/about/about.scss","/./src/components/about/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE7BL;EACI,YAAW;EACX,8BAA6B,EAChC;;AAED;EACI,WAAU;EACV,uBAAsB,EAkDzB;EApDD;IAIQ,iBAAgB;IAChB,YAAW;IACX,YACJ,EAAE;EAPN;IAUQ,eAAc;IACd,mBACJ,EAAE;EAZN;IAeQ,cAAa;IACb,kBAAiB;IACjB,kCCzB8B;ID0B9B,eAAc,EACjB;EAnBL;IAsBQ,WAAU;IACV,eAAc;IACd,kBAAiB;IACjB,wCChC8B;IDiC9B,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB,EACnB;EA9BL;IAiCQ,eAAc;IACd,kBAAiB;IACjB,WAAU;IACV,kBAAiB;IACjB,mBAAkB;IAClB,YAAW;IACX,2CAAsC;IACtC,aAAY,EACf;EAzCL;IA4CQ,mBAAkB,EACrB;EA7CL;IAgDQ,mBAAkB;IAClB,OAAM;IACN,cAAa,EAChB","file":"about.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'fonts';\n@import 'header-background';\n\n.header-img {\n    width: 100%;\n    border-bottom: 3px solid #AAA;\n}\n\n.container {\n    width: 80%;\n    margin: 0 auto 5% auto;\n    img {\n        margin-top: 20px;\n        z-index: -1;\n        width: 100%\n    }\n\n    h1 {\n        font-size: 3em;\n        text-align: center\n    }\n\n    h2 {\n        margin-top: 0;\n        margin-bottom: 2%;\n        font-family: $decorative-font;\n        font-size: 3em;\n    }\n\n    p {\n        width: 90%;\n        margin: 0 auto;\n        text-indent: 25px;\n        font-family: $main-font;\n        font-size: 1.4em;\n        margin-top: 16px;\n        font-weight: 600;\n        line-height: 1.3;\n    }\n\n    .section-divider {\n        margin-top: 5%;\n        margin-bottom: 5%;\n        width: 70%;\n        margin-left: auto;\n        margin-right: auto;\n        height: 1px;\n        background-color: rgba(200,200,200,.7);\n        border: none;\n    }\n\n    .about-text {\n        position: relative;\n    }\n\n    .behind-text {\n        position: absolute;\n        top: 0;\n        margin-top: 0;\n    }\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-img {\n  width: 100%;\n  border-bottom: 3px solid #AAA; }\n\n.container {\n  width: 80%;\n  margin: 5% auto 5% auto; }\n  .container img {\n    margin-top: 20px;\n    z-index: -1;\n    width: 100%; }\n  .container h1 {\n    font-size: 3em;\n    text-align: center; }\n  .container h2 {\n    margin-top: 0;\n    margin-bottom: 2%;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em; }\n  .container p {\n    width: 90%;\n    margin: 0 auto;\n    text-indent: 25px;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.4em;\n    margin-top: 16px;\n    font-weight: 600;\n    line-height: 1.3; }\n  .container .section-divider {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    width: 70%;\n    margin-left: auto;\n    margin-right: auto;\n    height: 1px;\n    background-color: rgba(200, 200, 200, 0.7);\n    border: none; }\n  .container .about-text {\n    position: relative; }\n  .container .behind-text {\n    position: absolute;\n    top: 0;\n    margin-top: 0; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_header-background.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/components/about/about.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE7BL;EACI,YAAW;EACX,8BAA6B,EAChC;;AAED;EACI,WAAU;EACV,wBAAuB,EAkD1B;EApDD;IAIQ,iBAAgB;IAChB,YAAW;IACX,YACJ,EAAE;EAPN;IAUQ,eAAc;IACd,mBACJ,EAAE;EAZN;IAeQ,cAAa;IACb,kBAAiB;IACjB,kCCzB8B;ID0B9B,eAAc,EACjB;EAnBL;IAsBQ,WAAU;IACV,eAAc;IACd,kBAAiB;IACjB,wCChC8B;IDiC9B,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB,EACnB;EA9BL;IAiCQ,eAAc;IACd,kBAAiB;IACjB,WAAU;IACV,kBAAiB;IACjB,mBAAkB;IAClB,YAAW;IACX,2CAAsC;IACtC,aAAY,EACf;EAzCL;IA4CQ,mBAAkB,EACrB;EA7CL;IAgDQ,mBAAkB;IAClB,OAAM;IACN,cAAa,EAChB","file":"about.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'fonts';\n@import 'header-background';\n\n.header-img {\n    width: 100%;\n    border-bottom: 3px solid #AAA;\n}\n\n.container {\n    width: 80%;\n    margin: 5% auto 5% auto;\n    img {\n        margin-top: 20px;\n        z-index: -1;\n        width: 100%\n    }\n\n    h1 {\n        font-size: 3em;\n        text-align: center\n    }\n\n    h2 {\n        margin-top: 0;\n        margin-bottom: 2%;\n        font-family: $decorative-font;\n        font-size: 3em;\n    }\n\n    p {\n        width: 90%;\n        margin: 0 auto;\n        text-indent: 25px;\n        font-family: $main-font;\n        font-size: 1.4em;\n        margin-top: 16px;\n        font-weight: 600;\n        line-height: 1.3;\n    }\n\n    .section-divider {\n        margin-top: 5%;\n        margin-bottom: 5%;\n        width: 70%;\n        margin-left: auto;\n        margin-right: auto;\n        height: 1px;\n        background-color: rgba(200,200,200,.7);\n        border: none;\n    }\n\n    .about-text {\n        position: relative;\n    }\n\n    .behind-text {\n        position: absolute;\n        top: 0;\n        margin-top: 0;\n    }\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -33996,7 +34215,7 @@
 			};
 		},
 		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+			return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 		}),
 		getHeadElement = memoize(function () {
 			return document.head || document.getElementsByTagName("head")[0];
@@ -34337,7 +34556,7 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"loading-bar\" ng-init=\"$ctrl.loading = $ctrl.styles.start\" ng-class=\"$ctrl.loading\"></div>\n\n<section class=\"articles\">\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"https://www.instagram.com/earthhousejuice/?hl=en\">Follow Us on Instagram!</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_north,h_920,w_1080/v1488237699/14027299_622727931235134_1244126147_n_nzudku.jpg\">   \n        </div>\n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"http://www.portlandfarmersmarket.org/vendors/\">Farmer's markets</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"https://www.portlandfarmersmarket.org/wp-content/uploads/2016/04/PFM-Logo-Horizontal-Green.png\">\n                <p>We will be selling our juices at markets around the Portland Area all summer long! Come take a look at our schedule.</p>\n        </div>    \n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a ui-sref=\"about\">Learn about our Juices</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1488245973/14360103_955849944561168_6715517624580571136_n_xvdpj1.jpg\">\n        </div>    \n    </div>\n</section>";
+	module.exports = "<div class=\"loading-bar\"></div>\n\n<section class=\"articles\">\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"https://www.instagram.com/earthhousejuice/?hl=en\">Follow Us on Instagram!</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_north,h_920,w_1080/v1488237699/14027299_622727931235134_1244126147_n_nzudku.jpg\">   \n        </div>\n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"http://www.portlandfarmersmarket.org/vendors/\">Farmer's markets</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"https://www.portlandfarmersmarket.org/wp-content/uploads/2016/04/PFM-Logo-Horizontal-Green.png\">\n                <p>We will be selling our juices at markets around the Portland Area all summer long! Come take a look at our schedule.</p>\n        </div>    \n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a ui-sref=\"about\">Learn about our Juices</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1488245973/14360103_955849944561168_6715517624580571136_n_xvdpj1.jpg\">\n        </div>    \n    </div>\n</section>";
 
 /***/ },
 /* 18 */
@@ -34355,8 +34574,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./articles.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./articles.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./articles.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./articles.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34374,7 +34593,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".loading-bar {\n  position: absolute;\n  height: 5px;\n  background-color: #FFC107;\n  opacity: .6;\n  transition: width 4s; }\n\n._3s_IS80UJioh8cYdbDVsfX {\n  width: 0; }\n\n._375W6Dz1ygJWh5oeNqxjER {\n  width: 100%; }\n\n.articles {\n  border-top: 5px solid rgba(200, 200, 200, 0.7);\n  background-color: #fafafa;\n  margin: 0 0 10px 0;\n  padding: 2px 0 10px 0; }\n\n.text-button {\n  font-family: \"Amatic SC\", cursive;\n  font-size: 2.5em;\n  text-align: center;\n  border: 5px solid #323232;\n  background-color: #323232;\n  margin: 5px auto 0 auto; }\n  .text-button a {\n    color: white;\n    font-weight: 700;\n    transition: all .3s ease; }\n\n.frame {\n  background-color: rgba(200, 200, 200, 0.7);\n  margin: 3px auto 0 auto;\n  padding: 5px; }\n  .frame p {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.3em;\n    text-indent: 50px;\n    font-weight: bold;\n    width: 90%;\n    margin: 10px auto 5px auto; }\n\n.text-button:hover a {\n  color: #FFC107; }\n\n@media all and (max-width: 750px) {\n  .article {\n    width: 100%; }\n  .text-button {\n    width: 90%; }\n  .frame {\n    width: 90%; } }\n\n@media all and (min-width: 751px) {\n  .article {\n    width: 33.33%;\n    float: left;\n    margin-bottom: 10px;\n    margin-top: 3px; }\n  .text-button {\n    width: 95%; }\n  .frame {\n    width: 95%; } }\n", "", {"version":3,"sources":["/./src/components/articles/src/components/articles/articles.scss","/./src/components/articles/src/scss/partials/_colors.scss","/./src/components/articles/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,YAAW;EACX,0BCNkB;EDOlB,YAAW;EACX,qBAAoB,EACvB;;AAED;EACI,SAAQ,EACX;;AAED;EACI,YAAW,EACd;;AAED;EACI,+CCnB4B;EDoB5B,0BAAkC;EAClC,mBAAkB;EAClB,sBAAqB,EACxB;;AAED;EACI,kCE3BkC;EF4BlC,iBAAgB;EAChB,mBAAkB;EAClB,0BC5BiB;ED6BjB,0BC7BiB;ED8BjB,wBAAuB,EAO1B;EAbD;IAQQ,aAAY;IACZ,iBAAgB;IAChB,yBAAwB,EAC3B;;AAGL;EACK,2CCxC2B;EDyC3B,wBAAuB;EACvB,aAAY,EAShB;EAZD;IAKQ,wCE5C8B;IF6C9B,iBAAgB;IAChB,kBAAiB;IACjB,kBAAiB;IACjB,WAAU;IACV,2BAA0B,EAC7B;;AAGL;EAEI,eCxDkB,EDyDjB;;AAGD;EACI;IACI,YAAW,EACd;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa;IACb,YAAW;IACX,oBAAmB;IACnB,gBAAe,EAClB;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA","file":"articles.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.loading-bar {\n    position: absolute;\n    height: 5px;\n    background-color: $accent-color;\n    opacity: .6;\n    transition: width 4s;\n}\n\n:local(.start) {\n    width: 0;\n}\n\n:local(.done) {\n    width: 100%;\n}\n\n.articles {\n    border-top: 5px solid $lightgrey;\n    background-color: rgb(250,250,250);\n    margin: 0 0 10px 0;\n    padding: 2px 0 10px 0;\n}\n\n.text-button {\n    font-family: $decorative-font;\n    font-size: 2.5em;\n    text-align: center;\n    border: 5px solid $black;\n    background-color: $black;\n    margin: 5px auto 0 auto;\n    a { \n        color: white;\n        font-weight: 700;\n        transition: all .3s ease;\n    }\n\n}\n.frame {\n     background-color: $lightgrey; \n     margin: 3px auto 0 auto;\n     padding: 5px;\n    p {\n        font-family: $main-font;\n        font-size: 1.3em;\n        text-indent: 50px;\n        font-weight: bold;\n        width: 90%;\n        margin: 10px auto 5px auto;\n    }\n}\n\n.text-button:hover {\n    a {\n    color: $accent-color;\n    }\n}\n\n    @media all and (max-width: 750px) {\n        .article {\n            width: 100%;\n        }\n\n        .text-button {\n            width: 90%;\n        }\n        .frame {\n            width: 90%;\n        }\n    }\n\n    @media all and (min-width: 751px) {\n        .article {\n            width: 33.33%;\n            float: left;\n            margin-bottom: 10px;\n            margin-top: 3px;\n        }\n\n        .text-button {\n            width: 95%;\n        }\n        .frame {\n            width: 95%;\n        }\n    }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".loading-bar {\n  position: absolute;\n  height: 5px;\n  background-color: #FFC107;\n  opacity: .6;\n  animation-name: slidein;\n  animation-duration: 5s;\n  animation-iteration-count: infinite; }\n\n@keyframes slidein {\n  from {\n    width: 0%; }\n  to {\n    width: 100%; } }\n\n._3s_IS80UJioh8cYdbDVsfX {\n  width: 50%; }\n\n._375W6Dz1ygJWh5oeNqxjER {\n  width: 100%; }\n\n.articles {\n  border-top: 5px solid rgba(200, 200, 200, 0.7);\n  background-color: #fafafa;\n  margin: 0 0 10px 0;\n  padding: 2px 0 10px 0; }\n\n.text-button {\n  font-family: \"Amatic SC\", cursive;\n  font-size: 2.5em;\n  text-align: center;\n  border: 5px solid #323232;\n  background-color: #323232;\n  margin: 5px auto 0 auto; }\n  .text-button a {\n    color: white;\n    font-weight: 700;\n    transition: all .3s ease; }\n\n.frame {\n  background-color: rgba(200, 200, 200, 0.7);\n  margin: 3px auto 0 auto;\n  padding: 5px; }\n  .frame p {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.3em;\n    text-indent: 50px;\n    font-weight: bold;\n    width: 90%;\n    margin: 10px auto 5px auto; }\n\n.text-button:hover a {\n  color: #FFC107; }\n\n@media all and (max-width: 750px) {\n  .article {\n    width: 100%; }\n  .text-button {\n    width: 90%; }\n  .frame {\n    width: 90%; } }\n\n@media all and (min-width: 751px) {\n  .article {\n    width: 33.33%;\n    float: left;\n    margin-bottom: 10px;\n    margin-top: 3px; }\n  .text-button {\n    width: 95%; }\n  .frame {\n    width: 95%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/articles/src/components/articles/articles.scss","/Users/Will/freelance/earth-house/app/src/components/articles/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/articles/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,YAAW;EACX,0BCNkB;EDOlB,YAAW;EACX,wBAAuB;EACvB,uBAAsB;EACtB,oCAAmC,EACtC;;AAED;EACI;IACI,UAAS,EAAA;EAGb;IACI,YAAW,EAAA,EAAA;;AAInB;EACI,WAAU,EACb;;AAED;EACI,YAAW,EACd;;AAED;EACI,+CC/B4B;EDgC5B,0BAAkC;EAClC,mBAAkB;EAClB,sBAAqB,EACxB;;AAED;EACI,kCEvCkC;EFwClC,iBAAgB;EAChB,mBAAkB;EAClB,0BCxCiB;EDyCjB,0BCzCiB;ED0CjB,wBAAuB,EAO1B;EAbD;IAQQ,aAAY;IACZ,iBAAgB;IAChB,yBAAwB,EAC3B;;AAGL;EACK,2CCpD2B;EDqD3B,wBAAuB;EACvB,aAAY,EAShB;EAZD;IAKQ,wCExD8B;IFyD9B,iBAAgB;IAChB,kBAAiB;IACjB,kBAAiB;IACjB,WAAU;IACV,2BAA0B,EAC7B;;AAGL;EAEI,eCpEkB,EDqEjB;;AAGD;EACI;IACI,YAAW,EACd;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa;IACb,YAAW;IACX,oBAAmB;IACnB,gBAAe,EAClB;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA","file":"articles.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.loading-bar {\n    position: absolute;\n    height: 5px;\n    background-color: $accent-color;\n    opacity: .6;\n    animation-name: slidein;\n    animation-duration: 5s;\n    animation-iteration-count: infinite;\n}\n\n@keyframes slidein {\n    from {\n        width: 0%; \n    }\n\n    to {\n        width: 100%;\n    }\n}\n\n:local(.start) {\n    width: 50%;\n}\n\n:local(.done) {\n    width: 100%;\n}\n\n.articles {\n    border-top: 5px solid $lightgrey;\n    background-color: rgb(250,250,250);\n    margin: 0 0 10px 0;\n    padding: 2px 0 10px 0;\n}\n\n.text-button {\n    font-family: $decorative-font;\n    font-size: 2.5em;\n    text-align: center;\n    border: 5px solid $black;\n    background-color: $black;\n    margin: 5px auto 0 auto;\n    a { \n        color: white;\n        font-weight: 700;\n        transition: all .3s ease;\n    }\n\n}\n.frame {\n     background-color: $lightgrey; \n     margin: 3px auto 0 auto;\n     padding: 5px;\n    p {\n        font-family: $main-font;\n        font-size: 1.3em;\n        text-indent: 50px;\n        font-weight: bold;\n        width: 90%;\n        margin: 10px auto 5px auto;\n    }\n}\n\n.text-button:hover {\n    a {\n    color: $accent-color;\n    }\n}\n\n    @media all and (max-width: 750px) {\n        .article {\n            width: 100%;\n        }\n\n        .text-button {\n            width: 90%;\n        }\n        .frame {\n            width: 90%;\n        }\n    }\n\n    @media all and (min-width: 751px) {\n        .article {\n            width: 33.33%;\n            float: left;\n            margin-bottom: 10px;\n            margin-top: 3px;\n        }\n\n        .text-button {\n            width: 95%;\n        }\n        .frame {\n            width: 95%;\n        }\n    }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -34564,8 +34783,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./checkout.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./checkout.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./checkout.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./checkout.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34583,7 +34802,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".checkout {\n  width: 90%;\n  min-height: 70vh;\n  margin: 0 auto;\n  margin-bottom: 10%;\n  font-size: .87em; }\n  .checkout h2 {\n    font-family: \"Amatic SC\", cursive;\n    margin-top: 2%;\n    margin-bottom: 2%;\n    font-size: 2.5em; }\n    .checkout h2 a {\n      font-size: .4em;\n      font-family: sans-serif;\n      font-weight: 500;\n      margin-left: 2%; }\n  .checkout h4 {\n    margin: 3% 0; }\n  .checkout p {\n    margin-bottom: 2%;\n    margin-top: 1%; }\n  .checkout a {\n    color: #0b0080;\n    transition: all .35s ease;\n    text-decoration: underline; }\n  .checkout table {\n    width: 100%;\n    margin-bottom: 3%; }\n  .checkout .cart-table tr {\n    height: 50px; }\n  .checkout .quant {\n    text-align: center; }\n  .checkout .total {\n    text-align: right; }\n  .checkout .bold {\n    font-weight: bold;\n    font-size: 1em;\n    color: black;\n    display: inline;\n    margin: 0; }\n  .checkout span {\n    display: block;\n    color: red;\n    font-size: .75em;\n    margin-left: 2%; }\n  .checkout button {\n    background: none;\n    font-size: .75em;\n    line-height: .5em; }\n  .checkout .confirm-cart {\n    float: right; }\n  .checkout input, .checkout textarea, .checkout select, .checkout button {\n    -webkit-appearance: none;\n    border: 1px solid #555;\n    padding: 0.5em;\n    font-size: .75em;\n    line-height: .8em;\n    background: #fff;\n    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n    -webkit-box-shadow: 1px 1px 1px #fff;\n    -webkit-border-radius: 0.5em; }\n  .checkout input {\n    line-height: .75em;\n    font-size: .75em;\n    margin: 2%; }\n\n.remove-item {\n  color: red;\n  text-decoration: underline; }\n\n.ng-invalid, .warning {\n  color: red; }\n\n@media all and (min-width: 500px) {\n  .checkout {\n    font-size: 1em; } }\n\n@media all and (min-width: 700px) {\n  .checkout {\n    font-size: 1.25em;\n    margin-top: 3%;\n    width: 80%; }\n    .checkout table {\n      width: 90%;\n      margin: 0 auto; }\n    .checkout h4 {\n      margin: 0; } }\n", "", {"version":3,"sources":["/./src/components/checkout/src/components/checkout/checkout.scss","/./src/components/checkout/src/scss/partials/_fonts.scss","/./src/components/checkout/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAGA;EACI,WAAU;EACV,iBAAgB;EAChB,eAAc;EACd,mBAAkB;EAClB,iBAAgB,EAwFnB;EA7FD;IAQQ,kCCX8B;IDY9B,eAAc;IACd,kBAAiB;IACjB,iBAAgB,EAOnB;IAlBL;MAaY,gBAAe;MACf,wBAAuB;MACvB,iBAAgB;MAChB,gBAAe,EAClB;EAjBT;IAqBQ,aAAY,EACf;EAtBL;IAyBQ,kBAAiB;IACjB,eAAc,EACjB;EA3BL;IA6BQ,eE7BiB;IF8BjB,0BAAyB;IACzB,2BAA0B,EAC7B;EAhCL;IAmCQ,YAAW;IACX,kBAAiB,EACpB;EArCL;IAwCY,aAAY,EACf;EAzCT;IA6CQ,mBAAkB,EACrB;EA9CL;IAiDQ,kBAAiB,EACpB;EAlDL;IAqDQ,kBAAiB;IACjB,eAAc;IACd,aAAY;IACZ,gBAAe;IACf,UAAS,EACZ;EA1DL;IA6DQ,eAAc;IACd,WAAU;IACV,iBAAgB;IAChB,gBAAe,EAClB;EAjEL;IAoEQ,iBAAgB;IAChB,iBAAgB;IAChB,kBAAiB,EACpB;EAvEL;IA0EQ,aAAY,EACf;EA3EL;IA8EQ,yBAAwB;IACxB,uBAAsB;IACtB,eAAc;IACd,iBAAgB;IAChB,kBAAiB;IACjB,iBAAgB;IAChB,kFAAiF;IACjF,qCAAoC;IACpC,6BAA4B,EAC/B;EAvFL;IAyFQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU,EACb;;AAML;EACI,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,WAAU,EACb;;AAGD;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,kBAAiB;IACjB,eAAc;IACd,WAAU,EASb;IAZD;MAKQ,WAAU;MACV,eAAc,EACjB;IAPL;MAUQ,UAAS,EACZ,EAAA","file":"checkout.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.checkout {\n    width: 90%;\n    min-height: 70vh;\n    margin: 0 auto;\n    margin-bottom: 10%;\n    font-size: .87em;\n\n    h2 {\n        font-family: $decorative-font;\n        margin-top: 2%;\n        margin-bottom: 2%;\n        font-size: 2.5em;\n        a {\n            font-size: .4em;\n            font-family: sans-serif;\n            font-weight: 500;\n            margin-left: 2%;\n        }\n    }\n\n    h4 {\n        margin: 3% 0;\n    }\n\n    p {\n        margin-bottom: 2%;\n        margin-top: 1%;\n    }\n    a {\n        color: $link-blue;\n        transition: all .35s ease;\n        text-decoration: underline;\n    }\n\n    table {\n        width: 100%;\n        margin-bottom: 3%;\n    }\n    .cart-table {\n        tr {\n            height: 50px;\n        }\n    }\n\n    .quant {\n        text-align: center;\n    }\n\n    .total {\n        text-align: right;\n    }\n\n    .bold {\n        font-weight: bold;\n        font-size: 1em;\n        color: black;\n        display: inline;\n        margin: 0;\n    }\n\n    span {\n        display: block;\n        color: red;\n        font-size: .75em;\n        margin-left: 2%;\n    }\n\n    button {\n        background: none;\n        font-size: .75em;\n        line-height: .5em;\n    }\n\n    .confirm-cart {\n        float: right;\n    }\n\n    input, textarea, select, button {\n        -webkit-appearance: none;\n        border: 1px solid #555;\n        padding: 0.5em;\n        font-size: .75em;\n        line-height: .8em;\n        background: #fff;\n        background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n        -webkit-box-shadow: 1px 1px 1px #fff;\n        -webkit-border-radius: 0.5em;\n    }\n    input {\n        line-height: .75em;\n        font-size: .75em;\n        margin: 2%;\n    }\n}\n\n\n\n\n.remove-item {\n    color: red;\n    text-decoration: underline;\n}\n\n.ng-invalid, .warning {\n    color: red;\n}\n\n\n@media all and (min-width: 500px) {\n    .checkout {\n        font-size: 1em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .checkout {\n        font-size: 1.25em;\n        margin-top: 3%;\n        width: 80%;\n        table {\n            width: 90%;\n            margin: 0 auto;\n        }\n\n        h4 {\n            margin: 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".checkout {\n  width: 90%;\n  min-height: 70vh;\n  margin: 0 auto;\n  margin-bottom: 10%;\n  font-size: .87em; }\n  .checkout h2 {\n    font-family: \"Amatic SC\", cursive;\n    margin-top: 2%;\n    margin-bottom: 2%;\n    font-size: 2.5em; }\n    .checkout h2 a {\n      font-size: .4em;\n      font-family: sans-serif;\n      font-weight: 500;\n      margin-left: 2%; }\n  .checkout h4 {\n    margin: 3% 0; }\n  .checkout p {\n    margin-bottom: 2%;\n    margin-top: 1%; }\n  .checkout a {\n    color: #0b0080;\n    transition: all .35s ease;\n    text-decoration: underline; }\n  .checkout table {\n    width: 100%;\n    margin-bottom: 3%; }\n  .checkout .cart-table tr {\n    height: 50px; }\n  .checkout .quant {\n    text-align: center; }\n  .checkout .total {\n    text-align: right; }\n  .checkout .bold {\n    font-weight: bold;\n    font-size: 1em;\n    color: black;\n    display: inline;\n    margin: 0; }\n  .checkout span {\n    display: block;\n    color: red;\n    font-size: .75em;\n    margin-left: 2%; }\n  .checkout button {\n    background: none;\n    font-size: .75em;\n    line-height: .5em; }\n  .checkout .confirm-cart {\n    float: right; }\n  .checkout input, .checkout textarea, .checkout select, .checkout button {\n    -webkit-appearance: none;\n    border: 1px solid #555;\n    padding: 0.5em;\n    font-size: .75em;\n    line-height: .8em;\n    background: #fff;\n    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n    -webkit-box-shadow: 1px 1px 1px #fff;\n    -webkit-border-radius: 0.5em; }\n  .checkout input {\n    line-height: .75em;\n    font-size: .75em;\n    margin: 2%; }\n\n.remove-item {\n  color: red;\n  text-decoration: underline; }\n\n.ng-invalid, .warning {\n  color: red; }\n\n@media all and (min-width: 500px) {\n  .checkout {\n    font-size: 1em; } }\n\n@media all and (min-width: 700px) {\n  .checkout {\n    font-size: 1.25em;\n    margin-top: 3%;\n    width: 80%; }\n    .checkout table {\n      width: 90%;\n      margin: 0 auto; }\n    .checkout h4 {\n      margin: 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/checkout/src/components/checkout/checkout.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAGA;EACI,WAAU;EACV,iBAAgB;EAChB,eAAc;EACd,mBAAkB;EAClB,iBAAgB,EAwFnB;EA7FD;IAQQ,kCCX8B;IDY9B,eAAc;IACd,kBAAiB;IACjB,iBAAgB,EAOnB;IAlBL;MAaY,gBAAe;MACf,wBAAuB;MACvB,iBAAgB;MAChB,gBAAe,EAClB;EAjBT;IAqBQ,aAAY,EACf;EAtBL;IAyBQ,kBAAiB;IACjB,eAAc,EACjB;EA3BL;IA6BQ,eE7BiB;IF8BjB,0BAAyB;IACzB,2BAA0B,EAC7B;EAhCL;IAmCQ,YAAW;IACX,kBAAiB,EACpB;EArCL;IAwCY,aAAY,EACf;EAzCT;IA6CQ,mBAAkB,EACrB;EA9CL;IAiDQ,kBAAiB,EACpB;EAlDL;IAqDQ,kBAAiB;IACjB,eAAc;IACd,aAAY;IACZ,gBAAe;IACf,UAAS,EACZ;EA1DL;IA6DQ,eAAc;IACd,WAAU;IACV,iBAAgB;IAChB,gBAAe,EAClB;EAjEL;IAoEQ,iBAAgB;IAChB,iBAAgB;IAChB,kBAAiB,EACpB;EAvEL;IA0EQ,aAAY,EACf;EA3EL;IA8EQ,yBAAwB;IACxB,uBAAsB;IACtB,eAAc;IACd,iBAAgB;IAChB,kBAAiB;IACjB,iBAAgB;IAChB,kFAAiF;IACjF,qCAAoC;IACpC,6BAA4B,EAC/B;EAvFL;IAyFQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU,EACb;;AAML;EACI,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,WAAU,EACb;;AAGD;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,kBAAiB;IACjB,eAAc;IACd,WAAU,EASb;IAZD;MAKQ,WAAU;MACV,eAAc,EACjB;IAPL;MAUQ,UAAS,EACZ,EAAA","file":"checkout.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.checkout {\n    width: 90%;\n    min-height: 70vh;\n    margin: 0 auto;\n    margin-bottom: 10%;\n    font-size: .87em;\n\n    h2 {\n        font-family: $decorative-font;\n        margin-top: 2%;\n        margin-bottom: 2%;\n        font-size: 2.5em;\n        a {\n            font-size: .4em;\n            font-family: sans-serif;\n            font-weight: 500;\n            margin-left: 2%;\n        }\n    }\n\n    h4 {\n        margin: 3% 0;\n    }\n\n    p {\n        margin-bottom: 2%;\n        margin-top: 1%;\n    }\n    a {\n        color: $link-blue;\n        transition: all .35s ease;\n        text-decoration: underline;\n    }\n\n    table {\n        width: 100%;\n        margin-bottom: 3%;\n    }\n    .cart-table {\n        tr {\n            height: 50px;\n        }\n    }\n\n    .quant {\n        text-align: center;\n    }\n\n    .total {\n        text-align: right;\n    }\n\n    .bold {\n        font-weight: bold;\n        font-size: 1em;\n        color: black;\n        display: inline;\n        margin: 0;\n    }\n\n    span {\n        display: block;\n        color: red;\n        font-size: .75em;\n        margin-left: 2%;\n    }\n\n    button {\n        background: none;\n        font-size: .75em;\n        line-height: .5em;\n    }\n\n    .confirm-cart {\n        float: right;\n    }\n\n    input, textarea, select, button {\n        -webkit-appearance: none;\n        border: 1px solid #555;\n        padding: 0.5em;\n        font-size: .75em;\n        line-height: .8em;\n        background: #fff;\n        background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n        -webkit-box-shadow: 1px 1px 1px #fff;\n        -webkit-border-radius: 0.5em;\n    }\n    input {\n        line-height: .75em;\n        font-size: .75em;\n        margin: 2%;\n    }\n}\n\n\n\n\n.remove-item {\n    color: red;\n    text-decoration: underline;\n}\n\n.ng-invalid, .warning {\n    color: red;\n}\n\n\n@media all and (min-width: 500px) {\n    .checkout {\n        font-size: 1em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .checkout {\n        font-size: 1.25em;\n        margin-top: 3%;\n        width: 80%;\n        table {\n            width: 90%;\n            margin: 0 auto;\n        }\n\n        h4 {\n            margin: 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -34648,8 +34867,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./success.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./success.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./success.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./success.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34667,7 +34886,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._2H2OeSHZodUVf_sa1TQgeg {\n  margin-top: 5%;\n  margin-bottom: 5%;\n  height: 80vh; }\n  ._2H2OeSHZodUVf_sa1TQgeg h2 {\n    text-align: center; }\n  ._2H2OeSHZodUVf_sa1TQgeg p {\n    font-size: 1em; }\n  ._2H2OeSHZodUVf_sa1TQgeg a {\n    color: #0b0080;\n    display: block;\n    text-indent: 0;\n    transition: all .35s ease; }\n  ._2H2OeSHZodUVf_sa1TQgeg a:hover {\n    text-decoration: underline; }\n", "", {"version":3,"sources":["/./src/components/checkout/success/src/components/checkout/success/success.scss","/./src/components/checkout/success/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,eAAc;EACd,kBAAiB;EACjB,aAAY,EAiBf;EApBD;IAKQ,mBAAkB,EACrB;EANL;IAQQ,eAAc,EACjB;EATL;IAWQ,eCViB;IDWjB,eAAc;IACd,eAAc;IACd,0BAAyB,EAC5B;EAfL;IAiBQ,2BAA0B,EAC7B","file":"success.scss","sourcesContent":["@import 'colors';\n\n:local(.success) {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    height: 80vh;\n    h2 {\n        text-align: center;\n    }\n    p {\n        font-size: 1em;\n    }\n    a {\n        color: $link-blue;\n        display: block;\n        text-indent: 0;\n        transition: all .35s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "._2H2OeSHZodUVf_sa1TQgeg {\n  margin-top: 5%;\n  margin-bottom: 5%;\n  height: 80vh; }\n  ._2H2OeSHZodUVf_sa1TQgeg h2 {\n    text-align: center; }\n  ._2H2OeSHZodUVf_sa1TQgeg p {\n    font-size: 1em; }\n  ._2H2OeSHZodUVf_sa1TQgeg a {\n    color: #0b0080;\n    display: block;\n    text-indent: 0;\n    transition: all .35s ease; }\n  ._2H2OeSHZodUVf_sa1TQgeg a:hover {\n    text-decoration: underline; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/checkout/success/src/components/checkout/success/success.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/success/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,eAAc;EACd,kBAAiB;EACjB,aAAY,EAiBf;EApBD;IAKQ,mBAAkB,EACrB;EANL;IAQQ,eAAc,EACjB;EATL;IAWQ,eCViB;IDWjB,eAAc;IACd,eAAc;IACd,0BAAyB,EAC5B;EAfL;IAiBQ,2BAA0B,EAC7B","file":"success.scss","sourcesContent":["@import 'colors';\n\n:local(.success) {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    height: 80vh;\n    h2 {\n        text-align: center;\n    }\n    p {\n        font-size: 1em;\n    }\n    a {\n        color: $link-blue;\n        display: block;\n        text-indent: 0;\n        transition: all .35s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -34726,8 +34945,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./contact.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./contact.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./contact.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./contact.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34745,7 +34964,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._2-wh2eGpFOzRsplfQde1xu {\n  background-color: white;\n  min-height: 70vh;\n  width: 85%;\n  margin: 0 auto;\n  margin-top: 5%;\n  margin-bottom: 5%; }\n  ._2-wh2eGpFOzRsplfQde1xu ul, ._2-wh2eGpFOzRsplfQde1xu li, ._2-wh2eGpFOzRsplfQde1xu p {\n    margin-left: 0;\n    margin-right: 0;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._2-wh2eGpFOzRsplfQde1xu ul {\n    text-align: center;\n    font-size: 1.5em;\n    width: 80%;\n    margin: 0 auto; }\n  ._2-wh2eGpFOzRsplfQde1xu a {\n    color: black;\n    transition: all .3s ease; }\n  ._2-wh2eGpFOzRsplfQde1xu a:hover {\n    text-decoration: underline; }\n  ._2-wh2eGpFOzRsplfQde1xu h2 {\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em;\n    margin: 0 0 5% 0; }\n  ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n    font-size: 1.2em;\n    margin: 2% 0 10% 0;\n    text-indent: 25px; }\n  ._2-wh2eGpFOzRsplfQde1xu span {\n    margin: 0 1%; }\n  ._2-wh2eGpFOzRsplfQde1xu .icon-instagram:hover, ._2-wh2eGpFOzRsplfQde1xu .icon-facebook2:hover {\n    text-decoration: none; }\n\n@media all and (min-width: 500px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.2em; } }\n\n@media all and (min-width: 700px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 900px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    width: 75%;\n    font-size: 1.5em; }\n    ._2-wh2eGpFOzRsplfQde1xu h2 {\n      font-size: 4em;\n      margin-top: 2%; }\n    ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n      margin: 2% 0; } }\n", "", {"version":3,"sources":["/./src/components/contact/src/components/contact/contact.scss","/./src/components/contact/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,wBAAuB;EACvB,iBAAgB;EAChB,WAAU;EACV,eAAc;EACd,eAAc;EACd,kBAAiB,EAoCpB;EA1CD;IAQQ,eAAc;IACd,gBAAe;IACf,wCCZ8B,EDajC;EAXL;IAaQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU;IACV,eAAc,EACjB;EAjBL;IAmBQ,aAAY;IACZ,yBAAwB,EAC3B;EArBL;IAuBQ,2BAA0B,EAC7B;EAxBL;IA0BQ,mBAAkB;IAClB,kCC9B8B;ID+B9B,eAAc;IACd,iBAAgB,EACnB;EA9BL;IAgCQ,iBAAgB;IAChB,mBAAkB;IAClB,kBAAiB,EACpB;EAnCL;IAqCQ,aAAY,EACf;EAtCL;IAwCQ,sBAAqB,EACxB;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,WAAU;IACV,iBAAgB,EAQnB;IAVD;MAIQ,eAAc;MACd,eAAc,EACjB;IANL;MAQQ,aAAY,EACf,EAAA","file":"contact.scss","sourcesContent":["@import 'fonts';\n@import 'colors';\n\n:local(.contact) {\n    background-color: white;\n    min-height: 70vh;\n    width: 85%;\n    margin: 0 auto;\n    margin-top: 5%;\n    margin-bottom: 5%;\n    ul, li, p {\n        margin-left: 0;\n        margin-right: 0;\n        font-family: $main-font;\n    }\n    ul {\n        text-align: center;\n        font-size: 1.5em;\n        width: 80%;\n        margin: 0 auto;\n    }\n    a {\n        color: black;\n        transition: all .3s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    h2 {\n        text-align: center;\n        font-family: $decorative-font;\n        font-size: 3em;\n        margin: 0 0 5% 0;\n    }\n    .contact-info {\n        font-size: 1.2em;\n        margin: 2% 0 10% 0;\n        text-indent: 25px;\n    }\n    span {\n        margin: 0 1%;\n    }\n    .icon-instagram:hover, .icon-facebook2:hover {\n        text-decoration: none;\n    }\n}\n\n@media all and (min-width: 500px) {\n    :local(.contact) {\n        font-size: 1.2em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    :local(.contact) {\n        font-size: 1.5em;\n    }\n}\n\n@media all and (min-width: 900px) {\n    :local(.contact) {\n        width: 75%;\n        font-size: 1.5em;\n        h2 {\n            font-size: 4em;\n            margin-top: 2%;\n        }\n        .contact-info {\n            margin: 2% 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "._2-wh2eGpFOzRsplfQde1xu {\n  background-color: white;\n  min-height: 70vh;\n  width: 85%;\n  margin: 0 auto;\n  margin-top: 5%;\n  margin-bottom: 5%; }\n  ._2-wh2eGpFOzRsplfQde1xu ul, ._2-wh2eGpFOzRsplfQde1xu li, ._2-wh2eGpFOzRsplfQde1xu p {\n    margin-left: 0;\n    margin-right: 0;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._2-wh2eGpFOzRsplfQde1xu ul {\n    text-align: center;\n    font-size: 1.5em;\n    width: 80%;\n    margin: 0 auto; }\n  ._2-wh2eGpFOzRsplfQde1xu a {\n    color: black;\n    transition: all .3s ease; }\n  ._2-wh2eGpFOzRsplfQde1xu a:hover {\n    text-decoration: underline; }\n  ._2-wh2eGpFOzRsplfQde1xu h2 {\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em;\n    margin: 0 0 5% 0; }\n  ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n    font-size: 1.2em;\n    margin: 2% 0 10% 0;\n    text-indent: 25px; }\n  ._2-wh2eGpFOzRsplfQde1xu span {\n    margin: 0 1%; }\n  ._2-wh2eGpFOzRsplfQde1xu .icon-instagram:hover, ._2-wh2eGpFOzRsplfQde1xu .icon-facebook2:hover {\n    text-decoration: none; }\n\n@media all and (min-width: 500px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.2em; } }\n\n@media all and (min-width: 700px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 900px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    width: 75%;\n    font-size: 1.5em; }\n    ._2-wh2eGpFOzRsplfQde1xu h2 {\n      font-size: 4em;\n      margin-top: 2%; }\n    ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n      margin: 2% 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/contact/src/components/contact/contact.scss","/Users/Will/freelance/earth-house/app/src/components/contact/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,wBAAuB;EACvB,iBAAgB;EAChB,WAAU;EACV,eAAc;EACd,eAAc;EACd,kBAAiB,EAoCpB;EA1CD;IAQQ,eAAc;IACd,gBAAe;IACf,wCCZ8B,EDajC;EAXL;IAaQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU;IACV,eAAc,EACjB;EAjBL;IAmBQ,aAAY;IACZ,yBAAwB,EAC3B;EArBL;IAuBQ,2BAA0B,EAC7B;EAxBL;IA0BQ,mBAAkB;IAClB,kCC9B8B;ID+B9B,eAAc;IACd,iBAAgB,EACnB;EA9BL;IAgCQ,iBAAgB;IAChB,mBAAkB;IAClB,kBAAiB,EACpB;EAnCL;IAqCQ,aAAY,EACf;EAtCL;IAwCQ,sBAAqB,EACxB;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,WAAU;IACV,iBAAgB,EAQnB;IAVD;MAIQ,eAAc;MACd,eAAc,EACjB;IANL;MAQQ,aAAY,EACf,EAAA","file":"contact.scss","sourcesContent":["@import 'fonts';\n@import 'colors';\n\n:local(.contact) {\n    background-color: white;\n    min-height: 70vh;\n    width: 85%;\n    margin: 0 auto;\n    margin-top: 5%;\n    margin-bottom: 5%;\n    ul, li, p {\n        margin-left: 0;\n        margin-right: 0;\n        font-family: $main-font;\n    }\n    ul {\n        text-align: center;\n        font-size: 1.5em;\n        width: 80%;\n        margin: 0 auto;\n    }\n    a {\n        color: black;\n        transition: all .3s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    h2 {\n        text-align: center;\n        font-family: $decorative-font;\n        font-size: 3em;\n        margin: 0 0 5% 0;\n    }\n    .contact-info {\n        font-size: 1.2em;\n        margin: 2% 0 10% 0;\n        text-indent: 25px;\n    }\n    span {\n        margin: 0 1%;\n    }\n    .icon-instagram:hover, .icon-facebook2:hover {\n        text-decoration: none;\n    }\n}\n\n@media all and (min-width: 500px) {\n    :local(.contact) {\n        font-size: 1.2em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    :local(.contact) {\n        font-size: 1.5em;\n    }\n}\n\n@media all and (min-width: 900px) {\n    :local(.contact) {\n        width: 75%;\n        font-size: 1.5em;\n        h2 {\n            font-size: 4em;\n            margin-top: 2%;\n        }\n        .contact-info {\n            margin: 2% 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -34801,8 +35020,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./footer-content.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./footer-content.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./footer-content.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./footer-content.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34820,7 +35039,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".footer-container {\n  background-color: #323232;\n  width: 100%;\n  color: rgba(200, 200, 200, 0.7);\n  border-top: 1px solid rgba(200, 200, 200, 0.7); }\n\n.footer-contact {\n  text-align: center;\n  margin: 8% auto 10% auto;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: .75em; }\n  .footer-contact ul {\n    list-style-type: none; }\n  .footer-contact li {\n    margin: 20px 0; }\n  .footer-contact a {\n    color: rgba(200, 200, 200, 0.7); }\n  .footer-contact a:hover {\n    text-decoration: underline; }\n  .footer-contact span {\n    font-style: italic; }\n\n@media all and (min-width: 450px) {\n  .footer-contact {\n    font-size: 1em; } }\n\n@media all and (min-width: 600px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 8% auto 8% auto; } }\n\n@media all and (min-width: 800px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 5% auto 5% auto; } }\n", "", {"version":3,"sources":["/./src/components/footer-content/src/components/footer-content/footer-content.scss","/./src/components/footer-content/src/scss/partials/_colors.scss","/./src/components/footer-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,0BCFiB;EDGjB,YAAW;EACX,gCCL4B;EDM5B,+CCN4B,EDO/B;;AAED;EACI,mBAAkB;EAClB,yBAAwB;EACxB,wCEZkC;EFalC,iBAAgB,EAgBnB;EApBD;IAMQ,sBAAqB,EACxB;EAPL;IASQ,eAAc,EACjB;EAVL;IAYQ,gCCrBwB,EDsB3B;EAbL;IAeQ,2BAA0B,EAC7B;EAhBL;IAkBQ,mBAAkB,EACrB;;AAGL;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA","file":"footer-content.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.footer-container {\n    background-color: $black;\n    width: 100%;\n    color: $lightgrey;\n    border-top: 1px solid $lightgrey;\n}\n\n.footer-contact {\n    text-align: center;\n    margin: 8% auto 10% auto;\n    font-family: $main-font;\n    font-size: .75em;\n    ul {\n        list-style-type: none; \n    }\n    li {\n        margin: 20px 0;\n    }\n    a {\n        color: $lightgrey;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    span {\n        font-style: italic;\n    }\n}\n\n@media all and (min-width: 450px) {\n    .footer-contact {\n        font-size: 1em; \n    }\n}\n\n@media all and (min-width: 600px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 8% auto 8% auto;\n    }\n}\n\n@media all and (min-width: 800px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 5% auto 5% auto;\n    }\n}\n\n// .footer-category:last-child {\n//     border-right: none;\n// }\n\n// @media all and (max-width: 650px) {\n//     .footer-container {\n//         div {\n//             margin-top: 25px;\n//             width: 49.5%;\n//             height: 170px;\n//             }\n//     }\n\n//     .footer-category:nth-child(2) {\n//         border-right: none;\n//     }\n// }\n\n\n\n\n    // padding-bottom: 25px;\n\n    // div {\n    //     margin-top: 25px;\n    //     height: 80%;\n    //     width: 24%;\n    //     float: left;\n    //     border-right: .12em solid $lightgrey;\n    //     h3 {\n    //         margin-top: 0;\n    //         text-align: center;\n    //         font-size: 1em;\n    //     }\n\n        // ul{\n        //     list-style-type: none;\n        //     margin: 0 auto;\n        //     // height: 200px;\n        //     li {\n        //         // padding-left: 50px;\n        //         margin: 15px 0;\n        //         font-size: 1.2em;\n        //         // font-size: .85em;\n        //         font-family: $main-font;\n        //         font-weight: lighter;\n        //         width: 100%;   \n        //     }\n        // }\n    // }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".footer-container {\n  background-color: #323232;\n  width: 100%;\n  color: rgba(200, 200, 200, 0.7);\n  border-top: 1px solid rgba(200, 200, 200, 0.7); }\n\n.footer-contact {\n  text-align: center;\n  margin: 8% auto 10% auto;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: .75em; }\n  .footer-contact ul {\n    list-style-type: none; }\n  .footer-contact li {\n    margin: 20px 0; }\n  .footer-contact a {\n    color: rgba(200, 200, 200, 0.7); }\n  .footer-contact a:hover {\n    text-decoration: underline; }\n  .footer-contact span {\n    font-style: italic; }\n\n@media all and (min-width: 450px) {\n  .footer-contact {\n    font-size: 1em; } }\n\n@media all and (min-width: 600px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 8% auto 8% auto; } }\n\n@media all and (min-width: 800px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 5% auto 5% auto; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/footer-content/src/components/footer-content/footer-content.scss","/Users/Will/freelance/earth-house/app/src/components/footer-content/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/footer-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,0BCFiB;EDGjB,YAAW;EACX,gCCL4B;EDM5B,+CCN4B,EDO/B;;AAED;EACI,mBAAkB;EAClB,yBAAwB;EACxB,wCEZkC;EFalC,iBAAgB,EAgBnB;EApBD;IAMQ,sBAAqB,EACxB;EAPL;IASQ,eAAc,EACjB;EAVL;IAYQ,gCCrBwB,EDsB3B;EAbL;IAeQ,2BAA0B,EAC7B;EAhBL;IAkBQ,mBAAkB,EACrB;;AAGL;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA","file":"footer-content.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.footer-container {\n    background-color: $black;\n    width: 100%;\n    color: $lightgrey;\n    border-top: 1px solid $lightgrey;\n}\n\n.footer-contact {\n    text-align: center;\n    margin: 8% auto 10% auto;\n    font-family: $main-font;\n    font-size: .75em;\n    ul {\n        list-style-type: none; \n    }\n    li {\n        margin: 20px 0;\n    }\n    a {\n        color: $lightgrey;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    span {\n        font-style: italic;\n    }\n}\n\n@media all and (min-width: 450px) {\n    .footer-contact {\n        font-size: 1em; \n    }\n}\n\n@media all and (min-width: 600px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 8% auto 8% auto;\n    }\n}\n\n@media all and (min-width: 800px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 5% auto 5% auto;\n    }\n}\n\n// .footer-category:last-child {\n//     border-right: none;\n// }\n\n// @media all and (max-width: 650px) {\n//     .footer-container {\n//         div {\n//             margin-top: 25px;\n//             width: 49.5%;\n//             height: 170px;\n//             }\n//     }\n\n//     .footer-category:nth-child(2) {\n//         border-right: none;\n//     }\n// }\n\n\n\n\n    // padding-bottom: 25px;\n\n    // div {\n    //     margin-top: 25px;\n    //     height: 80%;\n    //     width: 24%;\n    //     float: left;\n    //     border-right: .12em solid $lightgrey;\n    //     h3 {\n    //         margin-top: 0;\n    //         text-align: center;\n    //         font-size: 1em;\n    //     }\n\n        // ul{\n        //     list-style-type: none;\n        //     margin: 0 auto;\n        //     // height: 200px;\n        //     li {\n        //         // padding-left: 50px;\n        //         margin: 15px 0;\n        //         font-size: 1.2em;\n        //         // font-size: .85em;\n        //         font-family: $main-font;\n        //         font-weight: lighter;\n        //         width: 100%;   \n        //     }\n        // }\n    // }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -34890,8 +35109,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./header-content.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./header-content.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./header-content.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./header-content.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34909,7 +35128,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-container {\n  width: 100%;\n  position: absolute;\n  z-index: 1; }\n  .header-container .left {\n    float: left;\n    margin-top: -5px; }\n  .header-container .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right; }\n    .header-container .right span {\n      margin-right: 20px; }\n  .header-container h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white; }\n  .header-container .cart-icon {\n    position: relative;\n    float: left; }\n    .header-container .cart-icon img {\n      max-width: none; }\n  .header-container .cart-icon:hover > .total-items {\n    color: #FFC107; }\n  .header-container .icon-facebook2:before {\n    content: \"\\EA91\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-instagram:before {\n    content: \"\\EA92\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-twitter:before {\n    content: \"\\EA96\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-menu:before {\n    content: \"\\E9BD\";\n    font-size: 1.2em;\n    color: white;\n    width: 20px; }\n\n.total-items {\n  display: inline-block;\n  position: absolute;\n  color: white;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.5em;\n  font-weight: bold;\n  margin: 0; }\n\n.socials {\n  float: right; }\n\n.hamburger {\n  display: none;\n  float: left; }\n\n@media all and (max-width: 550px) {\n  .header-container nav-bar {\n    display: none; }\n  .header-container .mobile-nav nav-bar {\n    display: block;\n    margin-top: 5px; }\n  .header-container .left {\n    float: none;\n    margin-top: -5px;\n    width: 100%;\n    z-index: 1; }\n    .header-container .left h1 {\n      float: left;\n      margin: 0 1%;\n      font-size: 2.9em;\n      font-weight: 900; }\n  .header-container .right {\n    margin-top: 5px; }\n    .header-container .right span {\n      margin-right: 10px; }\n  .header-container .socials {\n    display: none; }\n  .cart-icon img {\n    width: 22px;\n    margin-right: 5px; }\n  .total-items {\n    font-size: .5em;\n    top: 3px;\n    right: 12px; }\n  .hamburger {\n    display: block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  .header-container .left {\n    max-width: 250px; }\n    .header-container .left h1 {\n      font-size: 4em; }\n  .header-container .right {\n    margin-top: 15px; }\n    .header-container .right .icon-facebook2:before, .header-container .right .icon-instagram:before, .header-container .right .icon-twitter:before, .header-container .right .icon-cart:before {\n      font-size: 1.5em; }\n    .header-container .right span {\n      margin-right: 15px; }\n  .cart-icon img {\n    width: 35px;\n    margin-right: 15px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1em;\n    top: -1px;\n    right: 25px; } }\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n  .header-container .left {\n    width: 350px; }\n  .cart-icon img {\n    width: 45px;\n    margin-right: 20px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1.2em;\n    top: 1px;\n    right: 34px; } }\n\n@media all and (min-width: 1083px) {\n  .header-container .left {\n    width: 500px; }\n    .header-container .left h1 {\n      font-size: 7em; }\n  .header-container .right .icon-facebook2:before, .header-container .right .icon-twitter:before, .header-container .right .icon-instagram:before, .header-container .right .icon-cart:before {\n    font-size: 2.2em; }\n  .cart-icon img {\n    margin-top: -8px;\n    margin-right: 19px;\n    width: 55px; }\n  .total-items {\n    bottom: 23px;\n    right: 35px; } }\n", "", {"version":3,"sources":["/./src/components/header-content/src/scss/partials/_header-background.scss","/./src/components/header-content/src/scss/partials/_colors.scss","/./src/components/header-content/src/components/header-content/header-content.scss","/./src/components/header-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE5BL;EACQ,YAAW;EACX,mBAAkB;EAClB,WAAU,EAuDjB;EA1DD;IAKY,YAAW;IACX,iBAAgB,EACnB;EAPT;IASY,iBAAgB;IAChB,aAAY;IACZ,kBAAiB,EAIpB;IAfT;MAagB,mBAAkB,EACrB;EAdb;IAiBY,iBAAgB;IAChB,eAAc;IACd,kCAAiC;IACjC,eAAc;IACd,aAAY,EACf;EAtBT;IAwBY,mBAAkB;IAClB,YAAW,EAId;IA7BT;MA2BgB,gBAAe,EAClB;EA5Bb;IAgCY,eDpCU,ECqCb;EAjCT;IAoCY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EAvCT;IA0CY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EA7CT;IAgDY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EAnDT;IAqDY,iBAAgB;IAChB,iBAAgB;IAChB,aAAY;IACZ,YAAW,EACd;;AAGT;EACI,sBAAqB;EACrB,mBAAkB;EAClB,aAAY;EACZ,wCCnEkC;EDoElC,iBAAgB;EAChB,kBAAiB;EACjB,UAAS,EACZ;;AACD;EACI,aAAY,EACf;;AAED;EACI,cAAa;EACb,YAAW,EACd;;AAGD;EACI;IAEQ,cAAa,EAChB;EAHL;IAKQ,eAAc;IACd,gBAAe,EAClB;EAPL;IASQ,YAAW;IACX,iBAAgB;IAChB,YAAW;IACX,WAAU,EAOb;IAnBL;MAcY,YAAW;MACX,aAAY;MACZ,iBAAgB;MAChB,iBAAgB,EACnB;EAlBT;IAqBQ,gBAAe,EAIlB;IAzBL;MAuBY,mBAAkB,EACrB;EAxBT;IA2BQ,cAAa,EAChB;EAEL;IAEQ,YAAW;IACX,kBAAiB,EAEpB;EAEL;IACI,gBAAe;IACf,SAAO;IACP,YAAW,EACd;EACD;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IAEQ,iBAAgB,EAInB;IANL;MAIY,eAAc,EACjB;EALT;IASQ,iBAAgB,EAOnB;IAhBL;MAWY,iBAAgB,EACnB;IAZT;MAcY,mBAAkB,EACrB;EAGT;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,eAAc;IACd,UAAS;IACT,YAAW,EACd,EAAA;;AAIL;EACI;IAEQ,aAAY,EACf;EAEL;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,iBAAgB;IAChB,SAAQ;IACR,YAAW,EACd,EAAA;;AAGL;EACI;IAEQ,aAAY,EAIf;IANL;MAIY,eAAc,EACjB;EALT;IASY,iBAAgB,EACnB;EAGT;IAEQ,iBAAgB;IAChB,mBAAkB;IAClB,YAAW,EACd;EAEL;IACI,aAAY;IACZ,YAAW,EACd,EAAA","file":"header-content.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'colors';\n@import 'fonts';\n@import 'header-background';\n\n.header-container {\n        width: 100%;\n        position: absolute;\n        z-index: 1;\n        .left {\n            float: left;\n            margin-top: -5px;\n        }\n        .right {\n            margin-top: 20px;\n            float: right;\n            text-align: right;\n            span {\n                margin-right: 20px;\n            }\n        }\n        h1 {\n            text-align: left;\n            margin: 0 20px;\n            font-family: 'Amatic SC', cursive;\n            font-size: 6em;\n            color: white;\n        }\n        .cart-icon {\n            position: relative;\n            float: left;\n            img{\n                max-width: none;\n            }\n        }\n\n        .cart-icon:hover > .total-items {\n            color: $accent-color;\n        }\n\n        .icon-facebook2:before {\n            content: \"\\ea91\";\n            color: white;\n            font-size: 1.9em;\n        }\n\n        .icon-instagram:before {\n            content: \"\\ea92\";\n            color: white;\n            font-size: 1.9em;\n        }\n\n        .icon-twitter:before {\n            content: \"\\ea96\";\n            color: white;\n            font-size: 1.9em;\n        }\n        .icon-menu:before {\n            content: \"\\e9bd\";\n            font-size: 1.2em;\n            color: white;\n            width: 20px;\n        }\n}\n\n.total-items {\n    display: inline-block;\n    position: absolute;\n    color: white;\n    font-family: $main-font;\n    font-size: 1.5em;\n    font-weight: bold;\n    margin: 0;\n}\n.socials {\n    float: right;\n}\n\n.hamburger {\n    display: none;\n    float: left;\n}\n\n\n@media all and (max-width: 550px) {\n    .header-container {\n        nav-bar {\n            display: none;\n        }\n        .mobile-nav nav-bar {\n            display: block;\n            margin-top: 5px;\n        }\n        .left {\n            float: none;\n            margin-top: -5px;\n            width: 100%;\n            z-index: 1;\n            h1 {\n                float: left;\n                margin: 0 1%;\n                font-size: 2.9em;\n                font-weight: 900;\n            }\n        }\n        .right {\n            margin-top: 5px;\n            span {\n                margin-right: 10px;\n            }\n        }\n        .socials {\n            display: none;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 22px;\n            margin-right: 5px;\n            \n        }\n    }\n    .total-items {\n        font-size: .5em;\n        top:3px;\n        right: 12px;\n    }\n    .hamburger {\n        display: block;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    .header-container {\n        .left {\n            max-width: 250px;\n            h1 {\n                font-size: 4em;\n            }\n        }\n\n        .right {\n            margin-top: 15px;\n            .icon-facebook2:before, .icon-instagram:before, .icon-twitter:before, .icon-cart:before {\n                font-size: 1.5em;\n            }\n            span {\n                margin-right: 15px;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            width: 35px;\n            margin-right: 15px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1em;\n        top: -1px;\n        right: 25px;\n    }\n\n}\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n    .header-container {\n        .left {\n            width: 350px;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 45px;\n            margin-right: 20px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1.2em;\n        top: 1px;\n        right: 34px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-container {\n        .left {\n            width: 500px;\n            h1 {\n                font-size: 7em;\n            }\n        }\n        .right {\n            .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n                font-size: 2.2em;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            margin-top: -8px;\n            margin-right: 19px;\n            width: 55px;\n        }\n    }\n    .total-items {\n        bottom: 23px;\n        right: 35px;\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-container {\n  width: 100%;\n  position: absolute;\n  z-index: 1;\n  color: white; }\n  .header-container .left {\n    float: left;\n    margin-top: -5px; }\n  .header-container .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right; }\n    .header-container .right span {\n      margin-right: 20px; }\n  .header-container h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white; }\n  .header-container .cart-icon {\n    position: relative;\n    float: left; }\n    .header-container .cart-icon img {\n      max-width: none; }\n  .header-container .cart-icon:hover > .total-items {\n    color: #FFC107; }\n  .header-container .icon-facebook2:before {\n    content: \"\\EA91\";\n    font-size: 1.9em; }\n  .header-container .icon-instagram:before {\n    content: \"\\EA92\";\n    font-size: 1.9em; }\n  .header-container .icon-twitter:before {\n    content: \"\\EA96\";\n    font-size: 1.9em; }\n  .header-container .icon-menu:before {\n    content: \"\\E9BD\";\n    font-size: 2em; }\n  .header-container a:hover {\n    color: #FFC107; }\n\n.total-items {\n  display: inline-block;\n  position: absolute;\n  color: white;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.5em;\n  font-weight: bold;\n  margin: 0; }\n\n.socials {\n  float: right; }\n\n.hamburger {\n  display: none;\n  float: left; }\n\n@media all and (max-width: 550px) {\n  .header-container nav-bar {\n    display: none; }\n  .header-container .mobile-nav nav-bar {\n    display: block;\n    margin-top: 5px; }\n  .header-container .left {\n    float: none;\n    margin-top: -5px;\n    width: 100%;\n    z-index: 1; }\n    .header-container .left h1 {\n      float: left;\n      margin: 0 1%;\n      font-size: 2.9em;\n      font-weight: 900; }\n  .header-container .right {\n    margin-top: 5px; }\n    .header-container .right span {\n      margin-right: 10px; }\n  .header-container .socials {\n    display: none; }\n  .cart-icon img {\n    width: 36px;\n    margin-right: 5px; }\n  .total-items {\n    font-size: .9em;\n    top: 4px;\n    right: 15px; }\n  .hamburger {\n    display: block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  .header-container .left {\n    max-width: 250px; }\n    .header-container .left h1 {\n      font-size: 4em; }\n  .header-container .right {\n    margin-top: 15px; }\n    .header-container .right .icon-facebook2:before, .header-container .right .icon-instagram:before, .header-container .right .icon-twitter:before, .header-container .right .icon-cart:before {\n      font-size: 1.5em; }\n    .header-container .right span {\n      margin-right: 15px; }\n  .cart-icon img {\n    width: 35px;\n    margin-right: 15px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1em;\n    top: -1px;\n    right: 25px; } }\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n  .header-container .left {\n    width: 350px; }\n  .cart-icon img {\n    width: 45px;\n    margin-right: 20px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1.2em;\n    top: 1px;\n    right: 34px; } }\n\n@media all and (min-width: 1083px) {\n  .header-container .left {\n    width: 500px; }\n    .header-container .left h1 {\n      font-size: 7em; }\n  .header-container .right .icon-facebook2:before, .header-container .right .icon-twitter:before, .header-container .right .icon-instagram:before, .header-container .right .icon-cart:before {\n    font-size: 2.2em; }\n  .cart-icon img {\n    margin-top: -8px;\n    margin-right: 19px;\n    width: 55px; }\n  .total-items {\n    bottom: 23px;\n    right: 35px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_header-background.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/components/header-content/header-content.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE5BL;EACQ,YAAW;EACX,mBAAkB;EAClB,WAAU;EACV,aAAY,EAqDnB;EAzDD;IAMY,YAAW;IACX,iBAAgB,EACnB;EART;IAUY,iBAAgB;IAChB,aAAY;IACZ,kBAAiB,EAIpB;IAhBT;MAcgB,mBAAkB,EACrB;EAfb;IAkBY,iBAAgB;IAChB,eAAc;IACd,kCAAiC;IACjC,eAAc;IACd,aAAY,EACf;EAvBT;IAyBY,mBAAkB;IAClB,YAAW,EAId;IA9BT;MA4BgB,gBAAe,EAClB;EA7Bb;IAiCY,eDrCU,ECsCb;EAlCT;IAqCY,iBAAgB;IAChB,iBAAgB,EACnB;EAvCT;IA0CY,iBAAgB;IAChB,iBAAgB,EACnB;EA5CT;IA+CY,iBAAgB;IAChB,iBAAgB,EACnB;EAjDT;IAmDY,iBAAgB;IAChB,eAAc,EACjB;EArDT;IAuDY,eD3DU,EC4Db;;AAGT;EACI,sBAAqB;EACrB,mBAAkB;EAClB,aAAY;EACZ,wCClEkC;EDmElC,iBAAgB;EAChB,kBAAiB;EACjB,UAAS,EACZ;;AACD;EACI,aAAY,EACf;;AAED;EACI,cAAa;EACb,YAAW,EACd;;AAGD;EACI;IAEQ,cAAa,EAChB;EAHL;IAKQ,eAAc;IACd,gBAAe,EAClB;EAPL;IASQ,YAAW;IACX,iBAAgB;IAChB,YAAW;IACX,WAAU,EAOb;IAnBL;MAcY,YAAW;MACX,aAAY;MACZ,iBAAgB;MAChB,iBAAgB,EACnB;EAlBT;IAqBQ,gBAAe,EAIlB;IAzBL;MAuBY,mBAAkB,EACrB;EAxBT;IA2BQ,cAAa,EAChB;EAEL;IAEQ,YAAW;IACX,kBAAiB,EAEpB;EAEL;IACI,gBAAe;IACf,SAAQ;IACR,YAAW,EACd;EACD;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IAEQ,iBAAgB,EAInB;IANL;MAIY,eAAc,EACjB;EALT;IASQ,iBAAgB,EAOnB;IAhBL;MAWY,iBAAgB,EACnB;IAZT;MAcY,mBAAkB,EACrB;EAGT;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,eAAc;IACd,UAAS;IACT,YAAW,EACd,EAAA;;AAIL;EACI;IAEQ,aAAY,EACf;EAEL;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,iBAAgB;IAChB,SAAQ;IACR,YAAW,EACd,EAAA;;AAGL;EACI;IAEQ,aAAY,EAIf;IANL;MAIY,eAAc,EACjB;EALT;IASY,iBAAgB,EACnB;EAGT;IAEQ,iBAAgB;IAChB,mBAAkB;IAClB,YAAW,EACd;EAEL;IACI,aAAY;IACZ,YAAW,EACd,EAAA","file":"header-content.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'colors';\n@import 'fonts';\n@import 'header-background';\n\n.header-container {\n        width: 100%;\n        position: absolute;\n        z-index: 1;\n        color: white;\n        .left {\n            float: left;\n            margin-top: -5px;\n        }\n        .right {\n            margin-top: 20px;\n            float: right;\n            text-align: right;\n            span {\n                margin-right: 20px;\n            }\n        }\n        h1 {\n            text-align: left;\n            margin: 0 20px;\n            font-family: 'Amatic SC', cursive;\n            font-size: 6em;\n            color: white;\n        }\n        .cart-icon {\n            position: relative;\n            float: left;\n            img{\n                max-width: none;\n            }\n        }\n\n        .cart-icon:hover > .total-items {\n            color: $accent-color;\n        }\n\n        .icon-facebook2:before {\n            content: \"\\ea91\";\n            font-size: 1.9em;\n        }\n\n        .icon-instagram:before {\n            content: \"\\ea92\";\n            font-size: 1.9em;\n        }\n\n        .icon-twitter:before {\n            content: \"\\ea96\";\n            font-size: 1.9em;\n        }\n        .icon-menu:before {\n            content: \"\\e9bd\";\n            font-size: 2em;\n        }\n        a:hover {\n            color: $accent-color;\n        }\n}\n\n.total-items {\n    display: inline-block;\n    position: absolute;\n    color: white;\n    font-family: $main-font;\n    font-size: 1.5em;\n    font-weight: bold;\n    margin: 0;\n}\n.socials {\n    float: right;\n}\n\n.hamburger {\n    display: none;\n    float: left;\n}\n\n\n@media all and (max-width: 550px) {\n    .header-container {\n        nav-bar {\n            display: none;\n        }\n        .mobile-nav nav-bar {\n            display: block;\n            margin-top: 5px;\n        }\n        .left {\n            float: none;\n            margin-top: -5px;\n            width: 100%;\n            z-index: 1;\n            h1 {\n                float: left;\n                margin: 0 1%;\n                font-size: 2.9em;\n                font-weight: 900;\n            }\n        }\n        .right {\n            margin-top: 5px;\n            span {\n                margin-right: 10px;\n            }\n        }\n        .socials {\n            display: none;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 36px;\n            margin-right: 5px;\n            \n        }\n    }\n    .total-items {\n        font-size: .9em;\n        top: 4px;\n        right: 15px;\n    }\n    .hamburger {\n        display: block;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    .header-container {\n        .left {\n            max-width: 250px;\n            h1 {\n                font-size: 4em;\n            }\n        }\n\n        .right {\n            margin-top: 15px;\n            .icon-facebook2:before, .icon-instagram:before, .icon-twitter:before, .icon-cart:before {\n                font-size: 1.5em;\n            }\n            span {\n                margin-right: 15px;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            width: 35px;\n            margin-right: 15px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1em;\n        top: -1px;\n        right: 25px;\n    }\n\n}\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n    .header-container {\n        .left {\n            width: 350px;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 45px;\n            margin-right: 20px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1.2em;\n        top: 1px;\n        right: 34px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-container {\n        .left {\n            width: 500px;\n            h1 {\n                font-size: 7em;\n            }\n        }\n        .right {\n            .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n                font-size: 2.2em;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            margin-top: -8px;\n            margin-right: 19px;\n            width: 55px;\n        }\n    }\n    .total-items {\n        bottom: 23px;\n        right: 35px;\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -34998,7 +35217,7 @@
 	
 	    $interval(function () {
 	        _this.nextSlide();
-	    }, 4000);
+	    }, 5000);
 	
 	    //TODO: figure out some sort of way to adjust slider height based off of image height, we might have to use jQuery :/
 	
@@ -35030,7 +35249,7 @@
 /* 41 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"slider\">\n    <div ng-repeat=\"slide in $ctrl.slides\">\n        <img ng-hide=\"!$ctrl.isCurrIndex($index)\"\n            ng-src=\"{{slide.imgUrl}}\"\n             class=\"slide-image slide-animation \">\n         <div ng-if=\"$ctrl.isCurrIndex($index)\"\n            class=\"slide-text fade\">\n            <p><a ui-sref=\"shop\">{{$ctrl.currText}}</a></p>\n         </div>\n    </div>\n\n    <!--<a class=\"arrow next\" href=\"#\" ng-click=\"$ctrl.nextSlide()\"><span class=\"icon-arrow-right2\"></span></a>\n    <a class=\"arrow prev\" href=\"#\" ng-click=\"$ctrl.prevSlide()\"><span class=\"icon-arrow-left2\"></span></a>-->\n    \n    <nav class=\"slider-nav\">\n        <div class=\"wrapper\">\n            <ul class=\"dots\">\n                <li class=\"dot\" ng-repeat=\"slide in $ctrl.slides\">\n                    <a href=\"#\" \n                        ng-class=\"{'active': $ctrl.isCurrIndex($index)}\"\n                        ng-click=\"$ctrl.setCurrIndex($index)\"></a>\n                </li>\n            </ul>\n            <!--<div id=\"progress-bar\" ng-class=\"$ctrl.progress\"></div>-->\n        </div>\n    </nav>\n</div>\n\n\n";
+	module.exports = "<div class=\"slider\">\n    <div ng-repeat=\"slide in $ctrl.slides\">\n        <img ng-hide=\"!$ctrl.isCurrIndex($index)\"\n            ng-src=\"{{slide.imgUrl}}\"\n             class=\"slide-image slide-animation \">\n         <div ng-if=\"$ctrl.isCurrIndex($index)\"\n            class=\"slide-text fade\">\n            <p><a ui-sref=\"shop\">{{$ctrl.currText}}</a></p>\n         </div>\n    </div>\n\n    <!--<a class=\"arrow next\" href=\"#\" ng-click=\"$ctrl.nextSlide()\"><span class=\"icon-arrow-right2\"></span></a>\n    <a class=\"arrow prev\" href=\"#\" ng-click=\"$ctrl.prevSlide()\"><span class=\"icon-arrow-left2\"></span></a>-->\n    \n    <nav class=\"slider-nav\">\n        <div class=\"wrapper\">\n            <ul class=\"dots\">\n                <li class=\"dot\" ng-repeat=\"slide in $ctrl.slides\">\n                    <a href=\"#\" \n                        ng-class=\"{'active': $ctrl.isCurrIndex($index)}\"\n                        ng-click=\"$ctrl.setCurrIndex($index)\"></a>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</div>\n\n\n";
 
 /***/ },
 /* 42 */
@@ -35048,8 +35267,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./hero-image.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./hero-image.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./hero-image.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./hero-image.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35067,7 +35286,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".fade.ng-enter {\n  transition: .5s linear all;\n  opacity: 0; }\n\n.fade.ng-enter.ng-enter-active {\n  opacity: 1; }\n\n.fade.ng-leave {\n  transition: .5s linear all;\n  opacity: 1; }\n\n.fade.ng-leave.ng-leave-active {\n  opacity: 0; }\n\n.slide-text {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  width: 100%;\n  z-index: 1002; }\n  .slide-text p {\n    font-size: 1em;\n    color: white;\n    font-weight: bold;\n    text-align: center;\n    margin-bottom: 3%; }\n  .slide-text a {\n    font-size: 1.5em;\n    font-family: \"Amatic SC\", cursive;\n    display: block;\n    transition: .5s ease all; }\n  .slide-text a:hover {\n    color: #FFC107; }\n\n.slider {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden; }\n\n.slide-image {\n  position: absolute;\n  top: 0;\n  left: 0; }\n\n.slider-nav {\n  text-align: center;\n  display: block;\n  position: absolute;\n  z-index: 1002;\n  left: 0;\n  bottom: -4px;\n  right: 0;\n  height: 48px; }\n\n.nonDraggableImage {\n  -webkit-user-drag: none; }\n\n.slider-nav .wrapper {\n  margin: 0 auto;\n  width: 100%;\n  padding: 1em 0 .8em; }\n\n#progress-bar {\n  position: absolute;\n  bottom: 10px;\n  height: 3px;\n  background-color: #FFC107;\n  height: 3px;\n  opacity: .7;\n  transition: width 4s linear; }\n\n.slider-nav ul {\n  margin: 0;\n  width: 100%; }\n\n.slider-nav .dot, .slider-nav .dot a {\n  display: inline-block;\n  zoom: 1; }\n\n.dots .dot {\n  position: relative;\n  margin: 0 10px;\n  width: 12px;\n  height: 12px; }\n\n.dots .dot a {\n  position: absolute;\n  top: 2px;\n  left: 2px;\n  width: 6px;\n  height: 6px;\n  text-indent: 100%;\n  white-space: nowrap;\n  overflow: hidden;\n  background: #FFF;\n  border: 1px solid transparent;\n  outline: none;\n  -webkit-box-shadow: none;\n  -moz-box-shadow: none;\n  box-shadow: none;\n  -webkit-border-radius: 50%;\n  -moz-border-radius: 50%;\n  border-radius: 50%;\n  -webkit-transition: background-color 1s, border-color 1s;\n  -moz-transition: background-color 1s, border-color 1s;\n  transition: background-color 1s, border-color 1s; }\n\n.dots .dot a.active {\n  border-color: #FFC107;\n  background-color: #FFC107; }\n\n.arrow {\n  position: absolute;\n  z-index: 1002;\n  display: block;\n  top: 50%;\n  margin-top: -35px;\n  width: auto;\n  height: auto;\n  outline: none;\n  cursor: pointer;\n  color: white;\n  font-size: 4em;\n  border: 5px solid rgba(255, 255, 255, 0); }\n\n.arrow.prev {\n  opacity: 0.2;\n  left: 5%;\n  transition: 0.2s linear all; }\n\n.arrow.next {\n  opacity: 0.2;\n  right: 5%;\n  transition: 0.3s linear all; }\n\n.arrow:hover {\n  opacity: 1;\n  -webkit-transform: scale(1.2);\n  -ms-transform: scale(1.2);\n  transform: scale(1.2); }\n\n@media all and (max-width: 358px) {\n  .slider {\n    height: 210px; } }\n\n@media all and (min-width: 359px) and (max-width: 450px) {\n  .slider {\n    height: 250px; } }\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n  .slider {\n    height: 295px; } }\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n  .slider a {\n    font-size: 2em;\n    margin-bottom: 1%; }\n  .slide-text a {\n    font-size: 2em; } }\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n  .slider {\n    height: 350px; } }\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n  .slider {\n    height: 410px; }\n  .slide-text a {\n    font-size: 2.5em; } }\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n  .slider {\n    height: 440px; }\n  .slide-text a {\n    font-size: 3em; } }\n\n@media all and (max-width: 700px) {\n  .slider-nav {\n    height: 35px; }\n  .slider-nav .wrapper {\n    padding-bottom: 0;\n    bottom: 0; }\n  .dots .dot {\n    margin: 0 5px;\n    width: 12px;\n    height: 12px; }\n  .dots .dot a {\n    height: 4px;\n    width: 4px; } }\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n  .slider {\n    height: 500px; }\n  .slide-text a {\n    font-size: 3.5em;\n    margin-bottom: 10px; } }\n\n@media all and (min-width: 816px) {\n  .slider {\n    height: 550px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n  .slider img {\n    top: -35px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n  .slider img {\n    top: -60px; }\n  .slide-text a {\n    font-size: 5em; } }\n\n@media all and (min-width: 1200px) {\n  .slider {\n    height: 600px; }\n    .slider img {\n      top: -93px; } }\n", "", {"version":3,"sources":["/./src/components/hero-image/src/scss/partials/_fade-text.scss","/./src/components/hero-image/src/components/hero-image/hero-image.scss","/./src/components/hero-image/src/scss/partials/_fonts.scss","/./src/components/hero-image/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAAA;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;AAED;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;ACZD;EACI,mBAAkB;EAClB,UAAS;EACT,SAAQ;EACR,YAAW;EACX,cAAa,EAmBhB;EAxBD;IAOQ,eAAc;IACd,aAAY;IACZ,kBAAiB;IACjB,mBAAkB;IAElB,kBAAiB,EACpB;EAbL;IAeQ,iBAAgB;IAChB,kCCpB8B;IDqB9B,eAAc;IACd,yBAAwB,EAC3B;EAnBL;IAqBQ,eEzBc,EF0BjB;;AAIL;EACI,mBAAkB;EAClB,YAAW;EACX,cAAa;EACb,iBAAgB,EACnB;;AAED;EACI,mBAAkB;EAClB,OAAM;EACN,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,mBAAkB;EAClB,cAAa;EACb,QAAO;EACP,aAAY;EACZ,SAAQ;EACR,aAAY,EACf;;AAED;EACI,wBAAuB,EAC1B;;AAED;EACI,eAAc;EACd,YAAW;EACX,oBAAmB,EACtB;;AAUD;EACI,mBAAkB;EAClB,aAAY;EACZ,YAAW;EACX,0BE5EkB;EF6ElB,YAAW;EACX,YAAW;EACX,4BAA2B,EAC9B;;AAYD;EACI,UAAS;EACT,YAAW,EACd;;AAED;EACI,sBAAqB;EACrB,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,YAAW;EACX,aAAY,EACf;;AAED;EACI,mBAAkB;EAClB,SAAQ;EACR,UAAS;EACT,WAAU;EACV,YAAW;EACX,kBAAiB;EACjB,oBAAmB;EACnB,iBAAgB;EAChB,iBAAgB;EAChB,8BAA6B;EAC7B,cAAa;EACb,yBAAwB;EACxB,sBAAqB;EACrB,iBAAgB;EAChB,2BAA0B;EAC1B,wBAAuB;EACvB,mBAAkB;EAClB,yDAAwD;EACxD,sDAAqD;EACrD,iDAAgD,EACnD;;AAED;EAEI,sBEtIkB;EFuIlB,0BEvIkB,EFwIrB;;AAED;EACI,mBAAkB;EAClB,cAAa;EACb,eAAc;EACd,SAAQ;EACR,kBAAiB;EACjB,YAAW;EACX,aAAY;EACZ,cAAa;EACb,gBAAe;EACf,aAAY;EACZ,eAAc;EACd,yCAAqC,EACxC;;AAED;EACI,aAAY;EACZ,SAAQ;EAER,4BAA2B,EAC9B;;AAED;EACI,aAAY;EACZ,UAAS;EACT,4BAA2B,EAC9B;;AAED;EACI,WAAU;EACV,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB,EACxB;;AACD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IAEQ,eAAc;IACd,kBAAiB,EACpB;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB,EACnB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EAEI;IACI,aAAY,EACf;EACD;IACI,kBAAiB;IACjB,UAAS,EACZ;EAED;IACI,cAAa;IACb,YAAW;IACX,aAAY,EACf;EACD;IACI,YAAW;IACX,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB;IAChB,oBAAmB,EACtB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAIhB;IALD;MAGQ,WAAU,EACb,EAAA","file":"hero-image.scss","sourcesContent":[".fade.ng-enter {\n    transition: .5s linear all;\n    opacity: 0;\n}\n\n.fade.ng-enter.ng-enter-active {\n    opacity: 1;\n}\n\n.fade.ng-leave {\n    transition: .5s linear all;\n    opacity: 1;\n}\n\n.fade.ng-leave.ng-leave-active {\n    opacity: 0;\n}","@import 'fade-text';\n@import 'fonts';\n@import 'colors';\n\n.slide-text {\n    position: absolute;\n    bottom: 0;\n    right: 0;\n    width: 100%;\n    z-index: 1002;\n    p {\n        font-size: 1em;\n        color: white;\n        font-weight: bold;\n        text-align: center;\n\n        margin-bottom: 3%;\n    }\n    a {\n        font-size: 1.5em;\n        font-family: $decorative-font;\n        display: block;\n        transition: .5s ease all;\n    }\n    a:hover {\n        color: $accent-color;\n    }\n\n}\n\n.slider {\n    position: relative;\n    width: 100%;\n    height: 100vh;\n    overflow: hidden;\n}\n\n.slide-image {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n\n.slider-nav {\n    text-align: center;\n    display: block;\n    position: absolute;\n    z-index: 1002;\n    left: 0;\n    bottom: -4px;\n    right: 0;\n    height: 48px;\n}\n\n.nonDraggableImage{\n    -webkit-user-drag: none;\n}\n\n.slider-nav .wrapper {\n    margin: 0 auto;\n    width: 100%;\n    padding: 1em 0 .8em;\n}\n\n// .progress-bar {\n//     width: 100%;\n//     position: absolute;\n//     bottom: 10px;\n//     height: 3px;\n//     // background-color: rgab(255,255,255,.7);\n// }\n\n#progress-bar {\n    position: absolute;\n    bottom: 10px;\n    height: 3px;\n    background-color: $accent-color;\n    height: 3px;\n    opacity: .7;\n    transition: width 4s linear;\n}\n\n// :local(.start) {\n//     width: 100%;\n// }\n\n// :local(.finish) {\n//     width: 100%;\n// }\n\n\n\n.slider-nav ul {\n    margin: 0;\n    width: 100%;\n}\n\n.slider-nav .dot, .slider-nav .dot a {\n    display: inline-block;\n    zoom: 1;\n}\n\n.dots .dot {\n    position: relative;\n    margin: 0 10px;\n    width: 12px;\n    height: 12px;\n}\n\n.dots .dot a {\n    position: absolute;\n    top: 2px;\n    left: 2px;\n    width: 6px;\n    height: 6px;\n    text-indent: 100%;\n    white-space: nowrap;\n    overflow: hidden;\n    background: #FFF;\n    border: 1px solid transparent;\n    outline: none;\n    -webkit-box-shadow: none;\n    -moz-box-shadow: none;\n    box-shadow: none;\n    -webkit-border-radius: 50%;\n    -moz-border-radius: 50%;\n    border-radius: 50%;\n    -webkit-transition: background-color 1s, border-color 1s;\n    -moz-transition: background-color 1s, border-color 1s;\n    transition: background-color 1s, border-color 1s;\n}\n\n.dots .dot a.active {\n    // border-color: #FFF;\n    border-color: $accent-color;\n    background-color: $accent-color;\n}\n\n.arrow {\n    position: absolute;\n    z-index: 1002;\n    display: block;\n    top: 50%;\n    margin-top: -35px;\n    width: auto;\n    height: auto;\n    outline: none;\n    cursor: pointer;\n    color: white;\n    font-size: 4em; \n    border: 5px solid rgba(255,255,255,0);\n}\n\n.arrow.prev {\n    opacity: 0.2;\n    left: 5%;\n    \n    transition: 0.2s linear all;\n}\n\n.arrow.next {\n    opacity: 0.2;\n    right: 5%;\n    transition: 0.3s linear all;\n}\n\n.arrow:hover {\n    opacity: 1;\n    -webkit-transform: scale(1.2);\n    -ms-transform: scale(1.2);\n    transform: scale(1.2);\n}\n@media all and (max-width: 358px) {\n    .slider {\n        height: 210px;\n    }\n}\n\n@media all and (min-width:359px) and (max-width: 450px) {\n    .slider {\n        height: 250px;\n    }\n}\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n    .slider {\n        height: 295px;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n    .slider {\n        a {\n            font-size: 2em;\n            margin-bottom: 1%;\n        }\n    }\n    .slide-text {\n        a {\n            font-size: 2em;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n    .slider {\n        height: 350px; \n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n    .slider {\n        height: 410px; \n    }\n    .slide-text {\n        a {\n            font-size: 2.5em;\n        }\n    }\n}\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n    .slider {\n        height: 440px; \n    }\n    .slide-text {\n        a {\n            font-size: 3em;\n        }\n    }\n}\n\n@media all and (max-width: 700px) {\n\n    .slider-nav {\n        height: 35px;\n    }\n    .slider-nav .wrapper {\n        padding-bottom: 0;\n        bottom: 0;\n    }\n\n    .dots .dot {\n        margin: 0 5px;\n        width: 12px;\n        height: 12px;\n    }\n    .dots .dot a {\n        height: 4px;\n        width: 4px;\n    }\n}\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n    .slider {\n        height: 500px;\n    }\n    .slide-text {\n        a { \n            font-size: 3.5em;\n            margin-bottom: 10px;\n        }\n    }\n}\n\n@media all and (min-width: 816px) {\n    .slider {\n        height: 550px;\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n    .slider {\n        img {\n            top: -35px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n    .slider {\n        img {\n            top: -60px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 5em;\n        }\n    }\n}\n\n@media all and (min-width: 1200px) {\n    .slider {\n        height: 600px;\n        img {\n            top: -93px;\n        }\n    }\n}\n\n\n\n\n\n\n\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".fade.ng-enter {\n  transition: .5s linear all;\n  opacity: 0; }\n\n.fade.ng-enter.ng-enter-active {\n  opacity: 1; }\n\n.fade.ng-leave {\n  transition: .5s linear all;\n  opacity: 1; }\n\n.fade.ng-leave.ng-leave-active {\n  opacity: 0; }\n\n.slide-text {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  width: 100%;\n  z-index: 1002; }\n  .slide-text p {\n    font-size: 1em;\n    color: white;\n    font-weight: bold;\n    text-align: center;\n    margin-bottom: 3%; }\n  .slide-text a {\n    font-size: 1.5em;\n    font-family: \"Amatic SC\", cursive;\n    display: block;\n    transition: .5s ease all; }\n  .slide-text a:hover {\n    color: #FFC107; }\n\n.slider {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden; }\n\n.slide-image {\n  position: absolute;\n  top: 0;\n  left: 0; }\n\n.slider-nav {\n  text-align: center;\n  display: block;\n  position: absolute;\n  z-index: 1002;\n  left: 0;\n  bottom: -4px;\n  right: 0;\n  height: 48px; }\n\n.nonDraggableImage {\n  -webkit-user-drag: none; }\n\n.slider-nav .wrapper {\n  margin: 0 auto;\n  width: 100%;\n  padding: 1em 0 .8em; }\n\n.slider-nav ul {\n  margin: 0;\n  width: 100%; }\n\n.slider-nav .dot, .slider-nav .dot a {\n  display: inline-block;\n  zoom: 1; }\n\n.dots .dot {\n  position: relative;\n  margin: 0 10px;\n  width: 12px;\n  height: 12px; }\n\n.dots .dot a {\n  position: absolute;\n  top: 2px;\n  left: 2px;\n  width: 6px;\n  height: 6px;\n  text-indent: 100%;\n  white-space: nowrap;\n  overflow: hidden;\n  background: #FFF;\n  border: 1px solid transparent;\n  outline: none;\n  -webkit-box-shadow: none;\n  -moz-box-shadow: none;\n  box-shadow: none;\n  -webkit-border-radius: 50%;\n  -moz-border-radius: 50%;\n  border-radius: 50%;\n  -webkit-transition: background-color 1s, border-color 1s;\n  -moz-transition: background-color 1s, border-color 1s;\n  transition: background-color 1s, border-color 1s; }\n\n.dots .dot a.active {\n  border-color: #FFC107;\n  background-color: #FFC107; }\n\n.arrow {\n  position: absolute;\n  z-index: 1002;\n  display: block;\n  top: 50%;\n  margin-top: -35px;\n  width: auto;\n  height: auto;\n  outline: none;\n  cursor: pointer;\n  color: white;\n  font-size: 4em;\n  border: 5px solid rgba(255, 255, 255, 0); }\n\n.arrow.prev {\n  opacity: 0.2;\n  left: 5%;\n  transition: 0.2s linear all; }\n\n.arrow.next {\n  opacity: 0.2;\n  right: 5%;\n  transition: 0.3s linear all; }\n\n.arrow:hover {\n  opacity: 1;\n  -webkit-transform: scale(1.2);\n  -ms-transform: scale(1.2);\n  transform: scale(1.2); }\n\n@media all and (max-width: 358px) {\n  .slider {\n    height: 210px; } }\n\n@media all and (min-width: 359px) and (max-width: 450px) {\n  .slider {\n    height: 250px; } }\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n  .slider {\n    height: 295px; } }\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n  .slider a {\n    font-size: 2em;\n    margin-bottom: 1%; }\n  .slide-text a {\n    font-size: 2em; } }\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n  .slider {\n    height: 350px; } }\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n  .slider {\n    height: 410px; }\n  .slide-text a {\n    font-size: 2.5em; } }\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n  .slider {\n    height: 440px; }\n  .slide-text a {\n    font-size: 3em; } }\n\n@media all and (max-width: 700px) {\n  .slider-nav {\n    height: 35px; }\n  .slider-nav .wrapper {\n    padding-bottom: 0;\n    bottom: 0; }\n  .dots .dot {\n    margin: 0 5px;\n    width: 12px;\n    height: 12px; }\n  .dots .dot a {\n    height: 4px;\n    width: 4px; } }\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n  .slider {\n    height: 500px; }\n  .slide-text a {\n    font-size: 3.5em;\n    margin-bottom: 10px; } }\n\n@media all and (min-width: 816px) {\n  .slider {\n    height: 550px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n  .slider img {\n    top: -35px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n  .slider img {\n    top: -60px; }\n  .slide-text a {\n    font-size: 5em; } }\n\n@media all and (min-width: 1200px) {\n  .slider {\n    height: 600px; }\n    .slider img {\n      top: -93px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_fade-text.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/components/hero-image/hero-image.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAAA;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;AAED;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;ACZD;EACI,mBAAkB;EAClB,UAAS;EACT,SAAQ;EACR,YAAW;EACX,cAAa,EAmBhB;EAxBD;IAOQ,eAAc;IACd,aAAY;IACZ,kBAAiB;IACjB,mBAAkB;IAElB,kBAAiB,EACpB;EAbL;IAeQ,iBAAgB;IAChB,kCCpB8B;IDqB9B,eAAc;IACd,yBAAwB,EAC3B;EAnBL;IAqBQ,eEzBc,EF0BjB;;AAIL;EACI,mBAAkB;EAClB,YAAW;EACX,cAAa;EACb,iBAAgB,EACnB;;AAED;EACI,mBAAkB;EAClB,OAAM;EACN,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,mBAAkB;EAClB,cAAa;EACb,QAAO;EACP,aAAY;EACZ,SAAQ;EACR,aAAY,EACf;;AAED;EACI,wBAAuB,EAC1B;;AAED;EACI,eAAc;EACd,YAAW;EACX,oBAAmB,EACtB;;AAGD;EACI,UAAS;EACT,YAAW,EACd;;AAED;EACI,sBAAqB;EACrB,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,YAAW;EACX,aAAY,EACf;;AAED;EACI,mBAAkB;EAClB,SAAQ;EACR,UAAS;EACT,WAAU;EACV,YAAW;EACX,kBAAiB;EACjB,oBAAmB;EACnB,iBAAgB;EAChB,iBAAgB;EAChB,8BAA6B;EAC7B,cAAa;EACb,yBAAwB;EACxB,sBAAqB;EACrB,iBAAgB;EAChB,2BAA0B;EAC1B,wBAAuB;EACvB,mBAAkB;EAClB,yDAAwD;EACxD,sDAAqD;EACrD,iDAAgD,EACnD;;AAED;EAEI,sBE3GkB;EF4GlB,0BE5GkB,EF6GrB;;AAED;EACI,mBAAkB;EAClB,cAAa;EACb,eAAc;EACd,SAAQ;EACR,kBAAiB;EACjB,YAAW;EACX,aAAY;EACZ,cAAa;EACb,gBAAe;EACf,aAAY;EACZ,eAAc;EACd,yCAAqC,EACxC;;AAED;EACI,aAAY;EACZ,SAAQ;EAER,4BAA2B,EAC9B;;AAED;EACI,aAAY;EACZ,UAAS;EACT,4BAA2B,EAC9B;;AAED;EACI,WAAU;EACV,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB,EACxB;;AACD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IAEQ,eAAc;IACd,kBAAiB,EACpB;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB,EACnB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EAEI;IACI,aAAY,EACf;EACD;IACI,kBAAiB;IACjB,UAAS,EACZ;EAED;IACI,cAAa;IACb,YAAW;IACX,aAAY,EACf;EACD;IACI,YAAW;IACX,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB;IAChB,oBAAmB,EACtB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAIhB;IALD;MAGQ,WAAU,EACb,EAAA","file":"hero-image.scss","sourcesContent":[".fade.ng-enter {\n    transition: .5s linear all;\n    opacity: 0;\n}\n\n.fade.ng-enter.ng-enter-active {\n    opacity: 1;\n}\n\n.fade.ng-leave {\n    transition: .5s linear all;\n    opacity: 1;\n}\n\n.fade.ng-leave.ng-leave-active {\n    opacity: 0;\n}","@import 'fade-text';\n@import 'fonts';\n@import 'colors';\n\n.slide-text {\n    position: absolute;\n    bottom: 0;\n    right: 0;\n    width: 100%;\n    z-index: 1002;\n    p {\n        font-size: 1em;\n        color: white;\n        font-weight: bold;\n        text-align: center;\n\n        margin-bottom: 3%;\n    }\n    a {\n        font-size: 1.5em;\n        font-family: $decorative-font;\n        display: block;\n        transition: .5s ease all;\n    }\n    a:hover {\n        color: $accent-color;\n    }\n\n}\n\n.slider {\n    position: relative;\n    width: 100%;\n    height: 100vh;\n    overflow: hidden;\n}\n\n.slide-image {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n\n.slider-nav {\n    text-align: center;\n    display: block;\n    position: absolute;\n    z-index: 1002;\n    left: 0;\n    bottom: -4px;\n    right: 0;\n    height: 48px;\n}\n\n.nonDraggableImage{\n    -webkit-user-drag: none;\n}\n\n.slider-nav .wrapper {\n    margin: 0 auto;\n    width: 100%;\n    padding: 1em 0 .8em;\n}\n\n\n.slider-nav ul {\n    margin: 0;\n    width: 100%;\n}\n\n.slider-nav .dot, .slider-nav .dot a {\n    display: inline-block;\n    zoom: 1;\n}\n\n.dots .dot {\n    position: relative;\n    margin: 0 10px;\n    width: 12px;\n    height: 12px;\n}\n\n.dots .dot a {\n    position: absolute;\n    top: 2px;\n    left: 2px;\n    width: 6px;\n    height: 6px;\n    text-indent: 100%;\n    white-space: nowrap;\n    overflow: hidden;\n    background: #FFF;\n    border: 1px solid transparent;\n    outline: none;\n    -webkit-box-shadow: none;\n    -moz-box-shadow: none;\n    box-shadow: none;\n    -webkit-border-radius: 50%;\n    -moz-border-radius: 50%;\n    border-radius: 50%;\n    -webkit-transition: background-color 1s, border-color 1s;\n    -moz-transition: background-color 1s, border-color 1s;\n    transition: background-color 1s, border-color 1s;\n}\n\n.dots .dot a.active {\n    // border-color: #FFF;\n    border-color: $accent-color;\n    background-color: $accent-color;\n}\n\n.arrow {\n    position: absolute;\n    z-index: 1002;\n    display: block;\n    top: 50%;\n    margin-top: -35px;\n    width: auto;\n    height: auto;\n    outline: none;\n    cursor: pointer;\n    color: white;\n    font-size: 4em; \n    border: 5px solid rgba(255,255,255,0);\n}\n\n.arrow.prev {\n    opacity: 0.2;\n    left: 5%;\n    \n    transition: 0.2s linear all;\n}\n\n.arrow.next {\n    opacity: 0.2;\n    right: 5%;\n    transition: 0.3s linear all;\n}\n\n.arrow:hover {\n    opacity: 1;\n    -webkit-transform: scale(1.2);\n    -ms-transform: scale(1.2);\n    transform: scale(1.2);\n}\n@media all and (max-width: 358px) {\n    .slider {\n        height: 210px;\n    }\n}\n\n@media all and (min-width:359px) and (max-width: 450px) {\n    .slider {\n        height: 250px;\n    }\n}\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n    .slider {\n        height: 295px;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n    .slider {\n        a {\n            font-size: 2em;\n            margin-bottom: 1%;\n        }\n    }\n    .slide-text {\n        a {\n            font-size: 2em;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n    .slider {\n        height: 350px; \n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n    .slider {\n        height: 410px; \n    }\n    .slide-text {\n        a {\n            font-size: 2.5em;\n        }\n    }\n}\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n    .slider {\n        height: 440px; \n    }\n    .slide-text {\n        a {\n            font-size: 3em;\n        }\n    }\n}\n\n@media all and (max-width: 700px) {\n\n    .slider-nav {\n        height: 35px;\n    }\n    .slider-nav .wrapper {\n        padding-bottom: 0;\n        bottom: 0;\n    }\n\n    .dots .dot {\n        margin: 0 5px;\n        width: 12px;\n        height: 12px;\n    }\n    .dots .dot a {\n        height: 4px;\n        width: 4px;\n    }\n}\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n    .slider {\n        height: 500px;\n    }\n    .slide-text {\n        a { \n            font-size: 3.5em;\n            margin-bottom: 10px;\n        }\n    }\n}\n\n@media all and (min-width: 816px) {\n    .slider {\n        height: 550px;\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n    .slider {\n        img {\n            top: -35px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n    .slider {\n        img {\n            top: -60px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 5em;\n        }\n    }\n}\n\n@media all and (min-width: 1200px) {\n    .slider {\n        height: 600px;\n        img {\n            top: -93px;\n        }\n    }\n}\n\n\n\n\n\n\n\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -35148,8 +35367,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./landing.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./landing.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./landing.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./landing.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35167,7 +35386,7 @@
 	
 	
 	// module
-	exports.push([module.id, "", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"landing.scss","sourceRoot":"webpack://"}]);
+	exports.push([module.id, "", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"landing.scss","sourceRoot":""}]);
 	
 	// exports
 
@@ -35211,7 +35430,7 @@
 /* 51 */
 /***/ function(module, exports) {
 
-	module.exports = "<nav class=\"site-navigation\">\n    <!--<a class=\"icon-menu\" ng-click=\"$ctrl.toggleNav()\"></a>-->\n    <ul><li ng-class=\"$ctrl.styles.hamburger\"><span class=\"icon-cross\"></span></li>\n        <li ui-sref=\"home\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Home</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"shop\" ng-class=\"$ctrl.navVisibility\" class=\"link\"link>Shop</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref='about' ng-class=\"$ctrl.navVisibility\" class=\"link\">About</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"contact\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Contact</li>\n    </ul>\n</nav>";
+	module.exports = "<nav class=\"site-navigation\">\n    <ul><li ng-class=\"$ctrl.styles.hamburger\"><span class=\"icon-cross\"></span></li>\n        <li ui-sref=\"home\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Home</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"shop\" ng-class=\"$ctrl.navVisibility\" class=\"link\"link>Shop</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref='about' ng-class=\"$ctrl.navVisibility\" class=\"link\">About</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"contact\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Contact</li>\n    </ul>\n</nav>";
 
 /***/ },
 /* 52 */
@@ -35229,8 +35448,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./nav-bar.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./nav-bar.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./nav-bar.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./nav-bar.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35248,7 +35467,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".icon-cross:before {\n  content: \"\\EA0F\";\n  color: white;\n  font-size: .75em;\n  margin-right: 8px; }\n\nnav.site-navigation {\n  margin-left: 5%;\n  margin-top: 0; }\n  nav.site-navigation ul {\n    list-style-type: none;\n    margin: 0;\n    padding: 0; }\n    nav.site-navigation ul ._1O-BJLpyHkiNdd7QEqLBji {\n      display: none;\n      text-align: right; }\n    nav.site-navigation ul li {\n      text-align: center;\n      width: 20%;\n      display: inline-block;\n      color: white;\n      font-weight: bold;\n      transition: all .35s ease; }\n    nav.site-navigation ul li:hover {\n      cursor: pointer;\n      color: #FFC107; }\n    nav.site-navigation ul .mid-dot {\n      width: auto;\n      margin: 0; }\n\n@media all and (max-width: 551px) {\n  nav.site-navigation {\n    width: 100%;\n    position: relative;\n    margin: 0;\n    z-index: 10000; }\n    nav.site-navigation ul {\n      width: 100%;\n      position: absolute;\n      margin: 0; }\n      nav.site-navigation ul .mid-dot {\n        display: none; }\n      nav.site-navigation ul ._1O-BJLpyHkiNdd7QEqLBji {\n        display: block; }\n      nav.site-navigation ul li {\n        padding: 5px;\n        display: block;\n        width: 100%;\n        text-align: center;\n        font-weight: 100;\n        font-size: 1em;\n        margin: 0;\n        background-color: #323232;\n        border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n    nav.site-navigation a.icon-menu:before {\n      display: inline-block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  nav.site-navigation ul {\n    margin-left: 2.5%;\n    margin-top: -5px; }\n    nav.site-navigation ul li {\n      font-size: .9em;\n      width: 17%; } }\n\n@media all and (min-width: 1083px) {\n  nav.site-navigation {\n    margin-left: 1%;\n    margin-top: -2.5%; }\n    nav.site-navigation ul li {\n      font-size: 1.5em;\n      width: 17%; } }\n", "", {"version":3,"sources":["/./src/components/nav-bar/src/components/nav-bar/nav-bar.scss","/./src/components/nav-bar/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACE,iBAAgB;EAChB,aAAY;EACZ,iBAAgB;EAChB,kBAAiB,EAClB;;AAED;EACI,gBAAe;EACf,cAAa,EA0BhB;EA5BD;IAIQ,sBAAqB;IACrB,UAAS;IACT,WAAU,EAqBb;IA3BL;MAQY,cAAa;MACb,kBAAiB,EACpB;IAVT;MAYY,mBAAkB;MAClB,WAAU;MACV,sBAAqB;MACrB,aAAY;MACZ,kBAAiB;MACjB,0BAAyB,EAC5B;IAlBT;MAoBY,gBAAe;MACf,eC9BU,ED+Bb;IAtBT;MAwBY,YAAW;MACX,UAAS,EACZ;;AAOT;EACI;IACI,YAAW;IACX,mBAAkB;IAClB,UAAS;IACT,eAAc,EA0BjB;IA9BD;MAMQ,YAAW;MACX,mBAAkB;MAClB,UAAS,EAkBZ;MA1BL;QAUY,cAAa,EAChB;MAXT;QAaY,eAAc,EACjB;MAdT;QAgBY,aAAY;QACZ,eAAc;QACd,YAAW;QACX,mBAAkB;QAClB,iBAAgB;QAChB,eAAc;QACd,UAAS;QACT,0BAAqC;QACrC,kDClEgB,EDmEnB;IAzBT;MA4BQ,sBAAqB,EACxB,EAAA;;AAIT;EACI;IAEQ,kBAAiB;IACjB,iBAAgB,EAKnB;IARL;MAKY,gBAAe;MACf,WAAU,EACb,EAAA;;AAKb;EACI;IACI,gBAAe;IACf,kBAAiB,EAOpB;IATD;MAKY,iBAAgB;MAChB,WAAU,EACb,EAAA","file":"nav-bar.scss","sourcesContent":["@import 'colors';\n\n.icon-cross:before {\n  content: \"\\ea0f\";\n  color: white;\n  font-size: .75em;\n  margin-right: 8px;\n}\n\nnav.site-navigation {\n    margin-left: 5%;\n    margin-top: 0;  \n    ul {\n        list-style-type: none;\n        margin: 0;\n        padding: 0;\n        :local(.hamburger) {\n            display: none;\n            text-align: right;\n        }\n        li {\n            text-align: center;\n            width: 20%;\n            display: inline-block;\n            color: white;\n            font-weight: bold;\n            transition: all .35s ease;\n        }\n        li:hover {\n            cursor: pointer;\n            color: $accent-color;\n        }\n        .mid-dot {\n            width: auto;\n            margin: 0;\n        }\n    }\n}\n\n\n\n\n@media all and (max-width: 551px) {\n    nav.site-navigation {\n        width: 100%;\n        position: relative;\n        margin: 0;\n        z-index: 10000;\n        ul {\n            width: 100%;\n            position: absolute;\n            margin: 0;\n            .mid-dot {\n                display: none;\n            }\n            :local(.hamburger) {\n                display: block;\n            }\n            li {\n                padding: 5px;\n                display: block;\n                width: 100%;\n                text-align: center;\n                font-weight: 100;\n                font-size: 1em;\n                margin: 0;\n                background-color: rgba(50, 50, 50, 1);\n                border-bottom: 1px solid $lightgrey;\n            }\n        }\n        a.icon-menu:before {\n            display: inline-block;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    nav.site-navigation {\n        ul {\n            margin-left: 2.5%;\n            margin-top: -5px;\n            li {\n                font-size: .9em;\n                width: 17%;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 1083px) {\n    nav.site-navigation {\n        margin-left: 1%;\n        margin-top: -2.5%;\n        ul {\n            li {\n                font-size: 1.5em;\n                width: 17%;\n            }\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".icon-cross:before {\n  content: \"\\EA0F\";\n  color: white;\n  font-size: .75em;\n  margin-right: 8px; }\n\nnav.site-navigation {\n  margin-left: 5%;\n  margin-top: 0; }\n  nav.site-navigation ul {\n    list-style-type: none;\n    margin: 0;\n    padding: 0; }\n    nav.site-navigation ul ._1O-BJLpyHkiNdd7QEqLBji {\n      display: none;\n      text-align: right; }\n    nav.site-navigation ul li {\n      text-align: center;\n      width: 20%;\n      display: inline-block;\n      color: white;\n      font-weight: bold;\n      transition: all .35s ease; }\n    nav.site-navigation ul li:hover {\n      cursor: pointer;\n      color: #FFC107; }\n    nav.site-navigation ul .mid-dot {\n      width: auto;\n      margin: 0; }\n\n@media all and (max-width: 551px) {\n  nav.site-navigation {\n    width: 100%;\n    position: relative;\n    margin: 0;\n    z-index: 10000; }\n    nav.site-navigation ul {\n      width: 100%;\n      position: absolute;\n      margin: 0; }\n      nav.site-navigation ul .mid-dot {\n        display: none; }\n      nav.site-navigation ul ._1O-BJLpyHkiNdd7QEqLBji {\n        display: block; }\n      nav.site-navigation ul li {\n        padding: 5px;\n        display: block;\n        width: 100%;\n        text-align: center;\n        font-weight: 100;\n        font-size: 1em;\n        margin: 0;\n        background-color: #323232;\n        border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n    nav.site-navigation a.icon-menu:before {\n      display: inline-block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  nav.site-navigation ul {\n    margin-left: 2.5%;\n    margin-top: -5px; }\n    nav.site-navigation ul li {\n      font-size: .9em;\n      width: 17%; } }\n\n@media all and (min-width: 1083px) {\n  nav.site-navigation {\n    margin-left: 1%;\n    margin-top: -2.5%; }\n    nav.site-navigation ul li {\n      font-size: 1.5em;\n      width: 17%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/nav-bar/src/components/nav-bar/nav-bar.scss","/Users/Will/freelance/earth-house/app/src/components/nav-bar/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACE,iBAAgB;EAChB,aAAY;EACZ,iBAAgB;EAChB,kBAAiB,EAClB;;AAED;EACI,gBAAe;EACf,cAAa,EA0BhB;EA5BD;IAIQ,sBAAqB;IACrB,UAAS;IACT,WAAU,EAqBb;IA3BL;MAQY,cAAa;MACb,kBAAiB,EACpB;IAVT;MAYY,mBAAkB;MAClB,WAAU;MACV,sBAAqB;MACrB,aAAY;MACZ,kBAAiB;MACjB,0BAAyB,EAC5B;IAlBT;MAoBY,gBAAe;MACf,eC9BU,ED+Bb;IAtBT;MAwBY,YAAW;MACX,UAAS,EACZ;;AAOT;EACI;IACI,YAAW;IACX,mBAAkB;IAClB,UAAS;IACT,eAAc,EA0BjB;IA9BD;MAMQ,YAAW;MACX,mBAAkB;MAClB,UAAS,EAkBZ;MA1BL;QAUY,cAAa,EAChB;MAXT;QAaY,eAAc,EACjB;MAdT;QAgBY,aAAY;QACZ,eAAc;QACd,YAAW;QACX,mBAAkB;QAClB,iBAAgB;QAChB,eAAc;QACd,UAAS;QACT,0BAAqC;QACrC,kDClEgB,EDmEnB;IAzBT;MA4BQ,sBAAqB,EACxB,EAAA;;AAIT;EACI;IAEQ,kBAAiB;IACjB,iBAAgB,EAKnB;IARL;MAKY,gBAAe;MACf,WAAU,EACb,EAAA;;AAKb;EACI;IACI,gBAAe;IACf,kBAAiB,EAOpB;IATD;MAKY,iBAAgB;MAChB,WAAU,EACb,EAAA","file":"nav-bar.scss","sourcesContent":["@import 'colors';\n\n.icon-cross:before {\n  content: \"\\ea0f\";\n  color: white;\n  font-size: .75em;\n  margin-right: 8px;\n}\n\nnav.site-navigation {\n    margin-left: 5%;\n    margin-top: 0;  \n    ul {\n        list-style-type: none;\n        margin: 0;\n        padding: 0;\n        :local(.hamburger) {\n            display: none;\n            text-align: right;\n        }\n        li {\n            text-align: center;\n            width: 20%;\n            display: inline-block;\n            color: white;\n            font-weight: bold;\n            transition: all .35s ease;\n        }\n        li:hover {\n            cursor: pointer;\n            color: $accent-color;\n        }\n        .mid-dot {\n            width: auto;\n            margin: 0;\n        }\n    }\n}\n\n\n\n\n@media all and (max-width: 551px) {\n    nav.site-navigation {\n        width: 100%;\n        position: relative;\n        margin: 0;\n        z-index: 10000;\n        ul {\n            width: 100%;\n            position: absolute;\n            margin: 0;\n            .mid-dot {\n                display: none;\n            }\n            :local(.hamburger) {\n                display: block;\n            }\n            li {\n                padding: 5px;\n                display: block;\n                width: 100%;\n                text-align: center;\n                font-weight: 100;\n                font-size: 1em;\n                margin: 0;\n                background-color: rgba(50, 50, 50, 1);\n                border-bottom: 1px solid $lightgrey;\n            }\n        }\n        a.icon-menu:before {\n            display: inline-block;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    nav.site-navigation {\n        ul {\n            margin-left: 2.5%;\n            margin-top: -5px;\n            li {\n                font-size: .9em;\n                width: 17%;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 1083px) {\n    nav.site-navigation {\n        margin-left: 1%;\n        margin-top: -2.5%;\n        ul {\n            li {\n                font-size: 1.5em;\n                width: 17%;\n            }\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -35356,8 +35575,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35375,7 +35594,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._3OG3TBtarmYa_z6yiUJZd2 {\n  margin-bottom: 2%;\n  margin-top: 3%; }\n\n._3f2vxcW1iaK4PZrN4XVAAk {\n  float: right;\n  position: relative;\n  margin-top: 3%;\n  margin-bottom: 20px;\n  text-align: center; }\n  ._3f2vxcW1iaK4PZrN4XVAAk p {\n    margin-top: 0;\n    margin-bottom: 1.5%;\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n._3h9JlplhoP1sjXURIB9eh5 {\n  margin-bottom: 5%;\n  width: 93%;\n  margin: 0 auto; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 2.5em;\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    margin: 0 0 3% 0;\n    float: left; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.1em;\n    width: 45%;\n    float: right;\n    text-indent: 20px;\n    margin-top: 0;\n    margin-right: 3%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description a {\n      color: blue;\n      display: block; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 40%;\n    display: inline-block;\n    margin: -2% 4% 0 4%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img img {\n      width: 100%; }\n\n._3BnfWeDF7prcG64xUHo_PS {\n  width: 100%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 2.5em;\n    font-family: \"Amatic SC\", cursive;\n    text-align: center;\n    margin: 0; }\n  ._3BnfWeDF7prcG64xUHo_PS li {\n    float: left;\n    width: 49%;\n    margin-bottom: 5%; }\n  ._3BnfWeDF7prcG64xUHo_PS img {\n    width: 70%;\n    margin: 0 auto; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    width: 70%;\n    margin: 0 auto;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._3BnfWeDF7prcG64xUHo_PS span {\n    font-family: \"Amatic SC\", cursive;\n    font-size: 2em;\n    font-weight: bold; }\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS p {\n    font-size: 1.15em; } }\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 4em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.5em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 3.5em; } }\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0 0 0 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    float: none;\n    text-align: center; }\n    ._3f2vxcW1iaK4PZrN4XVAAk p {\n      margin-bottom: .5%; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 4.9em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: -2%;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 3% 0 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 45%;\n      margin: -1% 0 0 0; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    text-align: center;\n    float: none; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      margin-top: 1%;\n      margin-bottom: 1%;\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 ._3OG3TBtarmYa_z6yiUJZd2 {\n      width: 50%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 6em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: 0;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 2% 5% 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 22%;\n      margin: 0% 10% 0 13%; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em;\n      width: 85%; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS img {\n      width: 60%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) and (min-width: 1060px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 20%;\n    margin: 0 10% 0 15%; } }\n", "", {"version":3,"sources":["/./src/components/shop/item/src/components/shop/item/item.scss","/./src/components/shop/item/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAIA;EACI,kBAAiB;EACjB,eAAc,EACjB;;AACD;EACI,aAAY;EACZ,mBAAkB;EAClB,eAAc;EACd,oBAAmB;EAQnB,mBAAkB,EACrB;EAbD;IAMQ,cAAa;IACb,oBAAmB;IACnB,iBAAgB;IAChB,YAAW;IACX,+CChBqC,EDiBxC;;AAGL;EACI,kBAAiB;EACjB,WAAU;EACV,eAAc,EAgCjB;EAnCD;IAMQ,iBAAgB;IAChB,mBAAkB;IAClB,kCC9B8B;ID+B9B,iBAAgB;IAChB,YAAW,EACd;EAXL;IAcQ,wCCnC8B;IDoC9B,iBAAgB;IAChB,WAAU;IACV,aAAY;IACZ,kBAAiB;IACjB,cAAa;IACb,iBAAgB,EAKnB;IAzBL;MAsBY,YAAW;MACX,eAAc,EACjB;EAxBT;IA4BQ,WAAU;IACV,sBAAqB;IACrB,oBAAmB,EAItB;IAlCL;MAgCY,YAAW,EACd;;AAKT;EACI,YAAW,EA6Bd;EA9BD;IAGQ,iBAAgB;IAChB,kCChE8B;IDiE9B,mBAAkB;IAClB,UAAS,EACZ;EAPL;IAUQ,YAAW;IACX,WAAU;IACV,kBAAiB,EACpB;EAbL;IAgBQ,WAAU;IACV,eAAc,EACjB;EAlBL;IAoBQ,WAAU;IACV,eAAc;IACd,wCCjF8B,EDkFjC;EAvBL;IA0BQ,kCCtF8B;IDuF9B,eAAc;IACd,kBAAiB,EACpB;;AAIL;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,kBAAiB,EACpB,EAAA;;AAKb;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,iBAAgB,EACnB,EAAA;;AAKb;EACI;IACI,YAAW;IACX,WAAU;IACV,gBAAe,EAClB;EAED;IACI,YAAW;IACX,mBAAkB,EAIrB;IAND;MAIQ,mBAAkB,EACrB;EAEL;IACI,mBAAkB;IAClB,WAAU,EAuBb;IAzBD;MAIQ,eAAc,EACjB;IALL;MAOQ,iBAAgB;MAChB,YAAW;MACX,YAAW;MACX,cAAa;MACb,iBAAgB;MAChB,iBAAgB,EACnB;IAbL;MAeQ,WAAU;MACV,iBAAgB;MAChB,iBAAgB;MAChB,aAAY,EACf;IAnBL;MAqBQ,YAAW;MACX,WAAU;MACV,kBAAiB,EACpB;EAIL;IACI,WAAU;IACV,aAAY,EA2Bf;IA7BD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc,EACjB;IARL;MAUQ,kBAAiB,EACpB;IAXL;MAaQ,iBAAgB,EACnB;IAdL;MAgBQ,YAAW;MACX,UAAS,EACZ;IAlBL;MAqBQ,qDAAiD;MACjD,oBAAmB,EACtB;IAvBL;MA0BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAIT;EACQ;IACI,YAAW;IACX,WAAU;IACV,UAAS,EACZ;EACD;IACI,mBAAkB;IAClB,YAAW,EACd;EACD;IACA,mBAAkB;IAClB,WAAU,EA6Bb;IA/BG;MAKI,eAAc;MACd,kBAAiB;MACjB,eAAc,EACjB;IARD;MAUI,WAAU,EACb;IAXD;MAaI,eAAc;MACd,YAAW;MACX,YAAW;MACX,cAAa;MACb,eAAc;MACd,iBAAgB,EACnB;IAnBD;MAqBI,WAAU;MACV,iBAAgB;MAChB,kBAAiB;MACjB,aAAY,EACf;IAzBD;MA2BI,YAAW;MACX,WAAU;MACV,qBAAoB,EACvB;EAIL;IACI,WAAU;IACV,aAAY,EA+Bf;IAjCD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc;MACd,WAAU,EACb;IATL;MAWQ,kBAAiB,EACpB;IAZL;MAcQ,WAAU,EACb;IAfL;MAiBQ,iBAAgB,EACnB;IAlBL;MAoBQ,YAAW;MACX,UAAS,EACZ;IAtBL;MAyBQ,qDAAiD;MACjD,oBAAmB,EACtB;IA3BL;MA8BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAGL;EACI;IAEQ,WAAU;IACV,oBAAmB,EACtB,EAAA","file":"item.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n\n:local(.header) {\n    margin-bottom: 2%;\n    margin-top: 3%;\n}\n:local(.purchase) {\n    float: right;\n    position: relative;\n    margin-top: 3%;\n    margin-bottom: 20px;\n    p {\n        margin-top: 0;\n        margin-bottom: 1.5%;\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n    text-align: center;\n}\n:local(.item) {\n    margin-bottom: 5%;\n    width: 93%;\n    margin: 0 auto;\n\n    .item-name {\n        font-size: 2.5em;\n        text-align: center;\n        font-family: $decorative-font;\n        margin: 0 0 3% 0;\n        float: left;\n    }\n\n    .item-description {\n        font-family: $main-font;\n        font-size: 1.1em;\n        width: 45%;\n        float: right;\n        text-indent: 20px;\n        margin-top: 0;\n        margin-right: 3%;\n        a {\n            color: blue;\n            display: block;\n        }\n    }\n\n    .item-img {\n        width: 40%;\n        display: inline-block;\n        margin: -2% 4% 0 4%;\n        img {\n            width: 100%;\n        }\n    }\n}\n\n\n:local(.ingredients) {\n    width: 100%;\n    h3 {\n        font-size: 2.5em;\n        font-family: $decorative-font;\n        text-align: center;\n        margin: 0;\n    }\n\n    li {\n        float: left;\n        width: 49%;\n        margin-bottom: 5%;\n    }\n\n    img {\n        width: 70%;\n        margin: 0 auto;\n    }\n    p {\n        width: 70%;\n        margin: 0 auto;\n        font-family: $main-font;\n    }\n\n    span {\n        font-family: $decorative-font;\n        font-size: 2em;\n        font-weight: bold;\n    }\n}\n\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n    :local(.item) {\n        .item-name{\n            font-size: 3em;\n        }\n        .item-description {\n            font-size: 1.3em;\n        }  \n  \n        :local(.ingredients) {\n            p {\n                font-size: 1.15em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n    :local(.item) {\n        .item-name {\n            font-size: 4em;\n        }\n        .item-description {\n            font-size: 1.5em;\n        }\n\n        :local(.ingredients) {\n            h3 {\n                font-size: 3.5em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n    :local(.header) {\n        float: left;\n        width: 50%;\n        margin: 0 0 0 0;\n    }\n\n    :local(.purchase) {\n        float: none;\n        text-align: center;\n        p {\n            margin-bottom: .5%;\n        }\n    }\n    :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n        .description {\n            overflow: auto;\n        }\n        .item-name {\n            font-size: 4.9em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: -2%;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 3% 0 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 45%;\n            margin: -1% 0 0 0;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n}\n\n@media all and (min-width: 820px) {\n        :local(.header) {\n            float: left;\n            width: 50%;\n            margin: 0;\n        }\n        :local(.purchase) {\n            text-align: center;\n            float: none;\n        }\n        :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n\n        .description {\n            margin-top: 1%;\n            margin-bottom: 1%;\n            overflow: auto;\n        }\n        :local(.header) {\n            width: 50%;\n        }\n        .item-name {\n            font-size: 6em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: 0;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 2% 5% 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 22%;\n            margin: 0% 10% 0 13%;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n            width: 85%;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        img {\n            width: 60%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n\n    @media all and (min-width: 1060px) {\n        :local(.item) {\n            .item-img {\n                width: 20%;\n                margin: 0 10% 0 15%;\n            }\n        }\n    }\n\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "._3OG3TBtarmYa_z6yiUJZd2 {\n  margin-bottom: 2%;\n  margin-top: 3%; }\n\n._3f2vxcW1iaK4PZrN4XVAAk {\n  float: right;\n  position: relative;\n  margin-top: 3%;\n  margin-bottom: 20px;\n  text-align: center; }\n  ._3f2vxcW1iaK4PZrN4XVAAk p {\n    margin-top: 0;\n    margin-bottom: 1.5%;\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n._3h9JlplhoP1sjXURIB9eh5 {\n  margin-bottom: 5%;\n  width: 93%;\n  margin: 0 auto; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 2.5em;\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    margin: 0 0 3% 0;\n    float: left; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.1em;\n    width: 45%;\n    float: right;\n    text-indent: 20px;\n    margin-top: 0;\n    margin-right: 3%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description a {\n      color: blue;\n      display: block; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 40%;\n    display: inline-block;\n    margin: -2% 4% 0 4%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img img {\n      width: 100%; }\n\n._3BnfWeDF7prcG64xUHo_PS {\n  width: 100%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 2.5em;\n    font-family: \"Amatic SC\", cursive;\n    text-align: center;\n    margin: 0; }\n  ._3BnfWeDF7prcG64xUHo_PS li {\n    float: left;\n    width: 49%;\n    margin-bottom: 5%; }\n  ._3BnfWeDF7prcG64xUHo_PS img {\n    width: 70%;\n    margin: 0 auto; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    width: 70%;\n    margin: 0 auto;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._3BnfWeDF7prcG64xUHo_PS span {\n    font-family: \"Amatic SC\", cursive;\n    font-size: 2em;\n    font-weight: bold; }\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS p {\n    font-size: 1.15em; } }\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 4em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.5em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 3.5em; } }\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0 0 0 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    float: none;\n    text-align: center; }\n    ._3f2vxcW1iaK4PZrN4XVAAk p {\n      margin-bottom: .5%; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 4.9em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: -2%;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 3% 0 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 45%;\n      margin: -1% 0 0 0; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    text-align: center;\n    float: none; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      margin-top: 1%;\n      margin-bottom: 1%;\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 ._3OG3TBtarmYa_z6yiUJZd2 {\n      width: 50%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 6em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: 0;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 2% 5% 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 22%;\n      margin: 0% 10% 0 13%; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em;\n      width: 85%; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS img {\n      width: 60%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) and (min-width: 1060px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 20%;\n    margin: 0 10% 0 15%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/item/src/components/shop/item/item.scss","/Users/Will/freelance/earth-house/app/src/components/shop/item/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAIA;EACI,kBAAiB;EACjB,eAAc,EACjB;;AACD;EACI,aAAY;EACZ,mBAAkB;EAClB,eAAc;EACd,oBAAmB;EAQnB,mBAAkB,EACrB;EAbD;IAMQ,cAAa;IACb,oBAAmB;IACnB,iBAAgB;IAChB,YAAW;IACX,+CChBqC,EDiBxC;;AAGL;EACI,kBAAiB;EACjB,WAAU;EACV,eAAc,EAgCjB;EAnCD;IAMQ,iBAAgB;IAChB,mBAAkB;IAClB,kCC9B8B;ID+B9B,iBAAgB;IAChB,YAAW,EACd;EAXL;IAcQ,wCCnC8B;IDoC9B,iBAAgB;IAChB,WAAU;IACV,aAAY;IACZ,kBAAiB;IACjB,cAAa;IACb,iBAAgB,EAKnB;IAzBL;MAsBY,YAAW;MACX,eAAc,EACjB;EAxBT;IA4BQ,WAAU;IACV,sBAAqB;IACrB,oBAAmB,EAItB;IAlCL;MAgCY,YAAW,EACd;;AAKT;EACI,YAAW,EA6Bd;EA9BD;IAGQ,iBAAgB;IAChB,kCChE8B;IDiE9B,mBAAkB;IAClB,UAAS,EACZ;EAPL;IAUQ,YAAW;IACX,WAAU;IACV,kBAAiB,EACpB;EAbL;IAgBQ,WAAU;IACV,eAAc,EACjB;EAlBL;IAoBQ,WAAU;IACV,eAAc;IACd,wCCjF8B,EDkFjC;EAvBL;IA0BQ,kCCtF8B;IDuF9B,eAAc;IACd,kBAAiB,EACpB;;AAIL;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,kBAAiB,EACpB,EAAA;;AAKb;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,iBAAgB,EACnB,EAAA;;AAKb;EACI;IACI,YAAW;IACX,WAAU;IACV,gBAAe,EAClB;EAED;IACI,YAAW;IACX,mBAAkB,EAIrB;IAND;MAIQ,mBAAkB,EACrB;EAEL;IACI,mBAAkB;IAClB,WAAU,EAuBb;IAzBD;MAIQ,eAAc,EACjB;IALL;MAOQ,iBAAgB;MAChB,YAAW;MACX,YAAW;MACX,cAAa;MACb,iBAAgB;MAChB,iBAAgB,EACnB;IAbL;MAeQ,WAAU;MACV,iBAAgB;MAChB,iBAAgB;MAChB,aAAY,EACf;IAnBL;MAqBQ,YAAW;MACX,WAAU;MACV,kBAAiB,EACpB;EAIL;IACI,WAAU;IACV,aAAY,EA2Bf;IA7BD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc,EACjB;IARL;MAUQ,kBAAiB,EACpB;IAXL;MAaQ,iBAAgB,EACnB;IAdL;MAgBQ,YAAW;MACX,UAAS,EACZ;IAlBL;MAqBQ,qDAAiD;MACjD,oBAAmB,EACtB;IAvBL;MA0BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAIT;EACQ;IACI,YAAW;IACX,WAAU;IACV,UAAS,EACZ;EACD;IACI,mBAAkB;IAClB,YAAW,EACd;EACD;IACA,mBAAkB;IAClB,WAAU,EA6Bb;IA/BG;MAKI,eAAc;MACd,kBAAiB;MACjB,eAAc,EACjB;IARD;MAUI,WAAU,EACb;IAXD;MAaI,eAAc;MACd,YAAW;MACX,YAAW;MACX,cAAa;MACb,eAAc;MACd,iBAAgB,EACnB;IAnBD;MAqBI,WAAU;MACV,iBAAgB;MAChB,kBAAiB;MACjB,aAAY,EACf;IAzBD;MA2BI,YAAW;MACX,WAAU;MACV,qBAAoB,EACvB;EAIL;IACI,WAAU;IACV,aAAY,EA+Bf;IAjCD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc;MACd,WAAU,EACb;IATL;MAWQ,kBAAiB,EACpB;IAZL;MAcQ,WAAU,EACb;IAfL;MAiBQ,iBAAgB,EACnB;IAlBL;MAoBQ,YAAW;MACX,UAAS,EACZ;IAtBL;MAyBQ,qDAAiD;MACjD,oBAAmB,EACtB;IA3BL;MA8BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAGL;EACI;IAEQ,WAAU;IACV,oBAAmB,EACtB,EAAA","file":"item.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n\n:local(.header) {\n    margin-bottom: 2%;\n    margin-top: 3%;\n}\n:local(.purchase) {\n    float: right;\n    position: relative;\n    margin-top: 3%;\n    margin-bottom: 20px;\n    p {\n        margin-top: 0;\n        margin-bottom: 1.5%;\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n    text-align: center;\n}\n:local(.item) {\n    margin-bottom: 5%;\n    width: 93%;\n    margin: 0 auto;\n\n    .item-name {\n        font-size: 2.5em;\n        text-align: center;\n        font-family: $decorative-font;\n        margin: 0 0 3% 0;\n        float: left;\n    }\n\n    .item-description {\n        font-family: $main-font;\n        font-size: 1.1em;\n        width: 45%;\n        float: right;\n        text-indent: 20px;\n        margin-top: 0;\n        margin-right: 3%;\n        a {\n            color: blue;\n            display: block;\n        }\n    }\n\n    .item-img {\n        width: 40%;\n        display: inline-block;\n        margin: -2% 4% 0 4%;\n        img {\n            width: 100%;\n        }\n    }\n}\n\n\n:local(.ingredients) {\n    width: 100%;\n    h3 {\n        font-size: 2.5em;\n        font-family: $decorative-font;\n        text-align: center;\n        margin: 0;\n    }\n\n    li {\n        float: left;\n        width: 49%;\n        margin-bottom: 5%;\n    }\n\n    img {\n        width: 70%;\n        margin: 0 auto;\n    }\n    p {\n        width: 70%;\n        margin: 0 auto;\n        font-family: $main-font;\n    }\n\n    span {\n        font-family: $decorative-font;\n        font-size: 2em;\n        font-weight: bold;\n    }\n}\n\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n    :local(.item) {\n        .item-name{\n            font-size: 3em;\n        }\n        .item-description {\n            font-size: 1.3em;\n        }  \n  \n        :local(.ingredients) {\n            p {\n                font-size: 1.15em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n    :local(.item) {\n        .item-name {\n            font-size: 4em;\n        }\n        .item-description {\n            font-size: 1.5em;\n        }\n\n        :local(.ingredients) {\n            h3 {\n                font-size: 3.5em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n    :local(.header) {\n        float: left;\n        width: 50%;\n        margin: 0 0 0 0;\n    }\n\n    :local(.purchase) {\n        float: none;\n        text-align: center;\n        p {\n            margin-bottom: .5%;\n        }\n    }\n    :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n        .description {\n            overflow: auto;\n        }\n        .item-name {\n            font-size: 4.9em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: -2%;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 3% 0 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 45%;\n            margin: -1% 0 0 0;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n}\n\n@media all and (min-width: 820px) {\n        :local(.header) {\n            float: left;\n            width: 50%;\n            margin: 0;\n        }\n        :local(.purchase) {\n            text-align: center;\n            float: none;\n        }\n        :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n\n        .description {\n            margin-top: 1%;\n            margin-bottom: 1%;\n            overflow: auto;\n        }\n        :local(.header) {\n            width: 50%;\n        }\n        .item-name {\n            font-size: 6em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: 0;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 2% 5% 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 22%;\n            margin: 0% 10% 0 13%;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n            width: 85%;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        img {\n            width: 60%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n\n    @media all and (min-width: 1060px) {\n        :local(.item) {\n            .item-img {\n                width: 20%;\n                margin: 0 10% 0 15%;\n            }\n        }\n    }\n\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -35434,8 +35653,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35453,7 +35672,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._2DpE6toQ8FmWBt3oR4PhrL {\n  width: 100%; }\n", "", {"version":3,"sources":["/./src/components/shop/shop-head/src/components/shop/shop-head/shop-head.scss"],"names":[],"mappings":"AAAA;EACI,YACJ,EAAE","file":"shop-head.scss","sourcesContent":[":local(.banner-img) {\n    width: 100%\n};"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "._2DpE6toQ8FmWBt3oR4PhrL {\n  width: 100%; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/shop-head/src/components/shop/shop-head/shop-head.scss"],"names":[],"mappings":"AAAA;EACI,YACJ,EAAE","file":"shop-head.scss","sourcesContent":[":local(.banner-img) {\n    width: 100%\n};"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -35573,8 +35792,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35592,7 +35811,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".image-text {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n  overflow: hidden;\n  border-bottom: 2px solid rgba(200, 200, 200, 0.7); }\n  .image-text .text-box {\n    position: absolute;\n    text-align: center;\n    width: 100%;\n    right: 0;\n    z-index: 1; }\n  .image-text img {\n    width: 100%;\n    display: block; }\n  .image-text button {\n    border-radius: 1px;\n    background-color: rgba(50, 50, 50, 0.1);\n    font-family: \"Amatic SC\", cursive;\n    display: none;\n    color: white;\n    font-weight: 600;\n    padding: 0 10px;\n    margin: 0 auto;\n    border: 3px solid white;\n    transition: all .3s ease; }\n  .image-text button:focus {\n    outline: 0; }\n  .image-text button:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #FFC107;\n    border-color: #FFC107;\n    background-color: transparent; }\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n  .image-text .text-box {\n    bottom: 5%; }\n  .image-text button {\n    display: block;\n    font-size: 3.5em; } }\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n  .image-text .text-box {\n    bottom: 12%; }\n  .image-text button {\n    display: block;\n    font-size: 4em; } }\n\n@media all and (min-width: 1181px) {\n  .image-text .text-box {\n    bottom: 18%; }\n  .image-text button {\n    display: block;\n    font-size: 4.5em; } }\n\n.cart-message {\n  position: absolute;\n  width: 100%; }\n\nsection.shop-info {\n  width: 60%;\n  margin: 0 auto;\n  position: relative; }\n  section.shop-info h1 {\n    font-size: 4em;\n    color: #8282ff;\n    margin: 0;\n    display: inline; }\n  section.shop-info p {\n    display: inline;\n    font-size: 1.25em; }\n  section.shop-info h2 {\n    font-size: 3em;\n    font-family: 'Montserrat', sans-serif;\n    text-align: center;\n    margin: 0; }\n\n.item-header {\n  font-size: 4.5em;\n  margin-left: 1%;\n  font-family: \"Amatic SC\", cursive;\n  width: 100%;\n  float: left; }\n\n.item-text {\n  margin-top: 4%;\n  width: 60%;\n  float: left;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em; }\n\n.items {\n  width: 80%;\n  margin: 0 auto; }\n  .items ul {\n    margin-top: 0;\n    margin-bottom: 10%; }\n\n.item {\n  position: relative;\n  margin-top: 40px;\n  margin: 0 auto;\n  display: inline-block; }\n  .item img {\n    width: 60%;\n    margin: 0 auto;\n    transition: all .5s ease; }\n  .item h3 {\n    margin-bottom: 0;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 1.5em;\n    transition: all .5s ease; }\n  .item p {\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n.item:hover {\n  cursor: pointer; }\n  .item:hover h3 {\n    color: #FFC107; }\n\n.item-info {\n  text-align: center; }\n  .item-info h4 {\n    margin-bottom: 0; }\n  .item-info p {\n    margin-top: 0; }\n\n@media all and (max-width: 600px) {\n  .item-header {\n    font-size: 3em;\n    margin-top: 1%;\n    margin-bottom: 5%;\n    margin-left: 2%; }\n  .item {\n    width: 50%;\n    margin-bottom: 20px; }\n    .item h3 {\n      margin-top: 5%; } }\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n  .items {\n    width: 85%; }\n  .item-header {\n    font-size: 5em;\n    margin: 1% 0 2% 3%; }\n  .item {\n    width: 33%; }\n    .item h3 {\n      font-size: 1.9em;\n      margin-top: 5%; } }\n\n@media all and (min-width: 851px) {\n  .items {\n    width: 80%; }\n  .item-header {\n    font-size: 6em;\n    margin: 2% 0 3% 3%; }\n  .item {\n    width: 33%;\n    margin-bottom: 3%; }\n    .item img {\n      width: 55%; }\n    .item h3 {\n      font-size: 2em;\n      margin-top: 2%; } }\n", "", {"version":3,"sources":["/./src/components/shop/src/scss/partials/_image-text.scss","/./src/components/shop/src/scss/partials/_colors.scss","/./src/components/shop/src/scss/partials/_fonts.scss","/./src/components/shop/src/components/shop/shop.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,sBAAqB;EACrB,YAAW;EACX,iBAAgB;EAChB,kDCP4B,EDoD/B;EAlDD;IASQ,mBAAkB;IAElB,mBAAkB;IAClB,YAAW;IACX,SAAQ;IACR,WAAU,EACb;EAfL;IAkBQ,YAAW;IACX,eAAc,EACjB;EApBL;IAuBQ,mBAAkB;IAClB,wCAAmC;IACnC,kCE5B8B;IF8B9B,cAAa;IACb,aAAY;IACZ,iBAAgB;IAEhB,gBAAe;IACf,eAAc;IACd,wBAAuB;IACvB,yBAAwB,EAC3B;EAnCL;IAsCQ,WAAU,EACb;EAvCL;IA2CQ,8BAA6B;IAC7B,0BAAyB;IACzB,sBAAqB;IACrB,eCjDc;IDkDd,sBClDc;IDmDd,8BAA6B,EAChC;;AAGL;EACI;IAEQ,WAAU,EACb;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AGnFT;EACI,mBAAkB;EAClB,YAAW,EACd;;AACD;EACI,WAAU;EACV,eAAc;EACd,mBAAkB,EAkBrB;EArBD;IAKQ,eAAc;IACd,eAAuB;IACvB,UAAS;IACT,gBAAe,EAClB;EATL;IAYQ,gBAAe;IACf,kBAAiB,EACpB;EAdL;IAgBQ,eAAc;IACd,sCAAqC;IACrC,mBAAkB;IAClB,UAAS,EACZ;;AAGL;EACI,iBAAgB;EAEhB,gBAAe;EAEf,kCDpCkC;ECqClC,YAAW;EACX,YAAW,EAEd;;AAED;EACI,eAAc;EACd,WAAU;EACV,YAAW;EACX,wCD7CkC;EC8ClC,iBACJ,EAAE;;AAIF;EACI,WAAU;EACV,eAAc,EAKjB;EAPD;IAIQ,cAAa;IACb,mBAAkB,EACrB;;AAGL;EACI,mBAAkB;EAClB,iBAAgB;EAEhB,eAAc;EAEd,sBAAqB,EAsBxB;EA5BD;IAQQ,WAAU;IACV,eAAc;IACd,yBAAwB,EAC3B;EAXL;IAaQ,iBAAgB;IAChB,kCD3E8B;IC4E9B,iBAAgB;IAChB,yBAAwB,EAC3B;EAjBL;IAwBQ,iBAAgB;IAChB,YAAW;IACX,+CDrFqC,ECsFxC;;AAEL;EACI,gBAAe,EAIlB;EALD;IAGQ,eF7Fc,EE8FjB;;AAeL;EACI,mBAAkB,EAOrB;EARD;IAGQ,iBAAgB,EACnB;EAJL;IAMQ,cAAa,EAChB;;AAGL;EACI;IACI,eAAc;IACd,eAAc;IACd,kBAAiB;IACjB,gBAAe,EAClB;EACD;IACI,WAAU;IACV,oBAAmB,EAItB;IAND;MAIQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EACrB;EAED;IACI,WAAU,EAKb;IAND;MAGQ,iBAAgB;MAChB,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EAErB;EAED;IACI,WAAU;IACV,kBAAiB,EAQpB;IAVD;MAIQ,WAAU,EACb;IALL;MAOQ,eAAc;MACd,eAAc,EACjB,EAAA","file":"shop.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.image-text {\n    position: relative;\n    display: inline-block;\n    width: 100%;\n    overflow: hidden;\n    border-bottom: 2px solid $lightgrey;\n\n\n    .text-box {\n        position: absolute;\n        // bottom: 8%;\n        text-align: center;\n        width: 100%;\n        right: 0;\n        z-index: 1;\n    }\n\n    img {\n        width: 100%;\n        display: block;\n    }\n\n    button {\n        border-radius: 1px;\n        background-color: rgba(50,50,50,.1);\n        font-family: $decorative-font;\n        // font-size: 2.7em;\n        display: none;\n        color: white;\n        font-weight: 600;\n        // display: block;\n        padding: 0 10px;\n        margin: 0 auto;\n        border: 3px solid white;\n        transition: all .3s ease;\n    }\n\n    button:focus {\n        outline: 0;\n    }\n\n    button:hover {\n        \n        -webkit-transform: scale(1.1);\n        -ms-transform: scale(1.1);\n        transform: scale(1.1);\n        color: $accent-color;\n        border-color: $accent-color;\n        background-color: transparent;\n    }\n}\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n    .image-text {\n        .text-box {\n            bottom: 5%;\n        }\n        button {\n            display: block;\n            font-size: 3.5em;\n        }\n    }\n}\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n    .image-text {\n        .text-box {\n            bottom: 12%;\n        }\n        button {\n            display: block;\n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1181px) {\n    .image-text {\n        .text-box {\n            bottom: 18%;\n        }\n        button {\n            display: block;\n            font-size: 4.5em;\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","@import 'image-text';\n@import 'fonts';\n@import 'colors';\n\n.cart-message {\n    position: absolute;\n    width: 100%;\n}\nsection.shop-info {\n    width: 60%;\n    margin: 0 auto;\n    position: relative;\n    h1 {\n        font-size: 4em;\n        color: rgb(130,130,255);\n        margin: 0;\n        display: inline;\n    }\n\n    p{\n        display: inline;\n        font-size: 1.25em;\n    }\n    h2 {\n        font-size: 3em;\n        font-family: 'Montserrat', sans-serif; \n        text-align: center;\n        margin: 0;\n    }\n}\n\n.item-header {\n    font-size: 4.5em;\n    // margin: 1%  0 0 3%;\n    margin-left: 1%;\n    // margin-bottom: 5%;\n    font-family: $decorative-font;\n    width: 100%;\n    float: left;\n    \n}\n\n.item-text {\n    margin-top: 4%;\n    width: 60%;\n    float: left;\n    font-family: $main-font;\n    font-size: 1.2em\n}\n\n//we need to move these styles to a file specifically for the \"all\" view\n\n.items {\n    width: 80%;\n    margin: 0 auto;\n    ul {\n        margin-top: 0;\n        margin-bottom: 10%;\n    }\n}\n\n.item {\n    position: relative;\n    margin-top: 40px;\n    // margin-right: 10%;\n    margin: 0 auto;\n    // width: 17%;\n    display: inline-block;\n    img {\n        width: 60%;\n        margin: 0 auto;\n        transition: all .5s ease;\n    }\n    h3 {\n        margin-bottom: 0;\n        font-family: $decorative-font;\n        font-size: 1.5em;\n        transition: all .5s ease;\n    }\n\n    // h3:hover {\n    //     cursor: pointer;\n    //     color: $accent-color;\n    // }\n    p {\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n}\n.item:hover {\n    cursor: pointer;\n    h3 {\n        color: $accent-color;\n    }\n}\n.item:hover > img {\n    // opacity: .5;\n    // -webkit-filter: blur(1px);\n    // -webkit-filter: contrast(150%); \n}\n\n// .item:hover > h3 {\n//     color: $accent-color;\n// }\n\n\n\n\n.item-info {\n    text-align: center;\n    h4 {\n        margin-bottom: 0;   \n    }\n    p {\n        margin-top: 0;\n    }\n}\n\n@media all and (max-width: 600px) {\n    .item-header {\n        font-size: 3em;\n        margin-top: 1%;\n        margin-bottom: 5%;\n        margin-left: 2%;\n    }\n    .item {\n        width: 50%;\n        margin-bottom: 20px;\n        h3 {\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n    .items {\n        width: 85%;\n    }\n    .item-header {\n        font-size: 5em;\n        margin: 1% 0 2% 3%;\n    }\n\n    .item {\n        width: 33%;\n        h3 {\n            font-size: 1.9em;\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 851px) {\n    .items {\n        width: 80%;\n    }\n    .item-header {\n        font-size: 6em;\n        margin: 2% 0 3% 3%;\n\n    }\n\n    .item {\n        width: 33%;\n        margin-bottom: 3%;\n        img {\n            width: 55%;\n        }\n        h3 {\n            font-size: 2em;\n            margin-top: 2%;\n        }\n    }\n}\n\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".image-text {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n  overflow: hidden;\n  border-bottom: 2px solid rgba(200, 200, 200, 0.7); }\n  .image-text .text-box {\n    position: absolute;\n    text-align: center;\n    width: 100%;\n    right: 0;\n    z-index: 1; }\n  .image-text img {\n    width: 100%;\n    display: block; }\n  .image-text button {\n    border-radius: 1px;\n    background-color: rgba(50, 50, 50, 0.1);\n    font-family: \"Amatic SC\", cursive;\n    display: none;\n    color: white;\n    font-weight: 600;\n    padding: 0 10px;\n    margin: 0 auto;\n    border: 3px solid white;\n    transition: all .3s ease; }\n  .image-text button:focus {\n    outline: 0; }\n  .image-text button:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #FFC107;\n    border-color: #FFC107;\n    background-color: transparent; }\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n  .image-text .text-box {\n    bottom: 5%; }\n  .image-text button {\n    display: block;\n    font-size: 3.5em; } }\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n  .image-text .text-box {\n    bottom: 12%; }\n  .image-text button {\n    display: block;\n    font-size: 4em; } }\n\n@media all and (min-width: 1181px) {\n  .image-text .text-box {\n    bottom: 18%; }\n  .image-text button {\n    display: block;\n    font-size: 4.5em; } }\n\n.cart-message {\n  position: absolute;\n  width: 100%; }\n\nsection.shop-info {\n  width: 60%;\n  margin: 0 auto;\n  position: relative; }\n  section.shop-info h1 {\n    font-size: 4em;\n    color: #8282ff;\n    margin: 0;\n    display: inline; }\n  section.shop-info p {\n    display: inline;\n    font-size: 1.25em; }\n  section.shop-info h2 {\n    font-size: 3em;\n    font-family: 'Montserrat', sans-serif;\n    text-align: center;\n    margin: 0; }\n\n.item-header {\n  font-size: 4.5em;\n  margin-left: 1%;\n  font-family: \"Amatic SC\", cursive;\n  width: 100%;\n  float: left; }\n\n.item-text {\n  margin-top: 4%;\n  width: 60%;\n  float: left;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em; }\n\n.items {\n  width: 80%;\n  margin: 0 auto; }\n  .items ul {\n    margin-top: 0;\n    margin-bottom: 10%; }\n\n.item {\n  position: relative;\n  margin-top: 40px;\n  margin: 0 auto;\n  display: inline-block; }\n  .item img {\n    width: 60%;\n    margin: 0 auto;\n    transition: all .5s ease; }\n  .item h3 {\n    margin-bottom: 0;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 1.5em;\n    transition: all .5s ease; }\n  .item p {\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n.item:hover {\n  cursor: pointer; }\n  .item:hover h3 {\n    color: #FFC107; }\n\n.item-info {\n  text-align: center; }\n  .item-info h4 {\n    margin-bottom: 0; }\n  .item-info p {\n    margin-top: 0; }\n\n@media all and (max-width: 600px) {\n  .item-header {\n    font-size: 3em;\n    margin-top: 1%;\n    margin-bottom: 5%;\n    margin-left: 2%; }\n  .item {\n    width: 50%;\n    margin-bottom: 20px; }\n    .item h3 {\n      margin-top: 5%; } }\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n  .items {\n    width: 85%; }\n  .item-header {\n    font-size: 5em;\n    margin: 1% 0 2% 3%; }\n  .item {\n    width: 33%; }\n    .item h3 {\n      font-size: 1.9em;\n      margin-top: 5%; } }\n\n@media all and (min-width: 851px) {\n  .items {\n    width: 80%; }\n  .item-header {\n    font-size: 6em;\n    margin: 2% 0 3% 3%; }\n  .item {\n    width: 33%;\n    margin-bottom: 3%; }\n    .item img {\n      width: 55%; }\n    .item h3 {\n      font-size: 2em;\n      margin-top: 2%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_image-text.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/components/shop/shop.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,sBAAqB;EACrB,YAAW;EACX,iBAAgB;EAChB,kDCP4B,EDoD/B;EAlDD;IASQ,mBAAkB;IAElB,mBAAkB;IAClB,YAAW;IACX,SAAQ;IACR,WAAU,EACb;EAfL;IAkBQ,YAAW;IACX,eAAc,EACjB;EApBL;IAuBQ,mBAAkB;IAClB,wCAAmC;IACnC,kCE5B8B;IF8B9B,cAAa;IACb,aAAY;IACZ,iBAAgB;IAEhB,gBAAe;IACf,eAAc;IACd,wBAAuB;IACvB,yBAAwB,EAC3B;EAnCL;IAsCQ,WAAU,EACb;EAvCL;IA2CQ,8BAA6B;IAC7B,0BAAyB;IACzB,sBAAqB;IACrB,eCjDc;IDkDd,sBClDc;IDmDd,8BAA6B,EAChC;;AAGL;EACI;IAEQ,WAAU,EACb;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AGnFT;EACI,mBAAkB;EAClB,YAAW,EACd;;AACD;EACI,WAAU;EACV,eAAc;EACd,mBAAkB,EAkBrB;EArBD;IAKQ,eAAc;IACd,eAAuB;IACvB,UAAS;IACT,gBAAe,EAClB;EATL;IAYQ,gBAAe;IACf,kBAAiB,EACpB;EAdL;IAgBQ,eAAc;IACd,sCAAqC;IACrC,mBAAkB;IAClB,UAAS,EACZ;;AAGL;EACI,iBAAgB;EAEhB,gBAAe;EAEf,kCDpCkC;ECqClC,YAAW;EACX,YAAW,EAEd;;AAED;EACI,eAAc;EACd,WAAU;EACV,YAAW;EACX,wCD7CkC;EC8ClC,iBACJ,EAAE;;AAIF;EACI,WAAU;EACV,eAAc,EAKjB;EAPD;IAIQ,cAAa;IACb,mBAAkB,EACrB;;AAGL;EACI,mBAAkB;EAClB,iBAAgB;EAEhB,eAAc;EAEd,sBAAqB,EAsBxB;EA5BD;IAQQ,WAAU;IACV,eAAc;IACd,yBAAwB,EAC3B;EAXL;IAaQ,iBAAgB;IAChB,kCD3E8B;IC4E9B,iBAAgB;IAChB,yBAAwB,EAC3B;EAjBL;IAwBQ,iBAAgB;IAChB,YAAW;IACX,+CDrFqC,ECsFxC;;AAEL;EACI,gBAAe,EAIlB;EALD;IAGQ,eF7Fc,EE8FjB;;AAeL;EACI,mBAAkB,EAOrB;EARD;IAGQ,iBAAgB,EACnB;EAJL;IAMQ,cAAa,EAChB;;AAGL;EACI;IACI,eAAc;IACd,eAAc;IACd,kBAAiB;IACjB,gBAAe,EAClB;EACD;IACI,WAAU;IACV,oBAAmB,EAItB;IAND;MAIQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EACrB;EAED;IACI,WAAU,EAKb;IAND;MAGQ,iBAAgB;MAChB,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EAErB;EAED;IACI,WAAU;IACV,kBAAiB,EAQpB;IAVD;MAIQ,WAAU,EACb;IALL;MAOQ,eAAc;MACd,eAAc,EACjB,EAAA","file":"shop.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.image-text {\n    position: relative;\n    display: inline-block;\n    width: 100%;\n    overflow: hidden;\n    border-bottom: 2px solid $lightgrey;\n\n\n    .text-box {\n        position: absolute;\n        // bottom: 8%;\n        text-align: center;\n        width: 100%;\n        right: 0;\n        z-index: 1;\n    }\n\n    img {\n        width: 100%;\n        display: block;\n    }\n\n    button {\n        border-radius: 1px;\n        background-color: rgba(50,50,50,.1);\n        font-family: $decorative-font;\n        // font-size: 2.7em;\n        display: none;\n        color: white;\n        font-weight: 600;\n        // display: block;\n        padding: 0 10px;\n        margin: 0 auto;\n        border: 3px solid white;\n        transition: all .3s ease;\n    }\n\n    button:focus {\n        outline: 0;\n    }\n\n    button:hover {\n        \n        -webkit-transform: scale(1.1);\n        -ms-transform: scale(1.1);\n        transform: scale(1.1);\n        color: $accent-color;\n        border-color: $accent-color;\n        background-color: transparent;\n    }\n}\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n    .image-text {\n        .text-box {\n            bottom: 5%;\n        }\n        button {\n            display: block;\n            font-size: 3.5em;\n        }\n    }\n}\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n    .image-text {\n        .text-box {\n            bottom: 12%;\n        }\n        button {\n            display: block;\n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1181px) {\n    .image-text {\n        .text-box {\n            bottom: 18%;\n        }\n        button {\n            display: block;\n            font-size: 4.5em;\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","@import 'image-text';\n@import 'fonts';\n@import 'colors';\n\n.cart-message {\n    position: absolute;\n    width: 100%;\n}\nsection.shop-info {\n    width: 60%;\n    margin: 0 auto;\n    position: relative;\n    h1 {\n        font-size: 4em;\n        color: rgb(130,130,255);\n        margin: 0;\n        display: inline;\n    }\n\n    p{\n        display: inline;\n        font-size: 1.25em;\n    }\n    h2 {\n        font-size: 3em;\n        font-family: 'Montserrat', sans-serif; \n        text-align: center;\n        margin: 0;\n    }\n}\n\n.item-header {\n    font-size: 4.5em;\n    // margin: 1%  0 0 3%;\n    margin-left: 1%;\n    // margin-bottom: 5%;\n    font-family: $decorative-font;\n    width: 100%;\n    float: left;\n    \n}\n\n.item-text {\n    margin-top: 4%;\n    width: 60%;\n    float: left;\n    font-family: $main-font;\n    font-size: 1.2em\n}\n\n//we need to move these styles to a file specifically for the \"all\" view\n\n.items {\n    width: 80%;\n    margin: 0 auto;\n    ul {\n        margin-top: 0;\n        margin-bottom: 10%;\n    }\n}\n\n.item {\n    position: relative;\n    margin-top: 40px;\n    // margin-right: 10%;\n    margin: 0 auto;\n    // width: 17%;\n    display: inline-block;\n    img {\n        width: 60%;\n        margin: 0 auto;\n        transition: all .5s ease;\n    }\n    h3 {\n        margin-bottom: 0;\n        font-family: $decorative-font;\n        font-size: 1.5em;\n        transition: all .5s ease;\n    }\n\n    // h3:hover {\n    //     cursor: pointer;\n    //     color: $accent-color;\n    // }\n    p {\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n}\n.item:hover {\n    cursor: pointer;\n    h3 {\n        color: $accent-color;\n    }\n}\n.item:hover > img {\n    // opacity: .5;\n    // -webkit-filter: blur(1px);\n    // -webkit-filter: contrast(150%); \n}\n\n// .item:hover > h3 {\n//     color: $accent-color;\n// }\n\n\n\n\n.item-info {\n    text-align: center;\n    h4 {\n        margin-bottom: 0;   \n    }\n    p {\n        margin-top: 0;\n    }\n}\n\n@media all and (max-width: 600px) {\n    .item-header {\n        font-size: 3em;\n        margin-top: 1%;\n        margin-bottom: 5%;\n        margin-left: 2%;\n    }\n    .item {\n        width: 50%;\n        margin-bottom: 20px;\n        h3 {\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n    .items {\n        width: 85%;\n    }\n    .item-header {\n        font-size: 5em;\n        margin: 1% 0 2% 3%;\n    }\n\n    .item {\n        width: 33%;\n        h3 {\n            font-size: 1.9em;\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 851px) {\n    .items {\n        width: 80%;\n    }\n    .item-header {\n        font-size: 6em;\n        margin: 2% 0 3% 3%;\n\n    }\n\n    .item {\n        width: 33%;\n        margin-bottom: 3%;\n        img {\n            width: 55%;\n        }\n        h3 {\n            font-size: 2em;\n            margin-top: 2%;\n        }\n    }\n}\n\n"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -35726,8 +35945,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/sass-loader/index.js?sourceMap!./main.scss", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/sass-loader/index.js?sourceMap!./main.scss");
+			module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/sass-loader/index.js?sourceMap!./main.scss", function() {
+				var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/sass-loader/index.js?sourceMap!./main.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35745,7 +35964,7 @@
 	
 	
 	// module
-	exports.push([module.id, "html {\n  font-size: 16px; }\n\nbody {\n  font-family: sans-serif;\n  margin: 0; }\n\nul {\n  list-style-type: none;\n  padding: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none;\n  color: white; }\n\na:hover {\n  cursor: pointer; }\n\n.link {\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em;\n  transition: all 0.5s ease; }\n\n.icon-arrow-down2:before {\n  content: \"\\EA3E\"; }\n\n.icon-arrow-right2:before {\n  content: \"\\EA3C\"; }\n\n.icon-arrow-left2:before {\n  content: \"\\EA40\"; }\n\n.clearfix {\n  overflow: auto; }\n", "", {"version":3,"sources":["/./src/scss/src/scss/main.scss","/./src/scss/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,gBAAe,EAClB;;AACD;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,sBAAqB;EACrB,WAAU,EACb;;AACD;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB;EACrB,aAAY,EACf;;AAED;EACI,gBAAe,EAClB;;AAED;EACI,wCCjCkC;EDkClC,iBAAgB;EAChB,0BAAyB,EAC5B;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AACD;EACI,eAAc,EACjB","file":"main.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\nhtml {\n    font-size: 16px;\n}\nbody {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nul {\n    list-style-type: none;\n    padding: 0;\n}\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n    color: white;\n}\n\na:hover {\n    cursor: pointer;    \n}\n\n.link {\n    font-family: $main-font;\n    font-size: 1.2em;\n    transition: all 0.5s ease;\n}\n\n.icon-arrow-down2:before {\n  content: \"\\ea3e\";\n}\n\n.icon-arrow-right2:before {\n  content: \"\\ea3c\";\n}\n\n.icon-arrow-left2:before {\n  content: \"\\ea40\";\n}\n.clearfix {\n    overflow: auto;\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "html {\n  font-size: 16px;\n  -webkit-font-smoothing: antialiased; }\n\nbody {\n  font-family: sans-serif;\n  margin: 0; }\n\nul {\n  list-style-type: none;\n  padding: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none;\n  color: white; }\n\na:hover {\n  cursor: pointer; }\n\n.link {\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em;\n  transition: all 0.5s ease; }\n\n.icon-arrow-down2:before {\n  content: \"\\EA3E\"; }\n\n.icon-arrow-right2:before {\n  content: \"\\EA3C\"; }\n\n.icon-arrow-left2:before {\n  content: \"\\EA40\"; }\n\n.clearfix {\n  overflow: auto; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/scss/src/scss/main.scss","/Users/Will/freelance/earth-house/app/src/scss/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,gBAAe;EACf,oCAAmC,EACtC;;AACD;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,sBAAqB;EACrB,WAAU,EACb;;AACD;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB;EACrB,aAAY,EACf;;AAED;EACI,gBAAe,EAClB;;AAED;EACI,wCClCkC;EDmClC,iBAAgB;EAChB,0BAAyB,EAC5B;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AACD;EACI,eAAc,EACjB","file":"main.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\nhtml {\n    font-size: 16px;\n    -webkit-font-smoothing: antialiased;\n}\nbody {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nul {\n    list-style-type: none;\n    padding: 0;\n}\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n    color: white;\n}\n\na:hover {\n    cursor: pointer;    \n}\n\n.link {\n    font-family: $main-font;\n    font-size: 1.2em;\n    transition: all 0.5s ease;\n}\n\n.icon-arrow-down2:before {\n  content: \"\\ea3e\";\n}\n\n.icon-arrow-right2:before {\n  content: \"\\ea3c\";\n}\n\n.icon-arrow-left2:before {\n  content: \"\\ea40\";\n}\n.clearfix {\n    overflow: auto;\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -54254,7 +54473,7 @@
 /***/ function(module, exports) {
 
 	/**
-	 * @license AngularJS v1.6.2
+	 * @license AngularJS v1.6.3
 	 * (c) 2010-2017 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -57808,6 +58027,10 @@
 	 *   /&#42; As of 1.4.4, this must always be set: it signals ngAnimate
 	 *     to not accidentally inherit a delay property from another CSS class &#42;/
 	 *   transition-duration: 0s;
+	 *
+	 *   /&#42; if you are using animations instead of transitions you should configure as follows:
+	 *     animation-delay: 0.1s;
+	 *     animation-duration: 0s; &#42;/
 	 * }
 	 * .my-animation.ng-enter.ng-enter-active {
 	 *   /&#42; standard transition styles &#42;/
@@ -58387,6 +58610,7 @@
 	  isFunction  = angular.isFunction;
 	  isElement   = angular.isElement;
 	})
+	  .info({ angularVersion: '1.6.3' })
 	  .directive('ngAnimateSwap', ngAnimateSwapDirective)
 	
 	  .directive('ngAnimateChildren', $$AnimateChildrenDirective)
@@ -58418,8 +58642,8 @@
 /***/ function(module, exports) {
 
 	/**
-	 * @license AngularJS v1.5.9
-	 * (c) 2010-2016 Google, Inc. http://angularjs.org
+	 * @license AngularJS v1.6.3
+	 * (c) 2010-2017 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
 	(function(window, angular) {'use strict';
@@ -58442,6 +58666,7 @@
 	var isDefined;
 	var lowercase;
 	var noop;
+	var nodeContains;
 	var htmlParser;
 	var htmlSanitizeWriter;
 	
@@ -58642,6 +58867,11 @@
 	  htmlParser = htmlParserImpl;
 	  htmlSanitizeWriter = htmlSanitizeWriterImpl;
 	
+	  nodeContains = window.Node.prototype.contains || /** @this */ function(arg) {
+	    // eslint-disable-next-line no-bitwise
+	    return !!(this.compareDocumentPosition(arg) & 16);
+	  };
+	
 	  // Regular Expressions for parsing tags and attributes
 	  var SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
 	    // Match everything outside of normal chars and " (quote character)
@@ -58802,16 +59032,16 @@
 	
 	      var nextNode;
 	      if (!(nextNode = node.firstChild)) {
-	      if (node.nodeType === 1) {
+	        if (node.nodeType === 1) {
 	          handler.end(node.nodeName.toLowerCase());
 	        }
-	        nextNode = node.nextSibling;
+	        nextNode = getNonDescendant('nextSibling', node);
 	        if (!nextNode) {
 	          while (nextNode == null) {
-	            node = node.parentNode;
+	            node = getNonDescendant('parentNode', node);
 	            if (node === inertBodyElement) break;
-	            nextNode = node.nextSibling;
-	          if (node.nodeType === 1) {
+	            nextNode = getNonDescendant('nextSibling', node);
+	            if (node.nodeType === 1) {
 	              handler.end(node.nodeName.toLowerCase());
 	            }
 	          }
@@ -58923,28 +59153,36 @@
 	   * @param node Root element to process
 	   */
 	  function stripCustomNsAttrs(node) {
-	    if (node.nodeType === window.Node.ELEMENT_NODE) {
-	      var attrs = node.attributes;
-	      for (var i = 0, l = attrs.length; i < l; i++) {
-	        var attrNode = attrs[i];
-	        var attrName = attrNode.name.toLowerCase();
-	        if (attrName === 'xmlns:ns1' || attrName.lastIndexOf('ns1:', 0) === 0) {
-	          node.removeAttributeNode(attrNode);
-	          i--;
-	          l--;
+	    while (node) {
+	      if (node.nodeType === window.Node.ELEMENT_NODE) {
+	        var attrs = node.attributes;
+	        for (var i = 0, l = attrs.length; i < l; i++) {
+	          var attrNode = attrs[i];
+	          var attrName = attrNode.name.toLowerCase();
+	          if (attrName === 'xmlns:ns1' || attrName.lastIndexOf('ns1:', 0) === 0) {
+	            node.removeAttributeNode(attrNode);
+	            i--;
+	            l--;
+	          }
 	        }
 	      }
-	    }
 	
-	    var nextNode = node.firstChild;
-	    if (nextNode) {
-	      stripCustomNsAttrs(nextNode);
-	    }
+	      var nextNode = node.firstChild;
+	      if (nextNode) {
+	        stripCustomNsAttrs(nextNode);
+	      }
 	
-	    nextNode = node.nextSibling;
-	    if (nextNode) {
-	      stripCustomNsAttrs(nextNode);
+	      node = getNonDescendant('nextSibling', node);
 	    }
+	  }
+	
+	  function getNonDescendant(propName, node) {
+	    // An element is clobbered if its `propName` property points to one of its descendants
+	    var nextNode = node[propName];
+	    if (nextNode && nodeContains.call(node, nextNode)) {
+	      throw $sanitizeMinErr('elclob', 'Failed to sanitize html because the element is clobbered: {0}', node.outerHTML || node.outerText);
+	    }
+	    return nextNode;
 	  }
 	}
 	
@@ -58957,7 +59195,9 @@
 	
 	
 	// define ngSanitize module and register $sanitize service
-	angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
+	angular.module('ngSanitize', [])
+	  .provider('$sanitize', $SanitizeProvider)
+	  .info({ angularVersion: '1.6.3' });
 	
 	/**
 	 * @ngdoc filter
