@@ -15,9 +15,11 @@
   "author": "Will Nickerson",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.15.2",
     "dotenv": "^4.0.0",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.3.0",
     "mongoose": "^4.7.1",
     "morgan": "^1.7.0",
     "nodemailer": "^3.1.8",
