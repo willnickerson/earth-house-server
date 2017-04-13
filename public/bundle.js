@@ -54,41 +54,41 @@
 	
 	var _components2 = _interopRequireDefault(_components);
 	
-	var _services = __webpack_require__(72);
+	var _services = __webpack_require__(76);
 	
 	var _services2 = _interopRequireDefault(_services);
 	
-	__webpack_require__(78);
+	__webpack_require__(82);
 	
-	var _angularUiRouter = __webpack_require__(80);
+	var _angularUiRouter = __webpack_require__(84);
 	
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 	
-	var _angularUiRouterDefault = __webpack_require__(150);
+	var _angularUiRouterDefault = __webpack_require__(154);
 	
 	var _angularUiRouterDefault2 = _interopRequireDefault(_angularUiRouterDefault);
 	
-	var _routes = __webpack_require__(151);
+	var _routes = __webpack_require__(155);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _angularScroll = __webpack_require__(152);
+	var _angularScroll = __webpack_require__(156);
 	
 	var _angularScroll2 = _interopRequireDefault(_angularScroll);
 	
-	var _gsap = __webpack_require__(155);
+	var _gsap = __webpack_require__(159);
 	
 	var _gsap2 = _interopRequireDefault(_gsap);
 	
-	var _angularAnimate = __webpack_require__(157);
+	var _angularAnimate = __webpack_require__(161);
 	
 	var _angularAnimate2 = _interopRequireDefault(_angularAnimate);
 	
-	var _angularSanitize = __webpack_require__(159);
+	var _angularSanitize = __webpack_require__(163);
 	
 	var _angularSanitize2 = _interopRequireDefault(_angularSanitize);
 	
-	var _angularPayments = __webpack_require__(161);
+	var _angularPayments = __webpack_require__(165);
 	
 	var _angularPayments2 = _interopRequireDefault(_angularPayments);
 	
@@ -34027,21 +34027,23 @@
 	var map = {
 		"./about/about.js": 8,
 		"./admin/admin.js": 14,
-		"./app/app.js": 18,
-		"./articles/articles.js": 20,
-		"./checkout/checkout.js": 24,
-		"./checkout/success/success.js": 28,
-		"./contact/contact.js": 32,
-		"./footer-content/footer-content.js": 36,
-		"./header-content/header-content.js": 40,
-		"./hero-image/hero-image.js": 44,
-		"./home/home.js": 48,
-		"./landing/landing.js": 50,
-		"./nav-bar/nav-bar.js": 54,
-		"./shop/all/all.js": 58,
-		"./shop/item/item.js": 60,
-		"./shop/shop-head/shop-head.js": 64,
-		"./shop/shop.js": 68
+		"./admin/login/login.js": 18,
+		"./admin/orders/orders.js": 20,
+		"./app/app.js": 22,
+		"./articles/articles.js": 24,
+		"./checkout/checkout.js": 28,
+		"./checkout/success/success.js": 32,
+		"./contact/contact.js": 36,
+		"./footer-content/footer-content.js": 40,
+		"./header-content/header-content.js": 44,
+		"./hero-image/hero-image.js": 48,
+		"./home/home.js": 52,
+		"./landing/landing.js": 54,
+		"./nav-bar/nav-bar.js": 58,
+		"./shop/all/all.js": 62,
+		"./shop/item/item.js": 64,
+		"./shop/shop-head/shop-head.js": 68,
+		"./shop/shop.js": 72
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -34478,32 +34480,30 @@
 	};
 	
 	
-	controller.$inject = ['authService', 'orderService'];
+	controller.$inject = ['authService', '$state'];
 	
-	function controller(authService, orderService) {
+	function controller(authService, $state) {
 	    var _this = this;
 	
 	    this.styles = _admin4.default;
-	    this.message = 'please login';
-	
 	    this.signin = function () {
 	        authService.signin(_this.credentials).then(function (data) {
 	            _this.token = data.token;
+	            $state.go('admin.orders');
 	        });
 	    };
-	
-	    this.getOrders = function () {
-	        orderService.getOrders(_this.token).then(function (data) {
-	            return console.log(data);
-	        });
+	    this.logOut = function () {
+	        _this.credentials = {};
+	        delete _this.token;
 	    };
+	    //TODO: ADD email and notes section to each order as well as in model on the server side!
 	}
 
 /***/ },
 /* 15 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"admin-header\"></div>\n<div class=\"admin-body\">\n    <h2>Login</h2>\n    <form ng-submit=\"$ctrl.signin()\">\n        <label for=\"username\">username</label>\n        <input type=\"text\" ng-model=\"$ctrl.credentials.username\">\n        <label for=\"password\"></label>\n        <input type=\"text\" ng-model=\"$ctrl.credentials.password\">\n        <button type=\"submit\">Submit</button>\n    </form>\n<button ng-click=\"$ctrl.getOrders()\">Get orders</button>\n</div>";
+	module.exports = "<div class=\"admin-header\">\n\n</div>\n\n<div class=\"admin-body\">\n    <div class=\"login\" ng-if=\"!$ctrl.token\">\n        <h2>Login</h2>\n        <form ng-submit=\"$ctrl.signin()\">\n            <label for=\"username\">username</label>\n            <input type=\"text\" ng-model=\"$ctrl.credentials.username\">\n            <label for=\"password\">password</label>\n            <input type=\"text\" ng-model=\"$ctrl.credentials.password\">\n            <button type=\"submit\">Submit</button>\n        </form>\n    </div>\n\n    <ul class=\"admin-nav\" ng-if=\"$ctrl.token\">\n        <li>\n            <a ui-sref=\"admin.orders\">orders</a>\n        </li>\n        <li>\n            <a ui-sref=\"admin.content\">content</a>\n        </li>\n        <li>\n            <a ng-click=\"$ctrl.logOut()\">logout</a>\n        </li>\n    </ul>\n\n    <ui-view name=\"main\" token=\"$ctrl.token\"></ui-view>\n</div>\n\n";
 
 /***/ },
 /* 16 */
@@ -34540,7 +34540,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".admin-header {\n  height: 170px;\n  background-color: #323232; }\n\n.admin-body {\n  height: 85vh; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/src/components/admin/admin.scss","/Users/Will/freelance/earth-house/app/src/components/admin/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,cAAa;EACb,0BCFiB,EDGpB;;AAED;EACI,aAAY,EACf","file":"admin.scss","sourcesContent":["@import 'colors';\n\n.admin-header {\n    height: 170px;\n    background-color: $black;\n}\n\n.admin-body {\n    height: 85vh;\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
+	exports.push([module.id, ".admin-header {\n  height: 170px;\n  background-color: #323232; }\n\n.admin-body {\n  min-height: 85vh;\n  width: 90%;\n  margin: 0 auto; }\n\n.admin-nav a {\n  color: blue; }\n\n.admin-nav a:hover {\n  text-decoration: underline; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/src/components/admin/admin.scss","/Users/Will/freelance/earth-house/app/src/components/admin/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,cAAa;EACb,0BCFiB,EDGpB;;AAED;EACI,iBAAgB;EAChB,WAAU;EACV,eAAc,EACjB;;AAED;EAEQ,YAAW,EACd;;AAHL;EAKQ,2BAA0B,EAC7B","file":"admin.scss","sourcesContent":["@import 'colors';\n\n.admin-header {\n    height: 170px;\n    background-color: $black;\n}\n\n.admin-body {\n    min-height: 85vh;\n    width: 90%;\n    margin: 0 auto;\n}\n\n.admin-nav {\n    a {\n        color: blue;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -34555,7 +34555,112 @@
 	    value: true
 	});
 	
-	var _app = __webpack_require__(19);
+	var _login = __webpack_require__(19);
+	
+	var _login2 = _interopRequireDefault(_login);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _login2.default
+	};
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "<h1>Please login</h1>\n";
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _orders = __webpack_require__(21);
+	
+	var _orders2 = _interopRequireDefault(_orders);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _orders2.default,
+	    bindings: {
+	        token: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['orderService', '$state'];
+	
+	function controller(orderService, $state) {
+	    var _this = this;
+	
+	    this.$onInit = function () {
+	        if (_this.token) _this.getOrders();else $state.go('admin.login');
+	    };
+	
+	    this.getOrders = function () {
+	        orderService.getOrders(_this.token).then(function (data) {
+	            _this.orders = data;
+	        });
+	    };
+	    this.removeOrder = function (order) {
+	        var index = _this.orders.indexOf(order);
+	        orderService.deleteOrder(order._id, _this.token).then(function (data) {
+	            console.log(data);
+	            _this.orders.splice(index, 1);
+	        });
+	    };
+	    this.updateOrder = function (update) {
+	        _this.calcNewTotal(update);
+	        console.log('update function called', update);
+	        orderService.updateOrder(update._id, update, _this.token).then(function (data) {
+	            console.log(data);
+	            _this.setOrderToUpdate(null);
+	        });
+	    };
+	
+	    this.setOrderToUpdate = function (order) {
+	        _this.orderToUpdate = order;
+	    };
+	
+	    this.calcNewTotal = function (order) {
+	        order.total = 0;
+	        order.items.forEach(function (item) {
+	            item.subTotal = item.quantity * item.price;
+	            order.total += item.subTotal;
+	        });
+	    };
+	    this.addItem = function (newItem) {
+	        _this.orderToUpdate.items.push(newItem);
+	        newItem = {};
+	        console.log(_this.orderToUpdate.items);
+	    };
+	}
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"orders\" ng-if=\"$ctrl.token\">\n    <div class=\"static\" ng-if=\"!$ctrl.orderToUpdate\">\n        <h2>Orders</h2>\n\n        <h3>Filter</h3>\n        <select ng-model=\"$ctrl.completed\" ng-init=\"$ctrl.completed = false\">\n            <option ng-value=\"false\">incomplete</option>\n            <option ng-value=\"true\">complete</option>\n            <option ng-value=\"'all'\">all</option>\n        </select>\n\n        <ul>\n            <li ng-repeat=\"order in $ctrl.orders\" ng-if=\"order.completed === $ctrl.completed || $ctrl.completed === 'all'\">\n                    <h4>{{order.name}}</h4>\n                    <p>{{order.date}}</p>\n                    <h5>total: ${{order.total}}.00</h5>\n                    <h4>Items</h4>\n                    <table class=\"order-items\">\n                        <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                        <tr ng-repeat=\"item in order.items\">\n                            <td>{{item.name}}</td>\n                            <td>{{item.quantity}}</td>\n                            <td>${{item.subTotal}}.00</td>\n                        </tr>\n                    </table>\n                    <h5>\n                        Address: {{order.address.line_1}}, {{order.address.line_2 || ' '}} \n                        <br>\n                        {{order.address.city}}, {{order.address.state}}, {{order.address.zip}}\n                    </h5>\n                    <h5>complete: {{order.completed}}</h5>\n                    <button ng-click=\"$ctrl.removeOrder(order)\">delete</button>\n                    <button ng-click=\"$ctrl.setOrderToUpdate(order)\">edit</button>\n            </li>\n        </ul>\n    </div>\n    <div class=\"update\" ng-if=\"$ctrl.orderToUpdate\">\n        <h2>Update Form</h2>\n        {{$ctrl.orderToUpdate}}\n        <form>\n            <label>Name:</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.name\" placeholder=\"{{orderToUpdate.name}}\">\n            <label>Total: $</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.total\" placeholder=\"{{orderToUpdate.total}}\">\n\n\n            <h4>Completed:</h4>\n            <select ng-model=\"$ctrl.orderToUpdate.completed\" ng-init=\"$ctrl.orderToUpdate.completed\">\n                <option ng-value=\"false\">incomplete</option>\n                <option ng-value=\"true\">complete</option>\n            </select>\n                \n            <h4>Items</h4>\n            <table>\n                <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                <tr ng-repeat=\"item in $ctrl.orderToUpdate.items\">\n                    <td><input type=\"text\" ng-model=\"item.name\" ng-value=\"item.name\" placeholder=\"{{item.name}}\"></td>\n                    <td><input type=\"text\" ng-value=\"item.quantity\" ng-model=\"item.quantity\" placeholder=\"{{item.quantity}}\"></td>\n                    <td ng-value=\"item.quantity * item.price\" ng-model=\"item.subTotal\">${{item.quantity * item.price}}.00</td>\n                </tr>\n            </table>\n            <table>\n                <tr><th>item</th><th>price</th><th>qty.</th><th>subtotal</th></tr>\n                <tr>\n                    <td><input type=\"text\" placeholder=\"new item name\" ng-model=\"newItem.name\"></td>\n                    <td><input type=\"text\" placeholder=\"price\" ng-init=\"newItem.price = 0\" ng-model=\"newItem.price\"></td>\n                    <td><input type=\"text\" placeholder=\"qty\" ng-init=\"newItem.quantity = 0\" ng-model=\"newItem.quantity\"></td>\n                    <td>subtotal: ${{newItem.price * newItem.quantity}}.00</td>\n                </tr>\n                <tr>\n                    <td><button ng-click=\"$ctrl.addItem(newItem)\">add item</button></td>\n                </tr>\n            </table>\n\n        <h5>Address</h4>\n\n        <label>Line 1:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_1}}\" ng-model=\"$ctrl.orderToUpdate.address.line_1\">\n        <label>Line 2:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_2}}\" ng-model=\"$ctrl.orderToUpdate.address.line_2\">\n        <label>City:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.city}}\" ng-model=\"$ctrl.orderToUpdate.address.city\">\n        <label>State</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.state}}\" ng-model=\"$ctrl.orderToUpdate.address.state\">\n        <label>Zip</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.zip}}\" ng-model=\"$ctrl.orderToUpdate.address.zip\">\n        </form>\n        <button ng-click=\"$ctrl.updateOrder($ctrl.orderToUpdate)\">update</button>\n        <button ng-click=\"$ctrl.setOrderToUpdate(null)\">cancel</button>\n    </div>\n</div>";
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _app = __webpack_require__(23);
 	
 	var _app2 = _interopRequireDefault(_app);
 	
@@ -34602,13 +34707,13 @@
 	}
 
 /***/ },
-/* 19 */
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = "<header>\n    <header-content cart=\"$ctrl.cart\"></header-content>\n</header>\n\n<main>\n    <ui-view cart=\"$ctrl.cart\" initializeCart=\"$ctrl.initializeCart\" hasSeenLanding=\"$ctrl.hasSeenLanding\"></ui-view>\n</main>\n\n<footer>\n    <footer-content></footer-content>\n</footer>";
 
 /***/ },
-/* 20 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34617,11 +34722,11 @@
 	    value: true
 	});
 	
-	var _articles = __webpack_require__(21);
+	var _articles = __webpack_require__(25);
 	
 	var _articles2 = _interopRequireDefault(_articles);
 	
-	var _articles3 = __webpack_require__(22);
+	var _articles3 = __webpack_require__(26);
 	
 	var _articles4 = _interopRequireDefault(_articles3);
 	
@@ -34648,19 +34753,19 @@
 	}
 
 /***/ },
-/* 21 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"loading-bar\"></div>\n\n<section class=\"articles\">\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"https://www.instagram.com/earthhousejuice/?hl=en\">Follow Us on Instagram!</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_north,h_920,w_1080/v1488237699/14027299_622727931235134_1244126147_n_nzudku.jpg\">   \n        </div>\n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"http://www.portlandfarmersmarket.org/vendors/\">Farmer's markets</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"https://www.portlandfarmersmarket.org/wp-content/uploads/2016/04/PFM-Logo-Horizontal-Green.png\">\n                <p>We will be selling our juices at markets around the Portland Area all summer long! Come take a look at our schedule.</p>\n        </div>    \n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a ui-sref=\"about\">Learn about our Juices</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1488245973/14360103_955849944561168_6715517624580571136_n_xvdpj1.jpg\">\n        </div>    \n    </div>\n</section>";
 
 /***/ },
-/* 22 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(23);
+	var content = __webpack_require__(27);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -34680,7 +34785,7 @@
 	}
 
 /***/ },
-/* 23 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -34697,7 +34802,7 @@
 	};
 
 /***/ },
-/* 24 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34706,11 +34811,11 @@
 	    value: true
 	});
 	
-	var _checkout = __webpack_require__(25);
+	var _checkout = __webpack_require__(29);
 	
 	var _checkout2 = _interopRequireDefault(_checkout);
 	
-	var _checkout3 = __webpack_require__(26);
+	var _checkout3 = __webpack_require__(30);
 	
 	var _checkout4 = _interopRequireDefault(_checkout3);
 	
@@ -34857,19 +34962,19 @@
 	}
 
 /***/ },
-/* 25 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"checkout\">\n    <div class=\"cart-edit\" ng-if=\"!$ctrl.confirmCart\">\n        <h2>Ordering Online</h2>\n        <p>Due to the unpasturized nature of our product, we are only able to deliver to the Portland Metro Area and require a minimum of $50 for online purchases.</p>\n        <h2>Shopping Cart</h2>\n        \n        <div ng-if=\"$ctrl.cartEmpty\">\n            <p class=\"empty-cart\">There is nothing in your cart</p>\n            <a ui-sref=\"shop\">Keep shopping!</a>\n        </div>\n        \n        <div class=\"cart-table\" ng-if=\"!$ctrl.cartEmpty\">\n            <table>\n                <thead>\n                    <tr>\n                        <th>Product</th>\n                        <th>Price</th>\n                        <th colspan=\"2\">Quantity</th>\n                        <th></th>\n                        <th>Total</th>\n                    </tr>\n                </thead>\n\n                <tbody>\n                    <tr ng-repeat=\"item in $ctrl.cart.items\">\n                        <td>\n                            {{item.name}}\n                        </td>\n                        <td>\n                            ${{item.price}}.00\n                        </td>\n                        <td>\n                            <select ng-model=\"item.quantity\">\n                                <option ng-value=\"item.quantity\">\n                                    {{item.quantity}}\n                                </option>\n                                <option ng-value=\"number\" ng-repeat=\"number in $ctrl.selectArray\">\n                                    {{number}}\n                                </option>\n                            </select>\n                        </td>\n                        <td>\n                            <button ng-click=\"$ctrl.updateCart(item, item.quantity)\">Update</button>\n                        </td>\n                        <td>\n                            <span class=\"remove-item\" ng-click=\"$ctrl.removeItem(item)\">x remove</span>\n                        </td>\n                        <td class=\"total\">${{item.subTotal}}.00</td>\n                    </tr>\n                </tbody>\n\n                <tfoot>\n                    <tr>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td><span class=\"bold\">Total:</span></td>\n                        <td class=\"total\"> ${{$ctrl.total}}.00</td>\n                    </tr>\n                </tfoot>\n            </table>\n            <h3 ng-if=\"$ctrl.total < $ctrl.minPurchase\">Online purchases must be over ${{$ctrl.minPurchase}}.00</h3>\n            <div class=\"form-bottom\">\n                <a ui-sref=\"shop\">Keep shopping!</a>\n                <button class=\"confirm-cart\" ng-if=\"$ctrl.total > $ctrl.minPurchase\" ng-click=\"$ctrl.confirmCart = true; $ctrl.showAddressForm = true\">Confirm Cart</button>\n            </div>\n\n        </div>\n    </div>\n\n    <div class=\"cart\" ng-if=\"$ctrl.confirmCart\">\n        <h2>Your Order <a ng-click=\"$ctrl.confirmCart = false\">edit</a></h2>\n        <table>\n            <thead>\n                <th>Product</th>\n                <th></th>\n                <th>Quantity</th>\n                <th>Total</th>\n            </thead>\n            <tbody>\n                <tr ng-repeat=\"item in $ctrl.cart.items\">\n                    <td>{{item.name}}</td>\n                    <td>x</td>\n                    <td class=\"quant\">{{item.quantity}}</td>\n                    <td class=\"total\">${{item.price * item.quantity}}.00</td>\n                </tr>\n            </tbody>\n            <tfoot>\n                <td></td>\n                <td></td>\n                <td></td>\n                <td class=\"total\">\n                    <span class=\"bold\">Total:</span>${{$ctrl.total}}.00\n                </td>\n            </tfoot>\n        </table>\n        \n    </div>\n\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.showAddressForm && $ctrl.confirmCart\">\n        <h2>Delivery Info</h2>\n\n        <form name=\"address-form\" ng-submit=\"$ctrl.showPaymentDiv()\">\n            <h4>Name for order*</h4>\n            <input placeholder=\"first name\" ng-model=\"$ctrl.address.firstName\" required>\n            <input placeholder=\"last name\" ng-model=\"$ctrl.address.lastName\" required>\n            <h4>Email*</h4>\n            <input type=\"email\" placeholder=\"enter a valid email address\" ng-model=\"$ctrl.address.email\" required>\n            <input type=\"email\" placeholder=\"confirm email address\" ng-model=\"$ctrl.address.emailCheck\" required> \n            <p class=\"warning\" ng-if=\"$ctrl.emailWarning\">Make sure your email addresses are the same!!!!</p>\n            <h4>Adress for delivery*</h4>\n            <input placeholder=\"street line 1\" ng-model=\"$ctrl.address.line1\" required>\n            <input placeholder=\"street line 2\" ng-model=\"$ctrl.address.line2\">\n            <select name=\"city\" ng-model=\"$ctrl.address.city\" placeholder=\"city\" required>\n                <option value=\"\" disable selected>city</option>\n                <option ng-repeat=\"city in $ctrl.cityArray\" ng-value=\"city\" ng-required=\"required\">{{city}}</option>\n            </select>\n            <select name=\"state\" ng-model=\"$ctrl.address.state\" required>\n                <option value=\"\" disable selected>state</option>\n                <option value=\"Oregon\">Oregon</option>\n                <option value=\"Washington\">Washington</option>\n            </select>\n            <input name=\"zip\" placeholder=\"zip code\" ng-model=\"$ctrl.address.zip\" required>\n            <button type=\"submit\">Checkout</button>\n            <div ng-show=\"$ctrl.invalidAddress\">\n                Make sure you have filled out all of the required address fields!\n            </div>\n        </form>\n    </div>\n\n\n    <div class=\"payment\" ng-show=\"$ctrl.showPayment && !$ctrl.showAddressForm\">\n        <div class=\"address-table\">\n            <h2>Delivery Info <a ng-click=\"$ctrl.showAddressForm = true\">edit</a></h2>\n            <p><span class=\"bold\">name: </span>{{$ctrl.address.firstName}} {{$ctrl.address.lastName}}<p>\n            <p><span class=\"bold\">email for order: </span>{{$ctrl.address.email}}</p>\n            <h4>Address: </h4>\n            <p>{{$ctrl.address.line1}}</p>\n            <p>{{$ctrl.address.line2}}</p>\n            <p>{{$ctrl.address.city}}, {{$ctrl.address.state}} {{$ctrl.address.zip}}</p>\n        </div>\n\n\n        <h3>Payment Information</h3>\n        <form stripe-form=\"stripeCallback\" name=\"checkoutForm\">\n            <input ng-model=\"number\" placeholder=\"Card Number\" payments-format=\"card\" payments-validate=\"card\" name=\"card\">\n            <input ng-model=\"expiry\" placeholder=\"Expiration\" payments-formate=\"expiry\" payments-validate=\"expiry\" name=\"expiry\">\n            <input ng-model=\"cvc\" placeholder=\"CVC\" payments-format=\"cvc\" payments-validate=\"cvc\" name=\"cvc\">\n            <button type=\"submit\">Place Order!</button>\n        </form>\n\n        <div ng-show=\"invalidPayment\">\n            There was a problem processing your card. Make sure you entered all of your payment information correctly.\n        </div>\n    </div>\n</div>\n\n\n\n";
 
 /***/ },
-/* 26 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(27);
+	var content = __webpack_require__(31);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -34889,7 +34994,7 @@
 	}
 
 /***/ },
-/* 27 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -34903,7 +35008,7 @@
 
 
 /***/ },
-/* 28 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34912,11 +35017,11 @@
 	    value: true
 	});
 	
-	var _success = __webpack_require__(29);
+	var _success = __webpack_require__(33);
 	
 	var _success2 = _interopRequireDefault(_success);
 	
-	var _success3 = __webpack_require__(30);
+	var _success3 = __webpack_require__(34);
 	
 	var _success4 = _interopRequireDefault(_success3);
 	
@@ -34941,19 +35046,19 @@
 	}
 
 /***/ },
-/* 29 */
+/* 33 */
 /***/ function(module, exports) {
 
 	module.exports = "<!--TODO: make this a substate of checkout?-->\n<div class=\"container\" ng-class=\"$ctrl.styles.success\">   \n    <h2>Thank you for your order!</h2>\n    <p>You will recieve and email with your order summary. If you have any questions in the meantime, feel free to send us an email or call. <a ui-sref=\"home\">Back to home</a></p>\n</div>";
 
 /***/ },
-/* 30 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(31);
+	var content = __webpack_require__(35);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -34973,7 +35078,7 @@
 	}
 
 /***/ },
-/* 31 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -34989,7 +35094,7 @@
 	};
 
 /***/ },
-/* 32 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34998,11 +35103,11 @@
 	    value: true
 	});
 	
-	var _contact = __webpack_require__(33);
+	var _contact = __webpack_require__(37);
 	
 	var _contact2 = _interopRequireDefault(_contact);
 	
-	var _contact3 = __webpack_require__(34);
+	var _contact3 = __webpack_require__(38);
 	
 	var _contact4 = _interopRequireDefault(_contact3);
 	
@@ -35019,19 +35124,19 @@
 	}
 
 /***/ },
-/* 33 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = "<div ng-class=\"$ctrl.styles.contact\">\n    <h2>Contact</h2>\n    <p class=\"contact-info\">For any inquiries regarding deliveries, ordering online, or our farmers market schedule, feel free to send us an email or call. We look forward to hearing from you!</p>\n    <ul>\n        <li>\n            <p>email: <a href=\"mailto:youremail@email.com\">youremail@email.com</a><p>\n        </li>\n        <li>\n        <p>phone:<a href=\"tel:1-510-590-7431\"> (503)888-8888</a></p>\n        </li>\n        <li>\n            <p>social media:</p> \n        </li>\n        <li>\n            <p>\n                <a href=\"https://www.instagram.com/\"<span class=\"icon-instagram\"></span></a> \n                <a href=\"https://www.facebook.com\"<span class=\"icon-facebook2\"></span></a>\n            </p>\n        </li>\n    </ul>\n</div>\n";
 
 /***/ },
-/* 34 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(35);
+	var content = __webpack_require__(39);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35051,7 +35156,7 @@
 	}
 
 /***/ },
-/* 35 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35067,7 +35172,7 @@
 	};
 
 /***/ },
-/* 36 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35076,11 +35181,11 @@
 	    value: true
 	});
 	
-	var _footerContent = __webpack_require__(37);
+	var _footerContent = __webpack_require__(41);
 	
 	var _footerContent2 = _interopRequireDefault(_footerContent);
 	
-	var _footerContent3 = __webpack_require__(38);
+	var _footerContent3 = __webpack_require__(42);
 	
 	var _footerContent4 = _interopRequireDefault(_footerContent3);
 	
@@ -35094,19 +35199,19 @@
 	};
 
 /***/ },
-/* 37 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"footer-container clearfix\">\n     <!--<div class=\"footer-category\">\n        <h3>Shop</h3>\n        <ul>\n            <li>Buy Online</li>\n            <li>Buy in Person</li>\n        </ul>\n    </div>\n\n\n     <div class=\"footer-category\">\n        <h3>About</h3>\n        <ul>\n            <li>Our Juices</li>\n            <li>Our Mission</li>\n            <li>Our Customers</li>\n            <li>Our team</li>\n        </ul>\n    </div>\n\n\n     <div class=\"footer-category\">\n        <h3>Social Media</h3>\n        <ul>\n            <li>Instagram</li>\n            <li>Facebook</li>\n            <li>Twitter</li>\n        </ul>\n    </div>\n\n\n     <div class=\"footer-category\">\n        <h3>Contact</h3>\n        <ul>\n            <li>(XXX)XXX-XXXX</li>\n            <li>xxxxx@xxx.com</li>\n        </ul>\n    </div>-->\n    <div class=\"footer-contact\">\n        <ul>\n            <li><a href=\"tel:1-510-590-7431\">(503)888-8888</a></li>\n            <li><a href=\"mailto:wnickers@willamette.edu\">youremailgoeshere@email.com</a></li>\n            <li><span>&#169;2017 Earth House Juice Co.<span></li>\n        </ul>\n    </div>\n</div>";
 
 /***/ },
-/* 38 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(39);
+	var content = __webpack_require__(43);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35126,7 +35231,7 @@
 	}
 
 /***/ },
-/* 39 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35140,7 +35245,7 @@
 
 
 /***/ },
-/* 40 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35149,11 +35254,11 @@
 	    value: true
 	});
 	
-	var _headerContent = __webpack_require__(41);
+	var _headerContent = __webpack_require__(45);
 	
 	var _headerContent2 = _interopRequireDefault(_headerContent);
 	
-	var _headerContent3 = __webpack_require__(42);
+	var _headerContent3 = __webpack_require__(46);
 	
 	var _headerContent4 = _interopRequireDefault(_headerContent3);
 	
@@ -35183,19 +35288,19 @@
 	}
 
 /***/ },
-/* 41 */
+/* 45 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"header-container\" id=\"header-height\">\n    <div class=\"left\">\n        <h1 class=\"main-title\">Earth House</h1>\n            <nav-bar></nav-bar>\n        <div class=\"mobile-nav\" ng-show=\"$ctrl.nav\" ng-click=\"$ctrl.toggleNav()\">\n            <nav-bar></nav-bar>\n        </div>\n    </div>\n\n\n    <div class=\"right\">\n        <a ui-sref=\"checkout\" class=\"cart-icon\">\n            <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1489538579/cart-icon_zewzhg.png\">\n            <h5 class=\"total-items\">{{$ctrl.cart.totalItems}}</h5>\n        </a>\n        <div class=\"socials\">\n            <!--<a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>-->\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n        <div class=\"hamburger\">\n            <a ng-click=\"$ctrl.toggleNav()\">\n                <span class=\"icon-menu\"></span>\n            </a>\n        </div>\n    </div>\n</div>\n<div class=\"header-background\" ng-if=\"('about' | isState) || ('contact' | isState) || ('checkout' | isState) || ('success' | isState)\"></div>";
 
 /***/ },
-/* 42 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(43);
+	var content = __webpack_require__(47);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35215,7 +35320,7 @@
 	}
 
 /***/ },
-/* 43 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35229,7 +35334,7 @@
 
 
 /***/ },
-/* 44 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35238,11 +35343,11 @@
 	    value: true
 	});
 	
-	var _heroImage = __webpack_require__(45);
+	var _heroImage = __webpack_require__(49);
 	
 	var _heroImage2 = _interopRequireDefault(_heroImage);
 	
-	var _heroImage3 = __webpack_require__(46);
+	var _heroImage3 = __webpack_require__(50);
 	
 	var _heroImage4 = _interopRequireDefault(_heroImage3);
 	
@@ -35314,19 +35419,19 @@
 	}
 
 /***/ },
-/* 45 */
+/* 49 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"slider\">\n    <div ng-repeat=\"slide in $ctrl.slides\">\n        <img ng-hide=\"!$ctrl.isCurrIndex($index)\"\n            ng-src=\"{{slide.imgUrl}}\"\n             class=\"slide-image slide-animation \">\n         <div ng-if=\"$ctrl.isCurrIndex($index)\"\n            class=\"slide-text fade\">\n            <p><a ui-sref=\"shop\">{{$ctrl.currText}}</a></p>\n         </div>\n    </div>\n\n    <!--<a class=\"arrow next\" href=\"#\" ng-click=\"$ctrl.nextSlide()\"><span class=\"icon-arrow-right2\"></span></a>\n    <a class=\"arrow prev\" href=\"#\" ng-click=\"$ctrl.prevSlide()\"><span class=\"icon-arrow-left2\"></span></a>-->\n    \n    <nav class=\"slider-nav\">\n        <div class=\"wrapper\">\n            <ul class=\"dots\">\n                <li class=\"dot\" ng-repeat=\"slide in $ctrl.slides\">\n                    <a href=\"#\" \n                        ng-class=\"{'active': $ctrl.isCurrIndex($index)}\"\n                        ng-click=\"$ctrl.setCurrIndex($index)\"></a>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</div>\n\n\n";
 
 /***/ },
-/* 46 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(47);
+	var content = __webpack_require__(51);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35346,7 +35451,7 @@
 	}
 
 /***/ },
-/* 47 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35360,7 +35465,7 @@
 
 
 /***/ },
-/* 48 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35369,7 +35474,7 @@
 	    value: true
 	});
 	
-	var _home = __webpack_require__(49);
+	var _home = __webpack_require__(53);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
@@ -35381,13 +35486,13 @@
 	};
 
 /***/ },
-/* 49 */
+/* 53 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<hero-image></hero-image>\n<articles></articles>\n";
 
 /***/ },
-/* 50 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35396,11 +35501,11 @@
 	    value: true
 	});
 	
-	var _landing = __webpack_require__(51);
+	var _landing = __webpack_require__(55);
 	
 	var _landing2 = _interopRequireDefault(_landing);
 	
-	var _landing3 = __webpack_require__(52);
+	var _landing3 = __webpack_require__(56);
 	
 	var _landing4 = _interopRequireDefault(_landing3);
 	
@@ -35414,19 +35519,19 @@
 	};
 
 /***/ },
-/* 51 */
+/* 55 */
 /***/ function(module, exports) {
 
 	module.exports = "<img src=\"https://github.com/willnickerson/earth-house-juice/blob/master/blue-spread.jpeg?raw=true\">\n";
 
 /***/ },
-/* 52 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(53);
+	var content = __webpack_require__(57);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35446,7 +35551,7 @@
 	}
 
 /***/ },
-/* 53 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35460,7 +35565,7 @@
 
 
 /***/ },
-/* 54 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35469,11 +35574,11 @@
 	    value: true
 	});
 	
-	var _navBar = __webpack_require__(55);
+	var _navBar = __webpack_require__(59);
 	
 	var _navBar2 = _interopRequireDefault(_navBar);
 	
-	var _navBar3 = __webpack_require__(56);
+	var _navBar3 = __webpack_require__(60);
 	
 	var _navBar4 = _interopRequireDefault(_navBar3);
 	
@@ -35495,19 +35600,19 @@
 	}
 
 /***/ },
-/* 55 */
+/* 59 */
 /***/ function(module, exports) {
 
 	module.exports = "<nav class=\"site-navigation\">\n    <ul><li ng-class=\"$ctrl.styles.hamburger\"><span class=\"icon-cross\"></span></li>\n        <li ui-sref=\"home\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Home</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"shop\" ng-class=\"$ctrl.navVisibility\" class=\"link\"link>Shop</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref='about' ng-class=\"$ctrl.navVisibility\" class=\"link\">About</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"contact\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Contact</li>\n    </ul>\n</nav>";
 
 /***/ },
-/* 56 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(57);
+	var content = __webpack_require__(61);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35527,7 +35632,7 @@
 	}
 
 /***/ },
-/* 57 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35543,7 +35648,7 @@
 	};
 
 /***/ },
-/* 58 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35552,7 +35657,7 @@
 	    value: true
 	});
 	
-	var _all = __webpack_require__(59);
+	var _all = __webpack_require__(63);
 	
 	var _all2 = _interopRequireDefault(_all);
 	
@@ -35570,13 +35675,13 @@
 	};
 
 /***/ },
-/* 59 */
+/* 63 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"clearfix\">\n    <h2 class=\"item-header\">Our Juices</h2>\n    <!--<p class=\"item-text\"> Online store coming soon! In the meantime feel free to email us and place an order.</p>-->\n</div>\n<section class=\"items\">\n\n        <ul>\n            <li class=\"item\" ng-repeat=\"juice in $ctrl.juices\">\n                <img src=\"{{juice.imgUrl}}\"\n                    ui-sref=\"shop.item({\n                    id: juice._id})\">\n                <div class=\"item-info\">\n                    <h3 ui-sref=\"shop.item({\n                    id: juice._id})\">{{juice.name}}</h3>\n                    <p>${{juice.price}}.00</p>\n                    <select ng-model=\"juice.quantity\">\n                        <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                    </select>\n                    <button ng-click=\"$ctrl.addToCart(juice)\">Add to Cart</button>\n                    <p class=\"cart-message\" ng-if=\"juice.cartMessage\">{{juice.messageNum}} added to cart</p>\n                    <p class=\"cart-message\" ng-if=\"juice.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n                </div>\n            </li>\n        </ul>\n</section>";
 
 /***/ },
-/* 60 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35585,11 +35690,11 @@
 	    value: true
 	});
 	
-	var _item = __webpack_require__(61);
+	var _item = __webpack_require__(65);
 	
 	var _item2 = _interopRequireDefault(_item);
 	
-	var _item3 = __webpack_require__(62);
+	var _item3 = __webpack_require__(66);
 	
 	var _item4 = _interopRequireDefault(_item3);
 	
@@ -35622,19 +35727,19 @@
 	}
 
 /***/ },
-/* 61 */
+/* 65 */
 /***/ function(module, exports) {
 
 	module.exports = "<div ng-class=\"$ctrl.styles.item\" class=\"clearfix\">\n    <div class=\"description\">\n        <div ng-class=\"$ctrl.styles.header\" class=\"clearfix\">\n            <h2 class=\"item-name\">{{$ctrl.item.name}}</h2>\n            <form ng-class=\"$ctrl.styles.purchase\" ng-submit=\"$ctrl.addToCart($ctrl.item)\">\n                <p>price: ${{$ctrl.item.price}}.00</p>\n                <select ng-model=\"$ctrl.item.quantity\">\n                    <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                </select>\n                <button type=\"submit\">Add to Cart</button>\n                <p class=\"cart-message\" ng-if=\"$ctrl.item.cartMessage\">{{$ctrl.item.messageNum}} added to cart</p>\n                <p class=\"cart-message\" ng-if=\"$ctrl.item.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n            </form>\n        </div>\n        <p class=\"item-description\">{{$ctrl.item.description}} <a ui-sref=\"shop.all\">&larr;Back to all juices</a></p>    \n    </div>\n    <div class=\"item-img\">\n        <img src=\"{{$ctrl.item.imgUrl}}\">\n    </div>\n\n    <div ng-class=\"$ctrl.styles.ingredients\" class=\"clearfix\">\n        <h3>Ingredients</h3>\n        <div class=\"list\" ng-style=\"$ctrl.listHeight\">\n            <ul>\n                <li ng-repeat=\"ingredient in $ctrl.item.ingredients\">\n                    <img class=\"ingredient\" src=\"{{ingredient.imgUrl}}\">\n                    <p><span>{{ingredient.name}}. </span>{{ingredient.description}}</p>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n";
 
 /***/ },
-/* 62 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(63);
+	var content = __webpack_require__(67);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35654,7 +35759,7 @@
 	}
 
 /***/ },
-/* 63 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35673,7 +35778,7 @@
 	};
 
 /***/ },
-/* 64 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35682,11 +35787,11 @@
 	    value: true
 	});
 	
-	var _shopHead = __webpack_require__(65);
+	var _shopHead = __webpack_require__(69);
 	
 	var _shopHead2 = _interopRequireDefault(_shopHead);
 	
-	var _shopHead3 = __webpack_require__(66);
+	var _shopHead3 = __webpack_require__(70);
 	
 	var _shopHead4 = _interopRequireDefault(_shopHead3);
 	
@@ -35700,19 +35805,19 @@
 	};
 
 /***/ },
-/* 65 */
+/* 69 */
 /***/ function(module, exports) {
 
 	module.exports = "<!--<img ng-class=\"$ctrl.styles.banner-img\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\">-->\n";
 
 /***/ },
-/* 66 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(67);
+	var content = __webpack_require__(71);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35732,7 +35837,7 @@
 	}
 
 /***/ },
-/* 67 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35748,7 +35853,7 @@
 	};
 
 /***/ },
-/* 68 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35757,11 +35862,11 @@
 	    value: true
 	});
 	
-	var _shop = __webpack_require__(69);
+	var _shop = __webpack_require__(73);
 	
 	var _shop2 = _interopRequireDefault(_shop);
 	
-	var _shop3 = __webpack_require__(70);
+	var _shop3 = __webpack_require__(74);
 	
 	var _shop4 = _interopRequireDefault(_shop3);
 	
@@ -35839,19 +35944,19 @@
 	}
 
 /***/ },
-/* 69 */
+/* 73 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"image-text\">\n    <div class=\"text-box\">\n        <button ng-click=\"$ctrl.gotoItems()\">Check out Our Juices</button>\n    </div>\n    <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_south,h_2530,w_4096/v1482867018/earth%20house/blue-spread_ixxxfx.jpg\">\n</div>\n\n<div id=\"items\">\n    <ui-view autoscroll=\"$ctrl.hasSeenLanding\" name=\"main\" select-array=\"$ctrl.selectArray\" add-to-cart=\"$ctrl.addToCart\" quantity=\"$ctrl.quantity\" cart=\"$ctrl.cart\" goToItem=\"$ctrl.goToItem\"></ui-view>\n</div>\n\n<!-- TODO: work out some way to autoscroll when navigating from all items view to individual item view-->\n";
 
 /***/ },
-/* 70 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(71);
+	var content = __webpack_require__(75);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35871,7 +35976,7 @@
 	}
 
 /***/ },
-/* 71 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35885,7 +35990,7 @@
 
 
 /***/ },
-/* 72 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35908,7 +36013,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var context = __webpack_require__(73);
+	var context = __webpack_require__(77);
 	
 	var _module = _angular2.default.module('services', []);
 	
@@ -35920,14 +36025,14 @@
 	exports.default = _module.name;
 
 /***/ },
-/* 73 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./auth-service.js": 74,
-		"./juice-service.js": 75,
-		"./order-service.js": 76,
-		"./payment-service.js": 77
+		"./auth-service.js": 78,
+		"./juice-service.js": 79,
+		"./order-service.js": 80,
+		"./payment-service.js": 81
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -35940,11 +36045,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 73;
+	webpackContext.id = 77;
 
 
 /***/ },
-/* 74 */
+/* 78 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35967,7 +36072,7 @@
 	}
 
 /***/ },
-/* 75 */
+/* 79 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35994,7 +36099,7 @@
 	}
 
 /***/ },
-/* 76 */
+/* 80 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36008,19 +36113,45 @@
 	function orderService($http, apiUrl) {
 	    return {
 	        getOrders: function getOrders(token) {
-	            $http({
+	            return $http({
 	                method: 'GET',
 	                url: apiUrl + '/orders',
 	                headers: {
 	                    'Authorization': token
 	                }
+	            }).then(function (res) {
+	                console.log('in order service', res.data);
+	                return res.data;
+	            });
+	        },
+	        deleteOrder: function deleteOrder(id, token) {
+	            return $http({
+	                method: 'DELETE',
+	                url: apiUrl + '/orders/' + id,
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        updateOrder: function updateOrder(id, order, token) {
+	            return $http({
+	                method: 'PUT',
+	                url: apiUrl + '/orders/' + id,
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: order
+	            }).then(function (res) {
+	                return res.data;
 	            });
 	        }
 	    };
 	}
 
 /***/ },
-/* 77 */
+/* 81 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36049,13 +36180,13 @@
 	}
 
 /***/ },
-/* 78 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(79);
+	var content = __webpack_require__(83);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36075,7 +36206,7 @@
 	}
 
 /***/ },
-/* 79 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36089,7 +36220,7 @@
 
 
 /***/ },
-/* 80 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36100,23 +36231,23 @@
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	var core = __webpack_require__(81);
+	var core = __webpack_require__(85);
 	exports.core = core;
-	__export(__webpack_require__(81));
-	__export(__webpack_require__(137));
-	__export(__webpack_require__(139));
+	__export(__webpack_require__(85));
 	__export(__webpack_require__(141));
-	__webpack_require__(145);
-	__webpack_require__(146);
-	__webpack_require__(147);
-	__webpack_require__(148);
+	__export(__webpack_require__(143));
+	__export(__webpack_require__(145));
 	__webpack_require__(149);
+	__webpack_require__(150);
+	__webpack_require__(151);
+	__webpack_require__(152);
+	__webpack_require__(153);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = "ui.router";
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 81 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36127,21 +36258,21 @@
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(82));
-	__export(__webpack_require__(129));
-	__export(__webpack_require__(130));
-	__export(__webpack_require__(131));
-	__export(__webpack_require__(132));
+	__export(__webpack_require__(86));
 	__export(__webpack_require__(133));
 	__export(__webpack_require__(134));
 	__export(__webpack_require__(135));
-	__export(__webpack_require__(126));
-	__export(__webpack_require__(105));
 	__export(__webpack_require__(136));
+	__export(__webpack_require__(137));
+	__export(__webpack_require__(138));
+	__export(__webpack_require__(139));
+	__export(__webpack_require__(130));
+	__export(__webpack_require__(109));
+	__export(__webpack_require__(140));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 82 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36149,18 +36280,18 @@
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	/** @module common */ /** for typedoc */
-	__export(__webpack_require__(83));
-	__export(__webpack_require__(86));
 	__export(__webpack_require__(87));
-	__export(__webpack_require__(85));
-	__export(__webpack_require__(84));
-	__export(__webpack_require__(88));
+	__export(__webpack_require__(90));
+	__export(__webpack_require__(91));
 	__export(__webpack_require__(89));
+	__export(__webpack_require__(88));
 	__export(__webpack_require__(92));
+	__export(__webpack_require__(93));
+	__export(__webpack_require__(96));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 83 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36172,9 +36303,9 @@
 	 * @module common
 	 */ /** for typedoc */
 	"use strict";
-	var predicates_1 = __webpack_require__(84);
-	var hof_1 = __webpack_require__(85);
-	var coreservices_1 = __webpack_require__(86);
+	var predicates_1 = __webpack_require__(88);
+	var hof_1 = __webpack_require__(89);
+	var coreservices_1 = __webpack_require__(90);
 	var w = typeof window === 'undefined' ? {} : window;
 	var angular = w.angular || {};
 	exports.fromJson = angular.fromJson || JSON.parse.bind(JSON);
@@ -36782,7 +36913,7 @@
 	//# sourceMappingURL=common.js.map
 
 /***/ },
-/* 84 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36793,7 +36924,7 @@
 	 *
 	 * @module common_predicates
 	 */ /** */
-	var hof_1 = __webpack_require__(85);
+	var hof_1 = __webpack_require__(89);
 	var toStr = Object.prototype.toString;
 	var tis = function (t) { return function (x) { return typeof (x) === t; }; };
 	exports.isUndefined = tis('undefined');
@@ -36830,7 +36961,7 @@
 	//# sourceMappingURL=predicates.js.map
 
 /***/ },
-/* 85 */
+/* 89 */
 /***/ function(module, exports) {
 
 	/**
@@ -37079,7 +37210,7 @@
 	//# sourceMappingURL=hof.js.map
 
 /***/ },
-/* 86 */
+/* 90 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -37094,7 +37225,7 @@
 	//# sourceMappingURL=coreservices.js.map
 
 /***/ },
-/* 87 */
+/* 91 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -37183,7 +37314,7 @@
 	//# sourceMappingURL=glob.js.map
 
 /***/ },
-/* 88 */
+/* 92 */
 /***/ function(module, exports) {
 
 	/**
@@ -37233,7 +37364,7 @@
 	//# sourceMappingURL=queue.js.map
 
 /***/ },
-/* 89 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -37244,12 +37375,12 @@
 	 * @module common_strings
 	 */ /** */
 	"use strict";
-	var predicates_1 = __webpack_require__(84);
-	var rejectFactory_1 = __webpack_require__(90);
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
-	var transition_1 = __webpack_require__(91);
-	var resolvable_1 = __webpack_require__(102);
+	var predicates_1 = __webpack_require__(88);
+	var rejectFactory_1 = __webpack_require__(94);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
+	var transition_1 = __webpack_require__(95);
+	var resolvable_1 = __webpack_require__(106);
 	/**
 	 * Returns a string shortened to a maximum length
 	 *
@@ -37389,7 +37520,7 @@
 	//# sourceMappingURL=strings.js.map
 
 /***/ },
-/* 90 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -37397,8 +37528,8 @@
 	 * @module transition
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(83);
-	var strings_1 = __webpack_require__(89);
+	var common_1 = __webpack_require__(87);
+	var strings_1 = __webpack_require__(93);
 	var RejectType;
 	(function (RejectType) {
 	    RejectType[RejectType["SUPERSEDED"] = 2] = "SUPERSEDED";
@@ -37468,27 +37599,27 @@
 	//# sourceMappingURL=rejectFactory.js.map
 
 /***/ },
-/* 91 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var trace_1 = __webpack_require__(92);
-	var coreservices_1 = __webpack_require__(86);
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var hof_1 = __webpack_require__(85);
-	var interface_1 = __webpack_require__(93);
-	var transitionHook_1 = __webpack_require__(94);
-	var hookRegistry_1 = __webpack_require__(96);
-	var hookBuilder_1 = __webpack_require__(97);
-	var node_1 = __webpack_require__(98);
-	var pathFactory_1 = __webpack_require__(101);
-	var targetState_1 = __webpack_require__(95);
-	var param_1 = __webpack_require__(99);
-	var resolvable_1 = __webpack_require__(102);
-	var rejectFactory_1 = __webpack_require__(90);
-	var resolveContext_1 = __webpack_require__(103);
-	var router_1 = __webpack_require__(105);
+	var trace_1 = __webpack_require__(96);
+	var coreservices_1 = __webpack_require__(90);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var hof_1 = __webpack_require__(89);
+	var interface_1 = __webpack_require__(97);
+	var transitionHook_1 = __webpack_require__(98);
+	var hookRegistry_1 = __webpack_require__(100);
+	var hookBuilder_1 = __webpack_require__(101);
+	var node_1 = __webpack_require__(102);
+	var pathFactory_1 = __webpack_require__(105);
+	var targetState_1 = __webpack_require__(99);
+	var param_1 = __webpack_require__(103);
+	var resolvable_1 = __webpack_require__(106);
+	var rejectFactory_1 = __webpack_require__(94);
+	var resolveContext_1 = __webpack_require__(107);
+	var router_1 = __webpack_require__(109);
 	/** @hidden */
 	var stateSelf = hof_1.prop("self");
 	/**
@@ -38081,7 +38212,7 @@
 	//# sourceMappingURL=transition.js.map
 
 /***/ },
-/* 92 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38120,9 +38251,9 @@
 	 * @coreapi
 	 * @module trace
 	 */ /** for typedoc */
-	var hof_1 = __webpack_require__(85);
-	var predicates_1 = __webpack_require__(84);
-	var strings_1 = __webpack_require__(89);
+	var hof_1 = __webpack_require__(89);
+	var predicates_1 = __webpack_require__(88);
+	var strings_1 = __webpack_require__(93);
 	/** @hidden */
 	function uiViewString(viewData) {
 	    if (!viewData)
@@ -38332,7 +38463,7 @@
 	//# sourceMappingURL=trace.js.map
 
 /***/ },
-/* 93 */
+/* 97 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38352,18 +38483,18 @@
 	//# sourceMappingURL=interface.js.map
 
 /***/ },
-/* 94 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var common_1 = __webpack_require__(83);
-	var strings_1 = __webpack_require__(89);
-	var predicates_1 = __webpack_require__(84);
-	var hof_1 = __webpack_require__(85);
-	var trace_1 = __webpack_require__(92);
-	var coreservices_1 = __webpack_require__(86);
-	var rejectFactory_1 = __webpack_require__(90);
-	var targetState_1 = __webpack_require__(95);
+	var common_1 = __webpack_require__(87);
+	var strings_1 = __webpack_require__(93);
+	var predicates_1 = __webpack_require__(88);
+	var hof_1 = __webpack_require__(89);
+	var trace_1 = __webpack_require__(96);
+	var coreservices_1 = __webpack_require__(90);
+	var rejectFactory_1 = __webpack_require__(94);
+	var targetState_1 = __webpack_require__(99);
 	var defaultOptions = {
 	    current: common_1.noop,
 	    transition: null,
@@ -38503,7 +38634,7 @@
 	//# sourceMappingURL=transitionHook.js.map
 
 /***/ },
-/* 95 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -38511,8 +38642,8 @@
 	 * @module state
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
 	/**
 	 * Encapsulate the target (destination) state/params/options of a [[Transition]].
 	 *
@@ -38621,7 +38752,7 @@
 	//# sourceMappingURL=targetState.js.map
 
 /***/ },
-/* 96 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38629,10 +38760,10 @@
 	 * @coreapi
 	 * @module transition
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var interface_1 = __webpack_require__(93); // has or is using
-	var glob_1 = __webpack_require__(87);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var interface_1 = __webpack_require__(97); // has or is using
+	var glob_1 = __webpack_require__(91);
 	/**
 	 * Determines if the given state matches the matchCriteria
 	 *
@@ -38766,7 +38897,7 @@
 	//# sourceMappingURL=hookRegistry.js.map
 
 /***/ },
-/* 97 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -38774,10 +38905,10 @@
 	 * @module transition
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var interface_1 = __webpack_require__(93);
-	var transitionHook_1 = __webpack_require__(94);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var interface_1 = __webpack_require__(97);
+	var transitionHook_1 = __webpack_require__(98);
 	/**
 	 * This class returns applicable TransitionHooks for a specific Transition instance.
 	 *
@@ -38891,14 +39022,14 @@
 	//# sourceMappingURL=hookBuilder.js.map
 
 /***/ },
-/* 98 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module path */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
-	var param_1 = __webpack_require__(99);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
+	var param_1 = __webpack_require__(103);
 	/**
 	 * A node in a [[TreeChanges]] path
 	 *
@@ -38981,7 +39112,7 @@
 	//# sourceMappingURL=node.js.map
 
 /***/ },
-/* 99 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38989,11 +39120,11 @@
 	 * @internalapi
 	 * @module params
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
-	var predicates_1 = __webpack_require__(84);
-	var coreservices_1 = __webpack_require__(86);
-	var paramType_1 = __webpack_require__(100);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
+	var predicates_1 = __webpack_require__(88);
+	var coreservices_1 = __webpack_require__(90);
+	var paramType_1 = __webpack_require__(104);
 	var hasOwn = Object.prototype.hasOwnProperty;
 	var isShorthand = function (cfg) {
 	    return ["value", "type", "squash", "array", "dynamic"].filter(hasOwn.bind(cfg || {})).length === 0;
@@ -39159,13 +39290,13 @@
 	//# sourceMappingURL=param.js.map
 
 /***/ },
-/* 100 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module params */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
 	/**
 	 * An internal class which implements [[ParamTypeDefinition]].
 	 *
@@ -39301,15 +39432,15 @@
 	//# sourceMappingURL=paramType.js.map
 
 /***/ },
-/* 101 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @module path */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
-	var targetState_1 = __webpack_require__(95);
-	var node_1 = __webpack_require__(98);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
+	var targetState_1 = __webpack_require__(99);
+	var node_1 = __webpack_require__(102);
 	/**
 	 * This class contains functions which convert TargetStates, Nodes and paths from one type to another.
 	 */
@@ -39439,7 +39570,7 @@
 	//# sourceMappingURL=pathFactory.js.map
 
 /***/ },
-/* 102 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39447,11 +39578,11 @@
 	 * @coreapi
 	 * @module resolve
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var coreservices_1 = __webpack_require__(86);
-	var trace_1 = __webpack_require__(92);
-	var strings_1 = __webpack_require__(89);
-	var predicates_1 = __webpack_require__(84);
+	var common_1 = __webpack_require__(87);
+	var coreservices_1 = __webpack_require__(90);
+	var trace_1 = __webpack_require__(96);
+	var strings_1 = __webpack_require__(93);
+	var predicates_1 = __webpack_require__(88);
 	// TODO: explicitly make this user configurable
 	exports.defaultResolvePolicy = {
 	    when: "LAZY",
@@ -39576,20 +39707,20 @@
 	//# sourceMappingURL=resolvable.js.map
 
 /***/ },
-/* 103 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module resolve */
 	/** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
-	var trace_1 = __webpack_require__(92);
-	var coreservices_1 = __webpack_require__(86);
-	var interface_1 = __webpack_require__(104);
-	var resolvable_1 = __webpack_require__(102);
-	var pathFactory_1 = __webpack_require__(101);
-	var strings_1 = __webpack_require__(89);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
+	var trace_1 = __webpack_require__(96);
+	var coreservices_1 = __webpack_require__(90);
+	var interface_1 = __webpack_require__(108);
+	var resolvable_1 = __webpack_require__(106);
+	var pathFactory_1 = __webpack_require__(105);
+	var strings_1 = __webpack_require__(93);
 	var when = interface_1.resolvePolicies.when;
 	var ALL_WHENS = [when.EAGER, when.LAZY];
 	var EAGER_WHENS = [when.EAGER];
@@ -39780,7 +39911,7 @@
 	//# sourceMappingURL=resolveContext.js.map
 
 /***/ },
-/* 104 */
+/* 108 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39799,7 +39930,7 @@
 	//# sourceMappingURL=interface.js.map
 
 /***/ },
-/* 105 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39807,16 +39938,16 @@
 	 * @coreapi
 	 * @module core
 	 */ /** */
-	var urlMatcherFactory_1 = __webpack_require__(106);
-	var urlRouter_1 = __webpack_require__(109);
-	var transitionService_1 = __webpack_require__(112);
-	var view_1 = __webpack_require__(120);
-	var stateRegistry_1 = __webpack_require__(121);
-	var stateService_1 = __webpack_require__(125);
-	var globals_1 = __webpack_require__(126);
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var urlService_1 = __webpack_require__(128);
+	var urlMatcherFactory_1 = __webpack_require__(110);
+	var urlRouter_1 = __webpack_require__(113);
+	var transitionService_1 = __webpack_require__(116);
+	var view_1 = __webpack_require__(124);
+	var stateRegistry_1 = __webpack_require__(125);
+	var stateService_1 = __webpack_require__(129);
+	var globals_1 = __webpack_require__(130);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var urlService_1 = __webpack_require__(132);
 	/** @hidden */
 	var _routerInstance = 0;
 	/**
@@ -39904,7 +40035,7 @@
 	//# sourceMappingURL=router.js.map
 
 /***/ },
-/* 106 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39912,11 +40043,11 @@
 	 * @internalapi
 	 * @module url
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var urlMatcher_1 = __webpack_require__(107);
-	var param_1 = __webpack_require__(99);
-	var paramTypes_1 = __webpack_require__(108);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var urlMatcher_1 = __webpack_require__(111);
+	var param_1 = __webpack_require__(103);
+	var paramTypes_1 = __webpack_require__(112);
 	/**
 	 * Factory for [[UrlMatcher]] instances.
 	 *
@@ -40035,7 +40166,7 @@
 	//# sourceMappingURL=urlMatcherFactory.js.map
 
 /***/ },
-/* 107 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40043,11 +40174,11 @@
 	 * @coreapi
 	 * @module url
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
-	var predicates_1 = __webpack_require__(84);
-	var param_1 = __webpack_require__(99);
-	var strings_1 = __webpack_require__(89);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
+	var predicates_1 = __webpack_require__(88);
+	var param_1 = __webpack_require__(103);
+	var strings_1 = __webpack_require__(93);
 	/** @hidden */
 	function quoteRegExp(string, param) {
 	    var surroundPattern = ['', ''], result = string.replace(/[\\\[\]\^$*+?.()|{}]/g, "\\$&");
@@ -40512,7 +40643,7 @@
 	//# sourceMappingURL=urlMatcher.js.map
 
 /***/ },
-/* 108 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40520,11 +40651,11 @@
 	 * @coreapi
 	 * @module params
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var hof_1 = __webpack_require__(85);
-	var coreservices_1 = __webpack_require__(86);
-	var paramType_1 = __webpack_require__(100);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var hof_1 = __webpack_require__(89);
+	var coreservices_1 = __webpack_require__(90);
+	var paramType_1 = __webpack_require__(104);
 	/**
 	 * A registry for parameter types.
 	 *
@@ -40671,7 +40802,7 @@
 	//# sourceMappingURL=paramTypes.js.map
 
 /***/ },
-/* 109 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40680,12 +40811,12 @@
 	 * @module url
 	 */
 	/** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var urlMatcher_1 = __webpack_require__(107);
-	var hof_1 = __webpack_require__(85);
-	var urlRule_1 = __webpack_require__(110);
-	var targetState_1 = __webpack_require__(95);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var urlMatcher_1 = __webpack_require__(111);
+	var hof_1 = __webpack_require__(89);
+	var urlRule_1 = __webpack_require__(114);
+	var targetState_1 = __webpack_require__(99);
 	/** @hidden */
 	function appendBasePath(url, isHtml5, absolute, baseHref) {
 	    if (baseHref === '/')
@@ -40920,7 +41051,7 @@
 	//# sourceMappingURL=urlRouter.js.map
 
 /***/ },
-/* 110 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40928,11 +41059,11 @@
 	 * @coreapi
 	 * @module url
 	 */ /** */
-	var urlMatcher_1 = __webpack_require__(107);
-	var predicates_1 = __webpack_require__(84);
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
-	var stateObject_1 = __webpack_require__(111);
+	var urlMatcher_1 = __webpack_require__(111);
+	var predicates_1 = __webpack_require__(88);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
+	var stateObject_1 = __webpack_require__(115);
 	/**
 	 * Creates a [[UrlRule]]
 	 *
@@ -41134,7 +41265,7 @@
 	//# sourceMappingURL=urlRule.js.map
 
 /***/ },
-/* 111 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41142,8 +41273,8 @@
 	 * @module state
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
 	/**
 	 * Internal representation of a UI-Router state.
 	 *
@@ -41228,7 +41359,7 @@
 	//# sourceMappingURL=stateObject.js.map
 
 /***/ },
-/* 112 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41236,20 +41367,20 @@
 	 * @coreapi
 	 * @module transition
 	 */ /** for typedoc */
-	var interface_1 = __webpack_require__(93);
-	var transition_1 = __webpack_require__(91);
-	var hookRegistry_1 = __webpack_require__(96);
-	var resolve_1 = __webpack_require__(113);
-	var views_1 = __webpack_require__(114);
-	var url_1 = __webpack_require__(115);
-	var redirectTo_1 = __webpack_require__(116);
-	var onEnterExitRetain_1 = __webpack_require__(117);
-	var lazyLoad_1 = __webpack_require__(118);
-	var transitionEventType_1 = __webpack_require__(119);
-	var transitionHook_1 = __webpack_require__(94);
-	var predicates_1 = __webpack_require__(84);
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
+	var interface_1 = __webpack_require__(97);
+	var transition_1 = __webpack_require__(95);
+	var hookRegistry_1 = __webpack_require__(100);
+	var resolve_1 = __webpack_require__(117);
+	var views_1 = __webpack_require__(118);
+	var url_1 = __webpack_require__(119);
+	var redirectTo_1 = __webpack_require__(120);
+	var onEnterExitRetain_1 = __webpack_require__(121);
+	var lazyLoad_1 = __webpack_require__(122);
+	var transitionEventType_1 = __webpack_require__(123);
+	var transitionHook_1 = __webpack_require__(98);
+	var predicates_1 = __webpack_require__(88);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
 	/**
 	 * The default [[Transition]] options.
 	 *
@@ -41469,14 +41600,14 @@
 	//# sourceMappingURL=transitionService.js.map
 
 /***/ },
-/* 113 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module hooks */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var resolveContext_1 = __webpack_require__(103);
-	var hof_1 = __webpack_require__(85);
+	var common_1 = __webpack_require__(87);
+	var resolveContext_1 = __webpack_require__(107);
+	var hof_1 = __webpack_require__(89);
 	/**
 	 * A [[TransitionHookFn]] which resolves all EAGER Resolvables in the To Path
 	 *
@@ -41515,13 +41646,13 @@
 	//# sourceMappingURL=resolve.js.map
 
 /***/ },
-/* 114 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module hooks */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var coreservices_1 = __webpack_require__(86);
+	var common_1 = __webpack_require__(87);
+	var coreservices_1 = __webpack_require__(90);
 	/**
 	 * A [[TransitionHookFn]] which waits for the views to load
 	 *
@@ -41566,7 +41697,7 @@
 	//# sourceMappingURL=views.js.map
 
 /***/ },
-/* 115 */
+/* 119 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -41595,14 +41726,14 @@
 	//# sourceMappingURL=url.js.map
 
 /***/ },
-/* 116 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module hooks */ /** */
-	var predicates_1 = __webpack_require__(84);
-	var coreservices_1 = __webpack_require__(86);
-	var targetState_1 = __webpack_require__(95);
+	var predicates_1 = __webpack_require__(88);
+	var coreservices_1 = __webpack_require__(90);
+	var targetState_1 = __webpack_require__(99);
 	/**
 	 * A [[TransitionHookFn]] that redirects to a different state or params
 	 *
@@ -41636,7 +41767,7 @@
 	//# sourceMappingURL=redirectTo.js.map
 
 /***/ },
-/* 117 */
+/* 121 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -41696,11 +41827,11 @@
 	//# sourceMappingURL=onEnterExitRetain.js.map
 
 /***/ },
-/* 118 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var coreservices_1 = __webpack_require__(86);
+	var coreservices_1 = __webpack_require__(90);
 	/**
 	 * A [[TransitionHookFn]] that performs lazy loading
 	 *
@@ -41797,11 +41928,11 @@
 	//# sourceMappingURL=lazyLoad.js.map
 
 /***/ },
-/* 119 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var transitionHook_1 = __webpack_require__(94);
+	var transitionHook_1 = __webpack_require__(98);
 	/**
 	 * This class defines a type of hook, such as `onBefore` or `onEnter`.
 	 * Plugins can define custom hook types, such as sticky states does for `onInactive`.
@@ -41829,7 +41960,7 @@
 	//# sourceMappingURL=transitionEventType.js.map
 
 /***/ },
-/* 120 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41837,10 +41968,10 @@
 	 * @coreapi
 	 * @module view
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
-	var predicates_1 = __webpack_require__(84);
-	var trace_1 = __webpack_require__(92);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
+	var predicates_1 = __webpack_require__(88);
+	var trace_1 = __webpack_require__(96);
 	/**
 	 * The View service
 	 *
@@ -42102,7 +42233,7 @@
 	//# sourceMappingURL=view.js.map
 
 /***/ },
-/* 121 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42110,11 +42241,11 @@
 	 * @module state
 	 */ /** for typedoc */
 	"use strict";
-	var stateMatcher_1 = __webpack_require__(122);
-	var stateBuilder_1 = __webpack_require__(123);
-	var stateQueueManager_1 = __webpack_require__(124);
-	var common_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(85);
+	var stateMatcher_1 = __webpack_require__(126);
+	var stateBuilder_1 = __webpack_require__(127);
+	var stateQueueManager_1 = __webpack_require__(128);
+	var common_1 = __webpack_require__(87);
+	var hof_1 = __webpack_require__(89);
 	var StateRegistry = (function () {
 	    /** @internalapi */
 	    function StateRegistry(_router) {
@@ -42263,14 +42394,14 @@
 	//# sourceMappingURL=stateRegistry.js.map
 
 /***/ },
-/* 122 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module state */ /** for typedoc */
-	var predicates_1 = __webpack_require__(84);
-	var glob_1 = __webpack_require__(87);
-	var common_1 = __webpack_require__(83);
+	var predicates_1 = __webpack_require__(88);
+	var glob_1 = __webpack_require__(91);
+	var common_1 = __webpack_require__(87);
 	var StateMatcher = (function () {
 	    function StateMatcher(_states) {
 	        this._states = _states;
@@ -42327,17 +42458,17 @@
 	//# sourceMappingURL=stateMatcher.js.map
 
 /***/ },
-/* 123 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module state */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var strings_1 = __webpack_require__(89);
-	var hof_1 = __webpack_require__(85);
-	var resolvable_1 = __webpack_require__(102);
-	var coreservices_1 = __webpack_require__(86);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var strings_1 = __webpack_require__(93);
+	var hof_1 = __webpack_require__(89);
+	var resolvable_1 = __webpack_require__(106);
+	var coreservices_1 = __webpack_require__(90);
 	var parseUrl = function (url) {
 	    if (!predicates_1.isString(url))
 	        return false;
@@ -42605,14 +42736,14 @@
 	//# sourceMappingURL=stateBuilder.js.map
 
 /***/ },
-/* 124 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module state */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var stateObject_1 = __webpack_require__(111);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var stateObject_1 = __webpack_require__(115);
 	/** @internalapi */
 	var StateQueueManager = (function () {
 	    function StateQueueManager($registry, $urlRouter, states, builder, listeners) {
@@ -42698,7 +42829,7 @@
 	//# sourceMappingURL=stateQueueManager.js.map
 
 /***/ },
-/* 125 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42706,20 +42837,20 @@
 	 * @coreapi
 	 * @module state
 	 */ /** */
-	var common_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(84);
-	var queue_1 = __webpack_require__(88);
-	var coreservices_1 = __webpack_require__(86);
-	var pathFactory_1 = __webpack_require__(101);
-	var node_1 = __webpack_require__(98);
-	var transitionService_1 = __webpack_require__(112);
-	var rejectFactory_1 = __webpack_require__(90);
-	var targetState_1 = __webpack_require__(95);
-	var param_1 = __webpack_require__(99);
-	var glob_1 = __webpack_require__(87);
-	var resolveContext_1 = __webpack_require__(103);
-	var lazyLoad_1 = __webpack_require__(118);
-	var hof_1 = __webpack_require__(85);
+	var common_1 = __webpack_require__(87);
+	var predicates_1 = __webpack_require__(88);
+	var queue_1 = __webpack_require__(92);
+	var coreservices_1 = __webpack_require__(90);
+	var pathFactory_1 = __webpack_require__(105);
+	var node_1 = __webpack_require__(102);
+	var transitionService_1 = __webpack_require__(116);
+	var rejectFactory_1 = __webpack_require__(94);
+	var targetState_1 = __webpack_require__(99);
+	var param_1 = __webpack_require__(103);
+	var glob_1 = __webpack_require__(91);
+	var resolveContext_1 = __webpack_require__(107);
+	var lazyLoad_1 = __webpack_require__(122);
+	var hof_1 = __webpack_require__(89);
 	/**
 	 * Provides state related service functions
 	 *
@@ -43289,7 +43420,7 @@
 	//# sourceMappingURL=stateService.js.map
 
 /***/ },
-/* 126 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43297,9 +43428,9 @@
 	 * @coreapi
 	 * @module core
 	 */ /** */
-	var stateParams_1 = __webpack_require__(127);
-	var queue_1 = __webpack_require__(88);
-	var common_1 = __webpack_require__(83);
+	var stateParams_1 = __webpack_require__(131);
+	var queue_1 = __webpack_require__(92);
+	var common_1 = __webpack_require__(87);
 	/**
 	 * Global mutable state
 	 */
@@ -43331,12 +43462,12 @@
 	//# sourceMappingURL=globals.js.map
 
 /***/ },
-/* 127 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module params */ /** for typedoc */
-	var common_1 = __webpack_require__(83);
+	var common_1 = __webpack_require__(87);
 	var StateParams = (function () {
 	    function StateParams(params) {
 	        if (params === void 0) { params = {}; }
@@ -43374,7 +43505,7 @@
 	//# sourceMappingURL=stateParams.js.map
 
 /***/ },
-/* 128 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -43382,8 +43513,8 @@
 	 * @module url
 	 */ /** */
 	"use strict";
-	var coreservices_1 = __webpack_require__(86);
-	var common_1 = __webpack_require__(83);
+	var coreservices_1 = __webpack_require__(90);
+	var common_1 = __webpack_require__(87);
 	/** @hidden */
 	var makeStub = function (keys) {
 	    return keys.reduce(function (acc, key) { return (acc[key] = coreservices_1.notImplemented(key), acc); }, { dispose: common_1.noop });
@@ -43458,21 +43589,21 @@
 	//# sourceMappingURL=urlService.js.map
 
 /***/ },
-/* 129 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(99));
-	__export(__webpack_require__(108));
-	__export(__webpack_require__(127));
-	__export(__webpack_require__(100));
+	__export(__webpack_require__(103));
+	__export(__webpack_require__(112));
+	__export(__webpack_require__(131));
+	__export(__webpack_require__(104));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 130 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43480,12 +43611,12 @@
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	/** @module path */ /** for typedoc */
-	__export(__webpack_require__(98));
-	__export(__webpack_require__(101));
+	__export(__webpack_require__(102));
+	__export(__webpack_require__(105));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 131 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43493,30 +43624,30 @@
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	/** @module resolve */ /** for typedoc */
-	__export(__webpack_require__(104));
-	__export(__webpack_require__(102));
-	__export(__webpack_require__(103));
+	__export(__webpack_require__(108));
+	__export(__webpack_require__(106));
+	__export(__webpack_require__(107));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 132 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(123));
-	__export(__webpack_require__(111));
-	__export(__webpack_require__(122));
-	__export(__webpack_require__(124));
-	__export(__webpack_require__(121));
+	__export(__webpack_require__(127));
+	__export(__webpack_require__(115));
+	__export(__webpack_require__(126));
+	__export(__webpack_require__(128));
 	__export(__webpack_require__(125));
-	__export(__webpack_require__(95));
+	__export(__webpack_require__(129));
+	__export(__webpack_require__(99));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 133 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43535,44 +43666,44 @@
 	 * @preferred
 	 * @module transition
 	 */ /** for typedoc */
-	__export(__webpack_require__(93));
 	__export(__webpack_require__(97));
-	__export(__webpack_require__(96));
-	__export(__webpack_require__(90));
-	__export(__webpack_require__(91));
+	__export(__webpack_require__(101));
+	__export(__webpack_require__(100));
 	__export(__webpack_require__(94));
-	__export(__webpack_require__(119));
-	__export(__webpack_require__(112));
+	__export(__webpack_require__(95));
+	__export(__webpack_require__(98));
+	__export(__webpack_require__(123));
+	__export(__webpack_require__(116));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 134 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(107));
-	__export(__webpack_require__(106));
-	__export(__webpack_require__(109));
+	__export(__webpack_require__(111));
 	__export(__webpack_require__(110));
-	__export(__webpack_require__(128));
+	__export(__webpack_require__(113));
+	__export(__webpack_require__(114));
+	__export(__webpack_require__(132));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 135 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(120));
+	__export(__webpack_require__(124));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 136 */
+/* 140 */
 /***/ function(module, exports) {
 
 	/**
@@ -43596,7 +43727,7 @@
 	//# sourceMappingURL=interface.js.map
 
 /***/ },
-/* 137 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43611,14 +43742,14 @@
 	 * @preferred
 	 */
 	/** for typedoc */
-	var angular_1 = __webpack_require__(138);
-	var ui_router_core_1 = __webpack_require__(81);
-	var views_1 = __webpack_require__(139);
-	var templateFactory_1 = __webpack_require__(140);
-	var stateProvider_1 = __webpack_require__(141);
-	var onEnterExitRetain_1 = __webpack_require__(142);
-	var locationServices_1 = __webpack_require__(143);
-	var urlRouterProvider_1 = __webpack_require__(144);
+	var angular_1 = __webpack_require__(142);
+	var ui_router_core_1 = __webpack_require__(85);
+	var views_1 = __webpack_require__(143);
+	var templateFactory_1 = __webpack_require__(144);
+	var stateProvider_1 = __webpack_require__(145);
+	var onEnterExitRetain_1 = __webpack_require__(146);
+	var locationServices_1 = __webpack_require__(147);
+	var urlRouterProvider_1 = __webpack_require__(148);
 	angular_1.ng.module("ui.router.angular1", []);
 	var mod_init = angular_1.ng.module('ui.router.init', []);
 	var mod_util = angular_1.ng.module('ui.router.util', ['ng', 'ui.router.init']);
@@ -43715,7 +43846,7 @@
 	//# sourceMappingURL=services.js.map
 
 /***/ },
-/* 138 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43725,11 +43856,11 @@
 	//# sourceMappingURL=angular.js.map
 
 /***/ },
-/* 139 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ui_router_core_1 = __webpack_require__(81);
+	var ui_router_core_1 = __webpack_require__(85);
 	function getNg1ViewConfigFactory() {
 	    var templateFactory = null;
 	    return function (path, view) {
@@ -43826,14 +43957,14 @@
 	//# sourceMappingURL=views.js.map
 
 /***/ },
-/* 140 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module view */
 	/** for typedoc */
-	var angular_1 = __webpack_require__(138);
-	var ui_router_core_1 = __webpack_require__(81);
+	var angular_1 = __webpack_require__(142);
+	var ui_router_core_1 = __webpack_require__(85);
 	/**
 	 * Service which manages loading of templates from a ViewConfig.
 	 */
@@ -44017,12 +44148,12 @@
 	//# sourceMappingURL=templateFactory.js.map
 
 /***/ },
-/* 141 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module ng1 */ /** for typedoc */
-	var ui_router_core_1 = __webpack_require__(81);
+	var ui_router_core_1 = __webpack_require__(85);
 	/**
 	 * @ngdoc object
 	 * @name ui.router.state.$stateProvider
@@ -44168,13 +44299,13 @@
 	//# sourceMappingURL=stateProvider.js.map
 
 /***/ },
-/* 142 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module ng1 */ /** */
-	var ui_router_core_1 = __webpack_require__(81);
-	var services_1 = __webpack_require__(137);
+	var ui_router_core_1 = __webpack_require__(85);
+	var services_1 = __webpack_require__(141);
 	/**
 	 * This is a [[StateBuilder.builder]] function for angular1 `onEnter`, `onExit`,
 	 * `onRetain` callback hooks on a [[Ng1StateDeclaration]].
@@ -44197,11 +44328,11 @@
 	//# sourceMappingURL=onEnterExitRetain.js.map
 
 /***/ },
-/* 143 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ui_router_core_1 = __webpack_require__(81);
+	var ui_router_core_1 = __webpack_require__(85);
 	/**
 	 * Implements UI-Router LocationServices and LocationConfig using Angular 1's $location service
 	 */
@@ -44276,13 +44407,13 @@
 	//# sourceMappingURL=locationServices.js.map
 
 /***/ },
-/* 144 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module url */ /** */
-	var ui_router_core_1 = __webpack_require__(81);
-	var ui_router_core_2 = __webpack_require__(81);
+	var ui_router_core_1 = __webpack_require__(85);
+	var ui_router_core_2 = __webpack_require__(85);
 	/**
 	 * Manages rules for client-side URL
 	 *
@@ -44484,7 +44615,7 @@
 	//# sourceMappingURL=urlRouterProvider.js.map
 
 /***/ },
-/* 145 */
+/* 149 */
 /***/ function(module, exports) {
 
 	/**
@@ -44846,7 +44977,7 @@
 	//# sourceMappingURL=injectables.js.map
 
 /***/ },
-/* 146 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44859,8 +44990,8 @@
 	 * @preferred
 	 * @module directives
 	 */ /** for typedoc */
-	var angular_1 = __webpack_require__(138);
-	var ui_router_core_1 = __webpack_require__(81);
+	var angular_1 = __webpack_require__(142);
+	var ui_router_core_1 = __webpack_require__(85);
 	/** @hidden */
 	function parseStateRef(ref) {
 	    var paramsOnly = ref.match(/^\s*({[^}]*})\s*$/), parsed;
@@ -45379,12 +45510,12 @@
 	//# sourceMappingURL=stateDirectives.js.map
 
 /***/ },
-/* 147 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @module state */ /** for typedoc */
 	"use strict";
-	var angular_1 = __webpack_require__(138);
+	var angular_1 = __webpack_require__(142);
 	/**
 	 * @ngdoc filter
 	 * @name ui.router.state.filter:isState
@@ -45427,7 +45558,7 @@
 	//# sourceMappingURL=stateFilters.js.map
 
 /***/ },
-/* 148 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45435,11 +45566,11 @@
 	 * @ng1api
 	 * @module directives
 	 */ /** for typedoc */
-	var angular_1 = __webpack_require__(138);
+	var angular_1 = __webpack_require__(142);
 	var angular_2 = __webpack_require__(1);
-	var ui_router_core_1 = __webpack_require__(81);
-	var views_1 = __webpack_require__(139);
-	var services_1 = __webpack_require__(137);
+	var ui_router_core_1 = __webpack_require__(85);
+	var views_1 = __webpack_require__(143);
+	var services_1 = __webpack_require__(141);
 	/**
 	 * `ui-view`: A viewport directive which is filled in by a view from the active state.
 	 *
@@ -45829,12 +45960,12 @@
 	//# sourceMappingURL=viewDirective.js.map
 
 /***/ },
-/* 149 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module ng1 */ /** */
-	var angular_1 = __webpack_require__(138);
+	var angular_1 = __webpack_require__(142);
 	/** @hidden */
 	function $ViewScrollProvider() {
 	    var useAnchorScroll = false;
@@ -45856,7 +45987,7 @@
 	//# sourceMappingURL=viewScroll.js.map
 
 /***/ },
-/* 150 */
+/* 154 */
 /***/ function(module, exports) {
 
 	/**
@@ -45957,7 +46088,7 @@
 	})(window.angular);
 
 /***/ },
-/* 151 */
+/* 155 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -46047,25 +46178,47 @@
 	
 	    $stateProvider.state({
 	        name: 'admin',
+	        abstract: true,
+	        default: '.login',
 	        url: '/admin',
 	        component: 'admin'
+	    });
+	
+	    $stateProvider.state({
+	        name: 'admin.login',
+	        url: '/login',
+	        views: {
+	            main: {
+	                component: 'login'
+	            }
+	        }
+	    });
+	
+	    $stateProvider.state({
+	        name: 'admin.orders',
+	        url: '/orders',
+	        views: {
+	            main: {
+	                component: 'orders'
+	            }
+	        }
 	    });
 	
 	    $urlRouterProvider.otherwise('/home');
 	}
 
 /***/ },
-/* 152 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(153);
+	__webpack_require__(157);
 	
 	module.exports = 'duScroll';
 
 
 /***/ },
-/* 153 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/**
@@ -46696,10 +46849,10 @@
 	  };
 	}]);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(154)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(158)(module)))
 
 /***/ },
-/* 154 */
+/* 158 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -46715,7 +46868,7 @@
 
 
 /***/ },
-/* 155 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -52761,7 +52914,7 @@
 							if (global) {
 								_globals[n] = _exports[n] = cl; //provides a way to avoid global namespace pollution. By default, the main classes like TweenLite, Power1, Strong, etc. are added to window unless a GreenSockGlobals is defined. So if you want to have things added to a custom object instead, just do something like window.GreenSockGlobals = {} before loading any GreenSock files. You can even set up an alias like window.GreenSockGlobals = windows.gs = {} so that you can access everything like gs.TweenLite. Also remember that ALL classes are added to the window.com.greensock object (in their respective packages, like com.greensock.easing.Power1, com.greensock.TweenLite, etc.)
 								hasModule = (typeof(module) !== "undefined" && module.exports);
-								if (!hasModule && "function" === "function" && __webpack_require__(156)){ //AMD
+								if (!hasModule && "function" === "function" && __webpack_require__(160)){ //AMD
 									!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() { return cl; }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 								} else if (hasModule){ //node
 									if (ns === moduleName) {
@@ -54578,7 +54731,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 156 */
+/* 160 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -54586,15 +54739,15 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 157 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(158);
+	__webpack_require__(162);
 	module.exports = 'ngAnimate';
 
 
 /***/ },
-/* 158 */
+/* 162 */
 /***/ function(module, exports) {
 
 	/**
@@ -58755,15 +58908,15 @@
 
 
 /***/ },
-/* 159 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(160);
+	__webpack_require__(164);
 	module.exports = 'ngSanitize';
 
 
 /***/ },
-/* 160 */
+/* 164 */
 /***/ function(module, exports) {
 
 	/**
@@ -59525,7 +59678,7 @@
 
 
 /***/ },
-/* 161 */
+/* 165 */
 /***/ function(module, exports) {
 
 	angular.module('angularPayments', []);;angular.module('angularPayments')
