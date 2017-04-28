@@ -34557,7 +34557,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".admin-header {\n  height: 170px;\n  background-color: #323232; }\n\n.admin-body {\n  min-height: 85vh;\n  width: 90%;\n  margin: 0 auto; }\n  .admin-body a {\n    color: blue; }\n  .admin-body a:hover {\n    text-decoration: underline; }\n\ninput.article-title {\n  display: block; }\n\n.thumbnail {\n  max-width: 100px; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/src/components/admin/admin.scss","/Users/Will/freelance/earth-house/app/src/components/admin/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,cAAa;EACb,0BCFiB,EDGpB;;AAED;EACI,iBAAgB;EAChB,WAAU;EACV,eAAc,EAOjB;EAVD;IAKQ,YAAW,EACd;EANL;IAQQ,2BAA0B,EAC7B;;AAGL;EACI,eAAc,EACjB;;AAED;EACI,iBAAgB,EACnB","file":"admin.scss","sourcesContent":["@import 'colors';\n\n.admin-header {\n    height: 170px;\n    background-color: $black;\n}\n\n.admin-body {\n    min-height: 85vh;\n    width: 90%;\n    margin: 0 auto;\n    a {\n        color: blue;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n}\n\ninput.article-title {\n    display: block;\n}\n\n.thumbnail {\n    max-width: 100px;\n}\n\n\n","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
+	exports.push([module.id, ".admin-header {\n  height: 170px;\n  background-color: #323232; }\n\n.admin-body {\n  min-height: 85vh;\n  width: 90%;\n  margin: 0 auto 100px auto; }\n  .admin-body a {\n    color: blue; }\n  .admin-body a:hover {\n    text-decoration: underline; }\n\ninput.article-title {\n  display: block; }\n\n.thumbnail {\n  max-width: 100px; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/src/components/admin/admin.scss","/Users/Will/freelance/earth-house/app/src/components/admin/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,cAAa;EACb,0BCFiB,EDGpB;;AAED;EACI,iBAAgB;EAChB,WAAU;EACV,0BAAyB,EAO5B;EAVD;IAKQ,YAAW,EACd;EANL;IAQQ,2BAA0B,EAC7B;;AAGL;EACI,eAAc,EACjB;;AAED;EACI,iBAAgB,EACnB","file":"admin.scss","sourcesContent":["@import 'colors';\n\n.admin-header {\n    height: 170px;\n    background-color: $black;\n}\n\n.admin-body {\n    min-height: 85vh;\n    width: 90%;\n    margin: 0 auto 100px auto;\n    a {\n        color: blue;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n}\n\ninput.article-title {\n    display: block;\n}\n\n.thumbnail {\n    max-width: 100px;\n}\n\n\n","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -34762,7 +34762,7 @@
 	        if (!_this.token) $state.go('admin.login');
 	    };
 	
-	    this.contentToManage = 'pickups';
+	    this.contentToManage = 'slider';
 	
 	    this.setCms = function (content) {
 	        _this.contentToManage = content;
@@ -35150,14 +35150,20 @@
 	};
 	
 	
-	controller.$inject = ['orderService', '$state'];
+	controller.$inject = ['orderService', '$state', 'orderPickupService', 'dateService'];
 	
-	function controller(orderService, $state) {
+	function controller(orderService, $state, orderPickupService, dateService) {
 	    var _this = this;
 	
+	    this.days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+	    this.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	
 	    this.$onInit = function () {
-	        if (_this.token) _this.getOrders();else $state.go('admin.login');
-	        _this.type = 'delivery';
+	        if (_this.token) {
+	            _this.getOrders();
+	            _this.getPickups();
+	        } else $state.go('admin.login');
+	        _this.type = 'pickup';
 	    };
 	
 	    this.getOrders = function () {
@@ -35165,6 +35171,44 @@
 	            _this.orders = data;
 	        });
 	    };
+	
+	    this.getPickups = function () {
+	        orderPickupService.getAll(_this.token).then(function (data) {
+	            data.sort(function (curr, next) {
+	                return new Date(curr.pickupDate) - new Date(next.pickupDate);
+	            });
+	            data.forEach(function (order) {
+	                order.date = new Date(order.date).toDateString();
+	                order.pickupDate = dateService.dateStringToObj(new Date(order.pickupDate).toDateString());
+	                console.log(order.pickupDate);
+	            });
+	            _this.pickups = data;
+	            console.log(_this.pickups);
+	        });
+	    };
+	
+	    this.removePickup = function (order) {
+	        var index = _this.orders.indexOf(order);
+	        orderPickupService.deleteOrder(order._id, _this.token).then(function (data) {
+	            console.log(data);
+	            _this.pickups.splice(index, 1);
+	        });
+	    };
+	
+	    this.updatePickup = function (order) {
+	        var copy = {};
+	        Object.keys(order).forEach(function (key) {
+	            copy[key] = order[key];
+	        });
+	        copy.date = new Date(copy.date);
+	        copy.pickup = copy.pickup._id;
+	        copy.pickupDate = dateService.dateObjToString(copy.pickupDate);
+	        console.log('copy of the order', copy);
+	        orderPickupService.updateOrder(copy._id, copy, _this.token).then(function (updated) {
+	            return console.log(updated);
+	        });
+	    };
+	
 	    this.removeOrder = function (order) {
 	        var index = _this.orders.indexOf(order);
 	        orderService.deleteOrder(order._id, _this.token).then(function (data) {
@@ -35203,7 +35247,7 @@
 /* 35 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"orders\" ng-if=\"$ctrl.token\">\n    <div class=\"static\" ng-if=\"!$ctrl.orderToUpdate\">\n        <h2>Orders</h2>\n\n        <h3>Filter</h3>\n        <select ng-model=\"$ctrl.completed\" ng-init=\"$ctrl.completed = false\">\n            <option ng-value=\"false\">incomplete</option>\n            <option ng-value=\"true\">complete</option>\n            <option ng-value=\"'all'\">all</option>\n        </select>\n        <ul ng-if=\"$ctrl.type === 'pickup'\"></ul>\n        <ul ng-if=\"$ctrl.type === 'deliveries'\">\n            <li ng-repeat=\"order in $ctrl.orders\" ng-if=\"order.completed === $ctrl.completed || $ctrl.completed === 'all'\">\n                    <h4>{{order.name}}</h4>\n                    <p>{{order.date}}</p>\n                    <a ng-href=\"mailto:{{order.email}}\">{{order.email}}</a>\n                    <h5>total: ${{order.total}}.00</h5>\n                    <h4>Items</h4>\n                    <table class=\"order-items\">\n                        <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                        <tr ng-repeat=\"item in order.items\">\n                            <td>{{item.name}}</td>\n                            <td>{{item.quantity}}</td>\n                            <td>${{item.subTotal}}.00</td>\n                        </tr>\n                    </table>\n                    <h5>\n                        Address: {{order.address.line_1}}, {{order.address.line_2 || ' '}} \n                        <br>\n                        {{order.address.city}}, {{order.address.state}}, {{order.address.zip}}\n                    </h5>\n                    <h5>complete: {{order.completed}}</h5>\n                    <p>Notes: {{order.notes}}</p>\n                    <button ng-click=\"$ctrl.removeOrder(order)\">delete</button>\n                    <button ng-click=\"$ctrl.setOrderToUpdate(order)\">edit</button>\n                    <hr>\n            </li>\n        </ul>\n    </div>\n    <div class=\"update\" ng-if=\"$ctrl.orderToUpdate\">\n        <h2>Update Form</h2>\n        <form>\n            <label>Name:</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.name\" placeholder=\"{{orderToUpdate.name}}\">\n            <label>Total: $</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.total\" placeholder=\"{{orderToUpdate.total}}\">\n            <label>Email: </label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.email\" placeholder=\"{{orderToUpdate.email}}\">\n            <h4>Completed:</h4>\n            <select ng-model=\"$ctrl.orderToUpdate.completed\" ng-init=\"$ctrl.orderToUpdate.completed\">\n                <option ng-value=\"false\">incomplete</option>\n                <option ng-value=\"true\">complete</option>\n            </select>\n                \n            <h4>Items</h4>\n            <table>\n                <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                <tr ng-repeat=\"item in $ctrl.orderToUpdate.items\">\n                    <td><input type=\"text\" ng-model=\"item.name\" ng-value=\"item.name\" placeholder=\"{{item.name}}\"></td>\n                    <td><input type=\"text\" ng-value=\"item.quantity\" ng-model=\"item.quantity\" placeholder=\"{{item.quantity}}\"></td>\n                    <td ng-value=\"item.quantity * item.price\" ng-model=\"item.subTotal\">${{item.quantity * item.price}}.00</td>\n                </tr>\n            </table>\n            <table>\n                <tr><th>item</th><th>price</th><th>qty.</th><th>subtotal</th></tr>\n                <tr>\n                    <td><input type=\"text\" placeholder=\"new item name\" ng-model=\"newItem.name\"></td>\n                    <td><input type=\"text\" placeholder=\"price\" ng-init=\"newItem.price = 0\" ng-model=\"newItem.price\"></td>\n                    <td><input type=\"text\" placeholder=\"qty\" ng-init=\"newItem.quantity = 0\" ng-model=\"newItem.quantity\"></td>\n                    <td>subtotal: ${{newItem.price * newItem.quantity}}.00</td>\n                </tr>\n                <tr>\n                    <td><button ng-click=\"$ctrl.addItem(newItem)\">add item</button></td>\n                </tr>\n            </table>\n\n        <h5>Address</h4>\n\n        <label>Line 1:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_1}}\" ng-model=\"$ctrl.orderToUpdate.address.line_1\">\n        <label>Line 2:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_2}}\" ng-model=\"$ctrl.orderToUpdate.address.line_2\">\n        <label>City:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.city}}\" ng-model=\"$ctrl.orderToUpdate.address.city\">\n        <label>State</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.state}}\" ng-model=\"$ctrl.orderToUpdate.address.state\">\n        <label>Zip</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.zip}}\" ng-model=\"$ctrl.orderToUpdate.address.zip\">\n\n        <label>Notes:</label>\n        <textarea placeholder=\"{{$ctrl.orderToUpdate.notes}}\" ng-model=\"$ctrl.orderToUpdate.notes\">\n        </textarea>\n        </form>\n        <button ng-click=\"$ctrl.updateOrder($ctrl.orderToUpdate)\">update</button>\n        <button ng-click=\"$ctrl.setOrderToUpdate(null)\">cancel</button>\n    </div>\n</div>";
+	module.exports = "<div class=\"orders\" ng-if=\"$ctrl.token\">\n    <div class=\"static\" ng-if=\"!$ctrl.orderToUpdate\">\n        <h2>Orders</h2>\n\n        <h3>Filter</h3>\n        <button ng-click=\"$ctrl.type = 'pickup'\">pickups</button>\n        <button ng-click=\"$ctrl.type = 'delivery'\">deliveries</button>\n        <select ng-model=\"$ctrl.completed\" ng-init=\"$ctrl.completed = false\">\n            <option ng-value=\"false\">incomplete</option>\n            <option ng-value=\"true\">complete</option>\n            <option ng-value=\"'all'\">all</option>\n        </select>\n        <hr>\n        <div ng-if=\"$ctrl.type === 'pickup'\">\n            <h3>Pickups</h3>\n            <ul>\n                <li ng-repeat=\"order in $ctrl.pickups\" ng-if=\"order.completed === $ctrl.completed || $ctrl.completed === 'all'\">\n                    <h4>Name: {{order.name}}</h4>\n                        <h4>\n                            Pickup: {{order.pickup.name}}, on \n                            <select ng-model=\"order.pickupDate.day\">\n                                <option ng-repeat=\"day in $ctrl.days\" ng-value=\"day\">{{day}}</option>\n                            </select>\n                            <select ng-model=\"order.pickupDate.month\">\n                                <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n                            </select>\n                            <input type=\"text\" ng-model=\"order.pickupDate.date\"> \n                        </h4>\n                        <p>order placed: {{order.date}}</p>\n                        <a ng-href=\"mailto:{{order.email}}\">{{order.email}}</a>\n                        <h5>total: ${{order.total}}.00</h5>\n                        <h4>Items</h4>\n                        <table class=\"order-items\">\n                            <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                            <tr ng-repeat=\"item in order.items\">\n                                <td>{{item.name}}</td>\n                                <td>{{item.quantity}}</td>\n                                <td>${{item.subTotal}}.00</td>\n                            </tr>\n                        </table>\n                        <h5>complete:</h5>\n                        <select ng-model=\"order.completed\" ng-change=\"$ctrl.updatePickup(order)\">\n                            <option ng-value=\"true\">completed</option>\n                            <option ng-value=\"false\">incomplete</option>\n                        </select>\n                        <h5>Notes:</h5>\n                        <textarea ng-model=\"order.notes\" cols=\"100\" rows=\"4\">{{order.notes}}</textarea>\n                        <div>\n                            <button ng-click=\"$ctrl.removePickup(order)\">delete</button>\n                            <button ng-click=\"$ctrl.updatePickup(order)\">update</button>\n                        </div>\n                        <hr>\n\n                </li>\n            </ul>\n        </div>\n        <div ng-if=\"$ctrl.type === 'delivery'\">\n            <h3>Deliveries</h3>\n            <ul>\n                <li ng-repeat=\"order in $ctrl.orders\" ng-if=\"order.completed === $ctrl.completed || $ctrl.completed === 'all'\">\n                        <h4>{{order.name}}</h4>\n                        <p>{{order.date}}</p>\n                        <a ng-href=\"mailto:{{order.email}}\">{{order.email}}</a>\n                        <h5>total: ${{order.total}}.00</h5>\n                        <h4>Items</h4>\n                        <table class=\"order-items\">\n                            <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                            <tr ng-repeat=\"item in order.items\">\n                                <td>{{item.name}}</td>\n                                <td>{{item.quantity}}</td>\n                                <td>${{item.subTotal}}.00</td>\n                            </tr>\n                        </table>\n                        <h5>\n                            Address: {{order.address.line_1}}, {{order.address.line_2 || ' '}} \n                            <br>\n                            {{order.address.city}}, {{order.address.state}}, {{order.address.zip}}\n                        </h5>\n                        <h5>complete: {{order.completed}}</h5>\n                        <p>Notes: {{order.notes}}</p>\n                        <button ng-click=\"$ctrl.removeOrder(order)\">delete</button>\n                        <button ng-click=\"$ctrl.setOrderToUpdate(order)\">edit</button>\n                        <hr>\n                </li>\n            </ul>\n        </div>\n    </div>\n    <div class=\"update\" ng-if=\"$ctrl.orderToUpdate\">\n        <h2>Update Form</h2>\n        <form>\n            <label>Name:</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.name\" placeholder=\"{{orderToUpdate.name}}\">\n            <label>Total: $</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.total\" placeholder=\"{{orderToUpdate.total}}\">\n            <label>Email: </label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.email\" placeholder=\"{{orderToUpdate.email}}\">\n            <h4>Completed:</h4>\n            <select ng-model=\"$ctrl.orderToUpdate.completed\" ng-init=\"$ctrl.orderToUpdate.completed\">\n                <option ng-value=\"false\">incomplete</option>\n                <option ng-value=\"true\">complete</option>\n            </select>\n                \n            <h4>Items</h4>\n            <table>\n                <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                <tr ng-repeat=\"item in $ctrl.orderToUpdate.items\">\n                    <td><input type=\"text\" ng-model=\"item.name\" ng-value=\"item.name\" placeholder=\"{{item.name}}\"></td>\n                    <td><input type=\"text\" ng-value=\"item.quantity\" ng-model=\"item.quantity\" placeholder=\"{{item.quantity}}\"></td>\n                    <td ng-value=\"item.quantity * item.price\" ng-model=\"item.subTotal\">${{item.quantity * item.price}}.00</td>\n                </tr>\n            </table>\n            <table>\n                <tr><th>item</th><th>price</th><th>qty.</th><th>subtotal</th></tr>\n                <tr>\n                    <td><input type=\"text\" placeholder=\"new item name\" ng-model=\"newItem.name\"></td>\n                    <td><input type=\"text\" placeholder=\"price\" ng-init=\"newItem.price = 0\" ng-model=\"newItem.price\"></td>\n                    <td><input type=\"text\" placeholder=\"qty\" ng-init=\"newItem.quantity = 0\" ng-model=\"newItem.quantity\"></td>\n                    <td>subtotal: ${{newItem.price * newItem.quantity}}.00</td>\n                </tr>\n                <tr>\n                    <td><button ng-click=\"$ctrl.addItem(newItem)\">add item</button></td>\n                </tr>\n            </table>\n\n        <h5>Address</h4>\n\n        <label>Line 1:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_1}}\" ng-model=\"$ctrl.orderToUpdate.address.line_1\">\n        <label>Line 2:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_2}}\" ng-model=\"$ctrl.orderToUpdate.address.line_2\">\n        <label>City:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.city}}\" ng-model=\"$ctrl.orderToUpdate.address.city\">\n        <label>State</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.state}}\" ng-model=\"$ctrl.orderToUpdate.address.state\">\n        <label>Zip</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.zip}}\" ng-model=\"$ctrl.orderToUpdate.address.zip\">\n\n        <label>Notes:</label>\n        <textarea placeholder=\"{{$ctrl.orderToUpdate.notes}}\" ng-model=\"$ctrl.orderToUpdate.notes\">\n        </textarea>\n        </form>\n        <button ng-click=\"$ctrl.updateOrder($ctrl.orderToUpdate)\">update</button>\n        <button ng-click=\"$ctrl.setOrderToUpdate(null)\">cancel</button>\n    </div>\n</div>";
 
 /***/ },
 /* 36 */
@@ -37106,10 +37150,10 @@
 	
 	function orderPickupService($http, apiUrl) {
 	    return {
-	        getOrders: function getOrders(token) {
+	        getAll: function getAll(token) {
 	            return $http({
 	                method: 'GET',
-	                url: apiUrl + '/orders',
+	                url: apiUrl + '/orders-pickup',
 	                headers: {
 	                    'Authorization': token
 	                }
@@ -37134,7 +37178,7 @@
 	        deleteOrder: function deleteOrder(id, token) {
 	            return $http({
 	                method: 'DELETE',
-	                url: apiUrl + '/orders/' + id,
+	                url: apiUrl + '/orders-pickup/' + id,
 	                headers: {
 	                    'Authorization': token
 	                }
@@ -37145,7 +37189,7 @@
 	        updateOrder: function updateOrder(id, order, token) {
 	            return $http({
 	                method: 'PUT',
-	                url: apiUrl + '/orders/' + id,
+	                url: apiUrl + '/orders-pickup/' + id,
 	                headers: {
 	                    'Authorization': token
 	                },
