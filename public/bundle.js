@@ -54,41 +54,41 @@
 	
 	var _components2 = _interopRequireDefault(_components);
 	
-	var _services = __webpack_require__(68);
+	var _services = __webpack_require__(94);
 	
 	var _services2 = _interopRequireDefault(_services);
 	
-	__webpack_require__(72);
+	__webpack_require__(107);
 	
-	var _angularUiRouter = __webpack_require__(74);
+	var _angularUiRouter = __webpack_require__(109);
 	
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 	
-	var _angularUiRouterDefault = __webpack_require__(144);
+	var _angularUiRouterDefault = __webpack_require__(179);
 	
 	var _angularUiRouterDefault2 = _interopRequireDefault(_angularUiRouterDefault);
 	
-	var _routes = __webpack_require__(145);
+	var _routes = __webpack_require__(180);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _angularScroll = __webpack_require__(146);
+	var _angularScroll = __webpack_require__(181);
 	
 	var _angularScroll2 = _interopRequireDefault(_angularScroll);
 	
-	var _gsap = __webpack_require__(149);
+	var _gsap = __webpack_require__(184);
 	
 	var _gsap2 = _interopRequireDefault(_gsap);
 	
-	var _angularAnimate = __webpack_require__(151);
+	var _angularAnimate = __webpack_require__(186);
 	
 	var _angularAnimate2 = _interopRequireDefault(_angularAnimate);
 	
-	var _angularSanitize = __webpack_require__(153);
+	var _angularSanitize = __webpack_require__(188);
 	
 	var _angularSanitize2 = _interopRequireDefault(_angularSanitize);
 	
-	var _angularPayments = __webpack_require__(155);
+	var _angularPayments = __webpack_require__(190);
 	
 	var _angularPayments2 = _interopRequireDefault(_angularPayments);
 	
@@ -109,7 +109,14 @@
 	app.config(_routes2.default);
 	app.config(function ($windowProvider) {
 	    var $window = $windowProvider.$get();
+	    //TODO: put in drew's key
 	    $window.Stripe.setPublishableKey('pk_test_HS62OmJo7gCzA7fcN2ObL2rF');
+	});
+	
+	app.run(function ($rootScope, $state, $transitions, $anchorScroll) {
+	    $transitions.onSuccess({ to: '*' }, function () {
+	        $anchorScroll();
+	    });
 	});
 	
 	app.animation('.slide-animation', function ($window) {
@@ -159,7 +166,7 @@
 /***/ function(module, exports) {
 
 	/**
-	 * @license AngularJS v1.6.2
+	 * @license AngularJS v1.6.3
 	 * (c) 2010-2017 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -198,31 +205,29 @@
 	function minErr(module, ErrorConstructor) {
 	  ErrorConstructor = ErrorConstructor || Error;
 	  return function() {
-	    var SKIP_INDEXES = 2;
-	
-	    var templateArgs = arguments,
-	      code = templateArgs[0],
+	    var code = arguments[0],
+	      template = arguments[1],
 	      message = '[' + (module ? module + ':' : '') + code + '] ',
-	      template = templateArgs[1],
+	      templateArgs = sliceArgs(arguments, 2).map(function(arg) {
+	        return toDebugString(arg, minErrConfig.objectMaxDepth);
+	      }),
 	      paramPrefix, i;
 	
 	    message += template.replace(/\{\d+\}/g, function(match) {
-	      var index = +match.slice(1, -1),
-	        shiftedIndex = index + SKIP_INDEXES;
+	      var index = +match.slice(1, -1);
 	
-	      if (shiftedIndex < templateArgs.length) {
-	        return toDebugString(templateArgs[shiftedIndex]);
+	      if (index < templateArgs.length) {
+	        return templateArgs[index];
 	      }
 	
 	      return match;
 	    });
 	
-	    message += '\nhttp://errors.angularjs.org/1.6.2/' +
+	    message += '\nhttp://errors.angularjs.org/1.6.3/' +
 	      (module ? module + '/' : '') + code;
 	
-	    for (i = SKIP_INDEXES, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
-	      message += paramPrefix + 'p' + (i - SKIP_INDEXES) + '=' +
-	        encodeURIComponent(toDebugString(templateArgs[i]));
+	    for (i = 0, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
+	      message += paramPrefix + 'p' + i + '=' + encodeURIComponent(templateArgs[i]);
 	    }
 	
 	    return new ErrorConstructor(message);
@@ -239,6 +244,9 @@
 	  splice,
 	  push,
 	  toString,
+	  minErrConfig,
+	  errorHandlingConfig,
+	  isValidObjectMaxDepth,
 	  ngMinErr,
 	  angularModule,
 	  uid,
@@ -353,6 +361,50 @@
 	
 	
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	
+	var minErrConfig = {
+	  objectMaxDepth: 5
+	};
+	
+	 /**
+	 * @ngdoc function
+	 * @name angular.errorHandlingConfig
+	 * @module ng
+	 * @kind function
+	 *
+	 * @description
+	 * Configure several aspects of error handling in AngularJS if used as a setter or return the
+	 * current configuration if used as a getter. The following options are supported:
+	 *
+	 * - **objectMaxDepth**: The maximum depth to which objects are traversed when stringified for error messages.
+	 *
+	 * Omitted or undefined options will leave the corresponding configuration values unchanged.
+	 *
+	 * @param {Object=} config - The configuration object. May only contain the options that need to be
+	 *     updated. Supported keys:
+	 *
+	 * * `objectMaxDepth`  **{Number}** - The max depth for stringifying objects. Setting to a
+	 *   non-positive or non-numeric value, removes the max depth limit.
+	 *   Default: 5
+	 */
+	function errorHandlingConfig(config) {
+	  if (isObject(config)) {
+	    if (isDefined(config.objectMaxDepth)) {
+	      minErrConfig.objectMaxDepth = isValidObjectMaxDepth(config.objectMaxDepth) ? config.objectMaxDepth : NaN;
+	    }
+	  } else {
+	    return minErrConfig;
+	  }
+	}
+	
+	/**
+	 * @private
+	 * @param {Number} maxDepth
+	 * @return {boolean}
+	 */
+	function isValidObjectMaxDepth(maxDepth) {
+	  return isNumber(maxDepth) && maxDepth > 0;
+	}
 	
 	/**
 	 * @ngdoc function
@@ -1076,9 +1128,10 @@
 	    </file>
 	  </example>
 	 */
-	function copy(source, destination) {
+	function copy(source, destination, maxDepth) {
 	  var stackSource = [];
 	  var stackDest = [];
+	  maxDepth = isValidObjectMaxDepth(maxDepth) ? maxDepth : NaN;
 	
 	  if (destination) {
 	    if (isTypedArray(destination) || isArrayBuffer(destination)) {
@@ -1101,35 +1154,39 @@
 	
 	    stackSource.push(source);
 	    stackDest.push(destination);
-	    return copyRecurse(source, destination);
+	    return copyRecurse(source, destination, maxDepth);
 	  }
 	
-	  return copyElement(source);
+	  return copyElement(source, maxDepth);
 	
-	  function copyRecurse(source, destination) {
+	  function copyRecurse(source, destination, maxDepth) {
+	    maxDepth--;
+	    if (maxDepth < 0) {
+	      return '...';
+	    }
 	    var h = destination.$$hashKey;
 	    var key;
 	    if (isArray(source)) {
 	      for (var i = 0, ii = source.length; i < ii; i++) {
-	        destination.push(copyElement(source[i]));
+	        destination.push(copyElement(source[i], maxDepth));
 	      }
 	    } else if (isBlankObject(source)) {
 	      // createMap() fast path --- Safe to avoid hasOwnProperty check because prototype chain is empty
 	      for (key in source) {
-	        destination[key] = copyElement(source[key]);
+	        destination[key] = copyElement(source[key], maxDepth);
 	      }
 	    } else if (source && typeof source.hasOwnProperty === 'function') {
 	      // Slow path, which must rely on hasOwnProperty
 	      for (key in source) {
 	        if (source.hasOwnProperty(key)) {
-	          destination[key] = copyElement(source[key]);
+	          destination[key] = copyElement(source[key], maxDepth);
 	        }
 	      }
 	    } else {
 	      // Slowest path --- hasOwnProperty can't be called as a method
 	      for (key in source) {
 	        if (hasOwnProperty.call(source, key)) {
-	          destination[key] = copyElement(source[key]);
+	          destination[key] = copyElement(source[key], maxDepth);
 	        }
 	      }
 	    }
@@ -1137,7 +1194,7 @@
 	    return destination;
 	  }
 	
-	  function copyElement(source) {
+	  function copyElement(source, maxDepth) {
 	    // Simple values
 	    if (!isObject(source)) {
 	      return source;
@@ -1166,7 +1223,7 @@
 	    stackDest.push(destination);
 	
 	    return needsRecurse
-	      ? copyRecurse(source, destination)
+	      ? copyRecurse(source, destination, maxDepth)
 	      : destination;
 	  }
 	
@@ -1709,33 +1766,50 @@
 	
 	function allowAutoBootstrap(document) {
 	  var script = document.currentScript;
-	  var src = script && script.getAttribute('src');
 	
-	  if (!src) {
+	  if (!script) {
+	    // IE does not have `document.currentScript`
 	    return true;
 	  }
 	
-	  var link = document.createElement('a');
-	  link.href = src;
-	
-	  if (document.location.origin === link.origin) {
-	    // Same-origin resources are always allowed, even for non-whitelisted schemes.
-	    return true;
+	  // If the `currentScript` property has been clobbered just return false, since this indicates a probable attack
+	  if (!(script instanceof window.HTMLScriptElement || script instanceof window.SVGScriptElement)) {
+	    return false;
 	  }
-	  // Disabled bootstrapping unless angular.js was loaded from a known scheme used on the web.
-	  // This is to prevent angular.js bundled with browser extensions from being used to bypass the
-	  // content security policy in web pages and other browser extensions.
-	  switch (link.protocol) {
-	    case 'http:':
-	    case 'https:':
-	    case 'ftp:':
-	    case 'blob:':
-	    case 'file:':
-	    case 'data:':
+	
+	  var attributes = script.attributes;
+	  var srcs = [attributes.getNamedItem('src'), attributes.getNamedItem('href'), attributes.getNamedItem('xlink:href')];
+	
+	  return srcs.every(function(src) {
+	    if (!src) {
 	      return true;
-	    default:
+	    }
+	    if (!src.value) {
 	      return false;
-	  }
+	    }
+	
+	    var link = document.createElement('a');
+	    link.href = src.value;
+	
+	    if (document.location.origin === link.origin) {
+	      // Same-origin resources are always allowed, even for non-whitelisted schemes.
+	      return true;
+	    }
+	    // Disabled bootstrapping unless angular.js was loaded from a known scheme used on the web.
+	    // This is to prevent angular.js bundled with browser extensions from being used to bypass the
+	    // content security policy in web pages and other browser extensions.
+	    switch (link.protocol) {
+	      case 'http:':
+	      case 'https:':
+	      case 'ftp:':
+	      case 'blob:':
+	      case 'file:':
+	      case 'data:':
+	        return true;
+	      default:
+	        return false;
+	    }
+	  });
 	}
 	
 	// Cached as it has to run during loading so that document.currentScript is available.
@@ -2332,6 +2406,9 @@
 	     * @returns {angular.Module} new module with the {@link angular.Module} api.
 	     */
 	    return function module(name, requires, configFn) {
+	
+	      var info = {};
+	
 	      var assertNotHasOwnProperty = function(name, context) {
 	        if (name === 'hasOwnProperty') {
 	          throw ngMinErr('badname', 'hasOwnProperty is not a valid {0} name', context);
@@ -2366,6 +2443,45 @@
 	          _invokeQueue: invokeQueue,
 	          _configBlocks: configBlocks,
 	          _runBlocks: runBlocks,
+	
+	          /**
+	           * @ngdoc method
+	           * @name angular.Module#info
+	           * @module ng
+	           *
+	           * @param {Object=} info Information about the module
+	           * @returns {Object|Module} The current info object for this module if called as a getter,
+	           *                          or `this` if called as a setter.
+	           *
+	           * @description
+	           * Read and write custom information about this module.
+	           * For example you could put the version of the module in here.
+	           *
+	           * ```js
+	           * angular.module('myModule', []).info({ version: '1.0.0' });
+	           * ```
+	           *
+	           * The version could then be read back out by accessing the module elsewhere:
+	           *
+	           * ```
+	           * var version = angular.module('myModule').info().version;
+	           * ```
+	           *
+	           * You can also retrieve this information during runtime via the
+	           * {@link $injector#modules `$injector.modules`} property:
+	           *
+	           * ```js
+	           * var version = $injector.modules['myModule'].info().version;
+	           * ```
+	           */
+	          info: function(value) {
+	            if (isDefined(value)) {
+	              if (!isObject(value)) throw ngMinErr('aobj', 'Argument \'{0}\' must be an object', 'value');
+	              info = value;
+	              return this;
+	            }
+	            return info;
+	          },
 	
 	          /**
 	           * @ngdoc property
@@ -2645,9 +2761,15 @@
 	
 	/* global toDebugString: true */
 	
-	function serializeObject(obj) {
+	function serializeObject(obj, maxDepth) {
 	  var seen = [];
 	
+	  // There is no direct way to stringify object until reaching a specific depth
+	  // and a very deep object can cause a performance issue, so we copy the object
+	  // based on this specific depth and then stringify it.
+	  if (isValidObjectMaxDepth(maxDepth)) {
+	    obj = copy(obj, null, maxDepth);
+	  }
 	  return JSON.stringify(obj, function(key, val) {
 	    val = toJsonReplacer(key, val);
 	    if (isObject(val)) {
@@ -2660,13 +2782,13 @@
 	  });
 	}
 	
-	function toDebugString(obj) {
+	function toDebugString(obj, maxDepth) {
 	  if (typeof obj === 'function') {
 	    return obj.toString().replace(/ \{[\s\S]*$/, '');
 	  } else if (isUndefined(obj)) {
 	    return 'undefined';
 	  } else if (typeof obj !== 'string') {
-	    return serializeObject(obj);
+	    return serializeObject(obj, maxDepth);
 	  }
 	  return obj;
 	}
@@ -2787,16 +2909,17 @@
 	var version = {
 	  // These placeholder strings will be replaced by grunt's `build` task.
 	  // They need to be double- or single-quoted.
-	  full: '1.6.2',
+	  full: '1.6.3',
 	  major: 1,
 	  minor: 6,
-	  dot: 2,
-	  codeName: 'llamacorn-lovehug'
+	  dot: 3,
+	  codeName: 'scriptalicious-bootstrapping'
 	};
 	
 	
 	function publishExternalAPI(angular) {
 	  extend(angular, {
+	    'errorHandlingConfig': errorHandlingConfig,
 	    'bootstrap': bootstrap,
 	    'copy': copy,
 	    'extend': extend,
@@ -2935,7 +3058,8 @@
 	        $$cookieReader: $$CookieReaderProvider
 	      });
 	    }
-	  ]);
+	  ])
+	  .info({ angularVersion: '1.6.3' });
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -4327,6 +4451,28 @@
 	 */
 	
 	/**
+	 * @ngdoc property
+	 * @name $injector#modules
+	 * @type {Object}
+	 * @description
+	 * A hash containing all the modules that have been loaded into the
+	 * $injector.
+	 *
+	 * You can use this property to find out information about a module via the
+	 * {@link angular.Module#info `myModule.info(...)`} method.
+	 *
+	 * For example:
+	 *
+	 * ```
+	 * var info = $injector.modules['ngAnimate'].info();
+	 * ```
+	 *
+	 * **Do not use this property to attempt to modify the modules after the application
+	 * has been bootstrapped.**
+	 */
+	
+	
+	/**
 	 * @ngdoc method
 	 * @name $injector#get
 	 *
@@ -4819,6 +4965,7 @@
 	      instanceInjector = protoInstanceInjector;
 	
 	  providerCache['$injector' + providerSuffix] = { $get: valueFn(protoInstanceInjector) };
+	  instanceInjector.modules = providerInjector.modules = createMap();
 	  var runBlocks = loadModules(modulesToLoad);
 	  instanceInjector = protoInstanceInjector.get('$injector');
 	  instanceInjector.strictDi = strictDi;
@@ -4914,6 +5061,7 @@
 	      try {
 	        if (isString(module)) {
 	          moduleFn = angularModule(module);
+	          instanceInjector.modules[module] = moduleFn;
 	          runBlocks = runBlocks.concat(loadModules(moduleFn.requires)).concat(moduleFn._runBlocks);
 	          runInvokeQueue(moduleFn._invokeQueue);
 	          runInvokeQueue(moduleFn._configBlocks);
@@ -5504,6 +5652,7 @@
 	 */
 	var $AnimateProvider = ['$provide', /** @this */ function($provide) {
 	  var provider = this;
+	  var classNameFilter = null;
 	
 	  this.$$registeredAnimations = Object.create(null);
 	
@@ -5572,15 +5721,16 @@
 	   */
 	  this.classNameFilter = function(expression) {
 	    if (arguments.length === 1) {
-	      this.$$classNameFilter = (expression instanceof RegExp) ? expression : null;
-	      if (this.$$classNameFilter) {
-	        var reservedRegex = new RegExp('(\\s+|\\/)' + NG_ANIMATE_CLASSNAME + '(\\s+|\\/)');
-	        if (reservedRegex.test(this.$$classNameFilter.toString())) {
-	          throw $animateMinErr('nongcls','$animateProvider.classNameFilter(regex) prohibits accepting a regex value which matches/contains the "{0}" CSS class.', NG_ANIMATE_CLASSNAME);
+	      classNameFilter = (expression instanceof RegExp) ? expression : null;
+	      if (classNameFilter) {
+	        var reservedRegex = new RegExp('[(\\s|\\/)]' + NG_ANIMATE_CLASSNAME + '[(\\s|\\/)]');
+	        if (reservedRegex.test(classNameFilter.toString())) {
+	          classNameFilter = null;
+	          throw $animateMinErr('nongcls', '$animateProvider.classNameFilter(regex) prohibits accepting a regex value which matches/contains the "{0}" CSS class.', NG_ANIMATE_CLASSNAME);
 	        }
 	      }
 	    }
-	    return this.$$classNameFilter;
+	    return classNameFilter;
 	  };
 	
 	  this.$get = ['$$animateQueue', function($$animateQueue) {
@@ -6498,8 +6648,8 @@
 	  self.onUrlChange = function(callback) {
 	    // TODO(vojta): refactor to use node's syntax for events
 	    if (!urlChangeInit) {
-	      // We listen on both (hashchange/popstate) when available, as some browsers (e.g. Opera)
-	      // don't fire popstate when user change the address bar and don't fire hashchange when url
+	      // We listen on both (hashchange/popstate) when available, as some browsers don't
+	      // fire popstate when user changes the address bar and don't fire hashchange when url
 	      // changed by push/replaceState
 	
 	      // html5 history api - popstate event
@@ -7288,10 +7438,12 @@
 	 * the directive's element. If multiple directives on the same element request a new scope,
 	 * only one new scope is created.
 	 *
-	 * * **`{...}` (an object hash):** A new "isolate" scope is created for the directive's element. The
-	 * 'isolate' scope differs from normal scope in that it does not prototypically inherit from its parent
-	 * scope. This is useful when creating reusable components, which should not accidentally read or modify
-	 * data in the parent scope.
+	 * * **`{...}` (an object hash):** A new "isolate" scope is created for the directive's template.
+	 * The 'isolate' scope differs from normal scope in that it does not prototypically
+	 * inherit from its parent scope. This is useful when creating reusable components, which should not
+	 * accidentally read or modify data in the parent scope. Note that an isolate scope
+	 * directive without a `template` or `templateUrl` will not apply the isolate scope
+	 * to its children elements.
 	 *
 	 * The 'isolate' scope object hash defines a set of local scope properties derived from attributes on the
 	 * directive's element. These local properties are useful for aliasing values for templates. The keys in
@@ -13259,8 +13411,8 @@
 	 * how they vary compared to the requested url.
 	 */
 	var $jsonpCallbacksProvider = /** @this */ function() {
-	  this.$get = ['$window', function($window) {
-	    var callbacks = $window.angular.callbacks;
+	  this.$get = function() {
+	    var callbacks = angular.callbacks;
 	    var callbackMap = {};
 	
 	    function createCallback(callbackId) {
@@ -13327,7 +13479,7 @@
 	        delete callbackMap[callbackPath];
 	      }
 	    };
-	  }];
+	  };
 	};
 	
 	/**
@@ -14434,6 +14586,15 @@
 	  };
 	
 	  this.$get = ['$window', function($window) {
+	    // Support: IE 9-11, Edge 12-14+
+	    // IE/Edge display errors in such a way that it requires the user to click in 4 places
+	    // to see the stack trace. There is no way to feature-detect it so there's a chance
+	    // of the user agent sniffing to go wrong but since it's only about logging, this shouldn't
+	    // break apps. Other browsers display errors in a sensible way and some of them map stack
+	    // traces along source maps if available so it makes sense to let browsers display it
+	    // as they want.
+	    var formatStackTrace = msie || /\bEdge\//.test($window.navigator && $window.navigator.userAgent);
+	
 	    return {
 	      /**
 	       * @ngdoc method
@@ -14491,7 +14652,7 @@
 	
 	    function formatError(arg) {
 	      if (arg instanceof Error) {
-	        if (arg.stack) {
+	        if (arg.stack && formatStackTrace) {
 	          arg = (arg.message && arg.stack.indexOf(arg.message) === -1)
 	              ? 'Error: ' + arg.message + '\n' + arg.stack
 	              : arg.stack;
@@ -17979,12 +18140,13 @@
 	          current = target;
 	
 	          // It's safe for asyncQueuePosition to be a local variable here because this loop can't
-	          // be reentered recursively. Calling $digest from a function passed to $applyAsync would
+	          // be reentered recursively. Calling $digest from a function passed to $evalAsync would
 	          // lead to a '$digest already in progress' error.
 	          for (var asyncQueuePosition = 0; asyncQueuePosition < asyncQueue.length; asyncQueuePosition++) {
 	            try {
 	              asyncTask = asyncQueue[asyncQueuePosition];
-	              asyncTask.scope.$eval(asyncTask.expression, asyncTask.locals);
+	              fn = asyncTask.fn;
+	              fn(asyncTask.scope, asyncTask.locals);
 	            } catch (e) {
 	              $exceptionHandler(e);
 	            }
@@ -18218,7 +18380,7 @@
 	          });
 	        }
 	
-	        asyncQueue.push({scope: this, expression: $parse(expr), locals: locals});
+	        asyncQueue.push({scope: this, fn: $parse(expr), locals: locals});
 	      },
 	
 	      $$postDigest: function(fn) {
@@ -20186,7 +20348,7 @@
 	 * URL will be resolved into an absolute URL in the context of the application document.
 	 * Parsing means that the anchor node's host, hostname, protocol, port, pathname and related
 	 * properties are all populated to reflect the normalized URL.  This approach has wide
-	 * compatibility - Safari 1+, Mozilla 1+, Opera 7+,e etc.  See
+	 * compatibility - Safari 1+, Mozilla 1+ etc.  See
 	 * http://www.aptana.com/reference/html/api/HTMLAnchorElement.html
 	 *
 	 * Implementation Notes for IE
@@ -20552,6 +20714,9 @@
 	 * Selects a subset of items from `array` and returns it as a new array.
 	 *
 	 * @param {Array} array The source array.
+	 * <div class="alert alert-info">
+	 *   **Note**: If the array contains objects that reference themselves, filtering is not possible.
+	 * </div>
 	 * @param {string|Object|function()} expression The predicate to be used for selecting items from
 	 *   `array`.
 	 *
@@ -20769,7 +20934,10 @@
 	      var key;
 	      if (matchAgainstAnyProp) {
 	        for (key in actual) {
-	          if ((key.charAt(0) !== '$') && deepCompare(actual[key], expected, comparator, anyPropertyKey, true)) {
+	          // Under certain, rare, circumstances, key may not be a string and `charAt` will be undefined
+	          // See: https://github.com/angular/angular.js/issues/15644
+	          if (key.charAt && (key.charAt(0) !== '$') &&
+	              deepCompare(actual[key], expected, comparator, anyPropertyKey, true)) {
 	            return true;
 	          }
 	        }
@@ -28046,32 +28214,57 @@
 	 * @property {*} $viewValue The actual value from the control's view. For `input` elements, this is a
 	 * String. See {@link ngModel.NgModelController#$setViewValue} for information about when the $viewValue
 	 * is set.
+	 *
 	 * @property {*} $modelValue The value in the model that the control is bound to.
+	 *
 	 * @property {Array.<Function>} $parsers Array of functions to execute, as a pipeline, whenever
-	       the control reads value from the DOM. The functions are called in array order, each passing
-	       its return value through to the next. The last return value is forwarded to the
-	       {@link ngModel.NgModelController#$validators `$validators`} collection.
+	 *  the control updates the ngModelController with a new {@link ngModel.NgModelController#$viewValue
+	    `$viewValue`} from the DOM, usually via user input.
+	    See {@link ngModel.NgModelController#$setViewValue `$setViewValue()`} for a detailed lifecycle explanation.
+	    Note that the `$parsers` are not called when the bound ngModel expression changes programmatically.
 	
-	Parsers are used to sanitize / convert the {@link ngModel.NgModelController#$viewValue
-	`$viewValue`}.
+	  The functions are called in array order, each passing
+	    its return value through to the next. The last return value is forwarded to the
+	    {@link ngModel.NgModelController#$validators `$validators`} collection.
 	
-	Returning `undefined` from a parser means a parse error occurred. In that case,
-	no {@link ngModel.NgModelController#$validators `$validators`} will run and the `ngModel`
-	will be set to `undefined` unless {@link ngModelOptions `ngModelOptions.allowInvalid`}
-	is set to `true`. The parse error is stored in `ngModel.$error.parse`.
+	  Parsers are used to sanitize / convert the {@link ngModel.NgModelController#$viewValue
+	    `$viewValue`}.
+	
+	  Returning `undefined` from a parser means a parse error occurred. In that case,
+	    no {@link ngModel.NgModelController#$validators `$validators`} will run and the `ngModel`
+	    will be set to `undefined` unless {@link ngModelOptions `ngModelOptions.allowInvalid`}
+	    is set to `true`. The parse error is stored in `ngModel.$error.parse`.
+	
+	  This simple example shows a parser that would convert text input value to lowercase:
+	 * ```js
+	 * function parse(value) {
+	 *   if (value) {
+	 *     return value.toLowerCase();
+	 *   }
+	 * }
+	 * ngModelController.$parsers.push(parse);
+	 * ```
 	
 	 *
 	 * @property {Array.<Function>} $formatters Array of functions to execute, as a pipeline, whenever
-	       the model value changes. The functions are called in reverse array order, each passing the value through to the
-	       next. The last return value is used as the actual DOM value.
-	       Used to format / convert values for display in the control.
+	    the bound ngModel expression changes programmatically. The `$formatters` are not called when the
+	    value of the control is changed by user interaction.
+	
+	  Formatters are used to format / convert the {@link ngModel.NgModelController#$modelValue
+	    `$modelValue`} for display in the control.
+	
+	  The functions are called in reverse array order, each passing the value through to the
+	    next. The last return value is used as the actual DOM value.
+	
+	  This simple example shows a formatter that would convert the model value to uppercase:
+	
 	 * ```js
-	 * function formatter(value) {
+	 * function format(value) {
 	 *   if (value) {
 	 *     return value.toUpperCase();
 	 *   }
 	 * }
-	 * ngModel.$formatters.push(formatter);
+	 * ngModel.$formatters.push(format);
 	 * ```
 	 *
 	 * @property {Object.<string, function>} $validators A collection of validators that are applied
@@ -28779,9 +28972,10 @@
 	   *
 	   * When `$setViewValue` is called, the new `value` will be staged for committing through the `$parsers`
 	   * and `$validators` pipelines. If there are no special {@link ngModelOptions} specified then the staged
-	   * value sent directly for processing, finally to be applied to `$modelValue` and then the
-	   * **expression** specified in the `ng-model` attribute. Lastly, all the registered change listeners,
-	   * in the `$viewChangeListeners` list, are called.
+	   * value is sent directly for processing through the `$parsers` pipeline. After this, the `$validators` and
+	   * `$asyncValidators` are called and the value is applied to `$modelValue`.
+	   * Finally, the value is set to the **expression** specified in the `ng-model` attribute and
+	   * all the registered change listeners, in the `$viewChangeListeners` list are called.
 	   *
 	   * In case the {@link ng.directive:ngModelOptions ngModelOptions} directive is used with `updateOn`
 	   * and the `default` trigger is not listed, all those actions will remain pending until one of the
@@ -29708,13 +29902,8 @@
 	 * is not matched against any `<option>` and the `<select>` appears as having no selected value.
 	 *
 	 *
-	 * @param {string} ngModel Assignable angular expression to data-bind to.
-	 * @param {string=} name Property name of the form under which the control is published.
-	 * @param {string=} required The control is considered valid only if value is entered.
-	 * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
-	 *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
-	 *    `required` when you want to data-bind to the `required` attribute.
-	 * @param {comprehension_expression=} ngOptions in one of the following forms:
+	 * @param {string} ngModel Assignable AngularJS expression to data-bind to.
+	 * @param {comprehension_expression} ngOptions in one of the following forms:
 	 *
 	 *   * for array data sources:
 	 *     * `label` **`for`** `value` **`in`** `array`
@@ -29753,6 +29942,13 @@
 	 *      used to identify the objects in the array. The `trackexpr` will most likely refer to the
 	 *     `value` variable (e.g. `value.propertyName`). With this the selection is preserved
 	 *      even when the options are recreated (e.g. reloaded from the server).
+	 * @param {string=} name Property name of the form under which the control is published.
+	 * @param {string=} required The control is considered valid only if value is entered.
+	 * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
+	 *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
+	 *    `required` when you want to data-bind to the `required` attribute.
+	 * @param {string=} ngAttrSize sets the size of the select element dynamically. Uses the
+	 * {@link guide/interpolation#-ngattr-for-binding-to-arbitrary-attributes ngAttr} directive.
 	 *
 	 * @example
 	    <example module="selectExample" name="select">
@@ -30564,6 +30760,7 @@
 	 * @ngdoc directive
 	 * @name ngRepeat
 	 * @multiElement
+	 * @restrict A
 	 *
 	 * @description
 	 * The `ngRepeat` directive instantiates a template once per item from a collection. Each template
@@ -32088,6 +32285,18 @@
 	
 	var noopNgModelController = { $setViewValue: noop, $render: noop };
 	
+	function setOptionSelectedStatus(optionEl, value) {
+	  optionEl.prop('selected', value); // needed for IE
+	  /**
+	   * When unselecting an option, setting the property to null / false should be enough
+	   * However, screenreaders might react to the selected attribute instead, see
+	   * https://github.com/angular/angular.js/issues/14419
+	   * Note: "selected" is a boolean attr and will be removed when the "value" arg in attr() is false
+	   * or null
+	   */
+	  optionEl.attr('selected', value);
+	}
+	
 	/**
 	 * @ngdoc type
 	 * @name  select.SelectController
@@ -32128,14 +32337,14 @@
 	    var unknownVal = self.generateUnknownOptionValue(val);
 	    self.unknownOption.val(unknownVal);
 	    $element.prepend(self.unknownOption);
-	    setOptionAsSelected(self.unknownOption);
+	    setOptionSelectedStatus(self.unknownOption, true);
 	    $element.val(unknownVal);
 	  };
 	
 	  self.updateUnknownOption = function(val) {
 	    var unknownVal = self.generateUnknownOptionValue(val);
 	    self.unknownOption.val(unknownVal);
-	    setOptionAsSelected(self.unknownOption);
+	    setOptionSelectedStatus(self.unknownOption, true);
 	    $element.val(unknownVal);
 	  };
 	
@@ -32150,7 +32359,7 @@
 	  self.selectEmptyOption = function() {
 	    if (self.emptyOption) {
 	      $element.val('');
-	      setOptionAsSelected(self.emptyOption);
+	      setOptionSelectedStatus(self.emptyOption, true);
 	    }
 	  };
 	
@@ -32186,7 +32395,7 @@
 	    // Make sure to remove the selected attribute from the previously selected option
 	    // Otherwise, screen readers might get confused
 	    var currentlySelectedOption = $element[0].options[$element[0].selectedIndex];
-	    if (currentlySelectedOption) currentlySelectedOption.removeAttribute('selected');
+	    if (currentlySelectedOption) setOptionSelectedStatus(jqLite(currentlySelectedOption), false);
 	
 	    if (self.hasOption(value)) {
 	      self.removeUnknownOption();
@@ -32196,7 +32405,7 @@
 	
 	      // Set selected attribute and property on selected option for screen readers
 	      var selectedOption = $element[0].options[$element[0].selectedIndex];
-	      setOptionAsSelected(jqLite(selectedOption));
+	      setOptionSelectedStatus(jqLite(selectedOption), true);
 	    } else {
 	      if (value == null && self.emptyOption) {
 	        self.removeUnknownOption();
@@ -32376,11 +32585,6 @@
 	      }
 	    });
 	  };
-	
-	  function setOptionAsSelected(optionEl) {
-	    optionEl.prop('selected', true); // needed for IE
-	    optionEl.attr('selected', true);
-	  }
 	}];
 	
 	/**
@@ -32450,6 +32654,8 @@
 	 *    interaction with the select element.
 	 * @param {string=} ngOptions sets the options that the select is populated with and defines what is
 	 * set on the model on selection. See {@link ngOptions `ngOptions`}.
+	 * @param {string=} ngAttrSize sets the size of the select element dynamically. Uses the
+	 * {@link guide/interpolation#-ngattr-for-binding-to-arbitrary-attributes ngAttr} directive.
 	 *
 	 * @example
 	 * ### Simple `select` elements with static options
@@ -32691,8 +32897,20 @@
 	        // Write value now needs to set the selected property of each matching option
 	        selectCtrl.writeValue = function writeMultipleValue(value) {
 	          forEach(element.find('option'), function(option) {
-	            option.selected = !!value && (includes(value, option.value) ||
-	                                          includes(value, selectCtrl.selectValueMap[option.value]));
+	            var shouldBeSelected = !!value && (includes(value, option.value) ||
+	                                               includes(value, selectCtrl.selectValueMap[option.value]));
+	            var currentlySelected = option.selected;
+	
+	            // IE and Edge, adding options to the selection via shift+click/UP/DOWN,
+	            // will de-select already selected options if "selected" on those options was set
+	            // more than once (i.e. when the options were already selected)
+	            // So we only modify the selected property if neccessary.
+	            // Note: this behavior cannot be replicated via unit tests because it only shows in the
+	            // actual user interface.
+	            if (shouldBeSelected !== currentlySelected) {
+	              setOptionSelectedStatus(jqLite(option), shouldBeSelected);
+	            }
+	
 	          });
 	        };
 	
@@ -33806,21 +34024,31 @@
 
 	var map = {
 		"./about/about.js": 8,
-		"./app/app.js": 14,
-		"./articles/articles.js": 16,
-		"./checkout/checkout.js": 20,
-		"./checkout/success/success.js": 24,
-		"./contact/contact.js": 28,
-		"./footer-content/footer-content.js": 32,
-		"./header-content/header-content.js": 36,
-		"./hero-image/hero-image.js": 40,
-		"./home/home.js": 44,
-		"./landing/landing.js": 46,
-		"./nav-bar/nav-bar.js": 50,
-		"./shop/all/all.js": 54,
-		"./shop/item/item.js": 56,
-		"./shop/shop-head/shop-head.js": 60,
-		"./shop/shop.js": 64
+		"./admin/admin.js": 14,
+		"./admin/content/about/about-cms.js": 18,
+		"./admin/content/articles/articles-cms.js": 20,
+		"./admin/content/content.js": 22,
+		"./admin/content/image-slider/image-slider-cms.js": 24,
+		"./admin/content/pickups/pickups-cms.js": 26,
+		"./admin/content/shop/shop-cms.js": 30,
+		"./admin/login/login.js": 32,
+		"./admin/orders/orders.js": 34,
+		"./app/app.js": 36,
+		"./articles/articles.js": 38,
+		"./checkout/checkout.js": 42,
+		"./checkout/success/success.js": 46,
+		"./contact/contact.js": 50,
+		"./footer-content/footer-content.js": 54,
+		"./header-content/header-content.js": 58,
+		"./hero-image/hero-image.js": 62,
+		"./home/home.js": 66,
+		"./landing/landing.js": 68,
+		"./markets/markets.js": 72,
+		"./nav-bar/nav-bar.js": 76,
+		"./shop/all/all.js": 80,
+		"./shop/item/item.js": 82,
+		"./shop/shop-head/shop-head.js": 86,
+		"./shop/shop.js": 90
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -33858,6 +34086,9 @@
 	
 	exports.default = {
 	    template: _about2.default,
+	    bindings: {
+	        articles: '<'
+	    },
 	    controller: controller
 	};
 	
@@ -33869,10 +34100,10 @@
 	    this.getHeaderHeight = function () {
 	        this.height = angular.element(document.querySelector('div.header-container'))[0].height; //eslint-disable-line
 	        this.headerHeight = { height: this.height + 'px' };
-	        console.log('headerHeight: ', this.height);
 	    };
 	
 	    this.$onInit = function () {
+	        console.log(_this);
 	        _this.getHeaderHeight();
 	    };
 	}
@@ -33881,7 +34112,7 @@
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "<!--<img class=\"wood-header\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_east,h_514,w_3754/v1482867039/earth%20house/wood-banner_rbetwp.jpg\">-->\n<!--<div class=\"header-background\"></div>-->\n<div class=\"container\">\n    <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_north,h_1233,w_4096/v1482867033/earth%20house/top-cut_m3mrs8.jpg\">\n\n    <div class=\"about-text\">\n        <img class=\"behind-text\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_south,h_1100,w_4096/v1482867033/earth%20house/top-cut_m3mrs8.jpg\">\n        <section>\n            <h2>Our Juices</h2>\n            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates pariatur distinctio cumque voluptatum? Eaque nihil, quibusdam laudantium sint quas, quos aliquam inventore ducimus debitis itaque mollitia dolorum impedit vero ad!\n            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque aliquam quod tempora dolorem, cum. Quidem mollitia repellat quasi iure. Dolorem, quo, laudantium? Culpa quisquam numquam, rem in est nostrum, error.\n            </p>\n            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates pariatur distinctio cumque voluptatum? Eaque nihil, quibusdam laudantium sint quas, quos aliquam inventore ducimus debitis itaque mollitia dolorum impedit vero ad!\n            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque aliquam quod tempora dolorem, cum. Quidem mollitia repellat quasi iure. Dolorem, quo, laudantium? Culpa quisquam numquam, rem in est nostrum, error.\n            </p>\n        </section>\n\n        <hr class=\"section-divider\">\n\n        <section>\n            <h2>Our Mission</h2>\n            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates pariatur distinctio cumque voluptatum? Eaque nihil, quibusdam laudantium sint quas, quos aliquam inventore ducimus debitis itaque mollitia dolorum impedit vero ad!</p>\n        </section>\n\n        <hr class=\"section-divider\">\n\n        <section>\n            <h2>Our Customers</h2>\n            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates pariatur distinctio cumque voluptatum? Eaque nihil, quibusdam laudantium sint quas, quos aliquam inventore ducimus debitis itaque mollitia dolorum impedit vero ad!</p>\n        </section>\n    </div>\n\n</div>\n\n";
+	module.exports = "<div class=\"container\">\n    <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_north,h_1233,w_4096/v1482867033/earth%20house/top-cut_m3mrs8.jpg\">\n\n    <div class=\"about-text\">\n        <img class=\"behind-text\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_south,h_1100,w_4096/v1482867033/earth%20house/top-cut_m3mrs8.jpg\">\n        <section ng-repeat=\"article in $ctrl.articles\">\n            <h2>{{article.title}}</h2>\n            <div data-ng-bind-html=\"article.text\">\n                {{article.text}}\n            </div>\n            <img ng-if=\"article.imgUrl !== '#'\" src=\"{{article.imgUrl}}\">\n            <hr class=\"section-divider\">\n        </section>\n    </div>\n\n</div>\n\n";
 
 /***/ },
 /* 10 */
@@ -33899,8 +34130,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./about.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./about.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./about.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./about.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -33918,7 +34149,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-img {\n  width: 100%;\n  border-bottom: 3px solid #AAA; }\n\n.container {\n  width: 80%;\n  margin: 0 auto 5% auto; }\n  .container img {\n    margin-top: 20px;\n    z-index: -1;\n    width: 100%; }\n  .container h1 {\n    font-size: 3em;\n    text-align: center; }\n  .container h2 {\n    margin-top: 0;\n    margin-bottom: 2%;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em; }\n  .container p {\n    width: 90%;\n    margin: 0 auto;\n    text-indent: 25px;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.4em;\n    margin-top: 16px;\n    font-weight: 600;\n    line-height: 1.3; }\n  .container .section-divider {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    width: 70%;\n    margin-left: auto;\n    margin-right: auto;\n    height: 1px;\n    background-color: rgba(200, 200, 200, 0.7);\n    border: none; }\n  .container .about-text {\n    position: relative; }\n  .container .behind-text {\n    position: absolute;\n    top: 0;\n    margin-top: 0; }\n", "", {"version":3,"sources":["/./src/components/about/src/scss/partials/_header-background.scss","/./src/components/about/src/scss/partials/_colors.scss","/./src/components/about/src/components/about/about.scss","/./src/components/about/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE7BL;EACI,YAAW;EACX,8BAA6B,EAChC;;AAED;EACI,WAAU;EACV,uBAAsB,EAkDzB;EApDD;IAIQ,iBAAgB;IAChB,YAAW;IACX,YACJ,EAAE;EAPN;IAUQ,eAAc;IACd,mBACJ,EAAE;EAZN;IAeQ,cAAa;IACb,kBAAiB;IACjB,kCCzB8B;ID0B9B,eAAc,EACjB;EAnBL;IAsBQ,WAAU;IACV,eAAc;IACd,kBAAiB;IACjB,wCChC8B;IDiC9B,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB,EACnB;EA9BL;IAiCQ,eAAc;IACd,kBAAiB;IACjB,WAAU;IACV,kBAAiB;IACjB,mBAAkB;IAClB,YAAW;IACX,2CAAsC;IACtC,aAAY,EACf;EAzCL;IA4CQ,mBAAkB,EACrB;EA7CL;IAgDQ,mBAAkB;IAClB,OAAM;IACN,cAAa,EAChB","file":"about.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'fonts';\n@import 'header-background';\n\n.header-img {\n    width: 100%;\n    border-bottom: 3px solid #AAA;\n}\n\n.container {\n    width: 80%;\n    margin: 0 auto 5% auto;\n    img {\n        margin-top: 20px;\n        z-index: -1;\n        width: 100%\n    }\n\n    h1 {\n        font-size: 3em;\n        text-align: center\n    }\n\n    h2 {\n        margin-top: 0;\n        margin-bottom: 2%;\n        font-family: $decorative-font;\n        font-size: 3em;\n    }\n\n    p {\n        width: 90%;\n        margin: 0 auto;\n        text-indent: 25px;\n        font-family: $main-font;\n        font-size: 1.4em;\n        margin-top: 16px;\n        font-weight: 600;\n        line-height: 1.3;\n    }\n\n    .section-divider {\n        margin-top: 5%;\n        margin-bottom: 5%;\n        width: 70%;\n        margin-left: auto;\n        margin-right: auto;\n        height: 1px;\n        background-color: rgba(200,200,200,.7);\n        border: none;\n    }\n\n    .about-text {\n        position: relative;\n    }\n\n    .behind-text {\n        position: absolute;\n        top: 0;\n        margin-top: 0;\n    }\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-img {\n  width: 100%;\n  border-bottom: 3px solid #AAA; }\n\n.container {\n  width: 80%;\n  margin: 5% auto 10% auto; }\n  .container img {\n    margin-top: 20px;\n    z-index: -1;\n    width: 100%; }\n  .container section img {\n    max-width: 90%;\n    margin: 20px auto; }\n  .container h1 {\n    font-size: 3em;\n    text-align: center; }\n  .container h2 {\n    margin-top: 0;\n    margin-bottom: 2%;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em; }\n  .container h3 {\n    font-family: \"Amatic SC\", cursive;\n    width: 90%;\n    margin: 20px auto;\n    font-size: 2.2em;\n    color: #AAA; }\n  .container p {\n    width: 90%;\n    margin: 0 auto;\n    text-indent: 25px;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.4em;\n    margin-top: 16px;\n    font-weight: 600;\n    line-height: 1.3; }\n  .container .section-divider {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    width: 70%;\n    margin-left: auto;\n    margin-right: auto;\n    height: 1px;\n    background-color: rgba(200, 200, 200, 0.7);\n    border: none; }\n  .container .about-text {\n    position: relative; }\n  .container .behind-text {\n    position: absolute;\n    top: 0;\n    margin-top: 0; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_header-background.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/components/about/about.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE7BL;EACI,YAAW;EACX,8BAA6B,EAChC;;AAED;EACI,WAAU;EACV,yBAAwB,EAiE3B;EAnED;IAIQ,iBAAgB;IAChB,YAAW;IACX,YACJ,EAAE;EAPN;IAWY,eAAc;IACd,kBAAiB,EACpB;EAbT;IAiBQ,eAAc;IACd,mBACJ,EAAE;EAnBN;IAsBQ,cAAa;IACb,kBAAiB;IACjB,kCChC8B;IDiC9B,eAAc,EACjB;EA1BL;IA6BQ,kCCrC8B;IDsC9B,WAAU;IACV,kBAAiB;IACjB,iBAAgB;IAChB,YAAW,EACd;EAlCL;IAqCQ,WAAU;IACV,eAAc;IACd,kBAAiB;IACjB,wCC/C8B;IDgD9B,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB,EACnB;EA7CL;IAgDQ,eAAc;IACd,kBAAiB;IACjB,WAAU;IACV,kBAAiB;IACjB,mBAAkB;IAClB,YAAW;IACX,2CAAsC;IACtC,aAAY,EACf;EAxDL;IA2DQ,mBAAkB,EACrB;EA5DL;IA+DQ,mBAAkB;IAClB,OAAM;IACN,cAAa,EAChB","file":"about.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'fonts';\n@import 'header-background';\n\n.header-img {\n    width: 100%;\n    border-bottom: 3px solid #AAA;\n}\n\n.container {\n    width: 80%;\n    margin: 5% auto 10% auto;\n    img {\n        margin-top: 20px;\n        z-index: -1;\n        width: 100%\n    }\n\n    section {\n        img {\n            max-width: 90%;\n            margin: 20px auto;\n        }\n    }\n\n    h1 {\n        font-size: 3em;\n        text-align: center\n    }\n\n    h2 {\n        margin-top: 0;\n        margin-bottom: 2%;\n        font-family: $decorative-font;\n        font-size: 3em;\n    }\n\n    h3 {\n        font-family: $decorative-font;\n        width: 90%;\n        margin: 20px auto;\n        font-size: 2.2em;\n        color: #AAA;\n    }\n\n    p {\n        width: 90%;\n        margin: 0 auto;\n        text-indent: 25px;\n        font-family: $main-font;\n        font-size: 1.4em;\n        margin-top: 16px;\n        font-weight: 600;\n        line-height: 1.3;\n    }\n\n    .section-divider {\n        margin-top: 5%;\n        margin-bottom: 5%;\n        width: 70%;\n        margin-left: auto;\n        margin-right: auto;\n        height: 1px;\n        background-color: rgba(200,200,200,.7);\n        border: none;\n    }\n\n    .about-text {\n        position: relative;\n    }\n\n    .behind-text {\n        position: absolute;\n        top: 0;\n        margin-top: 0;\n    }\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -33996,7 +34227,7 @@
 			};
 		},
 		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+			return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 		}),
 		getHeadElement = memoize(function () {
 			return document.head || document.getElementsByTagName("head")[0];
@@ -34241,7 +34472,794 @@
 	    value: true
 	});
 	
-	var _app = __webpack_require__(15);
+	var _admin = __webpack_require__(15);
+	
+	var _admin2 = _interopRequireDefault(_admin);
+	
+	var _admin3 = __webpack_require__(16);
+	
+	var _admin4 = _interopRequireDefault(_admin3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _admin2.default,
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['authService', '$state'];
+	
+	function controller(authService, $state) {
+	    var _this = this;
+	
+	    this.styles = _admin4.default;
+	    //delete this eventually
+	    this.$onInit = function () {
+	        // this.credentials = {
+	        //     username: 'test',
+	        //     password: '123'
+	        // };
+	
+	        // this.signin();
+	    };
+	    this.signin = function () {
+	        authService.signin(_this.credentials).then(function (data) {
+	            _this.token = data.token;
+	            $state.go('admin.content');
+	        });
+	    };
+	    this.logOut = function () {
+	        _this.credentials = {};
+	        delete _this.token;
+	    };
+	    //TODO: ADD email and notes section to each order as well as in model on the server side!
+	}
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"admin-header\">\n\n</div>\n\n<div class=\"admin-body\">\n    <div class=\"login\" ng-if=\"!$ctrl.token\">\n        <h2>Login</h2>\n        <form ng-submit=\"$ctrl.signin()\">\n            <label for=\"username\">username</label>\n            <input type=\"text\" ng-model=\"$ctrl.credentials.username\">\n            <label for=\"password\">password</label>\n            <input type=\"text\" ng-model=\"$ctrl.credentials.password\">\n            <button type=\"submit\">Submit</button>\n        </form>\n    </div>\n\n    <ul class=\"admin-nav\" ng-if=\"$ctrl.token\">\n        <li>\n            <a ui-sref=\"admin.orders\">orders</a>\n        </li>\n        <li>\n            <a ui-sref=\"admin.content\">content</a>\n        </li>\n        <li>\n            <a ng-click=\"$ctrl.logOut()\">logout</a>\n        </li>\n    </ul>\n\n    <ui-view name=\"main\" token=\"$ctrl.token\"></ui-view>\n</div>\n\n";
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(17);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(13)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./admin.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./admin.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(12)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".admin-header {\n  height: 170px;\n  background-color: #323232; }\n\n.admin-body {\n  min-height: 85vh;\n  width: 90%;\n  margin: 0 auto 100px auto; }\n  .admin-body a {\n    color: blue; }\n  .admin-body a:hover {\n    text-decoration: underline; }\n\ninput.article-title {\n  display: block; }\n\n.thumbnail {\n  max-width: 100px; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/src/components/admin/admin.scss","/Users/Will/freelance/earth-house/app/src/components/admin/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,cAAa;EACb,0BCFiB,EDGpB;;AAED;EACI,iBAAgB;EAChB,WAAU;EACV,0BAAyB,EAO5B;EAVD;IAKQ,YAAW,EACd;EANL;IAQQ,2BAA0B,EAC7B;;AAGL;EACI,eAAc,EACjB;;AAED;EACI,iBAAgB,EACnB","file":"admin.scss","sourcesContent":["@import 'colors';\n\n.admin-header {\n    height: 170px;\n    background-color: $black;\n}\n\n.admin-body {\n    min-height: 85vh;\n    width: 90%;\n    margin: 0 auto 100px auto;\n    a {\n        color: blue;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n}\n\ninput.article-title {\n    display: block;\n}\n\n.thumbnail {\n    max-width: 100px;\n}\n\n\n","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
+	
+	// exports
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _aboutCms = __webpack_require__(19);
+	
+	var _aboutCms2 = _interopRequireDefault(_aboutCms);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _aboutCms2.default,
+	    bindings: {
+	        aboutArticles: '<',
+	        token: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['aboutService'];
+	
+	function controller(aboutService) {
+	    var _this = this;
+	
+	    this.positions = [0, 1, 2, 3, 4];
+	    this.$onInit = function () {
+	        _this.getArticles();
+	    };
+	
+	    this.getArticles = function () {
+	        aboutService.getAll().then(function (articles) {
+	            // articles.sort((curr, next) => {
+	            //     return curr.position - next.position;
+	            // });
+	            order(articles);
+	            _this.aboutArticles = articles;
+	            console.log('in about cms', _this.aboutArticles);
+	        });
+	    };
+	
+	    var order = function order(arr) {
+	        console.log(arr);
+	        arr.sort(function (curr, next) {
+	            return curr.position - next.position;
+	        });
+	    };
+	
+	    this.updateArticle = function (article) {
+	        aboutService.updateArticle(article, _this.token).then(function (updated) {
+	            var newPosition = updated.position;
+	            var currIndex = _this.aboutArticles.indexOf(article);
+	
+	            _this.aboutArticles.splice(currIndex, 1);
+	
+	            if (currIndex >= newPosition) {
+	                _this.aboutArticles.splice(newPosition, 0, article);
+	                for (var i = 0; i < currIndex - newPosition; i++) {
+	                    _this.aboutArticles[newPosition + 1 + i].position += 1;
+	                    aboutService.updateArticle(_this.aboutArticles[newPosition + 1 + i], _this.token);
+	                }
+	            } else {
+	                for (i = currIndex + 1; i <= newPosition; i++) {
+	                    _this.aboutArticles[i].position += -1;
+	                    _this.aboutArticles[i - 1] = _this.aboutArticles[i];
+	                    aboutService.updateArticle(_this.aboutArticles[i], _this.token);
+	                }
+	                _this.aboutArticles.splice(newPosition, 0, article);
+	                order(_this.aboutArticles);
+	            }
+	        });
+	    };
+	
+	    this.addArticle = function (newArticle) {
+	        newArticle.position = _this.aboutArticles.length;
+	        aboutService.createArticle(newArticle, _this.token).then(function (saved) {
+	            console.log(saved);
+	            _this.aboutArticles.push(saved);
+	            newArticle = {};
+	        });
+	    };
+	
+	    this.deleteArticle = function (article) {
+	        var index = _this.aboutArticles.indexOf(article);
+	        aboutService.deleteArticle(article, _this.token).then(function () {
+	            _this.aboutArticles.splice(index, 1);
+	        });
+	    };
+	}
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "<h2>About</h2>\n\n<ul>\n    <li ng-repeat=\"article in $ctrl.aboutArticles\">\n        <div class=\"cms-title\">\n            <label>Title: </label>\n            <input class=\"article-title\" type=\"text\" ng-model=\"article.title\">\n            <label>visible</label>\n            <select ng-model=\"article.visible\">\n                <option ng-value=\"true\">true</option>\n                <option ng-value=\"false\">false</option>\n            </select>\n            <label>position</label>\n            <select ng-if=\"article.visible\" ng-model=\"article.position\">\n                <option ng-repeat=\"position in $ctrl.positions\" ng-value=\"position\">{{position}}</option>\n            </select>\n        </div>\n\n        <div class=\"cms-img\">\n            <label>Image: </label>\n            <input type=\"text\" ng-model=\"article.imgUrl\">\n            <img class=\"thumbnail\" ng-if=\"article.imgUrl !== '#'\" src=\"{{article.imgUrl}}\">\n            <p ng-if=\"article.imgUrl === '#'\">No image provided</p>\n        </div>\n\n        <div class=\"cms-text\">\n            <label>Text: </label>\n            <textarea cols=\"130\" rows=\"20\" ng-model=\"article.text\"></textarea>      \n        </div>\n\n        <button ng-click=\"$ctrl.updateArticle(article)\">Update</button>\n        <button ng-click=\"$ctrl.deleteArticle(article)\">Delete</button>\n        <hr>\n    </li>\n</ul>\n\n<div class=\"add-article\">\n    <h2>New Article</h2>\n    <form ng-submit=\"$ctrl.addArticle(newArticle)\">\n        <label>Title: </label>\n        <input type=\"text\" ng-model=\"newArticle.title\">\n        <label>Image: </label>\n        <input type=\"text\" ng-model=\"newArticle.imgUrl\">\n        <label>Text: </label>\n        <textarea cols=\"130\" rows=\"20\" ng-model=\"newArticle.text\"></textarea>\n        <button type=\"submit\">Add article</button>\n    </form>\n</div>";
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _articlesCms = __webpack_require__(21);
+	
+	var _articlesCms2 = _interopRequireDefault(_articlesCms);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _articlesCms2.default,
+	    bindings: {
+	        token: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['articleService'];
+	
+	function controller(articleService) {
+	    var _this = this;
+	
+	    this.$onInit = function () {
+	        _this.articles = [];
+	        articleService.getAll().then(function (articles) {
+	            if (articles.length < 3) {
+	                var _template = {
+	                    title: 'template',
+	                    link: '#'
+	                };
+	
+	                for (var i = 0; i < 3; i++) {
+	                    articleService.create(_template, _this.token).then(function (saved) {
+	                        return _this.articles.push(saved);
+	                    });
+	                }
+	            } else {
+	                _this.articles = articles;
+	            }
+	        });
+	    };
+	
+	    this.update = function (article) {
+	        articleService.update(article, _this.token).then(function (updated) {
+	            return console.log(updated);
+	        });
+	    };
+	}
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	module.exports = "<h1>Articles</h1>\n\n<ul>\n    <li ng-repeat=\"article in $ctrl.articles\">\n        <form ng-submit=\"$ctrl.update(article)\">\n            <label>title: </label>\n            <input type=\"text\" ng-model=\"article.title\" required>\n\n            <label>image url: </label>\n            <input type=\"text\" ng-model=\"article.imgUrl\">\n            <img class=\"thumbnail\" ng-if=\"article.imgUrl !== ''\" ng-src=\"{{article.imgUrl}}\">\n            <p ng-if=\"article.imgUrl === ''\">No image proved</p>\n\n            <label>text: </label>\n            <input type=\"text\" ng-model=\"article.text\">\n\n            <label>link: </label>\n            <input type=\"text\" ng-model=\"article.link\">\n            <button type=\"submit\">update</button>\n        </form>\n        <hr>\n    </li>\n</ul>";
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _content = __webpack_require__(23);
+	
+	var _content2 = _interopRequireDefault(_content);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _content2.default,
+	    bindings: {
+	        token: '<',
+	        aboutArticles: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['$state'];
+	
+	function controller($state) {
+	    var _this = this;
+	
+	    this.$onInit = function () {
+	        if (!_this.token) $state.go('admin.login');
+	    };
+	
+	    this.contentToManage = 'slider';
+	
+	    this.setCms = function (content) {
+	        _this.contentToManage = content;
+	        console.log('content set to: ', _this.contentToManage);
+	    };
+	}
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	module.exports = "<h1>Content</h1>\n\n<ul>\n    <li>\n        <a ng-click=\"$ctrl.setCms('slider')\">Image Slider</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('articles')\">Articles</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('shop')\">Shop</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('about')\">About</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('pickups')\">Pickups</a>\n    </li>\n</ul>\n\n<image-slider-cms ng-if=\"$ctrl.contentToManage === 'slider'\" token=\"$ctrl.token\"></image-slider-cms>\n<articles-cms ng-if=\"$ctrl.contentToManage === 'articles'\" token=\"$ctrl.token\"></articles-cms>\n<shop-cms ng-if=\"$ctrl.contentToManage === 'shop'\" token=\"$ctrl.token\"></shop-cms>\n<about-cms ng-if=\"$ctrl.contentToManage === 'about'\"  aboutArticles=\"$ctrl.aboutArticles\" token=\"$ctrl.token\"></about-cms>\n<pickups-cms ng-if=\"$ctrl.contentToManage === 'pickups'\" token=\"$ctrl.token\"></pickups-cms>\n";
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _imageSliderCms = __webpack_require__(25);
+	
+	var _imageSliderCms2 = _interopRequireDefault(_imageSliderCms);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _imageSliderCms2.default,
+	    bindings: {
+	        token: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['slideService'];
+	
+	function controller(slideService) {
+	    var _this = this;
+	
+	    this.$onInit = function () {
+	        slideService.getAll().then(function (slides) {
+	            _this.slides = slides;
+	        });
+	    };
+	
+	    this.addSlide = function () {
+	        slideService.create(_this.newSlide, _this.token).then(function (slide) {
+	            _this.slides.push(slide);
+	            _this.newSlide = {};
+	        });
+	    };
+	
+	    this.update = function (slide) {
+	        slideService.update(slide, slide._id, _this.token).then(function (updated) {
+	            console.log(updated);
+	        });
+	    };
+	
+	    this.delete = function (slide) {
+	        var index = _this.slides.indexOf(slide);
+	        _this.slides.splice(index, 1);
+	        slideService(slide._id, _this.token).then(function (deleted) {
+	            console.log(deleted);
+	        });
+	    };
+	}
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	module.exports = "<h2>Image Slider</h2>\n\n<h3>Slides</h3>\n\n<ul>\n    <li ng-repeat=\"slide in $ctrl.slides\">\n        <label>name: </label>\n        <input type=\"text\" ng-model=\"slide.name\">\n\n        <label>image url: </label>\n        <input type=\"text\" ng-model=\"slide.imgUrl\">\n        <img ng-src=\"{{slide.imgUrl}}\" class=\"thumbnail\">\n\n        <label>text: </label>\n        <input type=\"text\" ng-model=\"slide.text\">\n\n        <label>link: </label>\n        <input type=\"text\" ng-model=\"slide.link\">\n\n        <label>show: </label>\n        <select ng-model=\"slide.show\">\n            <option ng-value=\"true\">true</option>\n            <option ng-value=\"false\">false</option>\n        </select>\n\n        <button ng-click=\"$ctrl.update(slide)\">update</button>\n        <button ng-click=\"$ctrl.delete(slide)\">delete</button>\n\n        <hr>\n    </li>\n</ul>\n\n<h3>Add slide</h3>\n\n<form ng-submit=\"$ctrl.addSlide()\">\n    <label>name: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.name\" required>\n    <label>image url: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.imgUrl\" required>\n    <img class=\"thumbnail\" ng-src=\"{{$ctrl.newSlide.imgUrl}}\">\n    <label>text: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.text\">\n    <label>link to: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.link\">\n    <button type=\"submit\">create</button>\n</form>";
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _pickupsCms = __webpack_require__(27);
+	
+	var _pickupsCms2 = _interopRequireDefault(_pickupsCms);
+	
+	var _pickupsCms3 = __webpack_require__(28);
+	
+	var _pickupsCms4 = _interopRequireDefault(_pickupsCms3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _pickupsCms2.default,
+	    bindings: {
+	        token: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['pickupService', 'dateService'];
+	
+	function controller(pickupService, dateService) {
+	    var _this = this;
+	
+	    this.styles = _pickupsCms4.default;
+	    this.days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+	    this.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	
+	    this.$onInit = function () {
+	        _this.pickups = [];
+	        _this.hours = [];
+	
+	        for (var i = 0; i < 24; i++) {
+	            _this.hours.push(dateService.hourValuetoObj(i));
+	        }
+	
+	        pickupService.getAll().then(function (pickups) {
+	            //alphabetize
+	
+	            pickups.forEach(function (pickup) {
+	                var startDate = new Date(pickup.start).toDateString();
+	                var endDate = new Date(pickup.end).toDateString();
+	
+	                pickup.start = dateService.dateStringToObj(startDate);
+	                pickup.end = dateService.dateStringToObj(endDate);
+	                pickup.startTime = dateService.hourValuetoObj(pickup.startTime);
+	                pickup.endTime = dateService.hourValuetoObj(pickup.endTime);
+	
+	                _this.pickups.push(pickup);
+	            });
+	            dateService.alphabetize(_this.pickups);
+	        });
+	    };
+	
+	    this.update = function (pickup) {
+	        var formatedPickup = {};
+	
+	        Object.keys(pickup).forEach(function (key) {
+	            formatedPickup[key] = pickup[key];
+	        });
+	
+	        formatedPickup.start = new Date(dateService.dateObjToString(pickup.start));
+	        formatedPickup.end = new Date(dateService.dateObjToString(pickup.end));
+	        formatedPickup.startTime = pickup.startTime.value;
+	        formatedPickup.endTime = pickup.endTime.value;
+	
+	        pickupService.update(formatedPickup, _this.token).then(function (updated) {
+	            return console.log(updated);
+	        });
+	    };
+	    this.add = function () {
+	        _this.new.start = dateService.dateObjToString(_this.new.start);
+	        _this.new.end = dateService.dateObjToString(_this.new.end);
+	        _this.new.day = _this.new.start.split(' ')[0];
+	        pickupService.create(_this.new, _this.token).then(function (saved) {
+	            saved.start = new Date(saved.start).toDateString();
+	            saved.end = new Date(saved.end).toDateString();
+	            _this.pickups.push(saved);
+	            dateService.alphabetize(_this.pickups);
+	            _this.new = {};
+	        });
+	    };
+	
+	    this.delete = function (pickup) {
+	        var index = _this.pickups.indexOf(pickup);
+	        pickupService.delete(pickup._id, _this.token).then(function () {
+	            _this.pickups.splice(index, 1);
+	        });
+	    };
+	}
+
+/***/ },
+/* 27 */
+/***/ function(module, exports) {
+
+	module.exports = "<h2>Pickup Locations</h2>\n<table ng-class=\"$ctrl.styles.table\">\n    <tr>\n        <th>name: </th>\n        <th>start date: </th>\n        <th>end date: </th>\n        <th>day: </th>\n        <th>start time: </th>\n        <th>end time: </th>\n        <th>link: </th>\n        <th>show: </th>\n        <th>edit: </th>\n\n    </tr>\n    <tr ng-repeat=\"pickup in $ctrl.pickups\">\n        <td><input type=\"text\" ng-model=\"pickup.name\"></td>\n        <td>\n            <select ng-model=\"pickup.start.month\" ng-options=\"month for month in $ctrl.months\">\n                <option ng-repeat=\"month in $ctrl.months\" ng-value=\"{{month}}\">{{month}}</option>\n            </select>\n            <input type=\"text\" ng-model=\"pickup.start.date\">\n        </td>\n        <td>\n            <select ng-model=\"pickup.end.month\" ng-options=\"month for month in $ctrl.months\"></select>\n            <input type=\"text\" ng-model=\"pickup.end.date\">\n        </td>\n        <td>{{pickup.day}}</td>\n        <td><select ng-model=\"pickup.startTime\" ng-options=\"hour as hour.time for hour in $ctrl.hours track by hour.value\"></select></td>\n        <td><select ng-model=\"pickup.endTime\" ng-options=\"hour as hour.time for hour in $ctrl.hours track by hour.value\"></select></td>\n        <td><input type=\"text\" ng-model=\"pickup.link\"></td>\n        <td>\n            <select ng-model=\"pickup.show\">\n                <option ng-value=\"true\">true</option>\n                <option ng-value=\"false\">false</option>\n            </select>\n        </td>\n        <td>\n            <button ng-click=\"$ctrl.update(pickup)\">update</button>\n            <button ng-click=\"$ctrl.delete(pickup)\">delete</button>\n        </td>\n    </tr>\n</table>\n<h2>Add New</h2>\n<form ng-submit=\"$ctrl.add()\">\n    <h4>General</h4>\n    <label>name: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.name\">\n    <label>link: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.link\">\n    <h4>Start date: </h4>\n    <label>month: </label>\n    <select ng-model=\"$ctrl.new.start.month\">\n        <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n    </select>\n    <label>date: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.start.date\"></input>\n    <label>year: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.start.year\"></input>\n\n    <h4>End date: </h4>\n    <label>month: </label>\n    <select ng-model=\"$ctrl.new.end.month\">\n        <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n    </select>\n    <label>date: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.end.date\"></input>\n    <label>year: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.end.year\"></input>\n\n    <h4>times: </h4>\n    <label>start time: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.startTime\">\n\n    <label>end time: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.endTime\">\n\n    <button type=\"submit\">Add pickup</button>\n</form>\n";
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(29);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(13)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../../../../node_modules/css-loader/index.js?sourceMap!../../../../../node_modules/sass-loader/index.js?sourceMap!./pickups-cms.scss", function() {
+				var newContent = require("!!../../../../../node_modules/css-loader/index.js?sourceMap!../../../../../node_modules/sass-loader/index.js?sourceMap!./pickups-cms.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(12)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "._2IibBvNEpZ2_Q8z3l21uW8 td {\n  border: 1px solid black;\n  text-align: center;\n  padding: 5px; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/content/pickups/src/components/admin/content/pickups/pickups-cms.scss"],"names":[],"mappings":"AAAA;EAEQ,wBAAuB;EACvB,mBAAkB;EAClB,aAAY,EACf","file":"pickups-cms.scss","sourcesContent":[":local(.table) {\n    td {\n        border: 1px solid black;\n        text-align: center;\n        padding: 5px;\n    }\n}"],"sourceRoot":""}]);
+	
+	// exports
+	exports.locals = {
+		"table": "_2IibBvNEpZ2_Q8z3l21uW8"
+	};
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _shopCms = __webpack_require__(31);
+	
+	var _shopCms2 = _interopRequireDefault(_shopCms);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _shopCms2.default,
+	    bindings: {
+	        token: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['juiceService', 'ingredientService', 'dateService'];
+	
+	function controller(juiceService, ingredientService, dateService) {
+	    var _this = this;
+	
+	    this.$onInit = function () {
+	        _this.juices = [];
+	        ingredientService.getAll().then(function (ingredients) {
+	            dateService.alphabetize(ingredients);
+	            _this.ingredients = ingredients;
+	        });
+	        juiceService.getAll().then(function (juices) {
+	            juices.forEach(function (juice) {
+	                juiceService.get(juice._id).then(function (juice) {
+	                    _this.juices.push(juice);
+	                    dateService.alphabetize(_this.juices);
+	                });
+	            });
+	        });
+	    };
+	
+	    this.updateJuice = function (juice) {
+	        console.log('update juice: ', juice);
+	    };
+	
+	    this.createJuice = function () {
+	        juiceService.create(_this.newJuice, _this.token).then(function (saved) {
+	            _this.juices.push(saved);
+	            _this.newJuice = {};
+	        });
+	    };
+	
+	    this.removeIngredient = function (juice, ingredient) {
+	        var index = juice.ingredients.indexOf(ingredient);
+	        juice.ingredients.splice(index, 1);
+	        juiceService.update(juice, juice._id, _this.token);
+	    };
+	
+	    this.addIngredient = function (juice, newIngredient) {
+	        var hasIngredient = false;
+	        juice.ingredients.forEach(function (ingredient) {
+	            if (ingredient.name === newIngredient.name) hasIngredient = true;
+	        });
+	        if (!hasIngredient) {
+	            juice.ingredients.push(newIngredient);
+	            juiceService.update(juice, juice._id, _this.token);
+	        } else {
+	            console.log('already has ingredient', newIngredient.name);
+	        }
+	    };
+	
+	    this.deleteJuice = function (juice) {
+	        juiceService.delete(juice._id, _this.token).then(function (deleted) {
+	            var index = _this.juices.indexOf(juice);
+	            _this.juices.splice(index, 1);
+	            console.log('has been deleted', deleted);
+	        });
+	    };
+	
+	    this.deleteIngredient = function (ingredient) {
+	        ingredientService.delete(ingredient._id, _this.token);
+	        _this.ingredients.splice(_this.ingredients.indexOf(ingredient), 1);
+	    };
+	
+	    this.updateIngredient = function (ingredient) {
+	        ingredientService.update(ingredient, ingredient._id, _this.token).then(function (updated) {
+	            return console.log(updated);
+	        });
+	    };
+	
+	    this.createIngredient = function () {
+	        ingredientService.create(_this.newIngredient, _this.token).then(function (saved) {
+	            _this.newIngredient = {};
+	            _this.ingredients.push(saved);
+	            dateService.alphabetize(_this.ingredients);
+	        });
+	    };
+	}
+
+/***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	module.exports = "<h1>Shop</h1>\n<h2>Juices</h2>\n<ul>\n    <li ng-repeat=\"juice in $ctrl.juices\">\n        <form ng-submit=\"$ctrl.updateJuice(juice)\">\n            <label>name: </label>\n            <input type=\"text\" ng-model=\"juice.name\">\n            <label>image: </label>\n            <input type=\"text\" ng-model=\"juice.imgUrl\">\n            <img class=\"thumbnail\" ng-src=\"{{juice.imgUrl}}\">\n            <label >price: $</label>\n            <input type=\"text\" ng-model=\"juice.price\">\n            <label>description: </label>\n            <textarea cols=\"80\" rows=\"8\" ng-model=\"juice.description\"></textarea>\n            <button type=\"submit\">update</button>\n        </form>\n        <button ng-click=\"$ctrl.deleteJuice(juice)\">Delete Juice</button>\n        <h3>ingredients</h3>\n        <ul>\n            <li ng-repeat=\"ingredient in juice.ingredients\">\n                {{ingredient.name}}\n                <button ng-click=\"$ctrl.removeIngredient(juice, ingredient)\">remove</button>\n            </li>\n        </ul>\n        <select ng-model=\"ingredientToAdd\" ng-options=\"ingredient as ingredient.name for ingredient in $ctrl.ingredients\">\n        </select>\n        <button ng-click=\"$ctrl.addIngredient(juice, ingredientToAdd)\">Add ingredient</button>\n        <hr>\n    </li>\n</ul>\n\n<h2>Add new juice</h2>\n\n<form ng-submit=\"$ctrl.createJuice()\">\n    <label>name: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newJuice.name\">\n    <label>image url: </label>\n    <img class=\"thumbnail\" ng-src=\"{{$ctrl.newJuice.imgUrl}}\">\n    <input type=\"text\" ng-model=\"$ctrl.newJuice.imgUrl\">\n    <label>price: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newJuice.price\">\n    <label>description: </label>\n    <textarea id=\"\" cols=\"80\" rows=\"8\" ng-model=\"$ctrl.newJuice.description\"></textarea>\n    <button type=\"submit\">Create</button>\n</form>\n\n\n<h2>ingredients</h2>\n<ul>\n    <li ng-repeat=\"ingredient in $ctrl.ingredients\">\n        <form ng-submit=\"$ctrl.updateIngredient(ingredient)\">\n            <label>name: </label>\n            <input type=\"text\" ng-model=\"ingredient.name\">\n            <label>image: </label>\n            <input type=\"text\" ng-model=\"ingredient.imgUrl\">\n            <img class=\"thumbnail\" ng-src=\"{{ingredient.imgUrl}}\">\n            <label>description: </label>\n            <textarea cols=\"80\" rows=\"8\" ng-model=\"ingredient.description\"></textarea>\n            <button type=\"submit\">update</button>\n        </form>\n        <button ng-click=\"$ctrl.deleteIngredient(ingredient)\">delete</button>\n        <hr>\n    </li>\n</ul>\n\n<h2>Add new Ingredient</h2>\n<form ng-submit=\"$ctrl.createIngredient()\">\n    <label>Name: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newIngredient.name\">\n    <label>Image url: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newIngredient.imgUrl\">\n    <img class=\"thumbnail\" src=\"{{$ctrl.newIngredient.imgUrl}}\">\n    <label>description: </label>\n    <textarea cols=\"80\" rows=\"15\" ng-model=\"$ctrl.newIngredient.description\"></textarea>\n    <button type=\"submit\">Add</button>\n</form>";
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _login = __webpack_require__(33);
+	
+	var _login2 = _interopRequireDefault(_login);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _login2.default
+	};
+
+/***/ },
+/* 33 */
+/***/ function(module, exports) {
+
+	module.exports = "<h1>Please login</h1>\n";
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _orders = __webpack_require__(35);
+	
+	var _orders2 = _interopRequireDefault(_orders);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _orders2.default,
+	    bindings: {
+	        token: '<'
+	    },
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['orderService', '$state', 'orderPickupService', 'dateService'];
+	
+	function controller(orderService, $state, orderPickupService, dateService) {
+	    var _this = this;
+	
+	    this.days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+	    this.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	
+	    this.$onInit = function () {
+	        if (_this.token) {
+	            _this.getOrders();
+	            _this.getPickups();
+	        } else $state.go('admin.login');
+	        _this.type = 'pickup';
+	    };
+	
+	    this.getOrders = function () {
+	        orderService.getOrders(_this.token).then(function (data) {
+	            _this.orders = data;
+	        });
+	    };
+	
+	    this.getPickups = function () {
+	        orderPickupService.getAll(_this.token).then(function (data) {
+	            data.sort(function (curr, next) {
+	                return new Date(curr.pickupDate) - new Date(next.pickupDate);
+	            });
+	            data.forEach(function (order) {
+	                order.date = new Date(order.date).toDateString();
+	                order.pickupDate = dateService.dateStringToObj(new Date(order.pickupDate).toDateString());
+	                console.log(order.pickupDate);
+	            });
+	            _this.pickups = data;
+	            console.log(_this.pickups);
+	        });
+	    };
+	
+	    this.removePickup = function (order) {
+	        var index = _this.orders.indexOf(order);
+	        orderPickupService.deleteOrder(order._id, _this.token).then(function (data) {
+	            console.log(data);
+	            _this.pickups.splice(index, 1);
+	        });
+	    };
+	
+	    this.updatePickup = function (order) {
+	        var copy = {};
+	        Object.keys(order).forEach(function (key) {
+	            copy[key] = order[key];
+	        });
+	        copy.date = new Date(copy.date);
+	        copy.pickup = copy.pickup._id;
+	        copy.pickupDate = dateService.dateObjToString(copy.pickupDate);
+	        console.log('copy of the order', copy);
+	        orderPickupService.updateOrder(copy._id, copy, _this.token).then(function (updated) {
+	            return console.log(updated);
+	        });
+	    };
+	
+	    this.removeOrder = function (order) {
+	        var index = _this.orders.indexOf(order);
+	        orderService.deleteOrder(order._id, _this.token).then(function (data) {
+	            console.log(data);
+	            _this.orders.splice(index, 1);
+	        });
+	    };
+	    this.updateOrder = function (update) {
+	        _this.calcNewTotal(update);
+	        console.log('update function called', update);
+	        orderService.updateOrder(update._id, update, _this.token).then(function (data) {
+	            console.log(data);
+	            _this.setOrderToUpdate(null);
+	        });
+	    };
+	
+	    this.setOrderToUpdate = function (order) {
+	        _this.orderToUpdate = order;
+	    };
+	
+	    this.calcNewTotal = function (order) {
+	        order.total = 0;
+	        order.items.forEach(function (item) {
+	            item.subTotal = item.quantity * item.price;
+	            order.total += item.subTotal;
+	        });
+	    };
+	    this.addItem = function (newItem) {
+	        _this.orderToUpdate.items.push(newItem);
+	        newItem = {};
+	        console.log(_this.orderToUpdate.items);
+	    };
+	}
+
+/***/ },
+/* 35 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"orders\" ng-if=\"$ctrl.token\">\n    <div class=\"static\" ng-if=\"!$ctrl.orderToUpdate\">\n        <h2>Orders</h2>\n\n        <h3>Filter</h3>\n        <button ng-click=\"$ctrl.type = 'pickup'\">pickups</button>\n        <button ng-click=\"$ctrl.type = 'delivery'\">deliveries</button>\n        <select ng-model=\"$ctrl.completed\" ng-init=\"$ctrl.completed = false\">\n            <option ng-value=\"false\">incomplete</option>\n            <option ng-value=\"true\">complete</option>\n            <option ng-value=\"'all'\">all</option>\n        </select>\n        <hr>\n        <div ng-if=\"$ctrl.type === 'pickup'\">\n            <h3>Pickups</h3>\n            <ul>\n                <li ng-repeat=\"order in $ctrl.pickups\" ng-if=\"order.completed === $ctrl.completed || $ctrl.completed === 'all'\">\n                    <h4>Name: {{order.name}}</h4>\n                        <h4>\n                            Pickup: {{order.pickup.name}}, on \n                            <select ng-model=\"order.pickupDate.day\">\n                                <option ng-repeat=\"day in $ctrl.days\" ng-value=\"day\">{{day}}</option>\n                            </select>\n                            <select ng-model=\"order.pickupDate.month\">\n                                <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n                            </select>\n                            <input type=\"text\" ng-model=\"order.pickupDate.date\"> \n                        </h4>\n                        <p>order placed: {{order.date}}</p>\n                        <a ng-href=\"mailto:{{order.email}}\">{{order.email}}</a>\n                        <h5>total: ${{order.total}}.00</h5>\n                        <h4>Items</h4>\n                        <table class=\"order-items\">\n                            <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                            <tr ng-repeat=\"item in order.items\">\n                                <td>{{item.name}}</td>\n                                <td>{{item.quantity}}</td>\n                                <td>${{item.subTotal}}.00</td>\n                            </tr>\n                        </table>\n                        <h5>complete:</h5>\n                        <select ng-model=\"order.completed\" ng-change=\"$ctrl.updatePickup(order)\">\n                            <option ng-value=\"true\">completed</option>\n                            <option ng-value=\"false\">incomplete</option>\n                        </select>\n                        <h5>Notes:</h5>\n                        <textarea ng-model=\"order.notes\" cols=\"100\" rows=\"4\">{{order.notes}}</textarea>\n                        <div>\n                            <button ng-click=\"$ctrl.removePickup(order)\">delete</button>\n                            <button ng-click=\"$ctrl.updatePickup(order)\">update</button>\n                        </div>\n                        <hr>\n\n                </li>\n            </ul>\n        </div>\n        <div ng-if=\"$ctrl.type === 'delivery'\">\n            <h3>Deliveries</h3>\n            <ul>\n                <li ng-repeat=\"order in $ctrl.orders\" ng-if=\"order.completed === $ctrl.completed || $ctrl.completed === 'all'\">\n                        <h4>{{order.name}}</h4>\n                        <p>{{order.date}}</p>\n                        <a ng-href=\"mailto:{{order.email}}\">{{order.email}}</a>\n                        <h5>total: ${{order.total}}.00</h5>\n                        <h4>Items</h4>\n                        <table class=\"order-items\">\n                            <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                            <tr ng-repeat=\"item in order.items\">\n                                <td>{{item.name}}</td>\n                                <td>{{item.quantity}}</td>\n                                <td>${{item.subTotal}}.00</td>\n                            </tr>\n                        </table>\n                        <h5>\n                            Address: {{order.address.line_1}}, {{order.address.line_2 || ' '}} \n                            <br>\n                            {{order.address.city}}, {{order.address.state}}, {{order.address.zip}}\n                        </h5>\n                        <h5>complete: {{order.completed}}</h5>\n                        <p>Notes: {{order.notes}}</p>\n                        <button ng-click=\"$ctrl.removeOrder(order)\">delete</button>\n                        <button ng-click=\"$ctrl.setOrderToUpdate(order)\">edit</button>\n                        <hr>\n                </li>\n            </ul>\n        </div>\n    </div>\n    <div class=\"update\" ng-if=\"$ctrl.orderToUpdate\">\n        <h2>Update Form</h2>\n        <form>\n            <label>Name:</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.name\" placeholder=\"{{orderToUpdate.name}}\">\n            <label>Total: $</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.total\" placeholder=\"{{orderToUpdate.total}}\">\n            <label>Email: </label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.email\" placeholder=\"{{orderToUpdate.email}}\">\n            <h4>Completed:</h4>\n            <select ng-model=\"$ctrl.orderToUpdate.completed\" ng-init=\"$ctrl.orderToUpdate.completed\">\n                <option ng-value=\"false\">incomplete</option>\n                <option ng-value=\"true\">complete</option>\n            </select>\n                \n            <h4>Items</h4>\n            <table>\n                <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                <tr ng-repeat=\"item in $ctrl.orderToUpdate.items\">\n                    <td><input type=\"text\" ng-model=\"item.name\" ng-value=\"item.name\" placeholder=\"{{item.name}}\"></td>\n                    <td><input type=\"text\" ng-value=\"item.quantity\" ng-model=\"item.quantity\" placeholder=\"{{item.quantity}}\"></td>\n                    <td ng-value=\"item.quantity * item.price\" ng-model=\"item.subTotal\">${{item.quantity * item.price}}.00</td>\n                </tr>\n            </table>\n            <table>\n                <tr><th>item</th><th>price</th><th>qty.</th><th>subtotal</th></tr>\n                <tr>\n                    <td><input type=\"text\" placeholder=\"new item name\" ng-model=\"newItem.name\"></td>\n                    <td><input type=\"text\" placeholder=\"price\" ng-init=\"newItem.price = 0\" ng-model=\"newItem.price\"></td>\n                    <td><input type=\"text\" placeholder=\"qty\" ng-init=\"newItem.quantity = 0\" ng-model=\"newItem.quantity\"></td>\n                    <td>subtotal: ${{newItem.price * newItem.quantity}}.00</td>\n                </tr>\n                <tr>\n                    <td><button ng-click=\"$ctrl.addItem(newItem)\">add item</button></td>\n                </tr>\n            </table>\n\n        <h5>Address</h4>\n\n        <label>Line 1:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_1}}\" ng-model=\"$ctrl.orderToUpdate.address.line_1\">\n        <label>Line 2:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_2}}\" ng-model=\"$ctrl.orderToUpdate.address.line_2\">\n        <label>City:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.city}}\" ng-model=\"$ctrl.orderToUpdate.address.city\">\n        <label>State</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.state}}\" ng-model=\"$ctrl.orderToUpdate.address.state\">\n        <label>Zip</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.zip}}\" ng-model=\"$ctrl.orderToUpdate.address.zip\">\n\n        <label>Notes:</label>\n        <textarea placeholder=\"{{$ctrl.orderToUpdate.notes}}\" ng-model=\"$ctrl.orderToUpdate.notes\">\n        </textarea>\n        </form>\n        <button ng-click=\"$ctrl.updateOrder($ctrl.orderToUpdate)\">update</button>\n        <button ng-click=\"$ctrl.setOrderToUpdate(null)\">cancel</button>\n    </div>\n</div>";
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _app = __webpack_require__(37);
 	
 	var _app2 = _interopRequireDefault(_app);
 	
@@ -34279,7 +35297,6 @@
 	                this.items = storedItems;
 	                this.updateTotalItems();
 	            } else {
-	                console.log('we didnt find anything');
 	                this.items = [];
 	                this.totalItems = 0;
 	            }
@@ -34288,13 +35305,13 @@
 	}
 
 /***/ },
-/* 15 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = "<header>\n    <header-content cart=\"$ctrl.cart\"></header-content>\n</header>\n\n<main>\n    <ui-view cart=\"$ctrl.cart\" initializeCart=\"$ctrl.initializeCart\" hasSeenLanding=\"$ctrl.hasSeenLanding\"></ui-view>\n</main>\n\n<footer>\n    <footer-content></footer-content>\n</footer>";
 
 /***/ },
-/* 16 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34303,11 +35320,11 @@
 	    value: true
 	});
 	
-	var _articles = __webpack_require__(17);
+	var _articles = __webpack_require__(39);
 	
 	var _articles2 = _interopRequireDefault(_articles);
 	
-	var _articles3 = __webpack_require__(18);
+	var _articles3 = __webpack_require__(40);
 	
 	var _articles4 = _interopRequireDefault(_articles3);
 	
@@ -34315,6 +35332,9 @@
 	
 	exports.default = {
 	    template: _articles2.default,
+	    bindings: {
+	        articles: '<'
+	    },
 	    controller: controller
 	};
 	
@@ -34334,19 +35354,19 @@
 	}
 
 /***/ },
-/* 17 */
+/* 39 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"loading-bar\" ng-init=\"$ctrl.loading = $ctrl.styles.start\" ng-class=\"$ctrl.loading\"></div>\n\n<section class=\"articles\">\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"https://www.instagram.com/earthhousejuice/?hl=en\">Follow Us on Instagram!</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_north,h_920,w_1080/v1488237699/14027299_622727931235134_1244126147_n_nzudku.jpg\">   \n        </div>\n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"http://www.portlandfarmersmarket.org/vendors/\">Farmer's markets</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"https://www.portlandfarmersmarket.org/wp-content/uploads/2016/04/PFM-Logo-Horizontal-Green.png\">\n                <p>We will be selling our juices at markets around the Portland Area all summer long! Come take a look at our schedule.</p>\n        </div>    \n    </div>\n\n    <div class=\"article\">\n        <div class=\"text-button\">\n            <a ui-sref=\"about\">Learn about our Juices</a>\n        </div>\n        <div class=\"frame\">\n                <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1488245973/14360103_955849944561168_6715517624580571136_n_xvdpj1.jpg\">\n        </div>    \n    </div>\n</section>";
+	module.exports = "<div class=\"loading-bar\"></div>\n\n<section class=\"articles\">\n    <div ng-repeat=\"article in $ctrl.articles\" class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"{{article.link}}\">{{article.title}}</a>\n        </div>\n        <div class=\"frame\">\n            <img ng-if=\"article.imgUrl !== ''\" ng-src=\"{{article.imgUrl}}\">\n            <p ng-if=\"article.text !== ''\">{{article.text}}</p>\n        </div>\n    </div>\n</section>";
 
 /***/ },
-/* 18 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(19);
+	var content = __webpack_require__(41);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -34355,8 +35375,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./articles.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./articles.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./articles.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./articles.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34366,7 +35386,7 @@
 	}
 
 /***/ },
-/* 19 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -34374,7 +35394,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".loading-bar {\n  position: absolute;\n  height: 5px;\n  background-color: #FFC107;\n  opacity: .6;\n  transition: width 4s; }\n\n._3s_IS80UJioh8cYdbDVsfX {\n  width: 0; }\n\n._375W6Dz1ygJWh5oeNqxjER {\n  width: 100%; }\n\n.articles {\n  border-top: 5px solid rgba(200, 200, 200, 0.7);\n  background-color: #fafafa;\n  margin: 0 0 10px 0;\n  padding: 2px 0 10px 0; }\n\n.text-button {\n  font-family: \"Amatic SC\", cursive;\n  font-size: 2.5em;\n  text-align: center;\n  border: 5px solid #323232;\n  background-color: #323232;\n  margin: 5px auto 0 auto; }\n  .text-button a {\n    color: white;\n    font-weight: 700;\n    transition: all .3s ease; }\n\n.frame {\n  background-color: rgba(200, 200, 200, 0.7);\n  margin: 3px auto 0 auto;\n  padding: 5px; }\n  .frame p {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.3em;\n    text-indent: 50px;\n    font-weight: bold;\n    width: 90%;\n    margin: 10px auto 5px auto; }\n\n.text-button:hover a {\n  color: #FFC107; }\n\n@media all and (max-width: 750px) {\n  .article {\n    width: 100%; }\n  .text-button {\n    width: 90%; }\n  .frame {\n    width: 90%; } }\n\n@media all and (min-width: 751px) {\n  .article {\n    width: 33.33%;\n    float: left;\n    margin-bottom: 10px;\n    margin-top: 3px; }\n  .text-button {\n    width: 95%; }\n  .frame {\n    width: 95%; } }\n", "", {"version":3,"sources":["/./src/components/articles/src/components/articles/articles.scss","/./src/components/articles/src/scss/partials/_colors.scss","/./src/components/articles/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,YAAW;EACX,0BCNkB;EDOlB,YAAW;EACX,qBAAoB,EACvB;;AAED;EACI,SAAQ,EACX;;AAED;EACI,YAAW,EACd;;AAED;EACI,+CCnB4B;EDoB5B,0BAAkC;EAClC,mBAAkB;EAClB,sBAAqB,EACxB;;AAED;EACI,kCE3BkC;EF4BlC,iBAAgB;EAChB,mBAAkB;EAClB,0BC5BiB;ED6BjB,0BC7BiB;ED8BjB,wBAAuB,EAO1B;EAbD;IAQQ,aAAY;IACZ,iBAAgB;IAChB,yBAAwB,EAC3B;;AAGL;EACK,2CCxC2B;EDyC3B,wBAAuB;EACvB,aAAY,EAShB;EAZD;IAKQ,wCE5C8B;IF6C9B,iBAAgB;IAChB,kBAAiB;IACjB,kBAAiB;IACjB,WAAU;IACV,2BAA0B,EAC7B;;AAGL;EAEI,eCxDkB,EDyDjB;;AAGD;EACI;IACI,YAAW,EACd;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa;IACb,YAAW;IACX,oBAAmB;IACnB,gBAAe,EAClB;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA","file":"articles.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.loading-bar {\n    position: absolute;\n    height: 5px;\n    background-color: $accent-color;\n    opacity: .6;\n    transition: width 4s;\n}\n\n:local(.start) {\n    width: 0;\n}\n\n:local(.done) {\n    width: 100%;\n}\n\n.articles {\n    border-top: 5px solid $lightgrey;\n    background-color: rgb(250,250,250);\n    margin: 0 0 10px 0;\n    padding: 2px 0 10px 0;\n}\n\n.text-button {\n    font-family: $decorative-font;\n    font-size: 2.5em;\n    text-align: center;\n    border: 5px solid $black;\n    background-color: $black;\n    margin: 5px auto 0 auto;\n    a { \n        color: white;\n        font-weight: 700;\n        transition: all .3s ease;\n    }\n\n}\n.frame {\n     background-color: $lightgrey; \n     margin: 3px auto 0 auto;\n     padding: 5px;\n    p {\n        font-family: $main-font;\n        font-size: 1.3em;\n        text-indent: 50px;\n        font-weight: bold;\n        width: 90%;\n        margin: 10px auto 5px auto;\n    }\n}\n\n.text-button:hover {\n    a {\n    color: $accent-color;\n    }\n}\n\n    @media all and (max-width: 750px) {\n        .article {\n            width: 100%;\n        }\n\n        .text-button {\n            width: 90%;\n        }\n        .frame {\n            width: 90%;\n        }\n    }\n\n    @media all and (min-width: 751px) {\n        .article {\n            width: 33.33%;\n            float: left;\n            margin-bottom: 10px;\n            margin-top: 3px;\n        }\n\n        .text-button {\n            width: 95%;\n        }\n        .frame {\n            width: 95%;\n        }\n    }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".loading-bar {\n  position: absolute;\n  height: 5px;\n  background-color: #FFC107;\n  opacity: .6;\n  animation-name: slidein;\n  animation-duration: 5s;\n  animation-iteration-count: infinite; }\n\n@keyframes slidein {\n  from {\n    width: 0%; }\n  to {\n    width: 100%; } }\n\n._3s_IS80UJioh8cYdbDVsfX {\n  width: 50%; }\n\n._375W6Dz1ygJWh5oeNqxjER {\n  width: 100%; }\n\n.articles {\n  border-top: 5px solid rgba(200, 200, 200, 0.7);\n  background-color: #fafafa;\n  margin: 0 0 10px 0;\n  padding: 2px 0 10px 0; }\n\n.text-button {\n  font-family: \"Amatic SC\", cursive;\n  font-size: 2.5em;\n  text-align: center;\n  border: 5px solid #323232;\n  background-color: #323232;\n  margin: 5px auto 0 auto; }\n  .text-button a {\n    color: white;\n    font-weight: 700;\n    transition: all .3s ease; }\n\n.frame {\n  background-color: rgba(200, 200, 200, 0.7);\n  margin: 3px auto 0 auto;\n  padding: 5px; }\n  .frame p {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.3em;\n    text-indent: 50px;\n    font-weight: bold;\n    width: 90%;\n    margin: 10px auto 5px auto; }\n\n.text-button:hover a {\n  color: #FFC107; }\n\n@media all and (max-width: 750px) {\n  .article {\n    width: 100%; }\n  .text-button {\n    width: 90%; }\n  .frame {\n    width: 90%; } }\n\n@media all and (min-width: 751px) {\n  .article {\n    width: 33.33%;\n    float: left;\n    margin-bottom: 10px;\n    margin-top: 3px; }\n  .text-button {\n    width: 95%; }\n  .frame {\n    width: 95%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/articles/src/components/articles/articles.scss","/Users/Will/freelance/earth-house/app/src/components/articles/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/articles/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,YAAW;EACX,0BCNkB;EDOlB,YAAW;EACX,wBAAuB;EACvB,uBAAsB;EACtB,oCAAmC,EACtC;;AAED;EACI;IACI,UAAS,EAAA;EAGb;IACI,YAAW,EAAA,EAAA;;AAInB;EACI,WAAU,EACb;;AAED;EACI,YAAW,EACd;;AAED;EACI,+CC/B4B;EDgC5B,0BAAkC;EAClC,mBAAkB;EAClB,sBAAqB,EACxB;;AAED;EACI,kCEvCkC;EFwClC,iBAAgB;EAChB,mBAAkB;EAClB,0BCxCiB;EDyCjB,0BCzCiB;ED0CjB,wBAAuB,EAO1B;EAbD;IAQQ,aAAY;IACZ,iBAAgB;IAChB,yBAAwB,EAC3B;;AAGL;EACK,2CCpD2B;EDqD3B,wBAAuB;EACvB,aAAY,EAShB;EAZD;IAKQ,wCExD8B;IFyD9B,iBAAgB;IAChB,kBAAiB;IACjB,kBAAiB;IACjB,WAAU;IACV,2BAA0B,EAC7B;;AAGL;EAEI,eCpEkB,EDqEjB;;AAGD;EACI;IACI,YAAW,EACd;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa;IACb,YAAW;IACX,oBAAmB;IACnB,gBAAe,EAClB;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA","file":"articles.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.loading-bar {\n    position: absolute;\n    height: 5px;\n    background-color: $accent-color;\n    opacity: .6;\n    animation-name: slidein;\n    animation-duration: 5s;\n    animation-iteration-count: infinite;\n}\n\n@keyframes slidein {\n    from {\n        width: 0%; \n    }\n\n    to {\n        width: 100%;\n    }\n}\n\n:local(.start) {\n    width: 50%;\n}\n\n:local(.done) {\n    width: 100%;\n}\n\n.articles {\n    border-top: 5px solid $lightgrey;\n    background-color: rgb(250,250,250);\n    margin: 0 0 10px 0;\n    padding: 2px 0 10px 0;\n}\n\n.text-button {\n    font-family: $decorative-font;\n    font-size: 2.5em;\n    text-align: center;\n    border: 5px solid $black;\n    background-color: $black;\n    margin: 5px auto 0 auto;\n    a { \n        color: white;\n        font-weight: 700;\n        transition: all .3s ease;\n    }\n\n}\n.frame {\n     background-color: $lightgrey; \n     margin: 3px auto 0 auto;\n     padding: 5px;\n    p {\n        font-family: $main-font;\n        font-size: 1.3em;\n        text-indent: 50px;\n        font-weight: bold;\n        width: 90%;\n        margin: 10px auto 5px auto;\n    }\n}\n\n.text-button:hover {\n    a {\n    color: $accent-color;\n    }\n}\n\n    @media all and (max-width: 750px) {\n        .article {\n            width: 100%;\n        }\n\n        .text-button {\n            width: 90%;\n        }\n        .frame {\n            width: 90%;\n        }\n    }\n\n    @media all and (min-width: 751px) {\n        .article {\n            width: 33.33%;\n            float: left;\n            margin-bottom: 10px;\n            margin-top: 3px;\n        }\n\n        .text-button {\n            width: 95%;\n        }\n        .frame {\n            width: 95%;\n        }\n    }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -34383,7 +35403,7 @@
 	};
 
 /***/ },
-/* 20 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34392,11 +35412,11 @@
 	    value: true
 	});
 	
-	var _checkout = __webpack_require__(21);
+	var _checkout = __webpack_require__(43);
 	
 	var _checkout2 = _interopRequireDefault(_checkout);
 	
-	var _checkout3 = __webpack_require__(22);
+	var _checkout3 = __webpack_require__(44);
 	
 	var _checkout4 = _interopRequireDefault(_checkout3);
 	
@@ -34411,9 +35431,9 @@
 	};
 	
 	
-	controller.$inject = ['paymentService', '$scope', '$state'];
+	controller.$inject = ['paymentService', '$scope', '$state', 'pickupService', 'dateService', 'orderPickupService'];
 	
-	function controller(paymentService, $scope, $state) {
+	function controller(paymentService, $scope, $state, pickupService, dateService, orderPickupService) {
 	    var _this = this;
 	
 	    this.styles = _checkout4.default;
@@ -34443,6 +35463,27 @@
 	    this.$onInit = function () {
 	        _this.updateTotals();
 	        if (!_this.cart.items.length) _this.cartEmpty = true;
+	
+	        pickupService.getVisible().then(function (pickups) {
+	            dateService.alphabetize(pickups);
+	            _this.pickups = pickups;
+	        });
+	    };
+	
+	    this.confirmPickup = function () {
+	        var currentTime = Date.now();
+	        _this.timeLimit = currentTime + 1000 * 60 * 60 * 48; //48 hours from the current time;
+	        for (var i = 0; i < 8; i++) {
+	            var date = new Date(3600000 * 24 * i + _this.timeLimit);
+	            var day = date.toDateString().split(' ')[0];
+	            if (day === _this.pickup.day) {
+	                i = 8;
+	                _this.pickupDate = date;
+	            }
+	        }
+	        _this.pickup.startPretty = dateService.hourValuetoObj(_this.pickup.startTime).time;
+	        _this.pickup.endPretty = dateService.hourValuetoObj(_this.pickup.endTime).time;
+	        console.log(_this.pickupDate);
 	    };
 	
 	    this.updateTotals = function () {
@@ -34475,7 +35516,6 @@
 	
 	    //for browsers that do not support the form require attribute
 	    this.checkAddress = function () {
-	        console.log(_this.address);
 	        var valid = true;
 	        Object.keys(_this.address).forEach(function (key) {
 	            if (key !== 'line2' && !_this.address[key]) {
@@ -34487,14 +35527,17 @@
 	    };
 	
 	    this.showPaymentDiv = function () {
-	        if (!_this.checkAddress()) {
-	            _this.invalidAddress = true;
-	            return;
+	        if (_this.orderType === 'delivery') {
+	            if (!_this.checkAddress()) {
+	                _this.invalidAddress = true;
+	                return;
+	            }
 	        }
-	        if (_this.address.email === _this.address.emailCheck) {
+	        if (_this.address.email === _this.address.emailCheck && _this.address.firstName && _this.address.lastName) {
 	            _this.showPayment = true;
 	            _this.emailWarning = false;
 	            _this.showAddressForm = false;
+	            _this.showPickupForm = false;
 	            _this.setOrderInfo();
 	        } else {
 	            _this.emailWarning = true;
@@ -34502,60 +35545,86 @@
 	    };
 	
 	    this.setOrderInfo = function () {
+	        console.log('in set info');
+	        $scope.orderType = _this.orderType;
 	        $scope.orderInfo = {
 	            name: _this.address.firstName + ' ' + _this.address.lastName,
 	            email: _this.address.email,
-	            address: {
+	            items: _this.cart.items,
+	            total: _this.total
+	        };
+	        if ($scope.orderType === 'delivery') {
+	            console.log('this is a delivery');
+	            $scope.orderInfo.address = {
 	                line_1: _this.address.line1,
 	                line_2: _this.address.line2,
 	                city: _this.address.city,
 	                state: _this.address.state,
 	                zip: _this.address.zip
-	            },
-	            items: _this.cart.items,
-	            total: _this.total
-	        };
+	            };
+	        }
+	        if ($scope.orderType === 'pickup') {
+	            console.log('this is a pickup');
+	            $scope.orderInfo.pickup = _this.pickup._id;
+	            $scope.orderInfo.pickupDate = _this.pickupDate;
+	        }
 	        $scope.resetCart = _this.initializeCart;
 	    };
 	
 	    $scope.stripeCallback = function (code, result) {
-	        console.log('In stripe callback', $scope.orderInfo);
+	
 	        if (result.error) {
 	            console.log('ERROR', result.error.message);
 	            $scope.invalidPayment = true;
 	            console.log($scope.invalidPayment);
 	        } else {
 	            //we need to put an order into our db and send the _id as the metadata to stripe
-	            paymentService.createOrder($scope.orderInfo).then(function (data) {
-	                var orderId = data._id;
-	                console.log('data returned from payment service', data, orderId);
-	                var paymentInfo = {
-	                    stripeToken: result.id,
-	                    chargeAmount: $scope.total,
-	                    description: orderId
-	                };
-	                paymentService.post(paymentInfo);
-	                localStorage.removeItem('earth-house-cart'); //eslint-disable-line
-	                $state.go('success');
-	            });
+	            if ($scope.orderType === 'delivery') {
+	                console.log('calling service to make delivery order');
+	                paymentService.createOrder($scope.orderInfo).then(function (data) {
+	                    var orderId = data._id;
+	                    var paymentInfo = {
+	                        stripeToken: result.id,
+	                        chargeAmount: $scope.total,
+	                        description: orderId
+	                    };
+	                    paymentService.post(paymentInfo);
+	                    localStorage.removeItem('earth-house-cart'); //eslint-disable-line
+	                    $state.go('success');
+	                });
+	            } else {
+	                console.log('calling service to make pickup orders', $scope.orderInfo);
+	                orderPickupService.create($scope.orderInfo).then(function (data) {
+	                    console.log(data);
+	                    var orderId = data._id;
+	                    var paymentInfo = {
+	                        stripeToken: result.id,
+	                        chargeAmount: $scope.total,
+	                        description: orderId
+	                    };
+	                    paymentService.post(paymentInfo);
+	                    localStorage.removeItem('earth-house-cart'); //eslint-disable-line
+	                    $state.go('success');
+	                });
+	            }
 	        }
 	    };
 	}
 
 /***/ },
-/* 21 */
+/* 43 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"checkout\">\n    <div class=\"cart-edit\" ng-if=\"!$ctrl.confirmCart\">\n        <h2>Ordering Online</h2>\n        <p>Due to the unpasturized nature of our product, we are only able to deliver to the Portland Metro Area and require a minimum of $50 for online purchases.</p>\n        <h2>Shopping Cart</h2>\n        \n        <div ng-if=\"$ctrl.cartEmpty\">\n            <p class=\"empty-cart\">There is nothing in your cart</p>\n            <a ui-sref=\"shop\">Keep shopping!</a>\n        </div>\n        \n        <div class=\"cart-table\" ng-if=\"!$ctrl.cartEmpty\">\n            <table>\n                <thead>\n                    <tr>\n                        <th>Product</th>\n                        <th>Price</th>\n                        <th colspan=\"2\">Quantity</th>\n                        <th></th>\n                        <th>Total</th>\n                    </tr>\n                </thead>\n\n                <tbody>\n                    <tr ng-repeat=\"item in $ctrl.cart.items\">\n                        <td>\n                            {{item.name}}\n                        </td>\n                        <td>\n                            ${{item.price}}.00\n                        </td>\n                        <td>\n                            <select ng-model=\"item.quantity\">\n                                <option ng-value=\"item.quantity\">\n                                    {{item.quantity}}\n                                </option>\n                                <option ng-value=\"number\" ng-repeat=\"number in $ctrl.selectArray\">\n                                    {{number}}\n                                </option>\n                            </select>\n                        </td>\n                        <td>\n                            <button ng-click=\"$ctrl.updateCart(item, item.quantity)\">Update</button>\n                        </td>\n                        <td>\n                            <span class=\"remove-item\" ng-click=\"$ctrl.removeItem(item)\">x remove</span>\n                        </td>\n                        <td class=\"total\">${{item.subTotal}}.00</td>\n                    </tr>\n                </tbody>\n\n                <tfoot>\n                    <tr>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td><span class=\"bold\">Total:</span></td>\n                        <td class=\"total\"> ${{$ctrl.total}}.00</td>\n                    </tr>\n                </tfoot>\n            </table>\n            <h3 ng-if=\"$ctrl.total < $ctrl.minPurchase\">Online purchases must be over ${{$ctrl.minPurchase}}.00</h3>\n            <div class=\"form-bottom\">\n                <a ui-sref=\"shop\">Keep shopping!</a>\n                <button class=\"confirm-cart\" ng-if=\"$ctrl.total > $ctrl.minPurchase\" ng-click=\"$ctrl.confirmCart = true; $ctrl.showAddressForm = true\">Confirm Cart</button>\n            </div>\n\n        </div>\n    </div>\n\n    <div class=\"cart\" ng-if=\"$ctrl.confirmCart\">\n        <h2>Your Order <a ng-click=\"$ctrl.confirmCart = false\">edit</a></h2>\n        <table>\n            <thead>\n                <th>Product</th>\n                <th></th>\n                <th>Quantity</th>\n                <th>Total</th>\n            </thead>\n            <tbody>\n                <tr ng-repeat=\"item in $ctrl.cart.items\">\n                    <td>{{item.name}}</td>\n                    <td>x</td>\n                    <td class=\"quant\">{{item.quantity}}</td>\n                    <td class=\"total\">${{item.price * item.quantity}}.00</td>\n                </tr>\n            </tbody>\n            <tfoot>\n                <td></td>\n                <td></td>\n                <td></td>\n                <td class=\"total\">\n                    <span class=\"bold\">Total:</span>${{$ctrl.total}}.00\n                </td>\n            </tfoot>\n        </table>\n        \n    </div>\n\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.showAddressForm && $ctrl.confirmCart\">\n        <h2>Delivery Info</h2>\n\n        <form name=\"address-form\" ng-submit=\"$ctrl.showPaymentDiv()\">\n            <h4>Name for order*</h4>\n            <input placeholder=\"first name\" ng-model=\"$ctrl.address.firstName\" required>\n            <input placeholder=\"last name\" ng-model=\"$ctrl.address.lastName\" required>\n            <h4>Email*</h4>\n            <input type=\"email\" placeholder=\"enter a valid email address\" ng-model=\"$ctrl.address.email\" required>\n            <input type=\"email\" placeholder=\"confirm email address\" ng-model=\"$ctrl.address.emailCheck\" required> \n            <p class=\"warning\" ng-if=\"$ctrl.emailWarning\">Make sure your email addresses are the same!!!!</p>\n            <h4>Adress for delivery*</h4>\n            <input placeholder=\"street line 1\" ng-model=\"$ctrl.address.line1\" required>\n            <input placeholder=\"street line 2\" ng-model=\"$ctrl.address.line2\">\n            <select name=\"city\" ng-model=\"$ctrl.address.city\" placeholder=\"city\" required>\n                <option value=\"\" disable selected>city</option>\n                <option ng-repeat=\"city in $ctrl.cityArray\" ng-value=\"city\" ng-required=\"required\">{{city}}</option>\n            </select>\n            <select name=\"state\" ng-model=\"$ctrl.address.state\" required>\n                <option value=\"\" disable selected>state</option>\n                <option value=\"Oregon\">Oregon</option>\n                <option value=\"Washington\">Washington</option>\n            </select>\n            <input name=\"zip\" placeholder=\"zip code\" ng-model=\"$ctrl.address.zip\" required>\n            <button type=\"submit\">Checkout</button>\n            <div ng-show=\"$ctrl.invalidAddress\">\n                Make sure you have filled out all of the required address fields!\n            </div>\n        </form>\n    </div>\n\n\n    <div class=\"payment\" ng-show=\"$ctrl.showPayment && !$ctrl.showAddressForm\">\n        <div class=\"address-table\">\n            <h2>Delivery Info <a ng-click=\"$ctrl.showAddressForm = true\">edit</a></h2>\n            <p><span class=\"bold\">name: </span>{{$ctrl.address.firstName}} {{$ctrl.address.lastName}}<p>\n            <p><span class=\"bold\">email for order: </span>{{$ctrl.address.email}}</p>\n            <h4>Address: </h4>\n            <p>{{$ctrl.address.line1}}</p>\n            <p>{{$ctrl.address.line2}}</p>\n            <p>{{$ctrl.address.city}}, {{$ctrl.address.state}} {{$ctrl.address.zip}}</p>\n        </div>\n\n\n        <h3>Payment Information</h3>\n        <form stripe-form=\"stripeCallback\" name=\"checkoutForm\">\n            <input ng-model=\"number\" placeholder=\"Card Number\" payments-format=\"card\" payments-validate=\"card\" name=\"card\">\n            <input ng-model=\"expiry\" placeholder=\"Expiration\" payments-formate=\"expiry\" payments-validate=\"expiry\" name=\"expiry\">\n            <input ng-model=\"cvc\" placeholder=\"CVC\" payments-format=\"cvc\" payments-validate=\"cvc\" name=\"cvc\">\n            <button type=\"submit\">Place Order!</button>\n        </form>\n\n        <div ng-show=\"invalidPayment\">\n            There was a problem processing your card. Make sure you entered all of your payment information correctly.\n        </div>\n    </div>\n</div>\n\n\n\n";
+	module.exports = "<div class=\"checkout\">\n    <div class=\"cart-edit\" ng-if=\"!$ctrl.confirmCart\">\n        <h2>Ordering Online</h2>\n        <p>Due to the unpasturized nature of our product, we are currently only able to do orders for pickup.</p>\n        <h2>Shopping Cart</h2>\n        \n        <div ng-if=\"$ctrl.cartEmpty\">\n            <p class=\"empty-cart\">There is nothing in your cart</p>\n            <a ui-sref=\"shop\">Keep shopping!</a>\n        </div>\n        \n        <div class=\"cart-table\" ng-if=\"!$ctrl.cartEmpty\">\n            <table>\n                <thead>\n                    <tr>\n                        <th>Product</th>\n                        <th>Price</th>\n                        <th colspan=\"2\">Quantity</th>\n                        <th></th>\n                        <th>Total</th>\n                    </tr>\n                </thead>\n\n                <tbody>\n                    <tr ng-repeat=\"item in $ctrl.cart.items\">\n                        <td>\n                            {{item.name}}\n                        </td>\n                        <td>\n                            ${{item.price}}.00\n                        </td>\n                        <td>\n                            <select ng-model=\"item.quantity\">\n                                <option ng-value=\"item.quantity\">\n                                    {{item.quantity}}\n                                </option>\n                                <option ng-value=\"number\" ng-repeat=\"number in $ctrl.selectArray\">\n                                    {{number}}\n                                </option>\n                            </select>\n                        </td>\n                        <td>\n                            <button ng-click=\"$ctrl.updateCart(item, item.quantity)\">Update</button>\n                        </td>\n                        <td>\n                            <span class=\"remove-item\" ng-click=\"$ctrl.removeItem(item)\">x remove</span>\n                        </td>\n                        <td class=\"total\">${{item.subTotal}}.00</td>\n                    </tr>\n                </tbody>\n\n                <tfoot>\n                    <tr>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td><span class=\"bold\">Total:</span></td>\n                        <td class=\"total\"> ${{$ctrl.total}}.00</td>\n                    </tr>\n                </tfoot>\n            </table>\n            <h3 ng-if=\"$ctrl.total < $ctrl.minPurchase\">Online purchases must be over ${{$ctrl.minPurchase}}.00</h3>\n            <div class=\"form-bottom\">\n                <a ui-sref=\"shop\">Keep shopping!</a>\n                <button class=\"confirm-cart\" ng-if=\"$ctrl.total > $ctrl.minPurchase\" ng-click=\"$ctrl.confirmCart = true\">Confirm Cart</button>\n            </div>\n\n        </div>\n    </div>\n\n\n    <div class=\"cart\" ng-if=\"$ctrl.confirmCart\">\n        <h2>Your Order <a ng-click=\"$ctrl.confirmCart = false\">edit</a></h2>\n        <table>\n            <thead>\n                <th>Product</th>\n                <th></th>\n                <th>Quantity</th>\n                <th>Total</th>\n            </thead>\n            <tbody>\n                <tr ng-repeat=\"item in $ctrl.cart.items\">\n                    <td>{{item.name}}</td>\n                    <td>x</td>\n                    <td class=\"quant\">{{item.quantity}}</td>\n                    <td class=\"total\">${{item.price * item.quantity}}.00</td>\n                </tr>\n            </tbody>\n            <tfoot>\n                <td></td>\n                <td></td>\n                <td></td>\n                <td class=\"total\">\n                    <span class=\"bold\">Total:</span>${{$ctrl.total}}.00\n                </td>\n            </tfoot>\n        </table>\n        \n    </div>\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.confirmCart && !$ctrl.showPayment\">\n        <h2>Select your delivery method</h2>\n        <button ng-click=\"$ctrl.showAddressForm = true; $ctrl.showPickupForm = false; $ctrl.orderType = 'delivery'\">Delivery</button>\n        <button ng-click=\"$ctrl.showPickupForm = true; $ctrl.showAddressForm = false; $ctrl.orderType = 'pickup'\">Pickup</button>\n    </div>\n\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.showAddressForm && $ctrl.confirmCart\">\n        <h2>Delivery Info</h2>\n\n        <form name=\"address-form\" ng-submit=\"$ctrl.showPaymentDiv()\">\n            <h4>Name for order*</h4>\n            <input placeholder=\"first name\" ng-model=\"$ctrl.address.firstName\" required>\n            <input placeholder=\"last name\" ng-model=\"$ctrl.address.lastName\" required>\n            <h4>Email*</h4>\n            <input type=\"email\" placeholder=\"enter a valid email address\" ng-model=\"$ctrl.address.email\" required>\n            <input type=\"email\" placeholder=\"confirm email address\" ng-model=\"$ctrl.address.emailCheck\" required> \n            <p class=\"warning\" ng-if=\"$ctrl.emailWarning\">Make sure your email addresses are the same!!!!</p>\n            <h4>Adress for delivery*</h4>\n            <input placeholder=\"street line 1\" ng-model=\"$ctrl.address.line1\" required>\n            <input placeholder=\"street line 2\" ng-model=\"$ctrl.address.line2\">\n            <select name=\"city\" ng-model=\"$ctrl.address.city\" placeholder=\"city\" required>\n                <option value=\"\" disable selected>city</option>\n                <option ng-repeat=\"city in $ctrl.cityArray\" ng-value=\"city\" ng-required=\"required\">{{city}}</option>\n            </select>\n            <select name=\"state\" ng-model=\"$ctrl.address.state\" required>\n                <option value=\"\" disable selected>state</option>\n                <option value=\"Oregon\">Oregon</option>\n                <option value=\"Washington\">Washington</option>\n            </select>\n            <input name=\"zip\" placeholder=\"zip code\" ng-model=\"$ctrl.address.zip\" required>\n            <button type=\"submit\">Checkout</button>\n            <div ng-show=\"$ctrl.invalidAddress\">\n                Make sure you have filled out all of the required address fields!\n            </div>\n        </form>\n    </div>\n\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.showPickupForm && $ctrl.confirmCart\">\n        <h2>Pickup Info</h2>\n        <form ng-submit=\"$ctrl.showPaymentDiv()\">\n            <select ng-model=\"$ctrl.pickup\" ng-change=\"$ctrl.confirmPickup()\" ng-options=\"pickup as pickup.name for pickup in $ctrl.pickups track by pickup._id\">\n                <option value=\"\">select your location</option>\n            </select>\n            <p ng-if=\"$ctrl.pickup\">Pick up at {{$ctrl.pickup.name}} on {{$ctrl.pickupDate.toDateString()}}, between {{$ctrl.pickup.startPretty}} and {{$ctrl.pickup.endPretty}}.</p>\n            <h4>Name for order*</h4>\n                <input placeholder=\"first name\" ng-model=\"$ctrl.address.firstName\" required>\n                <input placeholder=\"last name\" ng-model=\"$ctrl.address.lastName\" required>\n            <h4>Email*</h4>\n            <input type=\"email\" placeholder=\"enter a valid email address\" ng-model=\"$ctrl.address.email\" required>\n            <input type=\"email\" placeholder=\"confirm email address\" ng-model=\"$ctrl.address.emailCheck\" required> \n            <p class=\"warning\" ng-if=\"$ctrl.emailWarning\">Make sure your email addresses are the same!!!!</p>\n            <button ng-if=\"$ctrl.pickup\" type=\"submit\">Confirm</button>\n        </form>\n    </div>\n\n    <div class=\"payment\" ng-show=\"$ctrl.showPayment && !$ctrl.showAddressForm && !$ctrl.showPickupForm\">\n        <div class=\"address-table\" ng-if=\"$ctrl.orderType === 'delivery'\">\n            <h2>Delivery Info <a ng-click=\"$ctrl.showAddressForm = true; $ctrl.showPayment = false\">edit</a></h2>\n            <p><span class=\"bold\">name: </span>{{$ctrl.address.firstName}} {{$ctrl.address.lastName}}<p>\n            <p><span class=\"bold\">email for order: </span>{{$ctrl.address.email}}</p>\n            <h4>Address: </h4>\n            <p>{{$ctrl.address.line1}}</p>\n            <p>{{$ctrl.address.line2}}</p>\n            <p>{{$ctrl.address.city}}, {{$ctrl.address.state}} {{$ctrl.address.zip}}</p>\n        </div>\n        <div class=\"address-table\" ng-if=\"$ctrl.orderType === 'pickup'\">\n            <h2>Pickup Info <a ng-click=\"$ctrl.showPickupForm = true; $ctrl.showPayment = false\">edit</a></h2>\n            <p ng-if=\"$ctrl.pickup\">Pick up at {{$ctrl.pickup.name}} on {{$ctrl.pickupDate.toDateString()}}, between {{$ctrl.pickup.startPretty}} and {{$ctrl.pickup.endPretty}}.</p>\n        </div>\n\n\n        <h3>Payment Information</h3>\n        <form stripe-form=\"stripeCallback\" name=\"checkoutForm\">\n            <input ng-model=\"number\" placeholder=\"Card Number\" payments-format=\"card\" payments-validate=\"card\" name=\"card\">\n            <input ng-model=\"expiry\" placeholder=\"Expiration\" payments-formate=\"expiry\" payments-validate=\"expiry\" name=\"expiry\">\n            <input ng-model=\"cvc\" placeholder=\"CVC\" payments-format=\"cvc\" payments-validate=\"cvc\" name=\"cvc\">\n            <button type=\"submit\">Place Order!</button>\n        </form>\n\n        <div ng-show=\"invalidPayment\">\n            There was a problem processing your card. Make sure you entered all of your payment information correctly.\n        </div>\n    </div>\n</div>\n\n\n\n";
 
 /***/ },
-/* 22 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(23);
+	var content = __webpack_require__(45);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -34564,8 +35633,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./checkout.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./checkout.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./checkout.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./checkout.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34575,7 +35644,7 @@
 	}
 
 /***/ },
-/* 23 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -34583,13 +35652,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".checkout {\n  width: 90%;\n  min-height: 70vh;\n  margin: 0 auto;\n  margin-bottom: 10%;\n  font-size: .87em; }\n  .checkout h2 {\n    font-family: \"Amatic SC\", cursive;\n    margin-top: 2%;\n    margin-bottom: 2%;\n    font-size: 2.5em; }\n    .checkout h2 a {\n      font-size: .4em;\n      font-family: sans-serif;\n      font-weight: 500;\n      margin-left: 2%; }\n  .checkout h4 {\n    margin: 3% 0; }\n  .checkout p {\n    margin-bottom: 2%;\n    margin-top: 1%; }\n  .checkout a {\n    color: #0b0080;\n    transition: all .35s ease;\n    text-decoration: underline; }\n  .checkout table {\n    width: 100%;\n    margin-bottom: 3%; }\n  .checkout .cart-table tr {\n    height: 50px; }\n  .checkout .quant {\n    text-align: center; }\n  .checkout .total {\n    text-align: right; }\n  .checkout .bold {\n    font-weight: bold;\n    font-size: 1em;\n    color: black;\n    display: inline;\n    margin: 0; }\n  .checkout span {\n    display: block;\n    color: red;\n    font-size: .75em;\n    margin-left: 2%; }\n  .checkout button {\n    background: none;\n    font-size: .75em;\n    line-height: .5em; }\n  .checkout .confirm-cart {\n    float: right; }\n  .checkout input, .checkout textarea, .checkout select, .checkout button {\n    -webkit-appearance: none;\n    border: 1px solid #555;\n    padding: 0.5em;\n    font-size: .75em;\n    line-height: .8em;\n    background: #fff;\n    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n    -webkit-box-shadow: 1px 1px 1px #fff;\n    -webkit-border-radius: 0.5em; }\n  .checkout input {\n    line-height: .75em;\n    font-size: .75em;\n    margin: 2%; }\n\n.remove-item {\n  color: red;\n  text-decoration: underline; }\n\n.ng-invalid, .warning {\n  color: red; }\n\n@media all and (min-width: 500px) {\n  .checkout {\n    font-size: 1em; } }\n\n@media all and (min-width: 700px) {\n  .checkout {\n    font-size: 1.25em;\n    margin-top: 3%;\n    width: 80%; }\n    .checkout table {\n      width: 90%;\n      margin: 0 auto; }\n    .checkout h4 {\n      margin: 0; } }\n", "", {"version":3,"sources":["/./src/components/checkout/src/components/checkout/checkout.scss","/./src/components/checkout/src/scss/partials/_fonts.scss","/./src/components/checkout/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAGA;EACI,WAAU;EACV,iBAAgB;EAChB,eAAc;EACd,mBAAkB;EAClB,iBAAgB,EAwFnB;EA7FD;IAQQ,kCCX8B;IDY9B,eAAc;IACd,kBAAiB;IACjB,iBAAgB,EAOnB;IAlBL;MAaY,gBAAe;MACf,wBAAuB;MACvB,iBAAgB;MAChB,gBAAe,EAClB;EAjBT;IAqBQ,aAAY,EACf;EAtBL;IAyBQ,kBAAiB;IACjB,eAAc,EACjB;EA3BL;IA6BQ,eE7BiB;IF8BjB,0BAAyB;IACzB,2BAA0B,EAC7B;EAhCL;IAmCQ,YAAW;IACX,kBAAiB,EACpB;EArCL;IAwCY,aAAY,EACf;EAzCT;IA6CQ,mBAAkB,EACrB;EA9CL;IAiDQ,kBAAiB,EACpB;EAlDL;IAqDQ,kBAAiB;IACjB,eAAc;IACd,aAAY;IACZ,gBAAe;IACf,UAAS,EACZ;EA1DL;IA6DQ,eAAc;IACd,WAAU;IACV,iBAAgB;IAChB,gBAAe,EAClB;EAjEL;IAoEQ,iBAAgB;IAChB,iBAAgB;IAChB,kBAAiB,EACpB;EAvEL;IA0EQ,aAAY,EACf;EA3EL;IA8EQ,yBAAwB;IACxB,uBAAsB;IACtB,eAAc;IACd,iBAAgB;IAChB,kBAAiB;IACjB,iBAAgB;IAChB,kFAAiF;IACjF,qCAAoC;IACpC,6BAA4B,EAC/B;EAvFL;IAyFQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU,EACb;;AAML;EACI,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,WAAU,EACb;;AAGD;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,kBAAiB;IACjB,eAAc;IACd,WAAU,EASb;IAZD;MAKQ,WAAU;MACV,eAAc,EACjB;IAPL;MAUQ,UAAS,EACZ,EAAA","file":"checkout.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.checkout {\n    width: 90%;\n    min-height: 70vh;\n    margin: 0 auto;\n    margin-bottom: 10%;\n    font-size: .87em;\n\n    h2 {\n        font-family: $decorative-font;\n        margin-top: 2%;\n        margin-bottom: 2%;\n        font-size: 2.5em;\n        a {\n            font-size: .4em;\n            font-family: sans-serif;\n            font-weight: 500;\n            margin-left: 2%;\n        }\n    }\n\n    h4 {\n        margin: 3% 0;\n    }\n\n    p {\n        margin-bottom: 2%;\n        margin-top: 1%;\n    }\n    a {\n        color: $link-blue;\n        transition: all .35s ease;\n        text-decoration: underline;\n    }\n\n    table {\n        width: 100%;\n        margin-bottom: 3%;\n    }\n    .cart-table {\n        tr {\n            height: 50px;\n        }\n    }\n\n    .quant {\n        text-align: center;\n    }\n\n    .total {\n        text-align: right;\n    }\n\n    .bold {\n        font-weight: bold;\n        font-size: 1em;\n        color: black;\n        display: inline;\n        margin: 0;\n    }\n\n    span {\n        display: block;\n        color: red;\n        font-size: .75em;\n        margin-left: 2%;\n    }\n\n    button {\n        background: none;\n        font-size: .75em;\n        line-height: .5em;\n    }\n\n    .confirm-cart {\n        float: right;\n    }\n\n    input, textarea, select, button {\n        -webkit-appearance: none;\n        border: 1px solid #555;\n        padding: 0.5em;\n        font-size: .75em;\n        line-height: .8em;\n        background: #fff;\n        background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n        -webkit-box-shadow: 1px 1px 1px #fff;\n        -webkit-border-radius: 0.5em;\n    }\n    input {\n        line-height: .75em;\n        font-size: .75em;\n        margin: 2%;\n    }\n}\n\n\n\n\n.remove-item {\n    color: red;\n    text-decoration: underline;\n}\n\n.ng-invalid, .warning {\n    color: red;\n}\n\n\n@media all and (min-width: 500px) {\n    .checkout {\n        font-size: 1em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .checkout {\n        font-size: 1.25em;\n        margin-top: 3%;\n        width: 80%;\n        table {\n            width: 90%;\n            margin: 0 auto;\n        }\n\n        h4 {\n            margin: 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".checkout {\n  width: 90%;\n  min-height: 70vh;\n  margin: 0 auto;\n  margin-bottom: 10%;\n  font-size: .87em; }\n  .checkout h2 {\n    font-family: \"Amatic SC\", cursive;\n    margin-top: 2%;\n    margin-bottom: 2%;\n    font-size: 2.5em; }\n    .checkout h2 a {\n      font-size: .4em;\n      font-family: sans-serif;\n      font-weight: 500;\n      margin-left: 2%; }\n  .checkout h4 {\n    margin: 3% 0; }\n  .checkout p {\n    margin-bottom: 2%;\n    margin-top: 1%; }\n  .checkout a {\n    color: #0b0080;\n    transition: all .35s ease;\n    text-decoration: underline; }\n  .checkout table {\n    width: 100%;\n    margin-bottom: 3%; }\n  .checkout .cart-table tr {\n    height: 50px; }\n  .checkout .quant {\n    text-align: center; }\n  .checkout .total {\n    text-align: right; }\n  .checkout .bold {\n    font-weight: bold;\n    font-size: 1em;\n    color: black;\n    display: inline;\n    margin: 0; }\n  .checkout span {\n    display: block;\n    color: red;\n    font-size: .75em;\n    margin-left: 2%; }\n  .checkout button {\n    background: none;\n    font-size: .75em;\n    line-height: .5em; }\n  .checkout .confirm-cart {\n    float: right; }\n  .checkout input, .checkout textarea, .checkout select, .checkout button {\n    -webkit-appearance: none;\n    border: 1px solid #555;\n    padding: 0.5em;\n    font-size: .75em;\n    line-height: .8em;\n    background: #fff;\n    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n    -webkit-box-shadow: 1px 1px 1px #fff;\n    -webkit-border-radius: 0.5em; }\n  .checkout input {\n    line-height: .75em;\n    font-size: .75em;\n    margin: 2%; }\n\n.remove-item {\n  color: red;\n  text-decoration: underline; }\n\n.ng-invalid, .warning {\n  color: red; }\n\n@media all and (min-width: 500px) {\n  .checkout {\n    font-size: 1em; } }\n\n@media all and (min-width: 700px) {\n  .checkout {\n    font-size: 1.25em;\n    margin-top: 3%;\n    width: 80%; }\n    .checkout table {\n      width: 90%;\n      margin: 0 auto; }\n    .checkout h4 {\n      margin: 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/checkout/src/components/checkout/checkout.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAGA;EACI,WAAU;EACV,iBAAgB;EAChB,eAAc;EACd,mBAAkB;EAClB,iBAAgB,EAwFnB;EA7FD;IAQQ,kCCX8B;IDY9B,eAAc;IACd,kBAAiB;IACjB,iBAAgB,EAOnB;IAlBL;MAaY,gBAAe;MACf,wBAAuB;MACvB,iBAAgB;MAChB,gBAAe,EAClB;EAjBT;IAqBQ,aAAY,EACf;EAtBL;IAyBQ,kBAAiB;IACjB,eAAc,EACjB;EA3BL;IA6BQ,eE7BiB;IF8BjB,0BAAyB;IACzB,2BAA0B,EAC7B;EAhCL;IAmCQ,YAAW;IACX,kBAAiB,EACpB;EArCL;IAwCY,aAAY,EACf;EAzCT;IA6CQ,mBAAkB,EACrB;EA9CL;IAiDQ,kBAAiB,EACpB;EAlDL;IAqDQ,kBAAiB;IACjB,eAAc;IACd,aAAY;IACZ,gBAAe;IACf,UAAS,EACZ;EA1DL;IA6DQ,eAAc;IACd,WAAU;IACV,iBAAgB;IAChB,gBAAe,EAClB;EAjEL;IAoEQ,iBAAgB;IAChB,iBAAgB;IAChB,kBAAiB,EACpB;EAvEL;IA0EQ,aAAY,EACf;EA3EL;IA8EQ,yBAAwB;IACxB,uBAAsB;IACtB,eAAc;IACd,iBAAgB;IAChB,kBAAiB;IACjB,iBAAgB;IAChB,kFAAiF;IACjF,qCAAoC;IACpC,6BAA4B,EAC/B;EAvFL;IAyFQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU,EACb;;AAML;EACI,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,WAAU,EACb;;AAGD;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,kBAAiB;IACjB,eAAc;IACd,WAAU,EASb;IAZD;MAKQ,WAAU;MACV,eAAc,EACjB;IAPL;MAUQ,UAAS,EACZ,EAAA","file":"checkout.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.checkout {\n    width: 90%;\n    min-height: 70vh;\n    margin: 0 auto;\n    margin-bottom: 10%;\n    font-size: .87em;\n\n    h2 {\n        font-family: $decorative-font;\n        margin-top: 2%;\n        margin-bottom: 2%;\n        font-size: 2.5em;\n        a {\n            font-size: .4em;\n            font-family: sans-serif;\n            font-weight: 500;\n            margin-left: 2%;\n        }\n    }\n\n    h4 {\n        margin: 3% 0;\n    }\n\n    p {\n        margin-bottom: 2%;\n        margin-top: 1%;\n    }\n    a {\n        color: $link-blue;\n        transition: all .35s ease;\n        text-decoration: underline;\n    }\n\n    table {\n        width: 100%;\n        margin-bottom: 3%;\n    }\n    .cart-table {\n        tr {\n            height: 50px;\n        }\n    }\n\n    .quant {\n        text-align: center;\n    }\n\n    .total {\n        text-align: right;\n    }\n\n    .bold {\n        font-weight: bold;\n        font-size: 1em;\n        color: black;\n        display: inline;\n        margin: 0;\n    }\n\n    span {\n        display: block;\n        color: red;\n        font-size: .75em;\n        margin-left: 2%;\n    }\n\n    button {\n        background: none;\n        font-size: .75em;\n        line-height: .5em;\n    }\n\n    .confirm-cart {\n        float: right;\n    }\n\n    input, textarea, select, button {\n        -webkit-appearance: none;\n        border: 1px solid #555;\n        padding: 0.5em;\n        font-size: .75em;\n        line-height: .8em;\n        background: #fff;\n        background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n        -webkit-box-shadow: 1px 1px 1px #fff;\n        -webkit-border-radius: 0.5em;\n    }\n    input {\n        line-height: .75em;\n        font-size: .75em;\n        margin: 2%;\n    }\n}\n\n\n\n\n.remove-item {\n    color: red;\n    text-decoration: underline;\n}\n\n.ng-invalid, .warning {\n    color: red;\n}\n\n\n@media all and (min-width: 500px) {\n    .checkout {\n        font-size: 1em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .checkout {\n        font-size: 1.25em;\n        margin-top: 3%;\n        width: 80%;\n        table {\n            width: 90%;\n            margin: 0 auto;\n        }\n\n        h4 {\n            margin: 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 24 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34598,11 +35667,11 @@
 	    value: true
 	});
 	
-	var _success = __webpack_require__(25);
+	var _success = __webpack_require__(47);
 	
 	var _success2 = _interopRequireDefault(_success);
 	
-	var _success3 = __webpack_require__(26);
+	var _success3 = __webpack_require__(48);
 	
 	var _success4 = _interopRequireDefault(_success3);
 	
@@ -34627,19 +35696,19 @@
 	}
 
 /***/ },
-/* 25 */
+/* 47 */
 /***/ function(module, exports) {
 
 	module.exports = "<!--TODO: make this a substate of checkout?-->\n<div class=\"container\" ng-class=\"$ctrl.styles.success\">   \n    <h2>Thank you for your order!</h2>\n    <p>You will recieve and email with your order summary. If you have any questions in the meantime, feel free to send us an email or call. <a ui-sref=\"home\">Back to home</a></p>\n</div>";
 
 /***/ },
-/* 26 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(27);
+	var content = __webpack_require__(49);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -34648,8 +35717,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./success.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./success.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./success.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./success.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34659,7 +35728,7 @@
 	}
 
 /***/ },
-/* 27 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -34667,7 +35736,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._2H2OeSHZodUVf_sa1TQgeg {\n  margin-top: 5%;\n  margin-bottom: 5%;\n  height: 80vh; }\n  ._2H2OeSHZodUVf_sa1TQgeg h2 {\n    text-align: center; }\n  ._2H2OeSHZodUVf_sa1TQgeg p {\n    font-size: 1em; }\n  ._2H2OeSHZodUVf_sa1TQgeg a {\n    color: #0b0080;\n    display: block;\n    text-indent: 0;\n    transition: all .35s ease; }\n  ._2H2OeSHZodUVf_sa1TQgeg a:hover {\n    text-decoration: underline; }\n", "", {"version":3,"sources":["/./src/components/checkout/success/src/components/checkout/success/success.scss","/./src/components/checkout/success/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,eAAc;EACd,kBAAiB;EACjB,aAAY,EAiBf;EApBD;IAKQ,mBAAkB,EACrB;EANL;IAQQ,eAAc,EACjB;EATL;IAWQ,eCViB;IDWjB,eAAc;IACd,eAAc;IACd,0BAAyB,EAC5B;EAfL;IAiBQ,2BAA0B,EAC7B","file":"success.scss","sourcesContent":["@import 'colors';\n\n:local(.success) {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    height: 80vh;\n    h2 {\n        text-align: center;\n    }\n    p {\n        font-size: 1em;\n    }\n    a {\n        color: $link-blue;\n        display: block;\n        text-indent: 0;\n        transition: all .35s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "._2H2OeSHZodUVf_sa1TQgeg {\n  margin-top: 5%;\n  margin-bottom: 5%;\n  height: 80vh; }\n  ._2H2OeSHZodUVf_sa1TQgeg h2 {\n    text-align: center; }\n  ._2H2OeSHZodUVf_sa1TQgeg p {\n    font-size: 1em; }\n  ._2H2OeSHZodUVf_sa1TQgeg a {\n    color: #0b0080;\n    display: block;\n    text-indent: 0;\n    transition: all .35s ease; }\n  ._2H2OeSHZodUVf_sa1TQgeg a:hover {\n    text-decoration: underline; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/checkout/success/src/components/checkout/success/success.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/success/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,eAAc;EACd,kBAAiB;EACjB,aAAY,EAiBf;EApBD;IAKQ,mBAAkB,EACrB;EANL;IAQQ,eAAc,EACjB;EATL;IAWQ,eCViB;IDWjB,eAAc;IACd,eAAc;IACd,0BAAyB,EAC5B;EAfL;IAiBQ,2BAA0B,EAC7B","file":"success.scss","sourcesContent":["@import 'colors';\n\n:local(.success) {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    height: 80vh;\n    h2 {\n        text-align: center;\n    }\n    p {\n        font-size: 1em;\n    }\n    a {\n        color: $link-blue;\n        display: block;\n        text-indent: 0;\n        transition: all .35s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -34675,7 +35744,7 @@
 	};
 
 /***/ },
-/* 28 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34684,11 +35753,11 @@
 	    value: true
 	});
 	
-	var _contact = __webpack_require__(29);
+	var _contact = __webpack_require__(51);
 	
 	var _contact2 = _interopRequireDefault(_contact);
 	
-	var _contact3 = __webpack_require__(30);
+	var _contact3 = __webpack_require__(52);
 	
 	var _contact4 = _interopRequireDefault(_contact3);
 	
@@ -34705,19 +35774,19 @@
 	}
 
 /***/ },
-/* 29 */
+/* 51 */
 /***/ function(module, exports) {
 
 	module.exports = "<div ng-class=\"$ctrl.styles.contact\">\n    <h2>Contact</h2>\n    <p class=\"contact-info\">For any inquiries regarding deliveries, ordering online, or our farmers market schedule, feel free to send us an email or call. We look forward to hearing from you!</p>\n    <ul>\n        <li>\n            <p>email: <a href=\"mailto:youremail@email.com\">youremail@email.com</a><p>\n        </li>\n        <li>\n        <p>phone:<a href=\"tel:1-510-590-7431\"> (503)888-8888</a></p>\n        </li>\n        <li>\n            <p>social media:</p> \n        </li>\n        <li>\n            <p>\n                <a href=\"https://www.instagram.com/\"<span class=\"icon-instagram\"></span></a> \n                <a href=\"https://www.facebook.com\"<span class=\"icon-facebook2\"></span></a>\n            </p>\n        </li>\n    </ul>\n</div>\n";
 
 /***/ },
-/* 30 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(31);
+	var content = __webpack_require__(53);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -34726,8 +35795,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./contact.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./contact.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./contact.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./contact.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34737,7 +35806,7 @@
 	}
 
 /***/ },
-/* 31 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -34745,7 +35814,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._2-wh2eGpFOzRsplfQde1xu {\n  background-color: white;\n  min-height: 70vh;\n  width: 85%;\n  margin: 0 auto;\n  margin-top: 5%;\n  margin-bottom: 5%; }\n  ._2-wh2eGpFOzRsplfQde1xu ul, ._2-wh2eGpFOzRsplfQde1xu li, ._2-wh2eGpFOzRsplfQde1xu p {\n    margin-left: 0;\n    margin-right: 0;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._2-wh2eGpFOzRsplfQde1xu ul {\n    text-align: center;\n    font-size: 1.5em;\n    width: 80%;\n    margin: 0 auto; }\n  ._2-wh2eGpFOzRsplfQde1xu a {\n    color: black;\n    transition: all .3s ease; }\n  ._2-wh2eGpFOzRsplfQde1xu a:hover {\n    text-decoration: underline; }\n  ._2-wh2eGpFOzRsplfQde1xu h2 {\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em;\n    margin: 0 0 5% 0; }\n  ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n    font-size: 1.2em;\n    margin: 2% 0 10% 0;\n    text-indent: 25px; }\n  ._2-wh2eGpFOzRsplfQde1xu span {\n    margin: 0 1%; }\n  ._2-wh2eGpFOzRsplfQde1xu .icon-instagram:hover, ._2-wh2eGpFOzRsplfQde1xu .icon-facebook2:hover {\n    text-decoration: none; }\n\n@media all and (min-width: 500px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.2em; } }\n\n@media all and (min-width: 700px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 900px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    width: 75%;\n    font-size: 1.5em; }\n    ._2-wh2eGpFOzRsplfQde1xu h2 {\n      font-size: 4em;\n      margin-top: 2%; }\n    ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n      margin: 2% 0; } }\n", "", {"version":3,"sources":["/./src/components/contact/src/components/contact/contact.scss","/./src/components/contact/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,wBAAuB;EACvB,iBAAgB;EAChB,WAAU;EACV,eAAc;EACd,eAAc;EACd,kBAAiB,EAoCpB;EA1CD;IAQQ,eAAc;IACd,gBAAe;IACf,wCCZ8B,EDajC;EAXL;IAaQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU;IACV,eAAc,EACjB;EAjBL;IAmBQ,aAAY;IACZ,yBAAwB,EAC3B;EArBL;IAuBQ,2BAA0B,EAC7B;EAxBL;IA0BQ,mBAAkB;IAClB,kCC9B8B;ID+B9B,eAAc;IACd,iBAAgB,EACnB;EA9BL;IAgCQ,iBAAgB;IAChB,mBAAkB;IAClB,kBAAiB,EACpB;EAnCL;IAqCQ,aAAY,EACf;EAtCL;IAwCQ,sBAAqB,EACxB;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,WAAU;IACV,iBAAgB,EAQnB;IAVD;MAIQ,eAAc;MACd,eAAc,EACjB;IANL;MAQQ,aAAY,EACf,EAAA","file":"contact.scss","sourcesContent":["@import 'fonts';\n@import 'colors';\n\n:local(.contact) {\n    background-color: white;\n    min-height: 70vh;\n    width: 85%;\n    margin: 0 auto;\n    margin-top: 5%;\n    margin-bottom: 5%;\n    ul, li, p {\n        margin-left: 0;\n        margin-right: 0;\n        font-family: $main-font;\n    }\n    ul {\n        text-align: center;\n        font-size: 1.5em;\n        width: 80%;\n        margin: 0 auto;\n    }\n    a {\n        color: black;\n        transition: all .3s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    h2 {\n        text-align: center;\n        font-family: $decorative-font;\n        font-size: 3em;\n        margin: 0 0 5% 0;\n    }\n    .contact-info {\n        font-size: 1.2em;\n        margin: 2% 0 10% 0;\n        text-indent: 25px;\n    }\n    span {\n        margin: 0 1%;\n    }\n    .icon-instagram:hover, .icon-facebook2:hover {\n        text-decoration: none;\n    }\n}\n\n@media all and (min-width: 500px) {\n    :local(.contact) {\n        font-size: 1.2em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    :local(.contact) {\n        font-size: 1.5em;\n    }\n}\n\n@media all and (min-width: 900px) {\n    :local(.contact) {\n        width: 75%;\n        font-size: 1.5em;\n        h2 {\n            font-size: 4em;\n            margin-top: 2%;\n        }\n        .contact-info {\n            margin: 2% 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "._2-wh2eGpFOzRsplfQde1xu {\n  background-color: white;\n  min-height: 70vh;\n  width: 85%;\n  margin: 0 auto;\n  margin-top: 5%;\n  margin-bottom: 5%; }\n  ._2-wh2eGpFOzRsplfQde1xu ul, ._2-wh2eGpFOzRsplfQde1xu li, ._2-wh2eGpFOzRsplfQde1xu p {\n    margin-left: 0;\n    margin-right: 0;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._2-wh2eGpFOzRsplfQde1xu ul {\n    text-align: center;\n    font-size: 1.5em;\n    width: 80%;\n    margin: 0 auto; }\n  ._2-wh2eGpFOzRsplfQde1xu a {\n    color: black;\n    transition: all .3s ease; }\n  ._2-wh2eGpFOzRsplfQde1xu a:hover {\n    text-decoration: underline; }\n  ._2-wh2eGpFOzRsplfQde1xu h2 {\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em;\n    margin: 0 0 5% 0; }\n  ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n    font-size: 1.2em;\n    margin: 2% 0 10% 0;\n    text-indent: 25px; }\n  ._2-wh2eGpFOzRsplfQde1xu span {\n    margin: 0 1%; }\n  ._2-wh2eGpFOzRsplfQde1xu .icon-instagram:hover, ._2-wh2eGpFOzRsplfQde1xu .icon-facebook2:hover {\n    text-decoration: none; }\n\n@media all and (min-width: 500px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.2em; } }\n\n@media all and (min-width: 700px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 900px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    width: 75%;\n    font-size: 1.5em; }\n    ._2-wh2eGpFOzRsplfQde1xu h2 {\n      font-size: 4em;\n      margin-top: 2%; }\n    ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n      margin: 2% 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/contact/src/components/contact/contact.scss","/Users/Will/freelance/earth-house/app/src/components/contact/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,wBAAuB;EACvB,iBAAgB;EAChB,WAAU;EACV,eAAc;EACd,eAAc;EACd,kBAAiB,EAoCpB;EA1CD;IAQQ,eAAc;IACd,gBAAe;IACf,wCCZ8B,EDajC;EAXL;IAaQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU;IACV,eAAc,EACjB;EAjBL;IAmBQ,aAAY;IACZ,yBAAwB,EAC3B;EArBL;IAuBQ,2BAA0B,EAC7B;EAxBL;IA0BQ,mBAAkB;IAClB,kCC9B8B;ID+B9B,eAAc;IACd,iBAAgB,EACnB;EA9BL;IAgCQ,iBAAgB;IAChB,mBAAkB;IAClB,kBAAiB,EACpB;EAnCL;IAqCQ,aAAY,EACf;EAtCL;IAwCQ,sBAAqB,EACxB;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,WAAU;IACV,iBAAgB,EAQnB;IAVD;MAIQ,eAAc;MACd,eAAc,EACjB;IANL;MAQQ,aAAY,EACf,EAAA","file":"contact.scss","sourcesContent":["@import 'fonts';\n@import 'colors';\n\n:local(.contact) {\n    background-color: white;\n    min-height: 70vh;\n    width: 85%;\n    margin: 0 auto;\n    margin-top: 5%;\n    margin-bottom: 5%;\n    ul, li, p {\n        margin-left: 0;\n        margin-right: 0;\n        font-family: $main-font;\n    }\n    ul {\n        text-align: center;\n        font-size: 1.5em;\n        width: 80%;\n        margin: 0 auto;\n    }\n    a {\n        color: black;\n        transition: all .3s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    h2 {\n        text-align: center;\n        font-family: $decorative-font;\n        font-size: 3em;\n        margin: 0 0 5% 0;\n    }\n    .contact-info {\n        font-size: 1.2em;\n        margin: 2% 0 10% 0;\n        text-indent: 25px;\n    }\n    span {\n        margin: 0 1%;\n    }\n    .icon-instagram:hover, .icon-facebook2:hover {\n        text-decoration: none;\n    }\n}\n\n@media all and (min-width: 500px) {\n    :local(.contact) {\n        font-size: 1.2em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    :local(.contact) {\n        font-size: 1.5em;\n    }\n}\n\n@media all and (min-width: 900px) {\n    :local(.contact) {\n        width: 75%;\n        font-size: 1.5em;\n        h2 {\n            font-size: 4em;\n            margin-top: 2%;\n        }\n        .contact-info {\n            margin: 2% 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -34753,7 +35822,7 @@
 	};
 
 /***/ },
-/* 32 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34762,11 +35831,11 @@
 	    value: true
 	});
 	
-	var _footerContent = __webpack_require__(33);
+	var _footerContent = __webpack_require__(55);
 	
 	var _footerContent2 = _interopRequireDefault(_footerContent);
 	
-	var _footerContent3 = __webpack_require__(34);
+	var _footerContent3 = __webpack_require__(56);
 	
 	var _footerContent4 = _interopRequireDefault(_footerContent3);
 	
@@ -34780,19 +35849,19 @@
 	};
 
 /***/ },
-/* 33 */
+/* 55 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"footer-container clearfix\">\n     <!--<div class=\"footer-category\">\n        <h3>Shop</h3>\n        <ul>\n            <li>Buy Online</li>\n            <li>Buy in Person</li>\n        </ul>\n    </div>\n\n\n     <div class=\"footer-category\">\n        <h3>About</h3>\n        <ul>\n            <li>Our Juices</li>\n            <li>Our Mission</li>\n            <li>Our Customers</li>\n            <li>Our team</li>\n        </ul>\n    </div>\n\n\n     <div class=\"footer-category\">\n        <h3>Social Media</h3>\n        <ul>\n            <li>Instagram</li>\n            <li>Facebook</li>\n            <li>Twitter</li>\n        </ul>\n    </div>\n\n\n     <div class=\"footer-category\">\n        <h3>Contact</h3>\n        <ul>\n            <li>(XXX)XXX-XXXX</li>\n            <li>xxxxx@xxx.com</li>\n        </ul>\n    </div>-->\n    <div class=\"footer-contact\">\n        <ul>\n            <li><a href=\"tel:1-510-590-7431\">(503)888-8888</a></li>\n            <li><a href=\"mailto:wnickers@willamette.edu\">youremailgoeshere@email.com</a></li>\n            <li><span>&#169;2017 Earth House Juice Co.<span></li>\n        </ul>\n    </div>\n</div>";
 
 /***/ },
-/* 34 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(35);
+	var content = __webpack_require__(57);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -34801,8 +35870,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./footer-content.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./footer-content.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./footer-content.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./footer-content.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34812,7 +35881,7 @@
 	}
 
 /***/ },
-/* 35 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -34820,13 +35889,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".footer-container {\n  background-color: #323232;\n  width: 100%;\n  color: rgba(200, 200, 200, 0.7);\n  border-top: 1px solid rgba(200, 200, 200, 0.7); }\n\n.footer-contact {\n  text-align: center;\n  margin: 8% auto 10% auto;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: .75em; }\n  .footer-contact ul {\n    list-style-type: none; }\n  .footer-contact li {\n    margin: 20px 0; }\n  .footer-contact a {\n    color: rgba(200, 200, 200, 0.7); }\n  .footer-contact a:hover {\n    text-decoration: underline; }\n  .footer-contact span {\n    font-style: italic; }\n\n@media all and (min-width: 450px) {\n  .footer-contact {\n    font-size: 1em; } }\n\n@media all and (min-width: 600px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 8% auto 8% auto; } }\n\n@media all and (min-width: 800px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 5% auto 5% auto; } }\n", "", {"version":3,"sources":["/./src/components/footer-content/src/components/footer-content/footer-content.scss","/./src/components/footer-content/src/scss/partials/_colors.scss","/./src/components/footer-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,0BCFiB;EDGjB,YAAW;EACX,gCCL4B;EDM5B,+CCN4B,EDO/B;;AAED;EACI,mBAAkB;EAClB,yBAAwB;EACxB,wCEZkC;EFalC,iBAAgB,EAgBnB;EApBD;IAMQ,sBAAqB,EACxB;EAPL;IASQ,eAAc,EACjB;EAVL;IAYQ,gCCrBwB,EDsB3B;EAbL;IAeQ,2BAA0B,EAC7B;EAhBL;IAkBQ,mBAAkB,EACrB;;AAGL;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA","file":"footer-content.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.footer-container {\n    background-color: $black;\n    width: 100%;\n    color: $lightgrey;\n    border-top: 1px solid $lightgrey;\n}\n\n.footer-contact {\n    text-align: center;\n    margin: 8% auto 10% auto;\n    font-family: $main-font;\n    font-size: .75em;\n    ul {\n        list-style-type: none; \n    }\n    li {\n        margin: 20px 0;\n    }\n    a {\n        color: $lightgrey;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    span {\n        font-style: italic;\n    }\n}\n\n@media all and (min-width: 450px) {\n    .footer-contact {\n        font-size: 1em; \n    }\n}\n\n@media all and (min-width: 600px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 8% auto 8% auto;\n    }\n}\n\n@media all and (min-width: 800px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 5% auto 5% auto;\n    }\n}\n\n// .footer-category:last-child {\n//     border-right: none;\n// }\n\n// @media all and (max-width: 650px) {\n//     .footer-container {\n//         div {\n//             margin-top: 25px;\n//             width: 49.5%;\n//             height: 170px;\n//             }\n//     }\n\n//     .footer-category:nth-child(2) {\n//         border-right: none;\n//     }\n// }\n\n\n\n\n    // padding-bottom: 25px;\n\n    // div {\n    //     margin-top: 25px;\n    //     height: 80%;\n    //     width: 24%;\n    //     float: left;\n    //     border-right: .12em solid $lightgrey;\n    //     h3 {\n    //         margin-top: 0;\n    //         text-align: center;\n    //         font-size: 1em;\n    //     }\n\n        // ul{\n        //     list-style-type: none;\n        //     margin: 0 auto;\n        //     // height: 200px;\n        //     li {\n        //         // padding-left: 50px;\n        //         margin: 15px 0;\n        //         font-size: 1.2em;\n        //         // font-size: .85em;\n        //         font-family: $main-font;\n        //         font-weight: lighter;\n        //         width: 100%;   \n        //     }\n        // }\n    // }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".footer-container {\n  background-color: #323232;\n  width: 100%;\n  color: rgba(200, 200, 200, 0.7);\n  border-top: 1px solid rgba(200, 200, 200, 0.7); }\n\n.footer-contact {\n  text-align: center;\n  margin: 8% auto 10% auto;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: .75em; }\n  .footer-contact ul {\n    list-style-type: none; }\n  .footer-contact li {\n    margin: 20px 0; }\n  .footer-contact a {\n    color: rgba(200, 200, 200, 0.7); }\n  .footer-contact a:hover {\n    text-decoration: underline; }\n  .footer-contact span {\n    font-style: italic; }\n\n@media all and (min-width: 450px) {\n  .footer-contact {\n    font-size: 1em; } }\n\n@media all and (min-width: 600px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 8% auto 8% auto; } }\n\n@media all and (min-width: 800px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 5% auto 5% auto; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/footer-content/src/components/footer-content/footer-content.scss","/Users/Will/freelance/earth-house/app/src/components/footer-content/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/footer-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,0BCFiB;EDGjB,YAAW;EACX,gCCL4B;EDM5B,+CCN4B,EDO/B;;AAED;EACI,mBAAkB;EAClB,yBAAwB;EACxB,wCEZkC;EFalC,iBAAgB,EAgBnB;EApBD;IAMQ,sBAAqB,EACxB;EAPL;IASQ,eAAc,EACjB;EAVL;IAYQ,gCCrBwB,EDsB3B;EAbL;IAeQ,2BAA0B,EAC7B;EAhBL;IAkBQ,mBAAkB,EACrB;;AAGL;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA","file":"footer-content.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.footer-container {\n    background-color: $black;\n    width: 100%;\n    color: $lightgrey;\n    border-top: 1px solid $lightgrey;\n}\n\n.footer-contact {\n    text-align: center;\n    margin: 8% auto 10% auto;\n    font-family: $main-font;\n    font-size: .75em;\n    ul {\n        list-style-type: none; \n    }\n    li {\n        margin: 20px 0;\n    }\n    a {\n        color: $lightgrey;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    span {\n        font-style: italic;\n    }\n}\n\n@media all and (min-width: 450px) {\n    .footer-contact {\n        font-size: 1em; \n    }\n}\n\n@media all and (min-width: 600px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 8% auto 8% auto;\n    }\n}\n\n@media all and (min-width: 800px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 5% auto 5% auto;\n    }\n}\n\n// .footer-category:last-child {\n//     border-right: none;\n// }\n\n// @media all and (max-width: 650px) {\n//     .footer-container {\n//         div {\n//             margin-top: 25px;\n//             width: 49.5%;\n//             height: 170px;\n//             }\n//     }\n\n//     .footer-category:nth-child(2) {\n//         border-right: none;\n//     }\n// }\n\n\n\n\n    // padding-bottom: 25px;\n\n    // div {\n    //     margin-top: 25px;\n    //     height: 80%;\n    //     width: 24%;\n    //     float: left;\n    //     border-right: .12em solid $lightgrey;\n    //     h3 {\n    //         margin-top: 0;\n    //         text-align: center;\n    //         font-size: 1em;\n    //     }\n\n        // ul{\n        //     list-style-type: none;\n        //     margin: 0 auto;\n        //     // height: 200px;\n        //     li {\n        //         // padding-left: 50px;\n        //         margin: 15px 0;\n        //         font-size: 1.2em;\n        //         // font-size: .85em;\n        //         font-family: $main-font;\n        //         font-weight: lighter;\n        //         width: 100%;   \n        //     }\n        // }\n    // }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 36 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34835,11 +35904,11 @@
 	    value: true
 	});
 	
-	var _headerContent = __webpack_require__(37);
+	var _headerContent = __webpack_require__(59);
 	
 	var _headerContent2 = _interopRequireDefault(_headerContent);
 	
-	var _headerContent3 = __webpack_require__(38);
+	var _headerContent3 = __webpack_require__(60);
 	
 	var _headerContent4 = _interopRequireDefault(_headerContent3);
 	
@@ -34869,19 +35938,19 @@
 	}
 
 /***/ },
-/* 37 */
+/* 59 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"header-container\" id=\"header-height\">\n    <div class=\"left\">\n        <h1 class=\"main-title\">Earth House</h1>\n            <nav-bar></nav-bar>\n        <div class=\"mobile-nav\" ng-show=\"$ctrl.nav\" ng-click=\"$ctrl.toggleNav()\">\n            <nav-bar></nav-bar>\n        </div>\n    </div>\n\n\n    <div class=\"right\">\n        <a ui-sref=\"checkout\" class=\"cart-icon\">\n            <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1489538579/cart-icon_zewzhg.png\">\n            <h5 class=\"total-items\">{{$ctrl.cart.totalItems}}</h5>\n        </a>\n        <div class=\"socials\">\n            <!--<a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>-->\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n        <div class=\"hamburger\">\n            <a ng-click=\"$ctrl.toggleNav()\">\n                <span class=\"icon-menu\"></span>\n            </a>\n        </div>\n    </div>\n</div>\n<div class=\"header-background\" ng-if=\"('about' | isState) || ('contact' | isState) || ('checkout' | isState) || ('success' | isState)\"></div>";
+	module.exports = "<div class=\"header-container\" id=\"header-height\">\n    <div class=\"left\">\n        <h1 class=\"main-title\">Earth House</h1>\n            <nav-bar></nav-bar>\n        <div class=\"mobile-nav\" ng-show=\"$ctrl.nav\" ng-click=\"$ctrl.toggleNav()\">\n            <nav-bar></nav-bar>\n        </div>\n    </div>\n\n\n    <div class=\"right\">\n        <a ui-sref=\"checkout\" class=\"cart-icon\">\n            <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1489538579/cart-icon_zewzhg.png\">\n            <h5 class=\"total-items\">{{$ctrl.cart.totalItems}}</h5>\n        </a>\n        <div class=\"socials\">\n            <!--<a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>-->\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n        <div class=\"hamburger\">\n            <a ng-click=\"$ctrl.toggleNav()\">\n                <span class=\"icon-menu\"></span>\n            </a>\n        </div>\n    </div>\n</div>\n<div class=\"header-background\" ng-if=\"('about' | isState) || ('contact' | isState) || ('checkout' | isState) || ('success' | isState) || ('markets' | isState)\"></div>";
 
 /***/ },
-/* 38 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(39);
+	var content = __webpack_require__(61);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -34890,8 +35959,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./header-content.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./header-content.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./header-content.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./header-content.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -34901,7 +35970,7 @@
 	}
 
 /***/ },
-/* 39 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -34909,13 +35978,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-container {\n  width: 100%;\n  position: absolute;\n  z-index: 1; }\n  .header-container .left {\n    float: left;\n    margin-top: -5px; }\n  .header-container .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right; }\n    .header-container .right span {\n      margin-right: 20px; }\n  .header-container h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white; }\n  .header-container .cart-icon {\n    position: relative;\n    float: left; }\n    .header-container .cart-icon img {\n      max-width: none; }\n  .header-container .cart-icon:hover > .total-items {\n    color: #FFC107; }\n  .header-container .icon-facebook2:before {\n    content: \"\\EA91\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-instagram:before {\n    content: \"\\EA92\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-twitter:before {\n    content: \"\\EA96\";\n    color: white;\n    font-size: 1.9em; }\n  .header-container .icon-menu:before {\n    content: \"\\E9BD\";\n    font-size: 1.2em;\n    color: white;\n    width: 20px; }\n\n.total-items {\n  display: inline-block;\n  position: absolute;\n  color: white;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.5em;\n  font-weight: bold;\n  margin: 0; }\n\n.socials {\n  float: right; }\n\n.hamburger {\n  display: none;\n  float: left; }\n\n@media all and (max-width: 550px) {\n  .header-container nav-bar {\n    display: none; }\n  .header-container .mobile-nav nav-bar {\n    display: block;\n    margin-top: 5px; }\n  .header-container .left {\n    float: none;\n    margin-top: -5px;\n    width: 100%;\n    z-index: 1; }\n    .header-container .left h1 {\n      float: left;\n      margin: 0 1%;\n      font-size: 2.9em;\n      font-weight: 900; }\n  .header-container .right {\n    margin-top: 5px; }\n    .header-container .right span {\n      margin-right: 10px; }\n  .header-container .socials {\n    display: none; }\n  .cart-icon img {\n    width: 22px;\n    margin-right: 5px; }\n  .total-items {\n    font-size: .5em;\n    top: 3px;\n    right: 12px; }\n  .hamburger {\n    display: block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  .header-container .left {\n    max-width: 250px; }\n    .header-container .left h1 {\n      font-size: 4em; }\n  .header-container .right {\n    margin-top: 15px; }\n    .header-container .right .icon-facebook2:before, .header-container .right .icon-instagram:before, .header-container .right .icon-twitter:before, .header-container .right .icon-cart:before {\n      font-size: 1.5em; }\n    .header-container .right span {\n      margin-right: 15px; }\n  .cart-icon img {\n    width: 35px;\n    margin-right: 15px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1em;\n    top: -1px;\n    right: 25px; } }\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n  .header-container .left {\n    width: 350px; }\n  .cart-icon img {\n    width: 45px;\n    margin-right: 20px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1.2em;\n    top: 1px;\n    right: 34px; } }\n\n@media all and (min-width: 1083px) {\n  .header-container .left {\n    width: 500px; }\n    .header-container .left h1 {\n      font-size: 7em; }\n  .header-container .right .icon-facebook2:before, .header-container .right .icon-twitter:before, .header-container .right .icon-instagram:before, .header-container .right .icon-cart:before {\n    font-size: 2.2em; }\n  .cart-icon img {\n    margin-top: -8px;\n    margin-right: 19px;\n    width: 55px; }\n  .total-items {\n    bottom: 23px;\n    right: 35px; } }\n", "", {"version":3,"sources":["/./src/components/header-content/src/scss/partials/_header-background.scss","/./src/components/header-content/src/scss/partials/_colors.scss","/./src/components/header-content/src/components/header-content/header-content.scss","/./src/components/header-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE5BL;EACQ,YAAW;EACX,mBAAkB;EAClB,WAAU,EAuDjB;EA1DD;IAKY,YAAW;IACX,iBAAgB,EACnB;EAPT;IASY,iBAAgB;IAChB,aAAY;IACZ,kBAAiB,EAIpB;IAfT;MAagB,mBAAkB,EACrB;EAdb;IAiBY,iBAAgB;IAChB,eAAc;IACd,kCAAiC;IACjC,eAAc;IACd,aAAY,EACf;EAtBT;IAwBY,mBAAkB;IAClB,YAAW,EAId;IA7BT;MA2BgB,gBAAe,EAClB;EA5Bb;IAgCY,eDpCU,ECqCb;EAjCT;IAoCY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EAvCT;IA0CY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EA7CT;IAgDY,iBAAgB;IAChB,aAAY;IACZ,iBAAgB,EACnB;EAnDT;IAqDY,iBAAgB;IAChB,iBAAgB;IAChB,aAAY;IACZ,YAAW,EACd;;AAGT;EACI,sBAAqB;EACrB,mBAAkB;EAClB,aAAY;EACZ,wCCnEkC;EDoElC,iBAAgB;EAChB,kBAAiB;EACjB,UAAS,EACZ;;AACD;EACI,aAAY,EACf;;AAED;EACI,cAAa;EACb,YAAW,EACd;;AAGD;EACI;IAEQ,cAAa,EAChB;EAHL;IAKQ,eAAc;IACd,gBAAe,EAClB;EAPL;IASQ,YAAW;IACX,iBAAgB;IAChB,YAAW;IACX,WAAU,EAOb;IAnBL;MAcY,YAAW;MACX,aAAY;MACZ,iBAAgB;MAChB,iBAAgB,EACnB;EAlBT;IAqBQ,gBAAe,EAIlB;IAzBL;MAuBY,mBAAkB,EACrB;EAxBT;IA2BQ,cAAa,EAChB;EAEL;IAEQ,YAAW;IACX,kBAAiB,EAEpB;EAEL;IACI,gBAAe;IACf,SAAO;IACP,YAAW,EACd;EACD;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IAEQ,iBAAgB,EAInB;IANL;MAIY,eAAc,EACjB;EALT;IASQ,iBAAgB,EAOnB;IAhBL;MAWY,iBAAgB,EACnB;IAZT;MAcY,mBAAkB,EACrB;EAGT;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,eAAc;IACd,UAAS;IACT,YAAW,EACd,EAAA;;AAIL;EACI;IAEQ,aAAY,EACf;EAEL;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,iBAAgB;IAChB,SAAQ;IACR,YAAW,EACd,EAAA;;AAGL;EACI;IAEQ,aAAY,EAIf;IANL;MAIY,eAAc,EACjB;EALT;IASY,iBAAgB,EACnB;EAGT;IAEQ,iBAAgB;IAChB,mBAAkB;IAClB,YAAW,EACd;EAEL;IACI,aAAY;IACZ,YAAW,EACd,EAAA","file":"header-content.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'colors';\n@import 'fonts';\n@import 'header-background';\n\n.header-container {\n        width: 100%;\n        position: absolute;\n        z-index: 1;\n        .left {\n            float: left;\n            margin-top: -5px;\n        }\n        .right {\n            margin-top: 20px;\n            float: right;\n            text-align: right;\n            span {\n                margin-right: 20px;\n            }\n        }\n        h1 {\n            text-align: left;\n            margin: 0 20px;\n            font-family: 'Amatic SC', cursive;\n            font-size: 6em;\n            color: white;\n        }\n        .cart-icon {\n            position: relative;\n            float: left;\n            img{\n                max-width: none;\n            }\n        }\n\n        .cart-icon:hover > .total-items {\n            color: $accent-color;\n        }\n\n        .icon-facebook2:before {\n            content: \"\\ea91\";\n            color: white;\n            font-size: 1.9em;\n        }\n\n        .icon-instagram:before {\n            content: \"\\ea92\";\n            color: white;\n            font-size: 1.9em;\n        }\n\n        .icon-twitter:before {\n            content: \"\\ea96\";\n            color: white;\n            font-size: 1.9em;\n        }\n        .icon-menu:before {\n            content: \"\\e9bd\";\n            font-size: 1.2em;\n            color: white;\n            width: 20px;\n        }\n}\n\n.total-items {\n    display: inline-block;\n    position: absolute;\n    color: white;\n    font-family: $main-font;\n    font-size: 1.5em;\n    font-weight: bold;\n    margin: 0;\n}\n.socials {\n    float: right;\n}\n\n.hamburger {\n    display: none;\n    float: left;\n}\n\n\n@media all and (max-width: 550px) {\n    .header-container {\n        nav-bar {\n            display: none;\n        }\n        .mobile-nav nav-bar {\n            display: block;\n            margin-top: 5px;\n        }\n        .left {\n            float: none;\n            margin-top: -5px;\n            width: 100%;\n            z-index: 1;\n            h1 {\n                float: left;\n                margin: 0 1%;\n                font-size: 2.9em;\n                font-weight: 900;\n            }\n        }\n        .right {\n            margin-top: 5px;\n            span {\n                margin-right: 10px;\n            }\n        }\n        .socials {\n            display: none;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 22px;\n            margin-right: 5px;\n            \n        }\n    }\n    .total-items {\n        font-size: .5em;\n        top:3px;\n        right: 12px;\n    }\n    .hamburger {\n        display: block;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    .header-container {\n        .left {\n            max-width: 250px;\n            h1 {\n                font-size: 4em;\n            }\n        }\n\n        .right {\n            margin-top: 15px;\n            .icon-facebook2:before, .icon-instagram:before, .icon-twitter:before, .icon-cart:before {\n                font-size: 1.5em;\n            }\n            span {\n                margin-right: 15px;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            width: 35px;\n            margin-right: 15px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1em;\n        top: -1px;\n        right: 25px;\n    }\n\n}\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n    .header-container {\n        .left {\n            width: 350px;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 45px;\n            margin-right: 20px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1.2em;\n        top: 1px;\n        right: 34px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-container {\n        .left {\n            width: 500px;\n            h1 {\n                font-size: 7em;\n            }\n        }\n        .right {\n            .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n                font-size: 2.2em;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            margin-top: -8px;\n            margin-right: 19px;\n            width: 55px;\n        }\n    }\n    .total-items {\n        bottom: 23px;\n        right: 35px;\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-container {\n  width: 100%;\n  position: absolute;\n  z-index: 1;\n  color: white; }\n  .header-container .left {\n    float: left;\n    margin-top: -5px; }\n  .header-container .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right; }\n    .header-container .right span {\n      margin-right: 20px; }\n  .header-container h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white; }\n  .header-container .cart-icon {\n    position: relative;\n    float: left; }\n    .header-container .cart-icon img {\n      max-width: none; }\n  .header-container .cart-icon:hover > .total-items {\n    color: #FFC107; }\n  .header-container .icon-facebook2:before {\n    content: \"\\EA91\";\n    font-size: 1.9em; }\n  .header-container .icon-instagram:before {\n    content: \"\\EA92\";\n    font-size: 1.9em; }\n  .header-container .icon-twitter:before {\n    content: \"\\EA96\";\n    font-size: 1.9em; }\n  .header-container .icon-menu:before {\n    content: \"\\E9BD\";\n    font-size: 2em; }\n  .header-container a:hover {\n    color: #FFC107; }\n\n.total-items {\n  display: inline-block;\n  position: absolute;\n  color: white;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.5em;\n  font-weight: bold;\n  margin: 0; }\n\n.socials {\n  float: right; }\n\n.hamburger {\n  display: none;\n  float: left; }\n\n@media all and (max-width: 550px) {\n  .header-container nav-bar {\n    display: none; }\n  .header-container .mobile-nav nav-bar {\n    display: block;\n    margin-top: 5px; }\n  .header-container .left {\n    float: none;\n    margin-top: -5px;\n    width: 100%;\n    z-index: 1; }\n    .header-container .left h1 {\n      float: left;\n      margin: 0 1%;\n      font-size: 2.9em;\n      font-weight: 900; }\n  .header-container .right {\n    margin-top: 5px; }\n    .header-container .right span {\n      margin-right: 10px; }\n  .header-container .socials {\n    display: none; }\n  .cart-icon img {\n    width: 36px;\n    margin-right: 5px; }\n  .total-items {\n    font-size: .9em;\n    top: 4px;\n    right: 15px; }\n  .hamburger {\n    display: block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  .header-container .left {\n    max-width: 250px; }\n    .header-container .left h1 {\n      font-size: 4em; }\n  .header-container .right {\n    margin-top: 15px; }\n    .header-container .right .icon-facebook2:before, .header-container .right .icon-instagram:before, .header-container .right .icon-twitter:before, .header-container .right .icon-cart:before {\n      font-size: 1.5em; }\n    .header-container .right span {\n      margin-right: 15px; }\n  .cart-icon img {\n    width: 35px;\n    margin-right: 15px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1em;\n    top: -1px;\n    right: 25px; } }\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n  .header-container .left {\n    width: 350px; }\n  .cart-icon img {\n    width: 45px;\n    margin-right: 20px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1.2em;\n    top: 1px;\n    right: 34px; } }\n\n@media all and (min-width: 1083px) {\n  .header-container .left {\n    width: 500px; }\n    .header-container .left h1 {\n      font-size: 7em; }\n  .header-container .right .icon-facebook2:before, .header-container .right .icon-twitter:before, .header-container .right .icon-instagram:before, .header-container .right .icon-cart:before {\n    font-size: 2.2em; }\n  .cart-icon img {\n    margin-top: -8px;\n    margin-right: 19px;\n    width: 55px; }\n  .total-items {\n    bottom: 23px;\n    right: 35px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_header-background.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/components/header-content/header-content.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE5BL;EACQ,YAAW;EACX,mBAAkB;EAClB,WAAU;EACV,aAAY,EAqDnB;EAzDD;IAMY,YAAW;IACX,iBAAgB,EACnB;EART;IAUY,iBAAgB;IAChB,aAAY;IACZ,kBAAiB,EAIpB;IAhBT;MAcgB,mBAAkB,EACrB;EAfb;IAkBY,iBAAgB;IAChB,eAAc;IACd,kCAAiC;IACjC,eAAc;IACd,aAAY,EACf;EAvBT;IAyBY,mBAAkB;IAClB,YAAW,EAId;IA9BT;MA4BgB,gBAAe,EAClB;EA7Bb;IAiCY,eDrCU,ECsCb;EAlCT;IAqCY,iBAAgB;IAChB,iBAAgB,EACnB;EAvCT;IA0CY,iBAAgB;IAChB,iBAAgB,EACnB;EA5CT;IA+CY,iBAAgB;IAChB,iBAAgB,EACnB;EAjDT;IAmDY,iBAAgB;IAChB,eAAc,EACjB;EArDT;IAuDY,eD3DU,EC4Db;;AAGT;EACI,sBAAqB;EACrB,mBAAkB;EAClB,aAAY;EACZ,wCClEkC;EDmElC,iBAAgB;EAChB,kBAAiB;EACjB,UAAS,EACZ;;AACD;EACI,aAAY,EACf;;AAED;EACI,cAAa;EACb,YAAW,EACd;;AAGD;EACI;IAEQ,cAAa,EAChB;EAHL;IAKQ,eAAc;IACd,gBAAe,EAClB;EAPL;IASQ,YAAW;IACX,iBAAgB;IAChB,YAAW;IACX,WAAU,EAOb;IAnBL;MAcY,YAAW;MACX,aAAY;MACZ,iBAAgB;MAChB,iBAAgB,EACnB;EAlBT;IAqBQ,gBAAe,EAIlB;IAzBL;MAuBY,mBAAkB,EACrB;EAxBT;IA2BQ,cAAa,EAChB;EAEL;IAEQ,YAAW;IACX,kBAAiB,EAEpB;EAEL;IACI,gBAAe;IACf,SAAQ;IACR,YAAW,EACd;EACD;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IAEQ,iBAAgB,EAInB;IANL;MAIY,eAAc,EACjB;EALT;IASQ,iBAAgB,EAOnB;IAhBL;MAWY,iBAAgB,EACnB;IAZT;MAcY,mBAAkB,EACrB;EAGT;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,eAAc;IACd,UAAS;IACT,YAAW,EACd,EAAA;;AAIL;EACI;IAEQ,aAAY,EACf;EAEL;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,iBAAgB;IAChB,SAAQ;IACR,YAAW,EACd,EAAA;;AAGL;EACI;IAEQ,aAAY,EAIf;IANL;MAIY,eAAc,EACjB;EALT;IASY,iBAAgB,EACnB;EAGT;IAEQ,iBAAgB;IAChB,mBAAkB;IAClB,YAAW,EACd;EAEL;IACI,aAAY;IACZ,YAAW,EACd,EAAA","file":"header-content.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'colors';\n@import 'fonts';\n@import 'header-background';\n\n.header-container {\n        width: 100%;\n        position: absolute;\n        z-index: 1;\n        color: white;\n        .left {\n            float: left;\n            margin-top: -5px;\n        }\n        .right {\n            margin-top: 20px;\n            float: right;\n            text-align: right;\n            span {\n                margin-right: 20px;\n            }\n        }\n        h1 {\n            text-align: left;\n            margin: 0 20px;\n            font-family: 'Amatic SC', cursive;\n            font-size: 6em;\n            color: white;\n        }\n        .cart-icon {\n            position: relative;\n            float: left;\n            img{\n                max-width: none;\n            }\n        }\n\n        .cart-icon:hover > .total-items {\n            color: $accent-color;\n        }\n\n        .icon-facebook2:before {\n            content: \"\\ea91\";\n            font-size: 1.9em;\n        }\n\n        .icon-instagram:before {\n            content: \"\\ea92\";\n            font-size: 1.9em;\n        }\n\n        .icon-twitter:before {\n            content: \"\\ea96\";\n            font-size: 1.9em;\n        }\n        .icon-menu:before {\n            content: \"\\e9bd\";\n            font-size: 2em;\n        }\n        a:hover {\n            color: $accent-color;\n        }\n}\n\n.total-items {\n    display: inline-block;\n    position: absolute;\n    color: white;\n    font-family: $main-font;\n    font-size: 1.5em;\n    font-weight: bold;\n    margin: 0;\n}\n.socials {\n    float: right;\n}\n\n.hamburger {\n    display: none;\n    float: left;\n}\n\n\n@media all and (max-width: 550px) {\n    .header-container {\n        nav-bar {\n            display: none;\n        }\n        .mobile-nav nav-bar {\n            display: block;\n            margin-top: 5px;\n        }\n        .left {\n            float: none;\n            margin-top: -5px;\n            width: 100%;\n            z-index: 1;\n            h1 {\n                float: left;\n                margin: 0 1%;\n                font-size: 2.9em;\n                font-weight: 900;\n            }\n        }\n        .right {\n            margin-top: 5px;\n            span {\n                margin-right: 10px;\n            }\n        }\n        .socials {\n            display: none;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 36px;\n            margin-right: 5px;\n            \n        }\n    }\n    .total-items {\n        font-size: .9em;\n        top: 4px;\n        right: 15px;\n    }\n    .hamburger {\n        display: block;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    .header-container {\n        .left {\n            max-width: 250px;\n            h1 {\n                font-size: 4em;\n            }\n        }\n\n        .right {\n            margin-top: 15px;\n            .icon-facebook2:before, .icon-instagram:before, .icon-twitter:before, .icon-cart:before {\n                font-size: 1.5em;\n            }\n            span {\n                margin-right: 15px;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            width: 35px;\n            margin-right: 15px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1em;\n        top: -1px;\n        right: 25px;\n    }\n\n}\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n    .header-container {\n        .left {\n            width: 350px;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 45px;\n            margin-right: 20px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1.2em;\n        top: 1px;\n        right: 34px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-container {\n        .left {\n            width: 500px;\n            h1 {\n                font-size: 7em;\n            }\n        }\n        .right {\n            .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n                font-size: 2.2em;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            margin-top: -8px;\n            margin-right: 19px;\n            width: 55px;\n        }\n    }\n    .total-items {\n        bottom: 23px;\n        right: 35px;\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 40 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34924,11 +35993,11 @@
 	    value: true
 	});
 	
-	var _heroImage = __webpack_require__(41);
+	var _heroImage = __webpack_require__(63);
 	
 	var _heroImage2 = _interopRequireDefault(_heroImage);
 	
-	var _heroImage3 = __webpack_require__(42);
+	var _heroImage3 = __webpack_require__(64);
 	
 	var _heroImage4 = _interopRequireDefault(_heroImage3);
 	
@@ -34936,6 +36005,9 @@
 	
 	exports.default = {
 	    template: _heroImage2.default,
+	    bindings: {
+	        slides: '<'
+	    },
 	    controller: controller
 	};
 	
@@ -34945,34 +36017,40 @@
 	function controller($window, $interval) {
 	    var _this = this;
 	
+	    this.$onInit = function () {
+	        _this.slidesVisible = [];
+	        if (_this.slides.length < 3) {
+	            _this.slidesVisible = [{
+	                name: 'img3',
+	                imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1488324567/IMG_1125.tiff_mt0jkc.jpg',
+	                text: 'Tranquil Fennel',
+	                link: 'https://earth-house.herokuapp.com/#!/shop/item/58c8606ebcc7260011e09169'
+	            }, {
+	                name: 'img1',
+	                imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_south_west,h_2603,w_3800/v1488324606/sumpreme-green-centered_wp639t.jpg',
+	                text: 'Supreme Green',
+	                link: 'https://earth-house.herokuapp.com/#!/shop/item/58c860aabcc7260011e0916a'
+	            }, {
+	                name: 'img2',
+	                imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1488324567/IMG_1125.tiff_mt0jkc.jpg',
+	                text: 'Pear-adise',
+	                link: 'https://earth-house.herokuapp.com/#!/shop/item/58c85e66f36d287eb5cb74ef'
+	            }];
+	        } else {
+	            do {
+	                var index = Math.floor(Math.random() * _this.slides.length);
+	                if (_this.slidesVisible.indexOf(_this.slides[index]) === -1) {
+	                    _this.slidesVisible.push(_this.slides[index]);
+	                }
+	            } while (_this.slidesVisible.length < 3);
+	        }
+	        _this.currIndex = 0;
+	        _this.currText = _this.slidesVisible[0].text;
+	    };
 	    this.styles = _heroImage4.default;
-	    // this.progress = this.styles.start;
-	    // this.progress = this.styles.finish;
-	    this.slides = [{
-	        name: 'img3',
-	        imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1488324567/IMG_1125.tiff_mt0jkc.jpg',
-	        text: 'Tranquil Fennel',
-	        link: 'https://earth-house.herokuapp.com/#!/shop/item/58c8606ebcc7260011e09169'
-	        // text: 'Sit voluptatem accusantium doloremque laudantium, totam rem aperiam <a ui-sref="shop">Check out our online store</a>'
-	    }, {
-	        name: 'img1',
-	        imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_south_west,h_2603,w_3800/v1488324606/sumpreme-green-centered_wp639t.jpg',
-	        // text: 'Sed ut perspiciatis omnis iste natus error sit voluptatem accusantium doloremque laudantium. <a href="https://www.instagram.com">follow us on instagram!</a>'
-	        text: 'Supreme Green',
-	        link: 'https://earth-house.herokuapp.com/#!/shop/item/58c860aabcc7260011e0916a'
-	    }, {
-	        name: 'img2',
-	        imgUrl: 'http://res.cloudinary.com/lejipni8p/image/upload/v1488324567/IMG_1125.tiff_mt0jkc.jpg',
-	        // text: 'Sed sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. <a>Read about our juices</a>'
-	        text: 'Pear-adise',
-	        link: 'https://earth-house.herokuapp.com/#!/shop/item/58c85e66f36d287eb5cb74ef'
-	    }];
-	
-	    this.currIndex = 0;
-	    this.currText = this.slides[0].text;
 	
 	    this.setCurrText = function () {
-	        this.currText = this.slides[this.currIndex].text;
+	        this.currText = this.slidesVisible[this.currIndex].text;
 	    };
 	
 	    this.setCurrIndex = function (index) {
@@ -34985,61 +36063,34 @@
 	    };
 	
 	    this.nextSlide = function () {
-	        // this.progress = this.styles.finish;
-	        // console.log(this.progress);
-	        this.currIndex = this.currIndex < this.slides.length - 1 ? ++this.currIndex : 0;
+	        this.currIndex = this.currIndex < this.slidesVisible.length - 1 ? ++this.currIndex : 0;
 	        this.setCurrText();
 	    };
 	
 	    this.prevSlide = function () {
-	        this.currIndex = this.currIndex > 0 ? --this.currIndex : this.slides.length - 1;
+	        this.currIndex = this.currIndex > 0 ? --this.currIndex : this.slidesVisible.length - 1;
 	        this.setCurrText();
 	    };
 	
 	    $interval(function () {
 	        _this.nextSlide();
-	    }, 4000);
-	
-	    //TODO: figure out some sort of way to adjust slider height based off of image height, we might have to use jQuery :/
-	
-	    // this.sliderHeight = {'height': ($window.innerHeight - 50) + 'px'};
-	
-	    // const image = $document.getElementsByClassName('.slide-image')[0]; //eslint-disable-line
-	
-	    // const images = $document.getElementsByClassName('slide-image');
-	    // console.log('here', $document[0].querySelectorAll('.slide-image'));
-	
-	    // angular.element(document.getElementsByClassName('slide-image')[0]).bind('resize', function () {
-	    //     // this.sliderHeight = {'height': ($window.innerHeight - 50) + 'px'};
-	    //     console.log('Height', this.imageHeight);
-	    // });
-	
-	    // angular.element($window).bind('resize', function () {
-	    //     this.sliderHeight = {'height': ($window.innerHeight - 50) + 'px'};
-	    //     console.log('Height', this.sliderHeight);
-	    // });
-	    // const slideImgs =  document.getElementsByClassName('slide-image'); //eslint-disable-line
-	
-	    // const wrappedImgs = angular.element(slideImgs);
-	    // var imgs = angular.element(document.querySelector('.slide-image'));
-	
-	    // console.log(imgs);
+	    }, 5000);
 	}
 
 /***/ },
-/* 41 */
+/* 63 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"slider\">\n    <div ng-repeat=\"slide in $ctrl.slides\">\n        <img ng-hide=\"!$ctrl.isCurrIndex($index)\"\n            ng-src=\"{{slide.imgUrl}}\"\n             class=\"slide-image slide-animation \">\n         <div ng-if=\"$ctrl.isCurrIndex($index)\"\n            class=\"slide-text fade\">\n            <p><a ui-sref=\"shop\">{{$ctrl.currText}}</a></p>\n         </div>\n    </div>\n\n    <!--<a class=\"arrow next\" href=\"#\" ng-click=\"$ctrl.nextSlide()\"><span class=\"icon-arrow-right2\"></span></a>\n    <a class=\"arrow prev\" href=\"#\" ng-click=\"$ctrl.prevSlide()\"><span class=\"icon-arrow-left2\"></span></a>-->\n    \n    <nav class=\"slider-nav\">\n        <div class=\"wrapper\">\n            <ul class=\"dots\">\n                <li class=\"dot\" ng-repeat=\"slide in $ctrl.slides\">\n                    <a href=\"#\" \n                        ng-class=\"{'active': $ctrl.isCurrIndex($index)}\"\n                        ng-click=\"$ctrl.setCurrIndex($index)\"></a>\n                </li>\n            </ul>\n            <!--<div id=\"progress-bar\" ng-class=\"$ctrl.progress\"></div>-->\n        </div>\n    </nav>\n</div>\n\n\n";
+	module.exports = "<div class=\"slider\">\n    <div ng-repeat=\"slide in $ctrl.slidesVisible\">\n        <img ng-hide=\"!$ctrl.isCurrIndex($index)\"\n            ng-src=\"{{slide.imgUrl}}\"\n             class=\"slide-image slide-animation \">\n         <div ng-if=\"$ctrl.isCurrIndex($index)\"\n            class=\"slide-text fade\">\n            <p ng-if=\"slide.link !== '#'\"><a href=\"{{slide.link}}\">{{$ctrl.currText}}</a></p>\n            <p ng-if=\"slide.link === '#'\"><a ui-sref=\"shop\">{{$ctrl.currText}}</a></p>\n         </div>\n    </div>\n   \n    <nav class=\"slider-nav\">\n        <div class=\"wrapper\">\n            <ul class=\"dots\">\n                <li class=\"dot\" ng-repeat=\"slide in $ctrl.slidesVisible\">\n                    <a href=\"#\" \n                        ng-class=\"{'active': $ctrl.isCurrIndex($index)}\"\n                        ng-click=\"$ctrl.setCurrIndex($index)\"></a>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</div>\n\n\n";
 
 /***/ },
-/* 42 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(43);
+	var content = __webpack_require__(65);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35048,8 +36099,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./hero-image.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./hero-image.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./hero-image.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./hero-image.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35059,7 +36110,7 @@
 	}
 
 /***/ },
-/* 43 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35067,13 +36118,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".fade.ng-enter {\n  transition: .5s linear all;\n  opacity: 0; }\n\n.fade.ng-enter.ng-enter-active {\n  opacity: 1; }\n\n.fade.ng-leave {\n  transition: .5s linear all;\n  opacity: 1; }\n\n.fade.ng-leave.ng-leave-active {\n  opacity: 0; }\n\n.slide-text {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  width: 100%;\n  z-index: 1002; }\n  .slide-text p {\n    font-size: 1em;\n    color: white;\n    font-weight: bold;\n    text-align: center;\n    margin-bottom: 3%; }\n  .slide-text a {\n    font-size: 1.5em;\n    font-family: \"Amatic SC\", cursive;\n    display: block;\n    transition: .5s ease all; }\n  .slide-text a:hover {\n    color: #FFC107; }\n\n.slider {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden; }\n\n.slide-image {\n  position: absolute;\n  top: 0;\n  left: 0; }\n\n.slider-nav {\n  text-align: center;\n  display: block;\n  position: absolute;\n  z-index: 1002;\n  left: 0;\n  bottom: -4px;\n  right: 0;\n  height: 48px; }\n\n.nonDraggableImage {\n  -webkit-user-drag: none; }\n\n.slider-nav .wrapper {\n  margin: 0 auto;\n  width: 100%;\n  padding: 1em 0 .8em; }\n\n#progress-bar {\n  position: absolute;\n  bottom: 10px;\n  height: 3px;\n  background-color: #FFC107;\n  height: 3px;\n  opacity: .7;\n  transition: width 4s linear; }\n\n.slider-nav ul {\n  margin: 0;\n  width: 100%; }\n\n.slider-nav .dot, .slider-nav .dot a {\n  display: inline-block;\n  zoom: 1; }\n\n.dots .dot {\n  position: relative;\n  margin: 0 10px;\n  width: 12px;\n  height: 12px; }\n\n.dots .dot a {\n  position: absolute;\n  top: 2px;\n  left: 2px;\n  width: 6px;\n  height: 6px;\n  text-indent: 100%;\n  white-space: nowrap;\n  overflow: hidden;\n  background: #FFF;\n  border: 1px solid transparent;\n  outline: none;\n  -webkit-box-shadow: none;\n  -moz-box-shadow: none;\n  box-shadow: none;\n  -webkit-border-radius: 50%;\n  -moz-border-radius: 50%;\n  border-radius: 50%;\n  -webkit-transition: background-color 1s, border-color 1s;\n  -moz-transition: background-color 1s, border-color 1s;\n  transition: background-color 1s, border-color 1s; }\n\n.dots .dot a.active {\n  border-color: #FFC107;\n  background-color: #FFC107; }\n\n.arrow {\n  position: absolute;\n  z-index: 1002;\n  display: block;\n  top: 50%;\n  margin-top: -35px;\n  width: auto;\n  height: auto;\n  outline: none;\n  cursor: pointer;\n  color: white;\n  font-size: 4em;\n  border: 5px solid rgba(255, 255, 255, 0); }\n\n.arrow.prev {\n  opacity: 0.2;\n  left: 5%;\n  transition: 0.2s linear all; }\n\n.arrow.next {\n  opacity: 0.2;\n  right: 5%;\n  transition: 0.3s linear all; }\n\n.arrow:hover {\n  opacity: 1;\n  -webkit-transform: scale(1.2);\n  -ms-transform: scale(1.2);\n  transform: scale(1.2); }\n\n@media all and (max-width: 358px) {\n  .slider {\n    height: 210px; } }\n\n@media all and (min-width: 359px) and (max-width: 450px) {\n  .slider {\n    height: 250px; } }\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n  .slider {\n    height: 295px; } }\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n  .slider a {\n    font-size: 2em;\n    margin-bottom: 1%; }\n  .slide-text a {\n    font-size: 2em; } }\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n  .slider {\n    height: 350px; } }\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n  .slider {\n    height: 410px; }\n  .slide-text a {\n    font-size: 2.5em; } }\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n  .slider {\n    height: 440px; }\n  .slide-text a {\n    font-size: 3em; } }\n\n@media all and (max-width: 700px) {\n  .slider-nav {\n    height: 35px; }\n  .slider-nav .wrapper {\n    padding-bottom: 0;\n    bottom: 0; }\n  .dots .dot {\n    margin: 0 5px;\n    width: 12px;\n    height: 12px; }\n  .dots .dot a {\n    height: 4px;\n    width: 4px; } }\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n  .slider {\n    height: 500px; }\n  .slide-text a {\n    font-size: 3.5em;\n    margin-bottom: 10px; } }\n\n@media all and (min-width: 816px) {\n  .slider {\n    height: 550px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n  .slider img {\n    top: -35px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n  .slider img {\n    top: -60px; }\n  .slide-text a {\n    font-size: 5em; } }\n\n@media all and (min-width: 1200px) {\n  .slider {\n    height: 600px; }\n    .slider img {\n      top: -93px; } }\n", "", {"version":3,"sources":["/./src/components/hero-image/src/scss/partials/_fade-text.scss","/./src/components/hero-image/src/components/hero-image/hero-image.scss","/./src/components/hero-image/src/scss/partials/_fonts.scss","/./src/components/hero-image/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAAA;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;AAED;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;ACZD;EACI,mBAAkB;EAClB,UAAS;EACT,SAAQ;EACR,YAAW;EACX,cAAa,EAmBhB;EAxBD;IAOQ,eAAc;IACd,aAAY;IACZ,kBAAiB;IACjB,mBAAkB;IAElB,kBAAiB,EACpB;EAbL;IAeQ,iBAAgB;IAChB,kCCpB8B;IDqB9B,eAAc;IACd,yBAAwB,EAC3B;EAnBL;IAqBQ,eEzBc,EF0BjB;;AAIL;EACI,mBAAkB;EAClB,YAAW;EACX,cAAa;EACb,iBAAgB,EACnB;;AAED;EACI,mBAAkB;EAClB,OAAM;EACN,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,mBAAkB;EAClB,cAAa;EACb,QAAO;EACP,aAAY;EACZ,SAAQ;EACR,aAAY,EACf;;AAED;EACI,wBAAuB,EAC1B;;AAED;EACI,eAAc;EACd,YAAW;EACX,oBAAmB,EACtB;;AAUD;EACI,mBAAkB;EAClB,aAAY;EACZ,YAAW;EACX,0BE5EkB;EF6ElB,YAAW;EACX,YAAW;EACX,4BAA2B,EAC9B;;AAYD;EACI,UAAS;EACT,YAAW,EACd;;AAED;EACI,sBAAqB;EACrB,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,YAAW;EACX,aAAY,EACf;;AAED;EACI,mBAAkB;EAClB,SAAQ;EACR,UAAS;EACT,WAAU;EACV,YAAW;EACX,kBAAiB;EACjB,oBAAmB;EACnB,iBAAgB;EAChB,iBAAgB;EAChB,8BAA6B;EAC7B,cAAa;EACb,yBAAwB;EACxB,sBAAqB;EACrB,iBAAgB;EAChB,2BAA0B;EAC1B,wBAAuB;EACvB,mBAAkB;EAClB,yDAAwD;EACxD,sDAAqD;EACrD,iDAAgD,EACnD;;AAED;EAEI,sBEtIkB;EFuIlB,0BEvIkB,EFwIrB;;AAED;EACI,mBAAkB;EAClB,cAAa;EACb,eAAc;EACd,SAAQ;EACR,kBAAiB;EACjB,YAAW;EACX,aAAY;EACZ,cAAa;EACb,gBAAe;EACf,aAAY;EACZ,eAAc;EACd,yCAAqC,EACxC;;AAED;EACI,aAAY;EACZ,SAAQ;EAER,4BAA2B,EAC9B;;AAED;EACI,aAAY;EACZ,UAAS;EACT,4BAA2B,EAC9B;;AAED;EACI,WAAU;EACV,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB,EACxB;;AACD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IAEQ,eAAc;IACd,kBAAiB,EACpB;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB,EACnB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EAEI;IACI,aAAY,EACf;EACD;IACI,kBAAiB;IACjB,UAAS,EACZ;EAED;IACI,cAAa;IACb,YAAW;IACX,aAAY,EACf;EACD;IACI,YAAW;IACX,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB;IAChB,oBAAmB,EACtB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAIhB;IALD;MAGQ,WAAU,EACb,EAAA","file":"hero-image.scss","sourcesContent":[".fade.ng-enter {\n    transition: .5s linear all;\n    opacity: 0;\n}\n\n.fade.ng-enter.ng-enter-active {\n    opacity: 1;\n}\n\n.fade.ng-leave {\n    transition: .5s linear all;\n    opacity: 1;\n}\n\n.fade.ng-leave.ng-leave-active {\n    opacity: 0;\n}","@import 'fade-text';\n@import 'fonts';\n@import 'colors';\n\n.slide-text {\n    position: absolute;\n    bottom: 0;\n    right: 0;\n    width: 100%;\n    z-index: 1002;\n    p {\n        font-size: 1em;\n        color: white;\n        font-weight: bold;\n        text-align: center;\n\n        margin-bottom: 3%;\n    }\n    a {\n        font-size: 1.5em;\n        font-family: $decorative-font;\n        display: block;\n        transition: .5s ease all;\n    }\n    a:hover {\n        color: $accent-color;\n    }\n\n}\n\n.slider {\n    position: relative;\n    width: 100%;\n    height: 100vh;\n    overflow: hidden;\n}\n\n.slide-image {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n\n.slider-nav {\n    text-align: center;\n    display: block;\n    position: absolute;\n    z-index: 1002;\n    left: 0;\n    bottom: -4px;\n    right: 0;\n    height: 48px;\n}\n\n.nonDraggableImage{\n    -webkit-user-drag: none;\n}\n\n.slider-nav .wrapper {\n    margin: 0 auto;\n    width: 100%;\n    padding: 1em 0 .8em;\n}\n\n// .progress-bar {\n//     width: 100%;\n//     position: absolute;\n//     bottom: 10px;\n//     height: 3px;\n//     // background-color: rgab(255,255,255,.7);\n// }\n\n#progress-bar {\n    position: absolute;\n    bottom: 10px;\n    height: 3px;\n    background-color: $accent-color;\n    height: 3px;\n    opacity: .7;\n    transition: width 4s linear;\n}\n\n// :local(.start) {\n//     width: 100%;\n// }\n\n// :local(.finish) {\n//     width: 100%;\n// }\n\n\n\n.slider-nav ul {\n    margin: 0;\n    width: 100%;\n}\n\n.slider-nav .dot, .slider-nav .dot a {\n    display: inline-block;\n    zoom: 1;\n}\n\n.dots .dot {\n    position: relative;\n    margin: 0 10px;\n    width: 12px;\n    height: 12px;\n}\n\n.dots .dot a {\n    position: absolute;\n    top: 2px;\n    left: 2px;\n    width: 6px;\n    height: 6px;\n    text-indent: 100%;\n    white-space: nowrap;\n    overflow: hidden;\n    background: #FFF;\n    border: 1px solid transparent;\n    outline: none;\n    -webkit-box-shadow: none;\n    -moz-box-shadow: none;\n    box-shadow: none;\n    -webkit-border-radius: 50%;\n    -moz-border-radius: 50%;\n    border-radius: 50%;\n    -webkit-transition: background-color 1s, border-color 1s;\n    -moz-transition: background-color 1s, border-color 1s;\n    transition: background-color 1s, border-color 1s;\n}\n\n.dots .dot a.active {\n    // border-color: #FFF;\n    border-color: $accent-color;\n    background-color: $accent-color;\n}\n\n.arrow {\n    position: absolute;\n    z-index: 1002;\n    display: block;\n    top: 50%;\n    margin-top: -35px;\n    width: auto;\n    height: auto;\n    outline: none;\n    cursor: pointer;\n    color: white;\n    font-size: 4em; \n    border: 5px solid rgba(255,255,255,0);\n}\n\n.arrow.prev {\n    opacity: 0.2;\n    left: 5%;\n    \n    transition: 0.2s linear all;\n}\n\n.arrow.next {\n    opacity: 0.2;\n    right: 5%;\n    transition: 0.3s linear all;\n}\n\n.arrow:hover {\n    opacity: 1;\n    -webkit-transform: scale(1.2);\n    -ms-transform: scale(1.2);\n    transform: scale(1.2);\n}\n@media all and (max-width: 358px) {\n    .slider {\n        height: 210px;\n    }\n}\n\n@media all and (min-width:359px) and (max-width: 450px) {\n    .slider {\n        height: 250px;\n    }\n}\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n    .slider {\n        height: 295px;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n    .slider {\n        a {\n            font-size: 2em;\n            margin-bottom: 1%;\n        }\n    }\n    .slide-text {\n        a {\n            font-size: 2em;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n    .slider {\n        height: 350px; \n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n    .slider {\n        height: 410px; \n    }\n    .slide-text {\n        a {\n            font-size: 2.5em;\n        }\n    }\n}\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n    .slider {\n        height: 440px; \n    }\n    .slide-text {\n        a {\n            font-size: 3em;\n        }\n    }\n}\n\n@media all and (max-width: 700px) {\n\n    .slider-nav {\n        height: 35px;\n    }\n    .slider-nav .wrapper {\n        padding-bottom: 0;\n        bottom: 0;\n    }\n\n    .dots .dot {\n        margin: 0 5px;\n        width: 12px;\n        height: 12px;\n    }\n    .dots .dot a {\n        height: 4px;\n        width: 4px;\n    }\n}\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n    .slider {\n        height: 500px;\n    }\n    .slide-text {\n        a { \n            font-size: 3.5em;\n            margin-bottom: 10px;\n        }\n    }\n}\n\n@media all and (min-width: 816px) {\n    .slider {\n        height: 550px;\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n    .slider {\n        img {\n            top: -35px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n    .slider {\n        img {\n            top: -60px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 5em;\n        }\n    }\n}\n\n@media all and (min-width: 1200px) {\n    .slider {\n        height: 600px;\n        img {\n            top: -93px;\n        }\n    }\n}\n\n\n\n\n\n\n\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".fade.ng-enter {\n  transition: .5s linear all;\n  opacity: 0; }\n\n.fade.ng-enter.ng-enter-active {\n  opacity: 1; }\n\n.fade.ng-leave {\n  transition: .5s linear all;\n  opacity: 1; }\n\n.fade.ng-leave.ng-leave-active {\n  opacity: 0; }\n\n.slide-text {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  width: 100%;\n  z-index: 1002; }\n  .slide-text p {\n    font-size: 1em;\n    color: white;\n    font-weight: bold;\n    text-align: center;\n    margin-bottom: 3%; }\n  .slide-text a {\n    font-size: 1.5em;\n    font-family: \"Amatic SC\", cursive;\n    display: block;\n    transition: .5s ease all; }\n  .slide-text a:hover {\n    color: #FFC107; }\n\n.slider {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden; }\n\n.slide-image {\n  position: absolute;\n  top: 0;\n  left: 0; }\n\n.slider-nav {\n  text-align: center;\n  display: block;\n  position: absolute;\n  z-index: 1002;\n  left: 0;\n  bottom: -4px;\n  right: 0;\n  height: 48px; }\n\n.nonDraggableImage {\n  -webkit-user-drag: none; }\n\n.slider-nav .wrapper {\n  margin: 0 auto;\n  width: 100%;\n  padding: 1em 0 .8em; }\n\n.slider-nav ul {\n  margin: 0;\n  width: 100%; }\n\n.slider-nav .dot, .slider-nav .dot a {\n  display: inline-block;\n  zoom: 1; }\n\n.dots .dot {\n  position: relative;\n  margin: 0 10px;\n  width: 12px;\n  height: 12px; }\n\n.dots .dot a {\n  position: absolute;\n  top: 2px;\n  left: 2px;\n  width: 6px;\n  height: 6px;\n  text-indent: 100%;\n  white-space: nowrap;\n  overflow: hidden;\n  background: #FFF;\n  border: 1px solid transparent;\n  outline: none;\n  -webkit-box-shadow: none;\n  -moz-box-shadow: none;\n  box-shadow: none;\n  -webkit-border-radius: 50%;\n  -moz-border-radius: 50%;\n  border-radius: 50%;\n  -webkit-transition: background-color 1s, border-color 1s;\n  -moz-transition: background-color 1s, border-color 1s;\n  transition: background-color 1s, border-color 1s; }\n\n.dots .dot a.active {\n  border-color: #FFC107;\n  background-color: #FFC107; }\n\n.arrow {\n  position: absolute;\n  z-index: 1002;\n  display: block;\n  top: 50%;\n  margin-top: -35px;\n  width: auto;\n  height: auto;\n  outline: none;\n  cursor: pointer;\n  color: white;\n  font-size: 4em;\n  border: 5px solid rgba(255, 255, 255, 0); }\n\n.arrow.prev {\n  opacity: 0.2;\n  left: 5%;\n  transition: 0.2s linear all; }\n\n.arrow.next {\n  opacity: 0.2;\n  right: 5%;\n  transition: 0.3s linear all; }\n\n.arrow:hover {\n  opacity: 1;\n  -webkit-transform: scale(1.2);\n  -ms-transform: scale(1.2);\n  transform: scale(1.2); }\n\n@media all and (max-width: 358px) {\n  .slider {\n    height: 210px; } }\n\n@media all and (min-width: 359px) and (max-width: 450px) {\n  .slider {\n    height: 250px; } }\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n  .slider {\n    height: 295px; } }\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n  .slider a {\n    font-size: 2em;\n    margin-bottom: 1%; }\n  .slide-text a {\n    font-size: 2em; } }\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n  .slider {\n    height: 350px; } }\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n  .slider {\n    height: 410px; }\n  .slide-text a {\n    font-size: 2.5em; } }\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n  .slider {\n    height: 440px; }\n  .slide-text a {\n    font-size: 3em; } }\n\n@media all and (max-width: 700px) {\n  .slider-nav {\n    height: 35px; }\n  .slider-nav .wrapper {\n    padding-bottom: 0;\n    bottom: 0; }\n  .dots .dot {\n    margin: 0 5px;\n    width: 12px;\n    height: 12px; }\n  .dots .dot a {\n    height: 4px;\n    width: 4px; } }\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n  .slider {\n    height: 500px; }\n  .slide-text a {\n    font-size: 3.5em;\n    margin-bottom: 10px; } }\n\n@media all and (min-width: 816px) {\n  .slider {\n    height: 550px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n  .slider img {\n    top: -35px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n  .slider img {\n    top: -60px; }\n  .slide-text a {\n    font-size: 5em; } }\n\n@media all and (min-width: 1200px) {\n  .slider {\n    height: 600px; }\n    .slider img {\n      top: -93px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_fade-text.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/components/hero-image/hero-image.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAAA;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;AAED;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;ACZD;EACI,mBAAkB;EAClB,UAAS;EACT,SAAQ;EACR,YAAW;EACX,cAAa,EAmBhB;EAxBD;IAOQ,eAAc;IACd,aAAY;IACZ,kBAAiB;IACjB,mBAAkB;IAElB,kBAAiB,EACpB;EAbL;IAeQ,iBAAgB;IAChB,kCCpB8B;IDqB9B,eAAc;IACd,yBAAwB,EAC3B;EAnBL;IAqBQ,eEzBc,EF0BjB;;AAIL;EACI,mBAAkB;EAClB,YAAW;EACX,cAAa;EACb,iBAAgB,EACnB;;AAED;EACI,mBAAkB;EAClB,OAAM;EACN,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,mBAAkB;EAClB,cAAa;EACb,QAAO;EACP,aAAY;EACZ,SAAQ;EACR,aAAY,EACf;;AAED;EACI,wBAAuB,EAC1B;;AAED;EACI,eAAc;EACd,YAAW;EACX,oBAAmB,EACtB;;AAGD;EACI,UAAS;EACT,YAAW,EACd;;AAED;EACI,sBAAqB;EACrB,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,YAAW;EACX,aAAY,EACf;;AAED;EACI,mBAAkB;EAClB,SAAQ;EACR,UAAS;EACT,WAAU;EACV,YAAW;EACX,kBAAiB;EACjB,oBAAmB;EACnB,iBAAgB;EAChB,iBAAgB;EAChB,8BAA6B;EAC7B,cAAa;EACb,yBAAwB;EACxB,sBAAqB;EACrB,iBAAgB;EAChB,2BAA0B;EAC1B,wBAAuB;EACvB,mBAAkB;EAClB,yDAAwD;EACxD,sDAAqD;EACrD,iDAAgD,EACnD;;AAED;EAEI,sBE3GkB;EF4GlB,0BE5GkB,EF6GrB;;AAED;EACI,mBAAkB;EAClB,cAAa;EACb,eAAc;EACd,SAAQ;EACR,kBAAiB;EACjB,YAAW;EACX,aAAY;EACZ,cAAa;EACb,gBAAe;EACf,aAAY;EACZ,eAAc;EACd,yCAAqC,EACxC;;AAED;EACI,aAAY;EACZ,SAAQ;EAER,4BAA2B,EAC9B;;AAED;EACI,aAAY;EACZ,UAAS;EACT,4BAA2B,EAC9B;;AAED;EACI,WAAU;EACV,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB,EACxB;;AACD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IAEQ,eAAc;IACd,kBAAiB,EACpB;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB,EACnB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EAEI;IACI,aAAY,EACf;EACD;IACI,kBAAiB;IACjB,UAAS,EACZ;EAED;IACI,cAAa;IACb,YAAW;IACX,aAAY,EACf;EACD;IACI,YAAW;IACX,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB;IAChB,oBAAmB,EACtB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAIhB;IALD;MAGQ,WAAU,EACb,EAAA","file":"hero-image.scss","sourcesContent":[".fade.ng-enter {\n    transition: .5s linear all;\n    opacity: 0;\n}\n\n.fade.ng-enter.ng-enter-active {\n    opacity: 1;\n}\n\n.fade.ng-leave {\n    transition: .5s linear all;\n    opacity: 1;\n}\n\n.fade.ng-leave.ng-leave-active {\n    opacity: 0;\n}","@import 'fade-text';\n@import 'fonts';\n@import 'colors';\n\n.slide-text {\n    position: absolute;\n    bottom: 0;\n    right: 0;\n    width: 100%;\n    z-index: 1002;\n    p {\n        font-size: 1em;\n        color: white;\n        font-weight: bold;\n        text-align: center;\n\n        margin-bottom: 3%;\n    }\n    a {\n        font-size: 1.5em;\n        font-family: $decorative-font;\n        display: block;\n        transition: .5s ease all;\n    }\n    a:hover {\n        color: $accent-color;\n    }\n\n}\n\n.slider {\n    position: relative;\n    width: 100%;\n    height: 100vh;\n    overflow: hidden;\n}\n\n.slide-image {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n\n.slider-nav {\n    text-align: center;\n    display: block;\n    position: absolute;\n    z-index: 1002;\n    left: 0;\n    bottom: -4px;\n    right: 0;\n    height: 48px;\n}\n\n.nonDraggableImage{\n    -webkit-user-drag: none;\n}\n\n.slider-nav .wrapper {\n    margin: 0 auto;\n    width: 100%;\n    padding: 1em 0 .8em;\n}\n\n\n.slider-nav ul {\n    margin: 0;\n    width: 100%;\n}\n\n.slider-nav .dot, .slider-nav .dot a {\n    display: inline-block;\n    zoom: 1;\n}\n\n.dots .dot {\n    position: relative;\n    margin: 0 10px;\n    width: 12px;\n    height: 12px;\n}\n\n.dots .dot a {\n    position: absolute;\n    top: 2px;\n    left: 2px;\n    width: 6px;\n    height: 6px;\n    text-indent: 100%;\n    white-space: nowrap;\n    overflow: hidden;\n    background: #FFF;\n    border: 1px solid transparent;\n    outline: none;\n    -webkit-box-shadow: none;\n    -moz-box-shadow: none;\n    box-shadow: none;\n    -webkit-border-radius: 50%;\n    -moz-border-radius: 50%;\n    border-radius: 50%;\n    -webkit-transition: background-color 1s, border-color 1s;\n    -moz-transition: background-color 1s, border-color 1s;\n    transition: background-color 1s, border-color 1s;\n}\n\n.dots .dot a.active {\n    // border-color: #FFF;\n    border-color: $accent-color;\n    background-color: $accent-color;\n}\n\n.arrow {\n    position: absolute;\n    z-index: 1002;\n    display: block;\n    top: 50%;\n    margin-top: -35px;\n    width: auto;\n    height: auto;\n    outline: none;\n    cursor: pointer;\n    color: white;\n    font-size: 4em; \n    border: 5px solid rgba(255,255,255,0);\n}\n\n.arrow.prev {\n    opacity: 0.2;\n    left: 5%;\n    \n    transition: 0.2s linear all;\n}\n\n.arrow.next {\n    opacity: 0.2;\n    right: 5%;\n    transition: 0.3s linear all;\n}\n\n.arrow:hover {\n    opacity: 1;\n    -webkit-transform: scale(1.2);\n    -ms-transform: scale(1.2);\n    transform: scale(1.2);\n}\n@media all and (max-width: 358px) {\n    .slider {\n        height: 210px;\n    }\n}\n\n@media all and (min-width:359px) and (max-width: 450px) {\n    .slider {\n        height: 250px;\n    }\n}\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n    .slider {\n        height: 295px;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n    .slider {\n        a {\n            font-size: 2em;\n            margin-bottom: 1%;\n        }\n    }\n    .slide-text {\n        a {\n            font-size: 2em;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n    .slider {\n        height: 350px; \n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n    .slider {\n        height: 410px; \n    }\n    .slide-text {\n        a {\n            font-size: 2.5em;\n        }\n    }\n}\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n    .slider {\n        height: 440px; \n    }\n    .slide-text {\n        a {\n            font-size: 3em;\n        }\n    }\n}\n\n@media all and (max-width: 700px) {\n\n    .slider-nav {\n        height: 35px;\n    }\n    .slider-nav .wrapper {\n        padding-bottom: 0;\n        bottom: 0;\n    }\n\n    .dots .dot {\n        margin: 0 5px;\n        width: 12px;\n        height: 12px;\n    }\n    .dots .dot a {\n        height: 4px;\n        width: 4px;\n    }\n}\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n    .slider {\n        height: 500px;\n    }\n    .slide-text {\n        a { \n            font-size: 3.5em;\n            margin-bottom: 10px;\n        }\n    }\n}\n\n@media all and (min-width: 816px) {\n    .slider {\n        height: 550px;\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n    .slider {\n        img {\n            top: -35px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n    .slider {\n        img {\n            top: -60px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 5em;\n        }\n    }\n}\n\n@media all and (min-width: 1200px) {\n    .slider {\n        height: 600px;\n        img {\n            top: -93px;\n        }\n    }\n}\n\n\n\n\n\n\n\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 44 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35082,7 +36133,7 @@
 	    value: true
 	});
 	
-	var _home = __webpack_require__(45);
+	var _home = __webpack_require__(67);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
@@ -35090,17 +36141,20 @@
 	
 	exports.default = {
 	    template: _home2.default,
-	    controller: function controller() {}
+	    bindings: {
+	        slides: '<',
+	        articles: '<'
+	    }
 	};
 
 /***/ },
-/* 45 */
+/* 67 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<hero-image></hero-image>\n<articles></articles>\n";
+	module.exports = "\n<hero-image slides=\"$ctrl.slides\"></hero-image>\n<articles articles=\"$ctrl.articles\"></articles>\n";
 
 /***/ },
-/* 46 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35109,11 +36163,11 @@
 	    value: true
 	});
 	
-	var _landing = __webpack_require__(47);
+	var _landing = __webpack_require__(69);
 	
 	var _landing2 = _interopRequireDefault(_landing);
 	
-	var _landing3 = __webpack_require__(48);
+	var _landing3 = __webpack_require__(70);
 	
 	var _landing4 = _interopRequireDefault(_landing3);
 	
@@ -35127,19 +36181,19 @@
 	};
 
 /***/ },
-/* 47 */
+/* 69 */
 /***/ function(module, exports) {
 
 	module.exports = "<img src=\"https://github.com/willnickerson/earth-house-juice/blob/master/blue-spread.jpeg?raw=true\">\n";
 
 /***/ },
-/* 48 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(49);
+	var content = __webpack_require__(71);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35148,8 +36202,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./landing.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./landing.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./landing.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./landing.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35159,7 +36213,7 @@
 	}
 
 /***/ },
-/* 49 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35167,13 +36221,13 @@
 	
 	
 	// module
-	exports.push([module.id, "", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"landing.scss","sourceRoot":"webpack://"}]);
+	exports.push([module.id, "", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"landing.scss","sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 50 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35182,11 +36236,106 @@
 	    value: true
 	});
 	
-	var _navBar = __webpack_require__(51);
+	var _markets = __webpack_require__(73);
+	
+	var _markets2 = _interopRequireDefault(_markets);
+	
+	var _markets3 = __webpack_require__(74);
+	
+	var _markets4 = _interopRequireDefault(_markets3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    template: _markets2.default,
+	    controller: controller
+	};
+	
+	
+	controller.$inject = ['pickupService', 'dateService'];
+	function controller(pickupService, dateService) {
+	    var _this = this;
+	
+	    this.styles = _markets4.default;
+	    this.markets = [];
+	    this.$onInit = function () {
+	        pickupService.getVisible().then(function (pickups) {
+	            pickups.forEach(function (market) {
+	                if (market.isFarmersMarket) {
+	                    market.start = dateService.dateStringToObj(new Date(market.start).toDateString());
+	                    market.end = dateService.dateStringToObj(new Date(market.end).toDateString());
+	                    _this.markets.push(market);
+	                }
+	            });
+	            dateService.alphabetize(_this.markets);
+	        });
+	    };
+	}
+
+/***/ },
+/* 73 */
+/***/ function(module, exports) {
+
+	module.exports = "<div ng-class=\"$ctrl.styles.markets\">\n    <h2>Farmer's Market Schedule</h2>\n\n    <ul>\n        <li ng-repeat=\"market in $ctrl.markets\">\n            {{market.name}}\n            <p>{{market.day}} from {{market.start.month}} {{market.start.date}} - {{market.end.month}} {{market.end.date}}</p>\n            <p ng-if=\"market.link !== '#'\"><a href=\"{{market.link}}\">{{market.link}}</a></p>\n            <div class=\"divider\"></div>\n        </li>\n    </ul>\n</div>\n\n";
+
+/***/ },
+/* 74 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(75);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(13)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./markets.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./markets.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 75 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(12)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "._1qC4in9TZIKjVeVbsOrd5o {\n  background-color: white;\n  min-height: 70vh;\n  width: 85%;\n  margin: 0 auto;\n  margin-top: 5%;\n  margin-bottom: 100px;\n  font-size: 1.4em; }\n  ._1qC4in9TZIKjVeVbsOrd5o ul, ._1qC4in9TZIKjVeVbsOrd5o li, ._1qC4in9TZIKjVeVbsOrd5o p {\n    margin-left: 0;\n    margin-right: 0;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._1qC4in9TZIKjVeVbsOrd5o .divider {\n    border-bottom: 1px solid #777;\n    width: 20%;\n    margin: 50px auto; }\n  ._1qC4in9TZIKjVeVbsOrd5o p {\n    font-size: .7em;\n    color: #777; }\n  ._1qC4in9TZIKjVeVbsOrd5o ul {\n    text-align: center;\n    font-size: 1.5em;\n    width: 80%;\n    margin: 0 auto; }\n  ._1qC4in9TZIKjVeVbsOrd5o a {\n    color: #777;\n    transition: all .3s ease; }\n  ._1qC4in9TZIKjVeVbsOrd5o a:hover {\n    text-decoration: underline; }\n  ._1qC4in9TZIKjVeVbsOrd5o h2 {\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em;\n    margin: 0 0 5% 0; }\n  ._1qC4in9TZIKjVeVbsOrd5o .contact-info {\n    font-size: 1.2em;\n    margin: 2% 0 10% 0;\n    text-indent: 25px; }\n  ._1qC4in9TZIKjVeVbsOrd5o span {\n    margin: 0 1%; }\n  ._1qC4in9TZIKjVeVbsOrd5o .icon-instagram:hover, ._1qC4in9TZIKjVeVbsOrd5o .icon-facebook2:hover {\n    text-decoration: none; }\n\n@media all and (min-width: 500px) {\n  ._31WCW7pXEx6Y7dATrqdWcK {\n    font-size: 1.2em; } }\n\n@media all and (min-width: 700px) {\n  ._31WCW7pXEx6Y7dATrqdWcK {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 900px) {\n  ._31WCW7pXEx6Y7dATrqdWcK {\n    width: 75%;\n    font-size: 1.5em; }\n    ._31WCW7pXEx6Y7dATrqdWcK h2 {\n      font-size: 4em;\n      margin-top: 2%; }\n    ._31WCW7pXEx6Y7dATrqdWcK .contact-info {\n      margin: 2% 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/markets/src/components/markets/markets.scss","/Users/Will/freelance/earth-house/app/src/components/markets/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,wBAAuB;EACvB,iBAAgB;EAChB,WAAU;EACV,eAAc;EACd,eAAc;EACd,qBAAoB;EACpB,iBAAgB,EA6CnB;EApDD;IASQ,eAAc;IACd,gBAAe;IACf,wCCb8B,EDcjC;EAZL;IAcQ,8BAA6B;IAC7B,WAAU;IACV,kBAAiB,EACpB;EAjBL;IAmBQ,gBAAe;IACf,YAAW,EACd;EArBL;IAuBQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU;IACV,eAAc,EACjB;EA3BL;IA6BQ,YAAW;IACX,yBAAwB,EAC3B;EA/BL;IAiCQ,2BAA0B,EAC7B;EAlCL;IAoCQ,mBAAkB;IAClB,kCCxC8B;IDyC9B,eAAc;IACd,iBAAgB,EACnB;EAxCL;IA0CQ,iBAAgB;IAChB,mBAAkB;IAClB,kBAAiB,EACpB;EA7CL;IA+CQ,aAAY,EACf;EAhDL;IAkDQ,sBAAqB,EACxB;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,WAAU;IACV,iBAAgB,EAQnB;IAVD;MAIQ,eAAc;MACd,eAAc,EACjB;IANL;MAQQ,aAAY,EACf,EAAA","file":"markets.scss","sourcesContent":["@import 'fonts';\n@import 'colors';\n\n:local(.markets) {\n    background-color: white;\n    min-height: 70vh;\n    width: 85%;\n    margin: 0 auto;\n    margin-top: 5%;\n    margin-bottom: 100px;\n    font-size: 1.4em;\n    ul, li, p {\n        margin-left: 0;\n        margin-right: 0;\n        font-family: $main-font;\n    }\n    .divider {\n        border-bottom: 1px solid #777;\n        width: 20%;\n        margin: 50px auto;\n    }\n    p {\n        font-size: .7em;\n        color: #777;\n    }\n    ul {\n        text-align: center;\n        font-size: 1.5em;\n        width: 80%;\n        margin: 0 auto;\n    }\n    a {\n        color: #777;\n        transition: all .3s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    h2 {\n        text-align: center;\n        font-family: $decorative-font;\n        font-size: 3em;\n        margin: 0 0 5% 0;\n    }\n    .contact-info {\n        font-size: 1.2em;\n        margin: 2% 0 10% 0;\n        text-indent: 25px;\n    }\n    span {\n        margin: 0 1%;\n    }\n    .icon-instagram:hover, .icon-facebook2:hover {\n        text-decoration: none;\n    }\n}\n\n@media all and (min-width: 500px) {\n    :local(.contact) {\n        font-size: 1.2em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    :local(.contact) {\n        font-size: 1.5em;\n    }\n}\n\n@media all and (min-width: 900px) {\n    :local(.contact) {\n        width: 75%;\n        font-size: 1.5em;\n        h2 {\n            font-size: 4em;\n            margin-top: 2%;\n        }\n        .contact-info {\n            margin: 2% 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	
+	// exports
+	exports.locals = {
+		"markets": "_1qC4in9TZIKjVeVbsOrd5o",
+		"contact": "_31WCW7pXEx6Y7dATrqdWcK"
+	};
+
+/***/ },
+/* 76 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _navBar = __webpack_require__(77);
 	
 	var _navBar2 = _interopRequireDefault(_navBar);
 	
-	var _navBar3 = __webpack_require__(52);
+	var _navBar3 = __webpack_require__(78);
 	
 	var _navBar4 = _interopRequireDefault(_navBar3);
 	
@@ -35208,19 +36357,19 @@
 	}
 
 /***/ },
-/* 51 */
+/* 77 */
 /***/ function(module, exports) {
 
-	module.exports = "<nav class=\"site-navigation\">\n    <!--<a class=\"icon-menu\" ng-click=\"$ctrl.toggleNav()\"></a>-->\n    <ul><li ng-class=\"$ctrl.styles.hamburger\"><span class=\"icon-cross\"></span></li>\n        <li ui-sref=\"home\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Home</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"shop\" ng-class=\"$ctrl.navVisibility\" class=\"link\"link>Shop</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref='about' ng-class=\"$ctrl.navVisibility\" class=\"link\">About</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"contact\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Contact</li>\n    </ul>\n</nav>";
+	module.exports = "<nav class=\"site-navigation\">\n    <ul><li ng-class=\"$ctrl.styles.hamburger\"><span class=\"icon-cross\"></span></li>\n        <li ui-sref=\"home\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Home</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"shop\" ng-class=\"$ctrl.navVisibility\" class=\"link\"link>Shop</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref='about' ng-class=\"$ctrl.navVisibility\" class=\"link\">About</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"contact\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Contact</li>\n    </ul>\n</nav>";
 
 /***/ },
-/* 52 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(53);
+	var content = __webpack_require__(79);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35229,8 +36378,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./nav-bar.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./nav-bar.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./nav-bar.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./nav-bar.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35240,7 +36389,7 @@
 	}
 
 /***/ },
-/* 53 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35248,7 +36397,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".icon-cross:before {\n  content: \"\\EA0F\";\n  color: white;\n  font-size: .75em;\n  margin-right: 8px; }\n\nnav.site-navigation {\n  margin-left: 5%;\n  margin-top: 0; }\n  nav.site-navigation ul {\n    list-style-type: none;\n    margin: 0;\n    padding: 0; }\n    nav.site-navigation ul ._1O-BJLpyHkiNdd7QEqLBji {\n      display: none;\n      text-align: right; }\n    nav.site-navigation ul li {\n      text-align: center;\n      width: 20%;\n      display: inline-block;\n      color: white;\n      font-weight: bold;\n      transition: all .35s ease; }\n    nav.site-navigation ul li:hover {\n      cursor: pointer;\n      color: #FFC107; }\n    nav.site-navigation ul .mid-dot {\n      width: auto;\n      margin: 0; }\n\n@media all and (max-width: 551px) {\n  nav.site-navigation {\n    width: 100%;\n    position: relative;\n    margin: 0;\n    z-index: 10000; }\n    nav.site-navigation ul {\n      width: 100%;\n      position: absolute;\n      margin: 0; }\n      nav.site-navigation ul .mid-dot {\n        display: none; }\n      nav.site-navigation ul ._1O-BJLpyHkiNdd7QEqLBji {\n        display: block; }\n      nav.site-navigation ul li {\n        padding: 5px;\n        display: block;\n        width: 100%;\n        text-align: center;\n        font-weight: 100;\n        font-size: 1em;\n        margin: 0;\n        background-color: #323232;\n        border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n    nav.site-navigation a.icon-menu:before {\n      display: inline-block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  nav.site-navigation ul {\n    margin-left: 2.5%;\n    margin-top: -5px; }\n    nav.site-navigation ul li {\n      font-size: .9em;\n      width: 17%; } }\n\n@media all and (min-width: 1083px) {\n  nav.site-navigation {\n    margin-left: 1%;\n    margin-top: -2.5%; }\n    nav.site-navigation ul li {\n      font-size: 1.5em;\n      width: 17%; } }\n", "", {"version":3,"sources":["/./src/components/nav-bar/src/components/nav-bar/nav-bar.scss","/./src/components/nav-bar/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACE,iBAAgB;EAChB,aAAY;EACZ,iBAAgB;EAChB,kBAAiB,EAClB;;AAED;EACI,gBAAe;EACf,cAAa,EA0BhB;EA5BD;IAIQ,sBAAqB;IACrB,UAAS;IACT,WAAU,EAqBb;IA3BL;MAQY,cAAa;MACb,kBAAiB,EACpB;IAVT;MAYY,mBAAkB;MAClB,WAAU;MACV,sBAAqB;MACrB,aAAY;MACZ,kBAAiB;MACjB,0BAAyB,EAC5B;IAlBT;MAoBY,gBAAe;MACf,eC9BU,ED+Bb;IAtBT;MAwBY,YAAW;MACX,UAAS,EACZ;;AAOT;EACI;IACI,YAAW;IACX,mBAAkB;IAClB,UAAS;IACT,eAAc,EA0BjB;IA9BD;MAMQ,YAAW;MACX,mBAAkB;MAClB,UAAS,EAkBZ;MA1BL;QAUY,cAAa,EAChB;MAXT;QAaY,eAAc,EACjB;MAdT;QAgBY,aAAY;QACZ,eAAc;QACd,YAAW;QACX,mBAAkB;QAClB,iBAAgB;QAChB,eAAc;QACd,UAAS;QACT,0BAAqC;QACrC,kDClEgB,EDmEnB;IAzBT;MA4BQ,sBAAqB,EACxB,EAAA;;AAIT;EACI;IAEQ,kBAAiB;IACjB,iBAAgB,EAKnB;IARL;MAKY,gBAAe;MACf,WAAU,EACb,EAAA;;AAKb;EACI;IACI,gBAAe;IACf,kBAAiB,EAOpB;IATD;MAKY,iBAAgB;MAChB,WAAU,EACb,EAAA","file":"nav-bar.scss","sourcesContent":["@import 'colors';\n\n.icon-cross:before {\n  content: \"\\ea0f\";\n  color: white;\n  font-size: .75em;\n  margin-right: 8px;\n}\n\nnav.site-navigation {\n    margin-left: 5%;\n    margin-top: 0;  \n    ul {\n        list-style-type: none;\n        margin: 0;\n        padding: 0;\n        :local(.hamburger) {\n            display: none;\n            text-align: right;\n        }\n        li {\n            text-align: center;\n            width: 20%;\n            display: inline-block;\n            color: white;\n            font-weight: bold;\n            transition: all .35s ease;\n        }\n        li:hover {\n            cursor: pointer;\n            color: $accent-color;\n        }\n        .mid-dot {\n            width: auto;\n            margin: 0;\n        }\n    }\n}\n\n\n\n\n@media all and (max-width: 551px) {\n    nav.site-navigation {\n        width: 100%;\n        position: relative;\n        margin: 0;\n        z-index: 10000;\n        ul {\n            width: 100%;\n            position: absolute;\n            margin: 0;\n            .mid-dot {\n                display: none;\n            }\n            :local(.hamburger) {\n                display: block;\n            }\n            li {\n                padding: 5px;\n                display: block;\n                width: 100%;\n                text-align: center;\n                font-weight: 100;\n                font-size: 1em;\n                margin: 0;\n                background-color: rgba(50, 50, 50, 1);\n                border-bottom: 1px solid $lightgrey;\n            }\n        }\n        a.icon-menu:before {\n            display: inline-block;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    nav.site-navigation {\n        ul {\n            margin-left: 2.5%;\n            margin-top: -5px;\n            li {\n                font-size: .9em;\n                width: 17%;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 1083px) {\n    nav.site-navigation {\n        margin-left: 1%;\n        margin-top: -2.5%;\n        ul {\n            li {\n                font-size: 1.5em;\n                width: 17%;\n            }\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".icon-cross:before {\n  content: \"\\EA0F\";\n  color: white;\n  font-size: .75em;\n  margin-right: 8px; }\n\nnav.site-navigation {\n  margin-left: 5%;\n  margin-top: 0; }\n  nav.site-navigation ul {\n    list-style-type: none;\n    margin: 0;\n    padding: 0; }\n    nav.site-navigation ul ._1O-BJLpyHkiNdd7QEqLBji {\n      display: none;\n      text-align: right; }\n    nav.site-navigation ul li {\n      text-align: center;\n      width: 20%;\n      display: inline-block;\n      color: white;\n      font-weight: bold;\n      transition: all .35s ease; }\n    nav.site-navigation ul li:hover {\n      cursor: pointer;\n      color: #FFC107; }\n    nav.site-navigation ul .mid-dot {\n      width: auto;\n      margin: 0; }\n\n@media all and (max-width: 551px) {\n  nav.site-navigation {\n    width: 100%;\n    position: relative;\n    margin: 0;\n    z-index: 10000; }\n    nav.site-navigation ul {\n      width: 100%;\n      position: absolute;\n      margin: 0; }\n      nav.site-navigation ul .mid-dot {\n        display: none; }\n      nav.site-navigation ul ._1O-BJLpyHkiNdd7QEqLBji {\n        display: block; }\n      nav.site-navigation ul li {\n        padding: 5px;\n        display: block;\n        width: 100%;\n        text-align: center;\n        font-weight: 100;\n        font-size: 1em;\n        margin: 0;\n        background-color: #323232;\n        border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n    nav.site-navigation a.icon-menu:before {\n      display: inline-block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  nav.site-navigation ul {\n    margin-left: 2.5%;\n    margin-top: -5px; }\n    nav.site-navigation ul li {\n      font-size: .9em;\n      width: 17%; } }\n\n@media all and (min-width: 1083px) {\n  nav.site-navigation {\n    margin-left: 1%;\n    margin-top: -2.5%; }\n    nav.site-navigation ul li {\n      font-size: 1.5em;\n      width: 17%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/nav-bar/src/components/nav-bar/nav-bar.scss","/Users/Will/freelance/earth-house/app/src/components/nav-bar/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACE,iBAAgB;EAChB,aAAY;EACZ,iBAAgB;EAChB,kBAAiB,EAClB;;AAED;EACI,gBAAe;EACf,cAAa,EA0BhB;EA5BD;IAIQ,sBAAqB;IACrB,UAAS;IACT,WAAU,EAqBb;IA3BL;MAQY,cAAa;MACb,kBAAiB,EACpB;IAVT;MAYY,mBAAkB;MAClB,WAAU;MACV,sBAAqB;MACrB,aAAY;MACZ,kBAAiB;MACjB,0BAAyB,EAC5B;IAlBT;MAoBY,gBAAe;MACf,eC9BU,ED+Bb;IAtBT;MAwBY,YAAW;MACX,UAAS,EACZ;;AAOT;EACI;IACI,YAAW;IACX,mBAAkB;IAClB,UAAS;IACT,eAAc,EA0BjB;IA9BD;MAMQ,YAAW;MACX,mBAAkB;MAClB,UAAS,EAkBZ;MA1BL;QAUY,cAAa,EAChB;MAXT;QAaY,eAAc,EACjB;MAdT;QAgBY,aAAY;QACZ,eAAc;QACd,YAAW;QACX,mBAAkB;QAClB,iBAAgB;QAChB,eAAc;QACd,UAAS;QACT,0BAAqC;QACrC,kDClEgB,EDmEnB;IAzBT;MA4BQ,sBAAqB,EACxB,EAAA;;AAIT;EACI;IAEQ,kBAAiB;IACjB,iBAAgB,EAKnB;IARL;MAKY,gBAAe;MACf,WAAU,EACb,EAAA;;AAKb;EACI;IACI,gBAAe;IACf,kBAAiB,EAOpB;IATD;MAKY,iBAAgB;MAChB,WAAU,EACb,EAAA","file":"nav-bar.scss","sourcesContent":["@import 'colors';\n\n.icon-cross:before {\n  content: \"\\ea0f\";\n  color: white;\n  font-size: .75em;\n  margin-right: 8px;\n}\n\nnav.site-navigation {\n    margin-left: 5%;\n    margin-top: 0;  \n    ul {\n        list-style-type: none;\n        margin: 0;\n        padding: 0;\n        :local(.hamburger) {\n            display: none;\n            text-align: right;\n        }\n        li {\n            text-align: center;\n            width: 20%;\n            display: inline-block;\n            color: white;\n            font-weight: bold;\n            transition: all .35s ease;\n        }\n        li:hover {\n            cursor: pointer;\n            color: $accent-color;\n        }\n        .mid-dot {\n            width: auto;\n            margin: 0;\n        }\n    }\n}\n\n\n\n\n@media all and (max-width: 551px) {\n    nav.site-navigation {\n        width: 100%;\n        position: relative;\n        margin: 0;\n        z-index: 10000;\n        ul {\n            width: 100%;\n            position: absolute;\n            margin: 0;\n            .mid-dot {\n                display: none;\n            }\n            :local(.hamburger) {\n                display: block;\n            }\n            li {\n                padding: 5px;\n                display: block;\n                width: 100%;\n                text-align: center;\n                font-weight: 100;\n                font-size: 1em;\n                margin: 0;\n                background-color: rgba(50, 50, 50, 1);\n                border-bottom: 1px solid $lightgrey;\n            }\n        }\n        a.icon-menu:before {\n            display: inline-block;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    nav.site-navigation {\n        ul {\n            margin-left: 2.5%;\n            margin-top: -5px;\n            li {\n                font-size: .9em;\n                width: 17%;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 1083px) {\n    nav.site-navigation {\n        margin-left: 1%;\n        margin-top: -2.5%;\n        ul {\n            li {\n                font-size: 1.5em;\n                width: 17%;\n            }\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -35256,7 +36405,7 @@
 	};
 
 /***/ },
-/* 54 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35265,7 +36414,7 @@
 	    value: true
 	});
 	
-	var _all = __webpack_require__(55);
+	var _all = __webpack_require__(81);
 	
 	var _all2 = _interopRequireDefault(_all);
 	
@@ -35283,13 +36432,13 @@
 	};
 
 /***/ },
-/* 55 */
+/* 81 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"clearfix\">\n    <h2 class=\"item-header\">Our Juices</h2>\n    <!--<p class=\"item-text\"> Online store coming soon! In the meantime feel free to email us and place an order.</p>-->\n</div>\n<section class=\"items\">\n\n        <ul>\n            <li class=\"item\" ng-repeat=\"juice in $ctrl.juices\">\n                <img src=\"{{juice.imgUrl}}\"\n                    ui-sref=\"shop.item({\n                    id: juice._id})\">\n                <div class=\"item-info\">\n                    <h3 ui-sref=\"shop.item({\n                    id: juice._id})\">{{juice.name}}</h3>\n                    <p>${{juice.price}}.00</p>\n                    <select ng-model=\"juice.quantity\">\n                        <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                    </select>\n                    <button ng-click=\"$ctrl.addToCart(juice)\">Add to Cart</button>\n                    <p class=\"cart-message\" ng-if=\"juice.cartMessage\">{{juice.messageNum}} added to cart</p>\n                    <p class=\"cart-message\" ng-if=\"juice.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n                </div>\n            </li>\n        </ul>\n</section>";
 
 /***/ },
-/* 56 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35298,11 +36447,11 @@
 	    value: true
 	});
 	
-	var _item = __webpack_require__(57);
+	var _item = __webpack_require__(83);
 	
 	var _item2 = _interopRequireDefault(_item);
 	
-	var _item3 = __webpack_require__(58);
+	var _item3 = __webpack_require__(84);
 	
 	var _item4 = _interopRequireDefault(_item3);
 	
@@ -35335,19 +36484,19 @@
 	}
 
 /***/ },
-/* 57 */
+/* 83 */
 /***/ function(module, exports) {
 
 	module.exports = "<div ng-class=\"$ctrl.styles.item\" class=\"clearfix\">\n    <div class=\"description\">\n        <div ng-class=\"$ctrl.styles.header\" class=\"clearfix\">\n            <h2 class=\"item-name\">{{$ctrl.item.name}}</h2>\n            <form ng-class=\"$ctrl.styles.purchase\" ng-submit=\"$ctrl.addToCart($ctrl.item)\">\n                <p>price: ${{$ctrl.item.price}}.00</p>\n                <select ng-model=\"$ctrl.item.quantity\">\n                    <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                </select>\n                <button type=\"submit\">Add to Cart</button>\n                <p class=\"cart-message\" ng-if=\"$ctrl.item.cartMessage\">{{$ctrl.item.messageNum}} added to cart</p>\n                <p class=\"cart-message\" ng-if=\"$ctrl.item.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n            </form>\n        </div>\n        <p class=\"item-description\">{{$ctrl.item.description}} <a ui-sref=\"shop.all\">&larr;Back to all juices</a></p>    \n    </div>\n    <div class=\"item-img\">\n        <img src=\"{{$ctrl.item.imgUrl}}\">\n    </div>\n\n    <div ng-class=\"$ctrl.styles.ingredients\" class=\"clearfix\">\n        <h3>Ingredients</h3>\n        <div class=\"list\" ng-style=\"$ctrl.listHeight\">\n            <ul>\n                <li ng-repeat=\"ingredient in $ctrl.item.ingredients\">\n                    <img class=\"ingredient\" src=\"{{ingredient.imgUrl}}\">\n                    <p><span>{{ingredient.name}}. </span>{{ingredient.description}}</p>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n";
 
 /***/ },
-/* 58 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(59);
+	var content = __webpack_require__(85);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35356,8 +36505,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./item.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35367,7 +36516,7 @@
 	}
 
 /***/ },
-/* 59 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35375,7 +36524,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._3OG3TBtarmYa_z6yiUJZd2 {\n  margin-bottom: 2%;\n  margin-top: 3%; }\n\n._3f2vxcW1iaK4PZrN4XVAAk {\n  float: right;\n  position: relative;\n  margin-top: 3%;\n  margin-bottom: 20px;\n  text-align: center; }\n  ._3f2vxcW1iaK4PZrN4XVAAk p {\n    margin-top: 0;\n    margin-bottom: 1.5%;\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n._3h9JlplhoP1sjXURIB9eh5 {\n  margin-bottom: 5%;\n  width: 93%;\n  margin: 0 auto; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 2.5em;\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    margin: 0 0 3% 0;\n    float: left; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.1em;\n    width: 45%;\n    float: right;\n    text-indent: 20px;\n    margin-top: 0;\n    margin-right: 3%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description a {\n      color: blue;\n      display: block; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 40%;\n    display: inline-block;\n    margin: -2% 4% 0 4%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img img {\n      width: 100%; }\n\n._3BnfWeDF7prcG64xUHo_PS {\n  width: 100%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 2.5em;\n    font-family: \"Amatic SC\", cursive;\n    text-align: center;\n    margin: 0; }\n  ._3BnfWeDF7prcG64xUHo_PS li {\n    float: left;\n    width: 49%;\n    margin-bottom: 5%; }\n  ._3BnfWeDF7prcG64xUHo_PS img {\n    width: 70%;\n    margin: 0 auto; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    width: 70%;\n    margin: 0 auto;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._3BnfWeDF7prcG64xUHo_PS span {\n    font-family: \"Amatic SC\", cursive;\n    font-size: 2em;\n    font-weight: bold; }\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS p {\n    font-size: 1.15em; } }\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 4em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.5em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 3.5em; } }\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0 0 0 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    float: none;\n    text-align: center; }\n    ._3f2vxcW1iaK4PZrN4XVAAk p {\n      margin-bottom: .5%; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 4.9em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: -2%;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 3% 0 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 45%;\n      margin: -1% 0 0 0; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    text-align: center;\n    float: none; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      margin-top: 1%;\n      margin-bottom: 1%;\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 ._3OG3TBtarmYa_z6yiUJZd2 {\n      width: 50%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 6em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: 0;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 2% 5% 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 22%;\n      margin: 0% 10% 0 13%; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em;\n      width: 85%; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS img {\n      width: 60%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) and (min-width: 1060px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 20%;\n    margin: 0 10% 0 15%; } }\n", "", {"version":3,"sources":["/./src/components/shop/item/src/components/shop/item/item.scss","/./src/components/shop/item/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAIA;EACI,kBAAiB;EACjB,eAAc,EACjB;;AACD;EACI,aAAY;EACZ,mBAAkB;EAClB,eAAc;EACd,oBAAmB;EAQnB,mBAAkB,EACrB;EAbD;IAMQ,cAAa;IACb,oBAAmB;IACnB,iBAAgB;IAChB,YAAW;IACX,+CChBqC,EDiBxC;;AAGL;EACI,kBAAiB;EACjB,WAAU;EACV,eAAc,EAgCjB;EAnCD;IAMQ,iBAAgB;IAChB,mBAAkB;IAClB,kCC9B8B;ID+B9B,iBAAgB;IAChB,YAAW,EACd;EAXL;IAcQ,wCCnC8B;IDoC9B,iBAAgB;IAChB,WAAU;IACV,aAAY;IACZ,kBAAiB;IACjB,cAAa;IACb,iBAAgB,EAKnB;IAzBL;MAsBY,YAAW;MACX,eAAc,EACjB;EAxBT;IA4BQ,WAAU;IACV,sBAAqB;IACrB,oBAAmB,EAItB;IAlCL;MAgCY,YAAW,EACd;;AAKT;EACI,YAAW,EA6Bd;EA9BD;IAGQ,iBAAgB;IAChB,kCChE8B;IDiE9B,mBAAkB;IAClB,UAAS,EACZ;EAPL;IAUQ,YAAW;IACX,WAAU;IACV,kBAAiB,EACpB;EAbL;IAgBQ,WAAU;IACV,eAAc,EACjB;EAlBL;IAoBQ,WAAU;IACV,eAAc;IACd,wCCjF8B,EDkFjC;EAvBL;IA0BQ,kCCtF8B;IDuF9B,eAAc;IACd,kBAAiB,EACpB;;AAIL;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,kBAAiB,EACpB,EAAA;;AAKb;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,iBAAgB,EACnB,EAAA;;AAKb;EACI;IACI,YAAW;IACX,WAAU;IACV,gBAAe,EAClB;EAED;IACI,YAAW;IACX,mBAAkB,EAIrB;IAND;MAIQ,mBAAkB,EACrB;EAEL;IACI,mBAAkB;IAClB,WAAU,EAuBb;IAzBD;MAIQ,eAAc,EACjB;IALL;MAOQ,iBAAgB;MAChB,YAAW;MACX,YAAW;MACX,cAAa;MACb,iBAAgB;MAChB,iBAAgB,EACnB;IAbL;MAeQ,WAAU;MACV,iBAAgB;MAChB,iBAAgB;MAChB,aAAY,EACf;IAnBL;MAqBQ,YAAW;MACX,WAAU;MACV,kBAAiB,EACpB;EAIL;IACI,WAAU;IACV,aAAY,EA2Bf;IA7BD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc,EACjB;IARL;MAUQ,kBAAiB,EACpB;IAXL;MAaQ,iBAAgB,EACnB;IAdL;MAgBQ,YAAW;MACX,UAAS,EACZ;IAlBL;MAqBQ,qDAAiD;MACjD,oBAAmB,EACtB;IAvBL;MA0BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAIT;EACQ;IACI,YAAW;IACX,WAAU;IACV,UAAS,EACZ;EACD;IACI,mBAAkB;IAClB,YAAW,EACd;EACD;IACA,mBAAkB;IAClB,WAAU,EA6Bb;IA/BG;MAKI,eAAc;MACd,kBAAiB;MACjB,eAAc,EACjB;IARD;MAUI,WAAU,EACb;IAXD;MAaI,eAAc;MACd,YAAW;MACX,YAAW;MACX,cAAa;MACb,eAAc;MACd,iBAAgB,EACnB;IAnBD;MAqBI,WAAU;MACV,iBAAgB;MAChB,kBAAiB;MACjB,aAAY,EACf;IAzBD;MA2BI,YAAW;MACX,WAAU;MACV,qBAAoB,EACvB;EAIL;IACI,WAAU;IACV,aAAY,EA+Bf;IAjCD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc;MACd,WAAU,EACb;IATL;MAWQ,kBAAiB,EACpB;IAZL;MAcQ,WAAU,EACb;IAfL;MAiBQ,iBAAgB,EACnB;IAlBL;MAoBQ,YAAW;MACX,UAAS,EACZ;IAtBL;MAyBQ,qDAAiD;MACjD,oBAAmB,EACtB;IA3BL;MA8BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAGL;EACI;IAEQ,WAAU;IACV,oBAAmB,EACtB,EAAA","file":"item.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n\n:local(.header) {\n    margin-bottom: 2%;\n    margin-top: 3%;\n}\n:local(.purchase) {\n    float: right;\n    position: relative;\n    margin-top: 3%;\n    margin-bottom: 20px;\n    p {\n        margin-top: 0;\n        margin-bottom: 1.5%;\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n    text-align: center;\n}\n:local(.item) {\n    margin-bottom: 5%;\n    width: 93%;\n    margin: 0 auto;\n\n    .item-name {\n        font-size: 2.5em;\n        text-align: center;\n        font-family: $decorative-font;\n        margin: 0 0 3% 0;\n        float: left;\n    }\n\n    .item-description {\n        font-family: $main-font;\n        font-size: 1.1em;\n        width: 45%;\n        float: right;\n        text-indent: 20px;\n        margin-top: 0;\n        margin-right: 3%;\n        a {\n            color: blue;\n            display: block;\n        }\n    }\n\n    .item-img {\n        width: 40%;\n        display: inline-block;\n        margin: -2% 4% 0 4%;\n        img {\n            width: 100%;\n        }\n    }\n}\n\n\n:local(.ingredients) {\n    width: 100%;\n    h3 {\n        font-size: 2.5em;\n        font-family: $decorative-font;\n        text-align: center;\n        margin: 0;\n    }\n\n    li {\n        float: left;\n        width: 49%;\n        margin-bottom: 5%;\n    }\n\n    img {\n        width: 70%;\n        margin: 0 auto;\n    }\n    p {\n        width: 70%;\n        margin: 0 auto;\n        font-family: $main-font;\n    }\n\n    span {\n        font-family: $decorative-font;\n        font-size: 2em;\n        font-weight: bold;\n    }\n}\n\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n    :local(.item) {\n        .item-name{\n            font-size: 3em;\n        }\n        .item-description {\n            font-size: 1.3em;\n        }  \n  \n        :local(.ingredients) {\n            p {\n                font-size: 1.15em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n    :local(.item) {\n        .item-name {\n            font-size: 4em;\n        }\n        .item-description {\n            font-size: 1.5em;\n        }\n\n        :local(.ingredients) {\n            h3 {\n                font-size: 3.5em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n    :local(.header) {\n        float: left;\n        width: 50%;\n        margin: 0 0 0 0;\n    }\n\n    :local(.purchase) {\n        float: none;\n        text-align: center;\n        p {\n            margin-bottom: .5%;\n        }\n    }\n    :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n        .description {\n            overflow: auto;\n        }\n        .item-name {\n            font-size: 4.9em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: -2%;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 3% 0 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 45%;\n            margin: -1% 0 0 0;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n}\n\n@media all and (min-width: 820px) {\n        :local(.header) {\n            float: left;\n            width: 50%;\n            margin: 0;\n        }\n        :local(.purchase) {\n            text-align: center;\n            float: none;\n        }\n        :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n\n        .description {\n            margin-top: 1%;\n            margin-bottom: 1%;\n            overflow: auto;\n        }\n        :local(.header) {\n            width: 50%;\n        }\n        .item-name {\n            font-size: 6em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: 0;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 2% 5% 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 22%;\n            margin: 0% 10% 0 13%;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n            width: 85%;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        img {\n            width: 60%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n\n    @media all and (min-width: 1060px) {\n        :local(.item) {\n            .item-img {\n                width: 20%;\n                margin: 0 10% 0 15%;\n            }\n        }\n    }\n\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "._3OG3TBtarmYa_z6yiUJZd2 {\n  margin-bottom: 2%;\n  margin-top: 3%; }\n\n._3f2vxcW1iaK4PZrN4XVAAk {\n  float: right;\n  position: relative;\n  margin-top: 3%;\n  margin-bottom: 20px;\n  text-align: center; }\n  ._3f2vxcW1iaK4PZrN4XVAAk p {\n    margin-top: 0;\n    margin-bottom: 1.5%;\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n._3h9JlplhoP1sjXURIB9eh5 {\n  margin-bottom: 5%;\n  width: 93%;\n  margin: 0 auto; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 2.5em;\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    margin: 0 0 3% 0;\n    float: left; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.1em;\n    width: 45%;\n    float: right;\n    text-indent: 20px;\n    margin-top: 0;\n    margin-right: 3%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description a {\n      color: blue;\n      display: block; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 40%;\n    display: inline-block;\n    margin: -2% 4% 0 4%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img img {\n      width: 100%; }\n\n._3BnfWeDF7prcG64xUHo_PS {\n  width: 100%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 2.5em;\n    font-family: \"Amatic SC\", cursive;\n    text-align: center;\n    margin: 0; }\n  ._3BnfWeDF7prcG64xUHo_PS li {\n    float: left;\n    width: 49%;\n    margin-bottom: 5%; }\n  ._3BnfWeDF7prcG64xUHo_PS img {\n    width: 70%;\n    margin: 0 auto; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    width: 70%;\n    margin: 0 auto;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._3BnfWeDF7prcG64xUHo_PS span {\n    font-family: \"Amatic SC\", cursive;\n    font-size: 2em;\n    font-weight: bold; }\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS p {\n    font-size: 1.15em; } }\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 4em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.5em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 3.5em; } }\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0 0 0 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    float: none;\n    text-align: center; }\n    ._3f2vxcW1iaK4PZrN4XVAAk p {\n      margin-bottom: .5%; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 4.9em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: -2%;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 3% 0 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 45%;\n      margin: -1% 0 0 0; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    text-align: center;\n    float: none; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      margin-top: 1%;\n      margin-bottom: 1%;\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 ._3OG3TBtarmYa_z6yiUJZd2 {\n      width: 50%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 6em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: 0;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 2% 5% 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 22%;\n      margin: 0% 10% 0 13%; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em;\n      width: 85%; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS img {\n      width: 60%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) and (min-width: 1060px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 20%;\n    margin: 0 10% 0 15%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/item/src/components/shop/item/item.scss","/Users/Will/freelance/earth-house/app/src/components/shop/item/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAIA;EACI,kBAAiB;EACjB,eAAc,EACjB;;AACD;EACI,aAAY;EACZ,mBAAkB;EAClB,eAAc;EACd,oBAAmB;EAQnB,mBAAkB,EACrB;EAbD;IAMQ,cAAa;IACb,oBAAmB;IACnB,iBAAgB;IAChB,YAAW;IACX,+CChBqC,EDiBxC;;AAGL;EACI,kBAAiB;EACjB,WAAU;EACV,eAAc,EAgCjB;EAnCD;IAMQ,iBAAgB;IAChB,mBAAkB;IAClB,kCC9B8B;ID+B9B,iBAAgB;IAChB,YAAW,EACd;EAXL;IAcQ,wCCnC8B;IDoC9B,iBAAgB;IAChB,WAAU;IACV,aAAY;IACZ,kBAAiB;IACjB,cAAa;IACb,iBAAgB,EAKnB;IAzBL;MAsBY,YAAW;MACX,eAAc,EACjB;EAxBT;IA4BQ,WAAU;IACV,sBAAqB;IACrB,oBAAmB,EAItB;IAlCL;MAgCY,YAAW,EACd;;AAKT;EACI,YAAW,EA6Bd;EA9BD;IAGQ,iBAAgB;IAChB,kCChE8B;IDiE9B,mBAAkB;IAClB,UAAS,EACZ;EAPL;IAUQ,YAAW;IACX,WAAU;IACV,kBAAiB,EACpB;EAbL;IAgBQ,WAAU;IACV,eAAc,EACjB;EAlBL;IAoBQ,WAAU;IACV,eAAc;IACd,wCCjF8B,EDkFjC;EAvBL;IA0BQ,kCCtF8B;IDuF9B,eAAc;IACd,kBAAiB,EACpB;;AAIL;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,kBAAiB,EACpB,EAAA;;AAKb;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,iBAAgB,EACnB,EAAA;;AAKb;EACI;IACI,YAAW;IACX,WAAU;IACV,gBAAe,EAClB;EAED;IACI,YAAW;IACX,mBAAkB,EAIrB;IAND;MAIQ,mBAAkB,EACrB;EAEL;IACI,mBAAkB;IAClB,WAAU,EAuBb;IAzBD;MAIQ,eAAc,EACjB;IALL;MAOQ,iBAAgB;MAChB,YAAW;MACX,YAAW;MACX,cAAa;MACb,iBAAgB;MAChB,iBAAgB,EACnB;IAbL;MAeQ,WAAU;MACV,iBAAgB;MAChB,iBAAgB;MAChB,aAAY,EACf;IAnBL;MAqBQ,YAAW;MACX,WAAU;MACV,kBAAiB,EACpB;EAIL;IACI,WAAU;IACV,aAAY,EA2Bf;IA7BD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc,EACjB;IARL;MAUQ,kBAAiB,EACpB;IAXL;MAaQ,iBAAgB,EACnB;IAdL;MAgBQ,YAAW;MACX,UAAS,EACZ;IAlBL;MAqBQ,qDAAiD;MACjD,oBAAmB,EACtB;IAvBL;MA0BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAIT;EACQ;IACI,YAAW;IACX,WAAU;IACV,UAAS,EACZ;EACD;IACI,mBAAkB;IAClB,YAAW,EACd;EACD;IACA,mBAAkB;IAClB,WAAU,EA6Bb;IA/BG;MAKI,eAAc;MACd,kBAAiB;MACjB,eAAc,EACjB;IARD;MAUI,WAAU,EACb;IAXD;MAaI,eAAc;MACd,YAAW;MACX,YAAW;MACX,cAAa;MACb,eAAc;MACd,iBAAgB,EACnB;IAnBD;MAqBI,WAAU;MACV,iBAAgB;MAChB,kBAAiB;MACjB,aAAY,EACf;IAzBD;MA2BI,YAAW;MACX,WAAU;MACV,qBAAoB,EACvB;EAIL;IACI,WAAU;IACV,aAAY,EA+Bf;IAjCD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc;MACd,WAAU,EACb;IATL;MAWQ,kBAAiB,EACpB;IAZL;MAcQ,WAAU,EACb;IAfL;MAiBQ,iBAAgB,EACnB;IAlBL;MAoBQ,YAAW;MACX,UAAS,EACZ;IAtBL;MAyBQ,qDAAiD;MACjD,oBAAmB,EACtB;IA3BL;MA8BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAGL;EACI;IAEQ,WAAU;IACV,oBAAmB,EACtB,EAAA","file":"item.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n\n:local(.header) {\n    margin-bottom: 2%;\n    margin-top: 3%;\n}\n:local(.purchase) {\n    float: right;\n    position: relative;\n    margin-top: 3%;\n    margin-bottom: 20px;\n    p {\n        margin-top: 0;\n        margin-bottom: 1.5%;\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n    text-align: center;\n}\n:local(.item) {\n    margin-bottom: 5%;\n    width: 93%;\n    margin: 0 auto;\n\n    .item-name {\n        font-size: 2.5em;\n        text-align: center;\n        font-family: $decorative-font;\n        margin: 0 0 3% 0;\n        float: left;\n    }\n\n    .item-description {\n        font-family: $main-font;\n        font-size: 1.1em;\n        width: 45%;\n        float: right;\n        text-indent: 20px;\n        margin-top: 0;\n        margin-right: 3%;\n        a {\n            color: blue;\n            display: block;\n        }\n    }\n\n    .item-img {\n        width: 40%;\n        display: inline-block;\n        margin: -2% 4% 0 4%;\n        img {\n            width: 100%;\n        }\n    }\n}\n\n\n:local(.ingredients) {\n    width: 100%;\n    h3 {\n        font-size: 2.5em;\n        font-family: $decorative-font;\n        text-align: center;\n        margin: 0;\n    }\n\n    li {\n        float: left;\n        width: 49%;\n        margin-bottom: 5%;\n    }\n\n    img {\n        width: 70%;\n        margin: 0 auto;\n    }\n    p {\n        width: 70%;\n        margin: 0 auto;\n        font-family: $main-font;\n    }\n\n    span {\n        font-family: $decorative-font;\n        font-size: 2em;\n        font-weight: bold;\n    }\n}\n\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n    :local(.item) {\n        .item-name{\n            font-size: 3em;\n        }\n        .item-description {\n            font-size: 1.3em;\n        }  \n  \n        :local(.ingredients) {\n            p {\n                font-size: 1.15em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n    :local(.item) {\n        .item-name {\n            font-size: 4em;\n        }\n        .item-description {\n            font-size: 1.5em;\n        }\n\n        :local(.ingredients) {\n            h3 {\n                font-size: 3.5em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n    :local(.header) {\n        float: left;\n        width: 50%;\n        margin: 0 0 0 0;\n    }\n\n    :local(.purchase) {\n        float: none;\n        text-align: center;\n        p {\n            margin-bottom: .5%;\n        }\n    }\n    :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n        .description {\n            overflow: auto;\n        }\n        .item-name {\n            font-size: 4.9em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: -2%;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 3% 0 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 45%;\n            margin: -1% 0 0 0;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n}\n\n@media all and (min-width: 820px) {\n        :local(.header) {\n            float: left;\n            width: 50%;\n            margin: 0;\n        }\n        :local(.purchase) {\n            text-align: center;\n            float: none;\n        }\n        :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n\n        .description {\n            margin-top: 1%;\n            margin-bottom: 1%;\n            overflow: auto;\n        }\n        :local(.header) {\n            width: 50%;\n        }\n        .item-name {\n            font-size: 6em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: 0;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 2% 5% 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 22%;\n            margin: 0% 10% 0 13%;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n            width: 85%;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        img {\n            width: 60%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n\n    @media all and (min-width: 1060px) {\n        :local(.item) {\n            .item-img {\n                width: 20%;\n                margin: 0 10% 0 15%;\n            }\n        }\n    }\n\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -35386,7 +36535,7 @@
 	};
 
 /***/ },
-/* 60 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35395,11 +36544,11 @@
 	    value: true
 	});
 	
-	var _shopHead = __webpack_require__(61);
+	var _shopHead = __webpack_require__(87);
 	
 	var _shopHead2 = _interopRequireDefault(_shopHead);
 	
-	var _shopHead3 = __webpack_require__(62);
+	var _shopHead3 = __webpack_require__(88);
 	
 	var _shopHead4 = _interopRequireDefault(_shopHead3);
 	
@@ -35413,19 +36562,19 @@
 	};
 
 /***/ },
-/* 61 */
+/* 87 */
 /***/ function(module, exports) {
 
 	module.exports = "<!--<img ng-class=\"$ctrl.styles.banner-img\" src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\">-->\n";
 
 /***/ },
-/* 62 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(63);
+	var content = __webpack_require__(89);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35434,8 +36583,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss");
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./shop-head.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35445,7 +36594,7 @@
 	}
 
 /***/ },
-/* 63 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35453,7 +36602,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._2DpE6toQ8FmWBt3oR4PhrL {\n  width: 100%; }\n", "", {"version":3,"sources":["/./src/components/shop/shop-head/src/components/shop/shop-head/shop-head.scss"],"names":[],"mappings":"AAAA;EACI,YACJ,EAAE","file":"shop-head.scss","sourcesContent":[":local(.banner-img) {\n    width: 100%\n};"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "._2DpE6toQ8FmWBt3oR4PhrL {\n  width: 100%; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/shop-head/src/components/shop/shop-head/shop-head.scss"],"names":[],"mappings":"AAAA;EACI,YACJ,EAAE","file":"shop-head.scss","sourcesContent":[":local(.banner-img) {\n    width: 100%\n};"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -35461,7 +36610,7 @@
 	};
 
 /***/ },
-/* 64 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35470,11 +36619,11 @@
 	    value: true
 	});
 	
-	var _shop = __webpack_require__(65);
+	var _shop = __webpack_require__(91);
 	
 	var _shop2 = _interopRequireDefault(_shop);
 	
-	var _shop3 = __webpack_require__(66);
+	var _shop3 = __webpack_require__(92);
 	
 	var _shop4 = _interopRequireDefault(_shop3);
 	
@@ -35552,19 +36701,19 @@
 	}
 
 /***/ },
-/* 65 */
+/* 91 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"image-text\">\n    <div class=\"text-box\">\n        <button ng-click=\"$ctrl.gotoItems()\">Check out Our Juices</button>\n    </div>\n    <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/c_crop,g_south,h_2530,w_4096/v1482867018/earth%20house/blue-spread_ixxxfx.jpg\">\n</div>\n\n<div id=\"items\">\n    <ui-view autoscroll=\"$ctrl.hasSeenLanding\" name=\"main\" select-array=\"$ctrl.selectArray\" add-to-cart=\"$ctrl.addToCart\" quantity=\"$ctrl.quantity\" cart=\"$ctrl.cart\" goToItem=\"$ctrl.goToItem\"></ui-view>\n</div>\n\n<!-- TODO: work out some way to autoscroll when navigating from all items view to individual item view-->\n";
 
 /***/ },
-/* 66 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(67);
+	var content = __webpack_require__(93);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35573,8 +36722,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss");
+			module.hot.accept("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss", function() {
+				var newContent = require("!!../../../node_modules/css-loader/index.js?sourceMap!../../../node_modules/sass-loader/index.js?sourceMap!./shop.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35584,7 +36733,7 @@
 	}
 
 /***/ },
-/* 67 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35592,13 +36741,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".image-text {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n  overflow: hidden;\n  border-bottom: 2px solid rgba(200, 200, 200, 0.7); }\n  .image-text .text-box {\n    position: absolute;\n    text-align: center;\n    width: 100%;\n    right: 0;\n    z-index: 1; }\n  .image-text img {\n    width: 100%;\n    display: block; }\n  .image-text button {\n    border-radius: 1px;\n    background-color: rgba(50, 50, 50, 0.1);\n    font-family: \"Amatic SC\", cursive;\n    display: none;\n    color: white;\n    font-weight: 600;\n    padding: 0 10px;\n    margin: 0 auto;\n    border: 3px solid white;\n    transition: all .3s ease; }\n  .image-text button:focus {\n    outline: 0; }\n  .image-text button:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #FFC107;\n    border-color: #FFC107;\n    background-color: transparent; }\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n  .image-text .text-box {\n    bottom: 5%; }\n  .image-text button {\n    display: block;\n    font-size: 3.5em; } }\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n  .image-text .text-box {\n    bottom: 12%; }\n  .image-text button {\n    display: block;\n    font-size: 4em; } }\n\n@media all and (min-width: 1181px) {\n  .image-text .text-box {\n    bottom: 18%; }\n  .image-text button {\n    display: block;\n    font-size: 4.5em; } }\n\n.cart-message {\n  position: absolute;\n  width: 100%; }\n\nsection.shop-info {\n  width: 60%;\n  margin: 0 auto;\n  position: relative; }\n  section.shop-info h1 {\n    font-size: 4em;\n    color: #8282ff;\n    margin: 0;\n    display: inline; }\n  section.shop-info p {\n    display: inline;\n    font-size: 1.25em; }\n  section.shop-info h2 {\n    font-size: 3em;\n    font-family: 'Montserrat', sans-serif;\n    text-align: center;\n    margin: 0; }\n\n.item-header {\n  font-size: 4.5em;\n  margin-left: 1%;\n  font-family: \"Amatic SC\", cursive;\n  width: 100%;\n  float: left; }\n\n.item-text {\n  margin-top: 4%;\n  width: 60%;\n  float: left;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em; }\n\n.items {\n  width: 80%;\n  margin: 0 auto; }\n  .items ul {\n    margin-top: 0;\n    margin-bottom: 10%; }\n\n.item {\n  position: relative;\n  margin-top: 40px;\n  margin: 0 auto;\n  display: inline-block; }\n  .item img {\n    width: 60%;\n    margin: 0 auto;\n    transition: all .5s ease; }\n  .item h3 {\n    margin-bottom: 0;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 1.5em;\n    transition: all .5s ease; }\n  .item p {\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n.item:hover {\n  cursor: pointer; }\n  .item:hover h3 {\n    color: #FFC107; }\n\n.item-info {\n  text-align: center; }\n  .item-info h4 {\n    margin-bottom: 0; }\n  .item-info p {\n    margin-top: 0; }\n\n@media all and (max-width: 600px) {\n  .item-header {\n    font-size: 3em;\n    margin-top: 1%;\n    margin-bottom: 5%;\n    margin-left: 2%; }\n  .item {\n    width: 50%;\n    margin-bottom: 20px; }\n    .item h3 {\n      margin-top: 5%; } }\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n  .items {\n    width: 85%; }\n  .item-header {\n    font-size: 5em;\n    margin: 1% 0 2% 3%; }\n  .item {\n    width: 33%; }\n    .item h3 {\n      font-size: 1.9em;\n      margin-top: 5%; } }\n\n@media all and (min-width: 851px) {\n  .items {\n    width: 80%; }\n  .item-header {\n    font-size: 6em;\n    margin: 2% 0 3% 3%; }\n  .item {\n    width: 33%;\n    margin-bottom: 3%; }\n    .item img {\n      width: 55%; }\n    .item h3 {\n      font-size: 2em;\n      margin-top: 2%; } }\n", "", {"version":3,"sources":["/./src/components/shop/src/scss/partials/_image-text.scss","/./src/components/shop/src/scss/partials/_colors.scss","/./src/components/shop/src/scss/partials/_fonts.scss","/./src/components/shop/src/components/shop/shop.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,sBAAqB;EACrB,YAAW;EACX,iBAAgB;EAChB,kDCP4B,EDoD/B;EAlDD;IASQ,mBAAkB;IAElB,mBAAkB;IAClB,YAAW;IACX,SAAQ;IACR,WAAU,EACb;EAfL;IAkBQ,YAAW;IACX,eAAc,EACjB;EApBL;IAuBQ,mBAAkB;IAClB,wCAAmC;IACnC,kCE5B8B;IF8B9B,cAAa;IACb,aAAY;IACZ,iBAAgB;IAEhB,gBAAe;IACf,eAAc;IACd,wBAAuB;IACvB,yBAAwB,EAC3B;EAnCL;IAsCQ,WAAU,EACb;EAvCL;IA2CQ,8BAA6B;IAC7B,0BAAyB;IACzB,sBAAqB;IACrB,eCjDc;IDkDd,sBClDc;IDmDd,8BAA6B,EAChC;;AAGL;EACI;IAEQ,WAAU,EACb;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AGnFT;EACI,mBAAkB;EAClB,YAAW,EACd;;AACD;EACI,WAAU;EACV,eAAc;EACd,mBAAkB,EAkBrB;EArBD;IAKQ,eAAc;IACd,eAAuB;IACvB,UAAS;IACT,gBAAe,EAClB;EATL;IAYQ,gBAAe;IACf,kBAAiB,EACpB;EAdL;IAgBQ,eAAc;IACd,sCAAqC;IACrC,mBAAkB;IAClB,UAAS,EACZ;;AAGL;EACI,iBAAgB;EAEhB,gBAAe;EAEf,kCDpCkC;ECqClC,YAAW;EACX,YAAW,EAEd;;AAED;EACI,eAAc;EACd,WAAU;EACV,YAAW;EACX,wCD7CkC;EC8ClC,iBACJ,EAAE;;AAIF;EACI,WAAU;EACV,eAAc,EAKjB;EAPD;IAIQ,cAAa;IACb,mBAAkB,EACrB;;AAGL;EACI,mBAAkB;EAClB,iBAAgB;EAEhB,eAAc;EAEd,sBAAqB,EAsBxB;EA5BD;IAQQ,WAAU;IACV,eAAc;IACd,yBAAwB,EAC3B;EAXL;IAaQ,iBAAgB;IAChB,kCD3E8B;IC4E9B,iBAAgB;IAChB,yBAAwB,EAC3B;EAjBL;IAwBQ,iBAAgB;IAChB,YAAW;IACX,+CDrFqC,ECsFxC;;AAEL;EACI,gBAAe,EAIlB;EALD;IAGQ,eF7Fc,EE8FjB;;AAeL;EACI,mBAAkB,EAOrB;EARD;IAGQ,iBAAgB,EACnB;EAJL;IAMQ,cAAa,EAChB;;AAGL;EACI;IACI,eAAc;IACd,eAAc;IACd,kBAAiB;IACjB,gBAAe,EAClB;EACD;IACI,WAAU;IACV,oBAAmB,EAItB;IAND;MAIQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EACrB;EAED;IACI,WAAU,EAKb;IAND;MAGQ,iBAAgB;MAChB,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EAErB;EAED;IACI,WAAU;IACV,kBAAiB,EAQpB;IAVD;MAIQ,WAAU,EACb;IALL;MAOQ,eAAc;MACd,eAAc,EACjB,EAAA","file":"shop.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.image-text {\n    position: relative;\n    display: inline-block;\n    width: 100%;\n    overflow: hidden;\n    border-bottom: 2px solid $lightgrey;\n\n\n    .text-box {\n        position: absolute;\n        // bottom: 8%;\n        text-align: center;\n        width: 100%;\n        right: 0;\n        z-index: 1;\n    }\n\n    img {\n        width: 100%;\n        display: block;\n    }\n\n    button {\n        border-radius: 1px;\n        background-color: rgba(50,50,50,.1);\n        font-family: $decorative-font;\n        // font-size: 2.7em;\n        display: none;\n        color: white;\n        font-weight: 600;\n        // display: block;\n        padding: 0 10px;\n        margin: 0 auto;\n        border: 3px solid white;\n        transition: all .3s ease;\n    }\n\n    button:focus {\n        outline: 0;\n    }\n\n    button:hover {\n        \n        -webkit-transform: scale(1.1);\n        -ms-transform: scale(1.1);\n        transform: scale(1.1);\n        color: $accent-color;\n        border-color: $accent-color;\n        background-color: transparent;\n    }\n}\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n    .image-text {\n        .text-box {\n            bottom: 5%;\n        }\n        button {\n            display: block;\n            font-size: 3.5em;\n        }\n    }\n}\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n    .image-text {\n        .text-box {\n            bottom: 12%;\n        }\n        button {\n            display: block;\n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1181px) {\n    .image-text {\n        .text-box {\n            bottom: 18%;\n        }\n        button {\n            display: block;\n            font-size: 4.5em;\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","@import 'image-text';\n@import 'fonts';\n@import 'colors';\n\n.cart-message {\n    position: absolute;\n    width: 100%;\n}\nsection.shop-info {\n    width: 60%;\n    margin: 0 auto;\n    position: relative;\n    h1 {\n        font-size: 4em;\n        color: rgb(130,130,255);\n        margin: 0;\n        display: inline;\n    }\n\n    p{\n        display: inline;\n        font-size: 1.25em;\n    }\n    h2 {\n        font-size: 3em;\n        font-family: 'Montserrat', sans-serif; \n        text-align: center;\n        margin: 0;\n    }\n}\n\n.item-header {\n    font-size: 4.5em;\n    // margin: 1%  0 0 3%;\n    margin-left: 1%;\n    // margin-bottom: 5%;\n    font-family: $decorative-font;\n    width: 100%;\n    float: left;\n    \n}\n\n.item-text {\n    margin-top: 4%;\n    width: 60%;\n    float: left;\n    font-family: $main-font;\n    font-size: 1.2em\n}\n\n//we need to move these styles to a file specifically for the \"all\" view\n\n.items {\n    width: 80%;\n    margin: 0 auto;\n    ul {\n        margin-top: 0;\n        margin-bottom: 10%;\n    }\n}\n\n.item {\n    position: relative;\n    margin-top: 40px;\n    // margin-right: 10%;\n    margin: 0 auto;\n    // width: 17%;\n    display: inline-block;\n    img {\n        width: 60%;\n        margin: 0 auto;\n        transition: all .5s ease;\n    }\n    h3 {\n        margin-bottom: 0;\n        font-family: $decorative-font;\n        font-size: 1.5em;\n        transition: all .5s ease;\n    }\n\n    // h3:hover {\n    //     cursor: pointer;\n    //     color: $accent-color;\n    // }\n    p {\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n}\n.item:hover {\n    cursor: pointer;\n    h3 {\n        color: $accent-color;\n    }\n}\n.item:hover > img {\n    // opacity: .5;\n    // -webkit-filter: blur(1px);\n    // -webkit-filter: contrast(150%); \n}\n\n// .item:hover > h3 {\n//     color: $accent-color;\n// }\n\n\n\n\n.item-info {\n    text-align: center;\n    h4 {\n        margin-bottom: 0;   \n    }\n    p {\n        margin-top: 0;\n    }\n}\n\n@media all and (max-width: 600px) {\n    .item-header {\n        font-size: 3em;\n        margin-top: 1%;\n        margin-bottom: 5%;\n        margin-left: 2%;\n    }\n    .item {\n        width: 50%;\n        margin-bottom: 20px;\n        h3 {\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n    .items {\n        width: 85%;\n    }\n    .item-header {\n        font-size: 5em;\n        margin: 1% 0 2% 3%;\n    }\n\n    .item {\n        width: 33%;\n        h3 {\n            font-size: 1.9em;\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 851px) {\n    .items {\n        width: 80%;\n    }\n    .item-header {\n        font-size: 6em;\n        margin: 2% 0 3% 3%;\n\n    }\n\n    .item {\n        width: 33%;\n        margin-bottom: 3%;\n        img {\n            width: 55%;\n        }\n        h3 {\n            font-size: 2em;\n            margin-top: 2%;\n        }\n    }\n}\n\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".image-text {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n  overflow: hidden;\n  border-bottom: 2px solid rgba(200, 200, 200, 0.7); }\n  .image-text .text-box {\n    position: absolute;\n    text-align: center;\n    width: 100%;\n    right: 0;\n    z-index: 1; }\n  .image-text img {\n    width: 100%;\n    display: block; }\n  .image-text button {\n    border-radius: 1px;\n    background-color: rgba(50, 50, 50, 0.1);\n    font-family: \"Amatic SC\", cursive;\n    display: none;\n    color: white;\n    font-weight: 600;\n    padding: 0 10px;\n    margin: 0 auto;\n    border: 3px solid white;\n    transition: all .3s ease; }\n  .image-text button:focus {\n    outline: 0; }\n  .image-text button:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #FFC107;\n    border-color: #FFC107;\n    background-color: transparent; }\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n  .image-text .text-box {\n    bottom: 5%; }\n  .image-text button {\n    display: block;\n    font-size: 3.5em; } }\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n  .image-text .text-box {\n    bottom: 12%; }\n  .image-text button {\n    display: block;\n    font-size: 4em; } }\n\n@media all and (min-width: 1181px) {\n  .image-text .text-box {\n    bottom: 18%; }\n  .image-text button {\n    display: block;\n    font-size: 4.5em; } }\n\n.cart-message {\n  position: absolute;\n  width: 100%; }\n\nsection.shop-info {\n  width: 60%;\n  margin: 0 auto;\n  position: relative; }\n  section.shop-info h1 {\n    font-size: 4em;\n    color: #8282ff;\n    margin: 0;\n    display: inline; }\n  section.shop-info p {\n    display: inline;\n    font-size: 1.25em; }\n  section.shop-info h2 {\n    font-size: 3em;\n    font-family: 'Montserrat', sans-serif;\n    text-align: center;\n    margin: 0; }\n\n.item-header {\n  font-size: 4.5em;\n  margin-left: 1%;\n  font-family: \"Amatic SC\", cursive;\n  width: 100%;\n  float: left; }\n\n.item-text {\n  margin-top: 4%;\n  width: 60%;\n  float: left;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em; }\n\n.items {\n  width: 80%;\n  margin: 0 auto; }\n  .items ul {\n    margin-top: 0;\n    margin-bottom: 10%; }\n\n.item {\n  position: relative;\n  margin-top: 40px;\n  margin: 0 auto;\n  display: inline-block; }\n  .item img {\n    width: 60%;\n    margin: 0 auto;\n    transition: all .5s ease; }\n  .item h3 {\n    margin-bottom: 0;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 1.5em;\n    transition: all .5s ease; }\n  .item p {\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n.item:hover {\n  cursor: pointer; }\n  .item:hover h3 {\n    color: #FFC107; }\n\n.item-info {\n  text-align: center; }\n  .item-info h4 {\n    margin-bottom: 0; }\n  .item-info p {\n    margin-top: 0; }\n\n@media all and (max-width: 600px) {\n  .item-header {\n    font-size: 3em;\n    margin-top: 1%;\n    margin-bottom: 5%;\n    margin-left: 2%; }\n  .item {\n    width: 50%;\n    margin-bottom: 20px; }\n    .item h3 {\n      margin-top: 5%; } }\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n  .items {\n    width: 85%; }\n  .item-header {\n    font-size: 5em;\n    margin: 1% 0 2% 3%; }\n  .item {\n    width: 33%; }\n    .item h3 {\n      font-size: 1.9em;\n      margin-top: 5%; } }\n\n@media all and (min-width: 851px) {\n  .items {\n    width: 80%; }\n  .item-header {\n    font-size: 6em;\n    margin: 2% 0 3% 3%; }\n  .item {\n    width: 33%;\n    margin-bottom: 3%; }\n    .item img {\n      width: 55%; }\n    .item h3 {\n      font-size: 2em;\n      margin-top: 2%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_image-text.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/components/shop/shop.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,sBAAqB;EACrB,YAAW;EACX,iBAAgB;EAChB,kDCP4B,EDoD/B;EAlDD;IASQ,mBAAkB;IAElB,mBAAkB;IAClB,YAAW;IACX,SAAQ;IACR,WAAU,EACb;EAfL;IAkBQ,YAAW;IACX,eAAc,EACjB;EApBL;IAuBQ,mBAAkB;IAClB,wCAAmC;IACnC,kCE5B8B;IF8B9B,cAAa;IACb,aAAY;IACZ,iBAAgB;IAEhB,gBAAe;IACf,eAAc;IACd,wBAAuB;IACvB,yBAAwB,EAC3B;EAnCL;IAsCQ,WAAU,EACb;EAvCL;IA2CQ,8BAA6B;IAC7B,0BAAyB;IACzB,sBAAqB;IACrB,eCjDc;IDkDd,sBClDc;IDmDd,8BAA6B,EAChC;;AAGL;EACI;IAEQ,WAAU,EACb;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AGnFT;EACI,mBAAkB;EAClB,YAAW,EACd;;AACD;EACI,WAAU;EACV,eAAc;EACd,mBAAkB,EAkBrB;EArBD;IAKQ,eAAc;IACd,eAAuB;IACvB,UAAS;IACT,gBAAe,EAClB;EATL;IAYQ,gBAAe;IACf,kBAAiB,EACpB;EAdL;IAgBQ,eAAc;IACd,sCAAqC;IACrC,mBAAkB;IAClB,UAAS,EACZ;;AAGL;EACI,iBAAgB;EAEhB,gBAAe;EAEf,kCDpCkC;ECqClC,YAAW;EACX,YAAW,EAEd;;AAED;EACI,eAAc;EACd,WAAU;EACV,YAAW;EACX,wCD7CkC;EC8ClC,iBACJ,EAAE;;AAIF;EACI,WAAU;EACV,eAAc,EAKjB;EAPD;IAIQ,cAAa;IACb,mBAAkB,EACrB;;AAGL;EACI,mBAAkB;EAClB,iBAAgB;EAEhB,eAAc;EAEd,sBAAqB,EAsBxB;EA5BD;IAQQ,WAAU;IACV,eAAc;IACd,yBAAwB,EAC3B;EAXL;IAaQ,iBAAgB;IAChB,kCD3E8B;IC4E9B,iBAAgB;IAChB,yBAAwB,EAC3B;EAjBL;IAwBQ,iBAAgB;IAChB,YAAW;IACX,+CDrFqC,ECsFxC;;AAEL;EACI,gBAAe,EAIlB;EALD;IAGQ,eF7Fc,EE8FjB;;AAeL;EACI,mBAAkB,EAOrB;EARD;IAGQ,iBAAgB,EACnB;EAJL;IAMQ,cAAa,EAChB;;AAGL;EACI;IACI,eAAc;IACd,eAAc;IACd,kBAAiB;IACjB,gBAAe,EAClB;EACD;IACI,WAAU;IACV,oBAAmB,EAItB;IAND;MAIQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EACrB;EAED;IACI,WAAU,EAKb;IAND;MAGQ,iBAAgB;MAChB,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EAErB;EAED;IACI,WAAU;IACV,kBAAiB,EAQpB;IAVD;MAIQ,WAAU,EACb;IALL;MAOQ,eAAc;MACd,eAAc,EACjB,EAAA","file":"shop.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.image-text {\n    position: relative;\n    display: inline-block;\n    width: 100%;\n    overflow: hidden;\n    border-bottom: 2px solid $lightgrey;\n\n\n    .text-box {\n        position: absolute;\n        // bottom: 8%;\n        text-align: center;\n        width: 100%;\n        right: 0;\n        z-index: 1;\n    }\n\n    img {\n        width: 100%;\n        display: block;\n    }\n\n    button {\n        border-radius: 1px;\n        background-color: rgba(50,50,50,.1);\n        font-family: $decorative-font;\n        // font-size: 2.7em;\n        display: none;\n        color: white;\n        font-weight: 600;\n        // display: block;\n        padding: 0 10px;\n        margin: 0 auto;\n        border: 3px solid white;\n        transition: all .3s ease;\n    }\n\n    button:focus {\n        outline: 0;\n    }\n\n    button:hover {\n        \n        -webkit-transform: scale(1.1);\n        -ms-transform: scale(1.1);\n        transform: scale(1.1);\n        color: $accent-color;\n        border-color: $accent-color;\n        background-color: transparent;\n    }\n}\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n    .image-text {\n        .text-box {\n            bottom: 5%;\n        }\n        button {\n            display: block;\n            font-size: 3.5em;\n        }\n    }\n}\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n    .image-text {\n        .text-box {\n            bottom: 12%;\n        }\n        button {\n            display: block;\n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1181px) {\n    .image-text {\n        .text-box {\n            bottom: 18%;\n        }\n        button {\n            display: block;\n            font-size: 4.5em;\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","@import 'image-text';\n@import 'fonts';\n@import 'colors';\n\n.cart-message {\n    position: absolute;\n    width: 100%;\n}\nsection.shop-info {\n    width: 60%;\n    margin: 0 auto;\n    position: relative;\n    h1 {\n        font-size: 4em;\n        color: rgb(130,130,255);\n        margin: 0;\n        display: inline;\n    }\n\n    p{\n        display: inline;\n        font-size: 1.25em;\n    }\n    h2 {\n        font-size: 3em;\n        font-family: 'Montserrat', sans-serif; \n        text-align: center;\n        margin: 0;\n    }\n}\n\n.item-header {\n    font-size: 4.5em;\n    // margin: 1%  0 0 3%;\n    margin-left: 1%;\n    // margin-bottom: 5%;\n    font-family: $decorative-font;\n    width: 100%;\n    float: left;\n    \n}\n\n.item-text {\n    margin-top: 4%;\n    width: 60%;\n    float: left;\n    font-family: $main-font;\n    font-size: 1.2em\n}\n\n//we need to move these styles to a file specifically for the \"all\" view\n\n.items {\n    width: 80%;\n    margin: 0 auto;\n    ul {\n        margin-top: 0;\n        margin-bottom: 10%;\n    }\n}\n\n.item {\n    position: relative;\n    margin-top: 40px;\n    // margin-right: 10%;\n    margin: 0 auto;\n    // width: 17%;\n    display: inline-block;\n    img {\n        width: 60%;\n        margin: 0 auto;\n        transition: all .5s ease;\n    }\n    h3 {\n        margin-bottom: 0;\n        font-family: $decorative-font;\n        font-size: 1.5em;\n        transition: all .5s ease;\n    }\n\n    // h3:hover {\n    //     cursor: pointer;\n    //     color: $accent-color;\n    // }\n    p {\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n}\n.item:hover {\n    cursor: pointer;\n    h3 {\n        color: $accent-color;\n    }\n}\n.item:hover > img {\n    // opacity: .5;\n    // -webkit-filter: blur(1px);\n    // -webkit-filter: contrast(150%); \n}\n\n// .item:hover > h3 {\n//     color: $accent-color;\n// }\n\n\n\n\n.item-info {\n    text-align: center;\n    h4 {\n        margin-bottom: 0;   \n    }\n    p {\n        margin-top: 0;\n    }\n}\n\n@media all and (max-width: 600px) {\n    .item-header {\n        font-size: 3em;\n        margin-top: 1%;\n        margin-bottom: 5%;\n        margin-left: 2%;\n    }\n    .item {\n        width: 50%;\n        margin-bottom: 20px;\n        h3 {\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n    .items {\n        width: 85%;\n    }\n    .item-header {\n        font-size: 5em;\n        margin: 1% 0 2% 3%;\n    }\n\n    .item {\n        width: 33%;\n        h3 {\n            font-size: 1.9em;\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 851px) {\n    .items {\n        width: 80%;\n    }\n    .item-header {\n        font-size: 6em;\n        margin: 2% 0 3% 3%;\n\n    }\n\n    .item {\n        width: 33%;\n        margin-bottom: 3%;\n        img {\n            width: 55%;\n        }\n        h3 {\n            font-size: 2em;\n            margin-top: 2%;\n        }\n    }\n}\n\n"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 68 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35621,7 +36770,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var context = __webpack_require__(69);
+	var context = __webpack_require__(95);
 	
 	var _module = _angular2.default.module('services', []);
 	
@@ -35633,12 +36782,21 @@
 	exports.default = _module.name;
 
 /***/ },
-/* 69 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./juice-service.js": 70,
-		"./payment-service.js": 71
+		"./about-service.js": 96,
+		"./article-service.js": 97,
+		"./auth-service.js": 98,
+		"./date-service.js": 99,
+		"./ingredient-service.js": 100,
+		"./juice-service.js": 101,
+		"./order-pickup-service.js": 102,
+		"./order-service.js": 103,
+		"./payment-service.js": 104,
+		"./pickup-service.js": 105,
+		"./slide-service.js": 106
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -35651,11 +36809,273 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 69;
+	webpackContext.id = 95;
 
 
 /***/ },
-/* 70 */
+/* 96 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = aboutService;
+	aboutService.$inject = ['$http', 'apiUrl'];
+	
+	function aboutService($http, apiUrl) {
+	    return {
+	        getAll: function getAll() {
+	            return $http.get(apiUrl + '/about-articles').then(function (res) {
+	                console.log('in about service', apiUrl + '/about-articles', res.data);
+	                return res.data;
+	            });
+	        },
+	        getVisible: function getVisible() {
+	            return $http.get(apiUrl + '/about-articles?visible=true').then(function (res) {
+	                console.log(res.date);
+	                return res.data;
+	            });
+	        },
+	        createArticle: function createArticle(article, token) {
+	            return $http({
+	                method: 'POST',
+	                url: apiUrl + '/about-articles',
+	                data: article,
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                console.log(res.date);
+	                return res.data;
+	            });
+	        },
+	        updateArticle: function updateArticle(article, token) {
+	            return $http({
+	                method: 'PUT',
+	                url: apiUrl + '/about-articles/' + article._id,
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: article
+	            }).then(function (res) {
+	                console.log(res.data);
+	                return res.data;
+	            });
+	        },
+	        deleteArticle: function deleteArticle(article, token) {
+	            return $http({
+	                method: 'DELETE',
+	                url: apiUrl + '/about-articles/' + article._id,
+	                headers: {
+	                    'Authorization': token
+	                }
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 97 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = articleService;
+	articleService.$inject = ['$http', 'apiUrl'];
+	
+	function articleService($http, apiUrl) {
+	    return {
+	        getAll: function getAll() {
+	            return $http.get(apiUrl + '/articles').then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        create: function create(article, token) {
+	            return $http({
+	                method: 'POST',
+	                url: apiUrl + '/articles',
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: article
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        update: function update(article, token) {
+	            return $http({
+	                method: 'PUT',
+	                url: apiUrl + '/articles/' + article._id,
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: article
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 98 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = authService;
+	authService.$inject = ['$http', 'apiUrl'];
+	
+	function authService($http, apiUrl) {
+	    return {
+	        signin: function signin(credentials) {
+	            return $http.post(apiUrl + '/auth/signin', credentials).then(function (res) {
+	                return res.data;
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 99 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = articleService;
+	function articleService() {
+	    return {
+	        dateObjToString: function dateObjToString(date) {
+	            var dateString = new Date(date.month + ' ' + date.date + ', ' + date.year).toDateString();
+	            return dateString;
+	        },
+	        dateStringToObj: function dateStringToObj(dateString) {
+	            var arr = dateString.split(' ');
+	            return {
+	                day: arr[0],
+	                month: arr[1],
+	                date: arr[2],
+	                year: arr[3]
+	            };
+	        },
+	        hourValuetoObj: function hourValuetoObj(i) {
+	            var hour = {};
+	            if (i > 0 & i < 12) {
+	                hour = {
+	                    time: i + ':00am',
+	                    value: i
+	                };
+	            } else if (i === 12) {
+	                hour = {
+	                    time: i + ':00pm',
+	                    value: i
+	                };
+	            } else if (i > 12) {
+	                hour = {
+	                    time: i - 12 + ':00pm',
+	                    value: i
+	                };
+	            } else {
+	                hour = {
+	                    time: '12:00am',
+	                    value: i
+	                };
+	            }
+	            return hour;
+	        },
+	        alphabetize: function alphabetize(arr) {
+	            arr.sort(function (curr, next) {
+	                var currName = curr.name.toUpperCase();
+	                var nextName = next.name.toUpperCase();
+	
+	                if (currName < nextName) {
+	                    return -1;
+	                }
+	                if (currName > nextName) {
+	                    return 1;
+	                }
+	                return 0;
+	            });
+	            return arr;
+	        }
+	    };
+	}
+
+/***/ },
+/* 100 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = ingredientService;
+	ingredientService.$inject = ['$http', 'apiUrl'];
+	
+	function ingredientService($http, apiUrl) {
+	    return {
+	        getAll: function getAll() {
+	            return $http.get(apiUrl + '/ingredients').then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        get: function get(id) {
+	            return $http.get(apiUrl + '/ingredients/' + id).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        create: function create(ingredient, token) {
+	            return $http({
+	                method: 'POST',
+	                url: apiUrl + '/ingredients',
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: ingredient
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        update: function update(ingredient, id, token) {
+	            return $http({
+	                method: 'PUT',
+	                url: apiUrl + '/ingredients/' + id,
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: ingredient
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        delete: function _delete(id, token) {
+	            return $http({
+	                method: 'DELETE',
+	                url: apiUrl + '/ingredients/' + id,
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 101 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35677,12 +37097,163 @@
 	            return $http.get(apiUrl + '/juices/' + id).then(function (res) {
 	                return res.data;
 	            });
+	        },
+	        update: function update(juice, id, token) {
+	            return $http({
+	                method: 'PUT',
+	                url: apiUrl + '/juices/' + id,
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: juice
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        create: function create(juice, token) {
+	            return $http({
+	                method: 'POST',
+	                url: apiUrl + '/juices',
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: juice
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        delete: function _delete(id, token) {
+	            return $http({
+	                method: 'DELETE',
+	                url: apiUrl + '/juices/' + id,
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                return res.data;
+	            });
 	        }
 	    };
 	}
 
 /***/ },
-/* 71 */
+/* 102 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = orderPickupService;
+	orderPickupService.$inject = ['$http', 'apiUrl'];
+	
+	function orderPickupService($http, apiUrl) {
+	    return {
+	        getAll: function getAll(token) {
+	            return $http({
+	                method: 'GET',
+	                url: apiUrl + '/orders-pickup',
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	
+	        //TODO on server side restructure routes so that we have an /orders/delivery and /orders/pickup
+	        create: function create(order) {
+	            return $http({
+	                method: 'POST',
+	                url: apiUrl + '/orders-pickup',
+	                // headers: {
+	                //     'Authorization': token
+	                // },
+	                data: order
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        deleteOrder: function deleteOrder(id, token) {
+	            return $http({
+	                method: 'DELETE',
+	                url: apiUrl + '/orders-pickup/' + id,
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        updateOrder: function updateOrder(id, order, token) {
+	            return $http({
+	                method: 'PUT',
+	                url: apiUrl + '/orders-pickup/' + id,
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: order
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 103 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = orderService;
+	orderService.$inject = ['$http', 'apiUrl'];
+	
+	function orderService($http, apiUrl) {
+	    return {
+	        getOrders: function getOrders(token) {
+	            return $http({
+	                method: 'GET',
+	                url: apiUrl + '/orders',
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        deleteOrder: function deleteOrder(id, token) {
+	            return $http({
+	                method: 'DELETE',
+	                url: apiUrl + '/orders/' + id,
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        updateOrder: function updateOrder(id, order, token) {
+	            return $http({
+	                method: 'PUT',
+	                url: apiUrl + '/orders/' + id,
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: order
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 104 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35711,13 +37282,137 @@
 	}
 
 /***/ },
-/* 72 */
+/* 105 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = pickupService;
+	pickupService.$inject = ['$http', 'apiUrl'];
+	
+	function pickupService($http, apiUrl) {
+	    return {
+	        getAll: function getAll() {
+	            return $http.get(apiUrl + '/pickups').then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        getVisible: function getVisible() {
+	            return $http.get(apiUrl + '/pickups?show=true').then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        create: function create(pickup, token) {
+	            return $http({
+	                method: 'POST',
+	                url: apiUrl + '/pickups',
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: pickup
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        update: function update(pickup, token) {
+	            return $http({
+	                method: 'PUT',
+	                url: apiUrl + '/pickups/' + pickup._id,
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: pickup
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        delete: function _delete(id, token) {
+	            return $http({
+	                method: 'DELETE',
+	                url: apiUrl + '/pickups/' + id,
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 106 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = slideService;
+	slideService.$inject = ['$http', 'apiUrl'];
+	
+	function slideService($http, apiUrl) {
+	    return {
+	        getAll: function getAll() {
+	            return $http.get(apiUrl + '/slides').then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        getVisible: function getVisible() {
+	            return $http.get(apiUrl + '/slides?show=true').then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        create: function create(slide, token) {
+	            return $http({
+	                method: 'POST',
+	                url: apiUrl + '/slides',
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: slide
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        update: function update(slide, id, token) {
+	            return $http({
+	                method: 'PUT',
+	                url: apiUrl + '/slides/' + id,
+	                headers: {
+	                    'Authorization': token
+	                },
+	                data: slide
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        },
+	        delete: function _delete(id, token) {
+	            return $http({
+	                method: 'DELETE',
+	                url: apiUrl + '/slides/' + id,
+	                headers: {
+	                    'Authorization': token
+	                }
+	            }).then(function (res) {
+	                return res.data;
+	            });
+	        }
+	    };
+	}
+
+/***/ },
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(73);
+	var content = __webpack_require__(108);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35726,8 +37421,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/sass-loader/index.js?sourceMap!./main.scss", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/sass-loader/index.js?sourceMap!./main.scss");
+			module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/sass-loader/index.js?sourceMap!./main.scss", function() {
+				var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/sass-loader/index.js?sourceMap!./main.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -35737,7 +37432,7 @@
 	}
 
 /***/ },
-/* 73 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35745,13 +37440,13 @@
 	
 	
 	// module
-	exports.push([module.id, "html {\n  font-size: 16px; }\n\nbody {\n  font-family: sans-serif;\n  margin: 0; }\n\nul {\n  list-style-type: none;\n  padding: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none;\n  color: white; }\n\na:hover {\n  cursor: pointer; }\n\n.link {\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em;\n  transition: all 0.5s ease; }\n\n.icon-arrow-down2:before {\n  content: \"\\EA3E\"; }\n\n.icon-arrow-right2:before {\n  content: \"\\EA3C\"; }\n\n.icon-arrow-left2:before {\n  content: \"\\EA40\"; }\n\n.clearfix {\n  overflow: auto; }\n", "", {"version":3,"sources":["/./src/scss/src/scss/main.scss","/./src/scss/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,gBAAe,EAClB;;AACD;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,sBAAqB;EACrB,WAAU,EACb;;AACD;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB;EACrB,aAAY,EACf;;AAED;EACI,gBAAe,EAClB;;AAED;EACI,wCCjCkC;EDkClC,iBAAgB;EAChB,0BAAyB,EAC5B;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AACD;EACI,eAAc,EACjB","file":"main.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\nhtml {\n    font-size: 16px;\n}\nbody {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nul {\n    list-style-type: none;\n    padding: 0;\n}\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n    color: white;\n}\n\na:hover {\n    cursor: pointer;    \n}\n\n.link {\n    font-family: $main-font;\n    font-size: 1.2em;\n    transition: all 0.5s ease;\n}\n\n.icon-arrow-down2:before {\n  content: \"\\ea3e\";\n}\n\n.icon-arrow-right2:before {\n  content: \"\\ea3c\";\n}\n\n.icon-arrow-left2:before {\n  content: \"\\ea40\";\n}\n.clearfix {\n    overflow: auto;\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "html {\n  font-size: 16px;\n  -webkit-font-smoothing: antialiased; }\n\nbody {\n  font-family: sans-serif;\n  margin: 0; }\n\nul {\n  list-style-type: none;\n  padding: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none;\n  color: white; }\n\na:hover {\n  cursor: pointer; }\n\n.link {\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em;\n  transition: all 0.5s ease; }\n\n.icon-arrow-down2:before {\n  content: \"\\EA3E\"; }\n\n.icon-arrow-right2:before {\n  content: \"\\EA3C\"; }\n\n.icon-arrow-left2:before {\n  content: \"\\EA40\"; }\n\n.clearfix {\n  overflow: auto; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/scss/src/scss/main.scss","/Users/Will/freelance/earth-house/app/src/scss/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,gBAAe;EACf,oCAAmC,EACtC;;AACD;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,sBAAqB;EACrB,WAAU,EACb;;AACD;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB;EACrB,aAAY,EACf;;AAED;EACI,gBAAe,EAClB;;AAED;EACI,wCClCkC;EDmClC,iBAAgB;EAChB,0BAAyB,EAC5B;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AACD;EACI,eAAc,EACjB","file":"main.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\nhtml {\n    font-size: 16px;\n    -webkit-font-smoothing: antialiased;\n}\nbody {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nul {\n    list-style-type: none;\n    padding: 0;\n}\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n    color: white;\n}\n\na:hover {\n    cursor: pointer;    \n}\n\n.link {\n    font-family: $main-font;\n    font-size: 1.2em;\n    transition: all 0.5s ease;\n}\n\n.icon-arrow-down2:before {\n  content: \"\\ea3e\";\n}\n\n.icon-arrow-right2:before {\n  content: \"\\ea3c\";\n}\n\n.icon-arrow-left2:before {\n  content: \"\\ea40\";\n}\n.clearfix {\n    overflow: auto;\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 74 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -35762,23 +37457,23 @@
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	var core = __webpack_require__(75);
+	var core = __webpack_require__(110);
 	exports.core = core;
-	__export(__webpack_require__(75));
-	__export(__webpack_require__(131));
-	__export(__webpack_require__(133));
-	__export(__webpack_require__(135));
-	__webpack_require__(139);
-	__webpack_require__(140);
-	__webpack_require__(141);
-	__webpack_require__(142);
-	__webpack_require__(143);
+	__export(__webpack_require__(110));
+	__export(__webpack_require__(166));
+	__export(__webpack_require__(168));
+	__export(__webpack_require__(170));
+	__webpack_require__(174);
+	__webpack_require__(175);
+	__webpack_require__(176);
+	__webpack_require__(177);
+	__webpack_require__(178);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = "ui.router";
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 75 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -35789,21 +37484,21 @@
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(76));
-	__export(__webpack_require__(123));
-	__export(__webpack_require__(124));
-	__export(__webpack_require__(125));
-	__export(__webpack_require__(126));
-	__export(__webpack_require__(127));
-	__export(__webpack_require__(128));
-	__export(__webpack_require__(129));
-	__export(__webpack_require__(120));
-	__export(__webpack_require__(99));
-	__export(__webpack_require__(130));
+	__export(__webpack_require__(111));
+	__export(__webpack_require__(158));
+	__export(__webpack_require__(159));
+	__export(__webpack_require__(160));
+	__export(__webpack_require__(161));
+	__export(__webpack_require__(162));
+	__export(__webpack_require__(163));
+	__export(__webpack_require__(164));
+	__export(__webpack_require__(155));
+	__export(__webpack_require__(134));
+	__export(__webpack_require__(165));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 76 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35811,18 +37506,18 @@
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	/** @module common */ /** for typedoc */
-	__export(__webpack_require__(77));
-	__export(__webpack_require__(80));
-	__export(__webpack_require__(81));
-	__export(__webpack_require__(79));
-	__export(__webpack_require__(78));
-	__export(__webpack_require__(82));
-	__export(__webpack_require__(83));
-	__export(__webpack_require__(86));
+	__export(__webpack_require__(112));
+	__export(__webpack_require__(115));
+	__export(__webpack_require__(116));
+	__export(__webpack_require__(114));
+	__export(__webpack_require__(113));
+	__export(__webpack_require__(117));
+	__export(__webpack_require__(118));
+	__export(__webpack_require__(121));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 77 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -35834,9 +37529,9 @@
 	 * @module common
 	 */ /** for typedoc */
 	"use strict";
-	var predicates_1 = __webpack_require__(78);
-	var hof_1 = __webpack_require__(79);
-	var coreservices_1 = __webpack_require__(80);
+	var predicates_1 = __webpack_require__(113);
+	var hof_1 = __webpack_require__(114);
+	var coreservices_1 = __webpack_require__(115);
 	var w = typeof window === 'undefined' ? {} : window;
 	var angular = w.angular || {};
 	exports.fromJson = angular.fromJson || JSON.parse.bind(JSON);
@@ -36444,7 +38139,7 @@
 	//# sourceMappingURL=common.js.map
 
 /***/ },
-/* 78 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36455,7 +38150,7 @@
 	 *
 	 * @module common_predicates
 	 */ /** */
-	var hof_1 = __webpack_require__(79);
+	var hof_1 = __webpack_require__(114);
 	var toStr = Object.prototype.toString;
 	var tis = function (t) { return function (x) { return typeof (x) === t; }; };
 	exports.isUndefined = tis('undefined');
@@ -36492,7 +38187,7 @@
 	//# sourceMappingURL=predicates.js.map
 
 /***/ },
-/* 79 */
+/* 114 */
 /***/ function(module, exports) {
 
 	/**
@@ -36741,7 +38436,7 @@
 	//# sourceMappingURL=hof.js.map
 
 /***/ },
-/* 80 */
+/* 115 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36756,7 +38451,7 @@
 	//# sourceMappingURL=coreservices.js.map
 
 /***/ },
-/* 81 */
+/* 116 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36845,7 +38540,7 @@
 	//# sourceMappingURL=glob.js.map
 
 /***/ },
-/* 82 */
+/* 117 */
 /***/ function(module, exports) {
 
 	/**
@@ -36895,7 +38590,7 @@
 	//# sourceMappingURL=queue.js.map
 
 /***/ },
-/* 83 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36906,12 +38601,12 @@
 	 * @module common_strings
 	 */ /** */
 	"use strict";
-	var predicates_1 = __webpack_require__(78);
-	var rejectFactory_1 = __webpack_require__(84);
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
-	var transition_1 = __webpack_require__(85);
-	var resolvable_1 = __webpack_require__(96);
+	var predicates_1 = __webpack_require__(113);
+	var rejectFactory_1 = __webpack_require__(119);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
+	var transition_1 = __webpack_require__(120);
+	var resolvable_1 = __webpack_require__(131);
 	/**
 	 * Returns a string shortened to a maximum length
 	 *
@@ -37051,7 +38746,7 @@
 	//# sourceMappingURL=strings.js.map
 
 /***/ },
-/* 84 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -37059,8 +38754,8 @@
 	 * @module transition
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(77);
-	var strings_1 = __webpack_require__(83);
+	var common_1 = __webpack_require__(112);
+	var strings_1 = __webpack_require__(118);
 	var RejectType;
 	(function (RejectType) {
 	    RejectType[RejectType["SUPERSEDED"] = 2] = "SUPERSEDED";
@@ -37130,27 +38825,27 @@
 	//# sourceMappingURL=rejectFactory.js.map
 
 /***/ },
-/* 85 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var trace_1 = __webpack_require__(86);
-	var coreservices_1 = __webpack_require__(80);
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var hof_1 = __webpack_require__(79);
-	var interface_1 = __webpack_require__(87);
-	var transitionHook_1 = __webpack_require__(88);
-	var hookRegistry_1 = __webpack_require__(90);
-	var hookBuilder_1 = __webpack_require__(91);
-	var node_1 = __webpack_require__(92);
-	var pathFactory_1 = __webpack_require__(95);
-	var targetState_1 = __webpack_require__(89);
-	var param_1 = __webpack_require__(93);
-	var resolvable_1 = __webpack_require__(96);
-	var rejectFactory_1 = __webpack_require__(84);
-	var resolveContext_1 = __webpack_require__(97);
-	var router_1 = __webpack_require__(99);
+	var trace_1 = __webpack_require__(121);
+	var coreservices_1 = __webpack_require__(115);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var hof_1 = __webpack_require__(114);
+	var interface_1 = __webpack_require__(122);
+	var transitionHook_1 = __webpack_require__(123);
+	var hookRegistry_1 = __webpack_require__(125);
+	var hookBuilder_1 = __webpack_require__(126);
+	var node_1 = __webpack_require__(127);
+	var pathFactory_1 = __webpack_require__(130);
+	var targetState_1 = __webpack_require__(124);
+	var param_1 = __webpack_require__(128);
+	var resolvable_1 = __webpack_require__(131);
+	var rejectFactory_1 = __webpack_require__(119);
+	var resolveContext_1 = __webpack_require__(132);
+	var router_1 = __webpack_require__(134);
 	/** @hidden */
 	var stateSelf = hof_1.prop("self");
 	/**
@@ -37743,7 +39438,7 @@
 	//# sourceMappingURL=transition.js.map
 
 /***/ },
-/* 86 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -37782,9 +39477,9 @@
 	 * @coreapi
 	 * @module trace
 	 */ /** for typedoc */
-	var hof_1 = __webpack_require__(79);
-	var predicates_1 = __webpack_require__(78);
-	var strings_1 = __webpack_require__(83);
+	var hof_1 = __webpack_require__(114);
+	var predicates_1 = __webpack_require__(113);
+	var strings_1 = __webpack_require__(118);
 	/** @hidden */
 	function uiViewString(viewData) {
 	    if (!viewData)
@@ -37994,7 +39689,7 @@
 	//# sourceMappingURL=trace.js.map
 
 /***/ },
-/* 87 */
+/* 122 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38014,18 +39709,18 @@
 	//# sourceMappingURL=interface.js.map
 
 /***/ },
-/* 88 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var common_1 = __webpack_require__(77);
-	var strings_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(78);
-	var hof_1 = __webpack_require__(79);
-	var trace_1 = __webpack_require__(86);
-	var coreservices_1 = __webpack_require__(80);
-	var rejectFactory_1 = __webpack_require__(84);
-	var targetState_1 = __webpack_require__(89);
+	var common_1 = __webpack_require__(112);
+	var strings_1 = __webpack_require__(118);
+	var predicates_1 = __webpack_require__(113);
+	var hof_1 = __webpack_require__(114);
+	var trace_1 = __webpack_require__(121);
+	var coreservices_1 = __webpack_require__(115);
+	var rejectFactory_1 = __webpack_require__(119);
+	var targetState_1 = __webpack_require__(124);
 	var defaultOptions = {
 	    current: common_1.noop,
 	    transition: null,
@@ -38165,7 +39860,7 @@
 	//# sourceMappingURL=transitionHook.js.map
 
 /***/ },
-/* 89 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -38173,8 +39868,8 @@
 	 * @module state
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
 	/**
 	 * Encapsulate the target (destination) state/params/options of a [[Transition]].
 	 *
@@ -38283,7 +39978,7 @@
 	//# sourceMappingURL=targetState.js.map
 
 /***/ },
-/* 90 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38291,10 +39986,10 @@
 	 * @coreapi
 	 * @module transition
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var interface_1 = __webpack_require__(87); // has or is using
-	var glob_1 = __webpack_require__(81);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var interface_1 = __webpack_require__(122); // has or is using
+	var glob_1 = __webpack_require__(116);
 	/**
 	 * Determines if the given state matches the matchCriteria
 	 *
@@ -38428,7 +40123,7 @@
 	//# sourceMappingURL=hookRegistry.js.map
 
 /***/ },
-/* 91 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -38436,10 +40131,10 @@
 	 * @module transition
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var interface_1 = __webpack_require__(87);
-	var transitionHook_1 = __webpack_require__(88);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var interface_1 = __webpack_require__(122);
+	var transitionHook_1 = __webpack_require__(123);
 	/**
 	 * This class returns applicable TransitionHooks for a specific Transition instance.
 	 *
@@ -38553,14 +40248,14 @@
 	//# sourceMappingURL=hookBuilder.js.map
 
 /***/ },
-/* 92 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module path */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
-	var param_1 = __webpack_require__(93);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
+	var param_1 = __webpack_require__(128);
 	/**
 	 * A node in a [[TreeChanges]] path
 	 *
@@ -38643,7 +40338,7 @@
 	//# sourceMappingURL=node.js.map
 
 /***/ },
-/* 93 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38651,11 +40346,11 @@
 	 * @internalapi
 	 * @module params
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
-	var predicates_1 = __webpack_require__(78);
-	var coreservices_1 = __webpack_require__(80);
-	var paramType_1 = __webpack_require__(94);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
+	var predicates_1 = __webpack_require__(113);
+	var coreservices_1 = __webpack_require__(115);
+	var paramType_1 = __webpack_require__(129);
 	var hasOwn = Object.prototype.hasOwnProperty;
 	var isShorthand = function (cfg) {
 	    return ["value", "type", "squash", "array", "dynamic"].filter(hasOwn.bind(cfg || {})).length === 0;
@@ -38821,13 +40516,13 @@
 	//# sourceMappingURL=param.js.map
 
 /***/ },
-/* 94 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module params */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
 	/**
 	 * An internal class which implements [[ParamTypeDefinition]].
 	 *
@@ -38963,15 +40658,15 @@
 	//# sourceMappingURL=paramType.js.map
 
 /***/ },
-/* 95 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @module path */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
-	var targetState_1 = __webpack_require__(89);
-	var node_1 = __webpack_require__(92);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
+	var targetState_1 = __webpack_require__(124);
+	var node_1 = __webpack_require__(127);
 	/**
 	 * This class contains functions which convert TargetStates, Nodes and paths from one type to another.
 	 */
@@ -39101,7 +40796,7 @@
 	//# sourceMappingURL=pathFactory.js.map
 
 /***/ },
-/* 96 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39109,11 +40804,11 @@
 	 * @coreapi
 	 * @module resolve
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var coreservices_1 = __webpack_require__(80);
-	var trace_1 = __webpack_require__(86);
-	var strings_1 = __webpack_require__(83);
-	var predicates_1 = __webpack_require__(78);
+	var common_1 = __webpack_require__(112);
+	var coreservices_1 = __webpack_require__(115);
+	var trace_1 = __webpack_require__(121);
+	var strings_1 = __webpack_require__(118);
+	var predicates_1 = __webpack_require__(113);
 	// TODO: explicitly make this user configurable
 	exports.defaultResolvePolicy = {
 	    when: "LAZY",
@@ -39238,20 +40933,20 @@
 	//# sourceMappingURL=resolvable.js.map
 
 /***/ },
-/* 97 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module resolve */
 	/** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
-	var trace_1 = __webpack_require__(86);
-	var coreservices_1 = __webpack_require__(80);
-	var interface_1 = __webpack_require__(98);
-	var resolvable_1 = __webpack_require__(96);
-	var pathFactory_1 = __webpack_require__(95);
-	var strings_1 = __webpack_require__(83);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
+	var trace_1 = __webpack_require__(121);
+	var coreservices_1 = __webpack_require__(115);
+	var interface_1 = __webpack_require__(133);
+	var resolvable_1 = __webpack_require__(131);
+	var pathFactory_1 = __webpack_require__(130);
+	var strings_1 = __webpack_require__(118);
 	var when = interface_1.resolvePolicies.when;
 	var ALL_WHENS = [when.EAGER, when.LAZY];
 	var EAGER_WHENS = [when.EAGER];
@@ -39442,7 +41137,7 @@
 	//# sourceMappingURL=resolveContext.js.map
 
 /***/ },
-/* 98 */
+/* 133 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39461,7 +41156,7 @@
 	//# sourceMappingURL=interface.js.map
 
 /***/ },
-/* 99 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39469,16 +41164,16 @@
 	 * @coreapi
 	 * @module core
 	 */ /** */
-	var urlMatcherFactory_1 = __webpack_require__(100);
-	var urlRouter_1 = __webpack_require__(103);
-	var transitionService_1 = __webpack_require__(106);
-	var view_1 = __webpack_require__(114);
-	var stateRegistry_1 = __webpack_require__(115);
-	var stateService_1 = __webpack_require__(119);
-	var globals_1 = __webpack_require__(120);
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var urlService_1 = __webpack_require__(122);
+	var urlMatcherFactory_1 = __webpack_require__(135);
+	var urlRouter_1 = __webpack_require__(138);
+	var transitionService_1 = __webpack_require__(141);
+	var view_1 = __webpack_require__(149);
+	var stateRegistry_1 = __webpack_require__(150);
+	var stateService_1 = __webpack_require__(154);
+	var globals_1 = __webpack_require__(155);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var urlService_1 = __webpack_require__(157);
 	/** @hidden */
 	var _routerInstance = 0;
 	/**
@@ -39566,7 +41261,7 @@
 	//# sourceMappingURL=router.js.map
 
 /***/ },
-/* 100 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39574,11 +41269,11 @@
 	 * @internalapi
 	 * @module url
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var urlMatcher_1 = __webpack_require__(101);
-	var param_1 = __webpack_require__(93);
-	var paramTypes_1 = __webpack_require__(102);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var urlMatcher_1 = __webpack_require__(136);
+	var param_1 = __webpack_require__(128);
+	var paramTypes_1 = __webpack_require__(137);
 	/**
 	 * Factory for [[UrlMatcher]] instances.
 	 *
@@ -39697,7 +41392,7 @@
 	//# sourceMappingURL=urlMatcherFactory.js.map
 
 /***/ },
-/* 101 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39705,11 +41400,11 @@
 	 * @coreapi
 	 * @module url
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
-	var predicates_1 = __webpack_require__(78);
-	var param_1 = __webpack_require__(93);
-	var strings_1 = __webpack_require__(83);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
+	var predicates_1 = __webpack_require__(113);
+	var param_1 = __webpack_require__(128);
+	var strings_1 = __webpack_require__(118);
 	/** @hidden */
 	function quoteRegExp(string, param) {
 	    var surroundPattern = ['', ''], result = string.replace(/[\\\[\]\^$*+?.()|{}]/g, "\\$&");
@@ -40174,7 +41869,7 @@
 	//# sourceMappingURL=urlMatcher.js.map
 
 /***/ },
-/* 102 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40182,11 +41877,11 @@
 	 * @coreapi
 	 * @module params
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var hof_1 = __webpack_require__(79);
-	var coreservices_1 = __webpack_require__(80);
-	var paramType_1 = __webpack_require__(94);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var hof_1 = __webpack_require__(114);
+	var coreservices_1 = __webpack_require__(115);
+	var paramType_1 = __webpack_require__(129);
 	/**
 	 * A registry for parameter types.
 	 *
@@ -40333,7 +42028,7 @@
 	//# sourceMappingURL=paramTypes.js.map
 
 /***/ },
-/* 103 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40342,12 +42037,12 @@
 	 * @module url
 	 */
 	/** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var urlMatcher_1 = __webpack_require__(101);
-	var hof_1 = __webpack_require__(79);
-	var urlRule_1 = __webpack_require__(104);
-	var targetState_1 = __webpack_require__(89);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var urlMatcher_1 = __webpack_require__(136);
+	var hof_1 = __webpack_require__(114);
+	var urlRule_1 = __webpack_require__(139);
+	var targetState_1 = __webpack_require__(124);
 	/** @hidden */
 	function appendBasePath(url, isHtml5, absolute, baseHref) {
 	    if (baseHref === '/')
@@ -40582,7 +42277,7 @@
 	//# sourceMappingURL=urlRouter.js.map
 
 /***/ },
-/* 104 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40590,11 +42285,11 @@
 	 * @coreapi
 	 * @module url
 	 */ /** */
-	var urlMatcher_1 = __webpack_require__(101);
-	var predicates_1 = __webpack_require__(78);
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
-	var stateObject_1 = __webpack_require__(105);
+	var urlMatcher_1 = __webpack_require__(136);
+	var predicates_1 = __webpack_require__(113);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
+	var stateObject_1 = __webpack_require__(140);
 	/**
 	 * Creates a [[UrlRule]]
 	 *
@@ -40796,7 +42491,7 @@
 	//# sourceMappingURL=urlRule.js.map
 
 /***/ },
-/* 105 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -40804,8 +42499,8 @@
 	 * @module state
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
 	/**
 	 * Internal representation of a UI-Router state.
 	 *
@@ -40890,7 +42585,7 @@
 	//# sourceMappingURL=stateObject.js.map
 
 /***/ },
-/* 106 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40898,20 +42593,20 @@
 	 * @coreapi
 	 * @module transition
 	 */ /** for typedoc */
-	var interface_1 = __webpack_require__(87);
-	var transition_1 = __webpack_require__(85);
-	var hookRegistry_1 = __webpack_require__(90);
-	var resolve_1 = __webpack_require__(107);
-	var views_1 = __webpack_require__(108);
-	var url_1 = __webpack_require__(109);
-	var redirectTo_1 = __webpack_require__(110);
-	var onEnterExitRetain_1 = __webpack_require__(111);
-	var lazyLoad_1 = __webpack_require__(112);
-	var transitionEventType_1 = __webpack_require__(113);
-	var transitionHook_1 = __webpack_require__(88);
-	var predicates_1 = __webpack_require__(78);
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
+	var interface_1 = __webpack_require__(122);
+	var transition_1 = __webpack_require__(120);
+	var hookRegistry_1 = __webpack_require__(125);
+	var resolve_1 = __webpack_require__(142);
+	var views_1 = __webpack_require__(143);
+	var url_1 = __webpack_require__(144);
+	var redirectTo_1 = __webpack_require__(145);
+	var onEnterExitRetain_1 = __webpack_require__(146);
+	var lazyLoad_1 = __webpack_require__(147);
+	var transitionEventType_1 = __webpack_require__(148);
+	var transitionHook_1 = __webpack_require__(123);
+	var predicates_1 = __webpack_require__(113);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
 	/**
 	 * The default [[Transition]] options.
 	 *
@@ -41131,14 +42826,14 @@
 	//# sourceMappingURL=transitionService.js.map
 
 /***/ },
-/* 107 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module hooks */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var resolveContext_1 = __webpack_require__(97);
-	var hof_1 = __webpack_require__(79);
+	var common_1 = __webpack_require__(112);
+	var resolveContext_1 = __webpack_require__(132);
+	var hof_1 = __webpack_require__(114);
 	/**
 	 * A [[TransitionHookFn]] which resolves all EAGER Resolvables in the To Path
 	 *
@@ -41177,13 +42872,13 @@
 	//# sourceMappingURL=resolve.js.map
 
 /***/ },
-/* 108 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module hooks */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var coreservices_1 = __webpack_require__(80);
+	var common_1 = __webpack_require__(112);
+	var coreservices_1 = __webpack_require__(115);
 	/**
 	 * A [[TransitionHookFn]] which waits for the views to load
 	 *
@@ -41228,7 +42923,7 @@
 	//# sourceMappingURL=views.js.map
 
 /***/ },
-/* 109 */
+/* 144 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -41257,14 +42952,14 @@
 	//# sourceMappingURL=url.js.map
 
 /***/ },
-/* 110 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module hooks */ /** */
-	var predicates_1 = __webpack_require__(78);
-	var coreservices_1 = __webpack_require__(80);
-	var targetState_1 = __webpack_require__(89);
+	var predicates_1 = __webpack_require__(113);
+	var coreservices_1 = __webpack_require__(115);
+	var targetState_1 = __webpack_require__(124);
 	/**
 	 * A [[TransitionHookFn]] that redirects to a different state or params
 	 *
@@ -41298,7 +42993,7 @@
 	//# sourceMappingURL=redirectTo.js.map
 
 /***/ },
-/* 111 */
+/* 146 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -41358,11 +43053,11 @@
 	//# sourceMappingURL=onEnterExitRetain.js.map
 
 /***/ },
-/* 112 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var coreservices_1 = __webpack_require__(80);
+	var coreservices_1 = __webpack_require__(115);
 	/**
 	 * A [[TransitionHookFn]] that performs lazy loading
 	 *
@@ -41459,11 +43154,11 @@
 	//# sourceMappingURL=lazyLoad.js.map
 
 /***/ },
-/* 113 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var transitionHook_1 = __webpack_require__(88);
+	var transitionHook_1 = __webpack_require__(123);
 	/**
 	 * This class defines a type of hook, such as `onBefore` or `onEnter`.
 	 * Plugins can define custom hook types, such as sticky states does for `onInactive`.
@@ -41491,7 +43186,7 @@
 	//# sourceMappingURL=transitionEventType.js.map
 
 /***/ },
-/* 114 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41499,10 +43194,10 @@
 	 * @coreapi
 	 * @module view
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
-	var predicates_1 = __webpack_require__(78);
-	var trace_1 = __webpack_require__(86);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
+	var predicates_1 = __webpack_require__(113);
+	var trace_1 = __webpack_require__(121);
 	/**
 	 * The View service
 	 *
@@ -41764,7 +43459,7 @@
 	//# sourceMappingURL=view.js.map
 
 /***/ },
-/* 115 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41772,11 +43467,11 @@
 	 * @module state
 	 */ /** for typedoc */
 	"use strict";
-	var stateMatcher_1 = __webpack_require__(116);
-	var stateBuilder_1 = __webpack_require__(117);
-	var stateQueueManager_1 = __webpack_require__(118);
-	var common_1 = __webpack_require__(77);
-	var hof_1 = __webpack_require__(79);
+	var stateMatcher_1 = __webpack_require__(151);
+	var stateBuilder_1 = __webpack_require__(152);
+	var stateQueueManager_1 = __webpack_require__(153);
+	var common_1 = __webpack_require__(112);
+	var hof_1 = __webpack_require__(114);
 	var StateRegistry = (function () {
 	    /** @internalapi */
 	    function StateRegistry(_router) {
@@ -41925,14 +43620,14 @@
 	//# sourceMappingURL=stateRegistry.js.map
 
 /***/ },
-/* 116 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module state */ /** for typedoc */
-	var predicates_1 = __webpack_require__(78);
-	var glob_1 = __webpack_require__(81);
-	var common_1 = __webpack_require__(77);
+	var predicates_1 = __webpack_require__(113);
+	var glob_1 = __webpack_require__(116);
+	var common_1 = __webpack_require__(112);
 	var StateMatcher = (function () {
 	    function StateMatcher(_states) {
 	        this._states = _states;
@@ -41989,17 +43684,17 @@
 	//# sourceMappingURL=stateMatcher.js.map
 
 /***/ },
-/* 117 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module state */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var strings_1 = __webpack_require__(83);
-	var hof_1 = __webpack_require__(79);
-	var resolvable_1 = __webpack_require__(96);
-	var coreservices_1 = __webpack_require__(80);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var strings_1 = __webpack_require__(118);
+	var hof_1 = __webpack_require__(114);
+	var resolvable_1 = __webpack_require__(131);
+	var coreservices_1 = __webpack_require__(115);
 	var parseUrl = function (url) {
 	    if (!predicates_1.isString(url))
 	        return false;
@@ -42267,14 +43962,14 @@
 	//# sourceMappingURL=stateBuilder.js.map
 
 /***/ },
-/* 118 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module state */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var stateObject_1 = __webpack_require__(105);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var stateObject_1 = __webpack_require__(140);
 	/** @internalapi */
 	var StateQueueManager = (function () {
 	    function StateQueueManager($registry, $urlRouter, states, builder, listeners) {
@@ -42360,7 +44055,7 @@
 	//# sourceMappingURL=stateQueueManager.js.map
 
 /***/ },
-/* 119 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42368,20 +44063,20 @@
 	 * @coreapi
 	 * @module state
 	 */ /** */
-	var common_1 = __webpack_require__(77);
-	var predicates_1 = __webpack_require__(78);
-	var queue_1 = __webpack_require__(82);
-	var coreservices_1 = __webpack_require__(80);
-	var pathFactory_1 = __webpack_require__(95);
-	var node_1 = __webpack_require__(92);
-	var transitionService_1 = __webpack_require__(106);
-	var rejectFactory_1 = __webpack_require__(84);
-	var targetState_1 = __webpack_require__(89);
-	var param_1 = __webpack_require__(93);
-	var glob_1 = __webpack_require__(81);
-	var resolveContext_1 = __webpack_require__(97);
-	var lazyLoad_1 = __webpack_require__(112);
-	var hof_1 = __webpack_require__(79);
+	var common_1 = __webpack_require__(112);
+	var predicates_1 = __webpack_require__(113);
+	var queue_1 = __webpack_require__(117);
+	var coreservices_1 = __webpack_require__(115);
+	var pathFactory_1 = __webpack_require__(130);
+	var node_1 = __webpack_require__(127);
+	var transitionService_1 = __webpack_require__(141);
+	var rejectFactory_1 = __webpack_require__(119);
+	var targetState_1 = __webpack_require__(124);
+	var param_1 = __webpack_require__(128);
+	var glob_1 = __webpack_require__(116);
+	var resolveContext_1 = __webpack_require__(132);
+	var lazyLoad_1 = __webpack_require__(147);
+	var hof_1 = __webpack_require__(114);
 	/**
 	 * Provides state related service functions
 	 *
@@ -42951,7 +44646,7 @@
 	//# sourceMappingURL=stateService.js.map
 
 /***/ },
-/* 120 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42959,9 +44654,9 @@
 	 * @coreapi
 	 * @module core
 	 */ /** */
-	var stateParams_1 = __webpack_require__(121);
-	var queue_1 = __webpack_require__(82);
-	var common_1 = __webpack_require__(77);
+	var stateParams_1 = __webpack_require__(156);
+	var queue_1 = __webpack_require__(117);
+	var common_1 = __webpack_require__(112);
 	/**
 	 * Global mutable state
 	 */
@@ -42993,12 +44688,12 @@
 	//# sourceMappingURL=globals.js.map
 
 /***/ },
-/* 121 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module params */ /** for typedoc */
-	var common_1 = __webpack_require__(77);
+	var common_1 = __webpack_require__(112);
 	var StateParams = (function () {
 	    function StateParams(params) {
 	        if (params === void 0) { params = {}; }
@@ -43036,7 +44731,7 @@
 	//# sourceMappingURL=stateParams.js.map
 
 /***/ },
-/* 122 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -43044,8 +44739,8 @@
 	 * @module url
 	 */ /** */
 	"use strict";
-	var coreservices_1 = __webpack_require__(80);
-	var common_1 = __webpack_require__(77);
+	var coreservices_1 = __webpack_require__(115);
+	var common_1 = __webpack_require__(112);
 	/** @hidden */
 	var makeStub = function (keys) {
 	    return keys.reduce(function (acc, key) { return (acc[key] = coreservices_1.notImplemented(key), acc); }, { dispose: common_1.noop });
@@ -43120,21 +44815,21 @@
 	//# sourceMappingURL=urlService.js.map
 
 /***/ },
-/* 123 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(93));
-	__export(__webpack_require__(102));
-	__export(__webpack_require__(121));
-	__export(__webpack_require__(94));
+	__export(__webpack_require__(128));
+	__export(__webpack_require__(137));
+	__export(__webpack_require__(156));
+	__export(__webpack_require__(129));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 124 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43142,12 +44837,12 @@
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	/** @module path */ /** for typedoc */
-	__export(__webpack_require__(92));
-	__export(__webpack_require__(95));
+	__export(__webpack_require__(127));
+	__export(__webpack_require__(130));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 125 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43155,30 +44850,30 @@
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	/** @module resolve */ /** for typedoc */
-	__export(__webpack_require__(98));
-	__export(__webpack_require__(96));
-	__export(__webpack_require__(97));
+	__export(__webpack_require__(133));
+	__export(__webpack_require__(131));
+	__export(__webpack_require__(132));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 126 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(117));
-	__export(__webpack_require__(105));
-	__export(__webpack_require__(116));
-	__export(__webpack_require__(118));
-	__export(__webpack_require__(115));
-	__export(__webpack_require__(119));
-	__export(__webpack_require__(89));
+	__export(__webpack_require__(152));
+	__export(__webpack_require__(140));
+	__export(__webpack_require__(151));
+	__export(__webpack_require__(153));
+	__export(__webpack_require__(150));
+	__export(__webpack_require__(154));
+	__export(__webpack_require__(124));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 127 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43197,44 +44892,44 @@
 	 * @preferred
 	 * @module transition
 	 */ /** for typedoc */
-	__export(__webpack_require__(87));
-	__export(__webpack_require__(91));
-	__export(__webpack_require__(90));
-	__export(__webpack_require__(84));
-	__export(__webpack_require__(85));
-	__export(__webpack_require__(88));
-	__export(__webpack_require__(113));
-	__export(__webpack_require__(106));
-	//# sourceMappingURL=index.js.map
-
-/***/ },
-/* 128 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	function __export(m) {
-	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-	}
-	__export(__webpack_require__(101));
-	__export(__webpack_require__(100));
-	__export(__webpack_require__(103));
-	__export(__webpack_require__(104));
 	__export(__webpack_require__(122));
+	__export(__webpack_require__(126));
+	__export(__webpack_require__(125));
+	__export(__webpack_require__(119));
+	__export(__webpack_require__(120));
+	__export(__webpack_require__(123));
+	__export(__webpack_require__(148));
+	__export(__webpack_require__(141));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 129 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(114));
+	__export(__webpack_require__(136));
+	__export(__webpack_require__(135));
+	__export(__webpack_require__(138));
+	__export(__webpack_require__(139));
+	__export(__webpack_require__(157));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 130 */
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	function __export(m) {
+	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+	}
+	__export(__webpack_require__(149));
+	//# sourceMappingURL=index.js.map
+
+/***/ },
+/* 165 */
 /***/ function(module, exports) {
 
 	/**
@@ -43258,7 +44953,7 @@
 	//# sourceMappingURL=interface.js.map
 
 /***/ },
-/* 131 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43273,14 +44968,14 @@
 	 * @preferred
 	 */
 	/** for typedoc */
-	var angular_1 = __webpack_require__(132);
-	var ui_router_core_1 = __webpack_require__(75);
-	var views_1 = __webpack_require__(133);
-	var templateFactory_1 = __webpack_require__(134);
-	var stateProvider_1 = __webpack_require__(135);
-	var onEnterExitRetain_1 = __webpack_require__(136);
-	var locationServices_1 = __webpack_require__(137);
-	var urlRouterProvider_1 = __webpack_require__(138);
+	var angular_1 = __webpack_require__(167);
+	var ui_router_core_1 = __webpack_require__(110);
+	var views_1 = __webpack_require__(168);
+	var templateFactory_1 = __webpack_require__(169);
+	var stateProvider_1 = __webpack_require__(170);
+	var onEnterExitRetain_1 = __webpack_require__(171);
+	var locationServices_1 = __webpack_require__(172);
+	var urlRouterProvider_1 = __webpack_require__(173);
 	angular_1.ng.module("ui.router.angular1", []);
 	var mod_init = angular_1.ng.module('ui.router.init', []);
 	var mod_util = angular_1.ng.module('ui.router.util', ['ng', 'ui.router.init']);
@@ -43377,7 +45072,7 @@
 	//# sourceMappingURL=services.js.map
 
 /***/ },
-/* 132 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43387,11 +45082,11 @@
 	//# sourceMappingURL=angular.js.map
 
 /***/ },
-/* 133 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ui_router_core_1 = __webpack_require__(75);
+	var ui_router_core_1 = __webpack_require__(110);
 	function getNg1ViewConfigFactory() {
 	    var templateFactory = null;
 	    return function (path, view) {
@@ -43488,14 +45183,14 @@
 	//# sourceMappingURL=views.js.map
 
 /***/ },
-/* 134 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module view */
 	/** for typedoc */
-	var angular_1 = __webpack_require__(132);
-	var ui_router_core_1 = __webpack_require__(75);
+	var angular_1 = __webpack_require__(167);
+	var ui_router_core_1 = __webpack_require__(110);
 	/**
 	 * Service which manages loading of templates from a ViewConfig.
 	 */
@@ -43679,12 +45374,12 @@
 	//# sourceMappingURL=templateFactory.js.map
 
 /***/ },
-/* 135 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module ng1 */ /** for typedoc */
-	var ui_router_core_1 = __webpack_require__(75);
+	var ui_router_core_1 = __webpack_require__(110);
 	/**
 	 * @ngdoc object
 	 * @name ui.router.state.$stateProvider
@@ -43830,13 +45525,13 @@
 	//# sourceMappingURL=stateProvider.js.map
 
 /***/ },
-/* 136 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module ng1 */ /** */
-	var ui_router_core_1 = __webpack_require__(75);
-	var services_1 = __webpack_require__(131);
+	var ui_router_core_1 = __webpack_require__(110);
+	var services_1 = __webpack_require__(166);
 	/**
 	 * This is a [[StateBuilder.builder]] function for angular1 `onEnter`, `onExit`,
 	 * `onRetain` callback hooks on a [[Ng1StateDeclaration]].
@@ -43859,11 +45554,11 @@
 	//# sourceMappingURL=onEnterExitRetain.js.map
 
 /***/ },
-/* 137 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ui_router_core_1 = __webpack_require__(75);
+	var ui_router_core_1 = __webpack_require__(110);
 	/**
 	 * Implements UI-Router LocationServices and LocationConfig using Angular 1's $location service
 	 */
@@ -43938,13 +45633,13 @@
 	//# sourceMappingURL=locationServices.js.map
 
 /***/ },
-/* 138 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module url */ /** */
-	var ui_router_core_1 = __webpack_require__(75);
-	var ui_router_core_2 = __webpack_require__(75);
+	var ui_router_core_1 = __webpack_require__(110);
+	var ui_router_core_2 = __webpack_require__(110);
 	/**
 	 * Manages rules for client-side URL
 	 *
@@ -44146,7 +45841,7 @@
 	//# sourceMappingURL=urlRouterProvider.js.map
 
 /***/ },
-/* 139 */
+/* 174 */
 /***/ function(module, exports) {
 
 	/**
@@ -44508,7 +46203,7 @@
 	//# sourceMappingURL=injectables.js.map
 
 /***/ },
-/* 140 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44521,8 +46216,8 @@
 	 * @preferred
 	 * @module directives
 	 */ /** for typedoc */
-	var angular_1 = __webpack_require__(132);
-	var ui_router_core_1 = __webpack_require__(75);
+	var angular_1 = __webpack_require__(167);
+	var ui_router_core_1 = __webpack_require__(110);
 	/** @hidden */
 	function parseStateRef(ref) {
 	    var paramsOnly = ref.match(/^\s*({[^}]*})\s*$/), parsed;
@@ -45041,12 +46736,12 @@
 	//# sourceMappingURL=stateDirectives.js.map
 
 /***/ },
-/* 141 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @module state */ /** for typedoc */
 	"use strict";
-	var angular_1 = __webpack_require__(132);
+	var angular_1 = __webpack_require__(167);
 	/**
 	 * @ngdoc filter
 	 * @name ui.router.state.filter:isState
@@ -45089,7 +46784,7 @@
 	//# sourceMappingURL=stateFilters.js.map
 
 /***/ },
-/* 142 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45097,11 +46792,11 @@
 	 * @ng1api
 	 * @module directives
 	 */ /** for typedoc */
-	var angular_1 = __webpack_require__(132);
+	var angular_1 = __webpack_require__(167);
 	var angular_2 = __webpack_require__(1);
-	var ui_router_core_1 = __webpack_require__(75);
-	var views_1 = __webpack_require__(133);
-	var services_1 = __webpack_require__(131);
+	var ui_router_core_1 = __webpack_require__(110);
+	var views_1 = __webpack_require__(168);
+	var services_1 = __webpack_require__(166);
 	/**
 	 * `ui-view`: A viewport directive which is filled in by a view from the active state.
 	 *
@@ -45491,12 +47186,12 @@
 	//# sourceMappingURL=viewDirective.js.map
 
 /***/ },
-/* 143 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module ng1 */ /** */
-	var angular_1 = __webpack_require__(132);
+	var angular_1 = __webpack_require__(167);
 	/** @hidden */
 	function $ViewScrollProvider() {
 	    var useAnchorScroll = false;
@@ -45518,7 +47213,7 @@
 	//# sourceMappingURL=viewScroll.js.map
 
 /***/ },
-/* 144 */
+/* 179 */
 /***/ function(module, exports) {
 
 	/**
@@ -45619,7 +47314,7 @@
 	})(window.angular);
 
 /***/ },
-/* 145 */
+/* 180 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -45639,6 +47334,14 @@
 	    $stateProvider.state({
 	        name: 'home',
 	        url: '/home',
+	        resolve: {
+	            slides: ['slideService', function (slideService) {
+	                return slideService.getVisible();
+	            }],
+	            articles: ['articleService', function (articleService) {
+	                return articleService.getAll();
+	            }]
+	        },
 	        component: 'home'
 	    });
 	
@@ -45686,6 +47389,11 @@
 	    $stateProvider.state({
 	        name: 'about',
 	        url: '/about',
+	        resolve: {
+	            articles: ['aboutService', function (aboutService) {
+	                return aboutService.getVisible();
+	            }]
+	        },
 	        component: 'about'
 	    });
 	
@@ -45707,21 +47415,65 @@
 	        component: 'success'
 	    });
 	
+	    $stateProvider.state({
+	        name: 'admin',
+	        abstract: true,
+	        default: '.login',
+	        url: '/admin',
+	        component: 'admin'
+	    });
+	
+	    $stateProvider.state({
+	        name: 'admin.login',
+	        url: '/login',
+	        views: {
+	            main: {
+	                component: 'login'
+	            }
+	        }
+	    });
+	
+	    $stateProvider.state({
+	        name: 'admin.orders',
+	        url: '/orders',
+	        views: {
+	            main: {
+	                component: 'orders'
+	            }
+	        }
+	    });
+	
+	    $stateProvider.state({
+	        name: 'admin.content',
+	        url: '/content',
+	        views: {
+	            main: {
+	                component: 'content'
+	            }
+	        }
+	    });
+	
+	    $stateProvider.state({
+	        name: 'markets',
+	        url: '/farmers-markets',
+	        component: 'markets'
+	    });
+	
 	    $urlRouterProvider.otherwise('/home');
 	}
 
 /***/ },
-/* 146 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(147);
+	__webpack_require__(182);
 	
 	module.exports = 'duScroll';
 
 
 /***/ },
-/* 147 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/**
@@ -46352,10 +48104,10 @@
 	  };
 	}]);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(148)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(183)(module)))
 
 /***/ },
-/* 148 */
+/* 183 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -46371,7 +48123,7 @@
 
 
 /***/ },
-/* 149 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -52417,7 +54169,7 @@
 							if (global) {
 								_globals[n] = _exports[n] = cl; //provides a way to avoid global namespace pollution. By default, the main classes like TweenLite, Power1, Strong, etc. are added to window unless a GreenSockGlobals is defined. So if you want to have things added to a custom object instead, just do something like window.GreenSockGlobals = {} before loading any GreenSock files. You can even set up an alias like window.GreenSockGlobals = windows.gs = {} so that you can access everything like gs.TweenLite. Also remember that ALL classes are added to the window.com.greensock object (in their respective packages, like com.greensock.easing.Power1, com.greensock.TweenLite, etc.)
 								hasModule = (typeof(module) !== "undefined" && module.exports);
-								if (!hasModule && "function" === "function" && __webpack_require__(150)){ //AMD
+								if (!hasModule && "function" === "function" && __webpack_require__(185)){ //AMD
 									!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() { return cl; }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 								} else if (hasModule){ //node
 									if (ns === moduleName) {
@@ -54234,7 +55986,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 150 */
+/* 185 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -54242,19 +55994,19 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 151 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(152);
+	__webpack_require__(187);
 	module.exports = 'ngAnimate';
 
 
 /***/ },
-/* 152 */
+/* 187 */
 /***/ function(module, exports) {
 
 	/**
-	 * @license AngularJS v1.6.2
+	 * @license AngularJS v1.6.3
 	 * (c) 2010-2017 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -57808,6 +59560,10 @@
 	 *   /&#42; As of 1.4.4, this must always be set: it signals ngAnimate
 	 *     to not accidentally inherit a delay property from another CSS class &#42;/
 	 *   transition-duration: 0s;
+	 *
+	 *   /&#42; if you are using animations instead of transitions you should configure as follows:
+	 *     animation-delay: 0.1s;
+	 *     animation-duration: 0s; &#42;/
 	 * }
 	 * .my-animation.ng-enter.ng-enter-active {
 	 *   /&#42; standard transition styles &#42;/
@@ -58387,6 +60143,7 @@
 	  isFunction  = angular.isFunction;
 	  isElement   = angular.isElement;
 	})
+	  .info({ angularVersion: '1.6.3' })
 	  .directive('ngAnimateSwap', ngAnimateSwapDirective)
 	
 	  .directive('ngAnimateChildren', $$AnimateChildrenDirective)
@@ -58406,20 +60163,20 @@
 
 
 /***/ },
-/* 153 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(154);
+	__webpack_require__(189);
 	module.exports = 'ngSanitize';
 
 
 /***/ },
-/* 154 */
+/* 189 */
 /***/ function(module, exports) {
 
 	/**
-	 * @license AngularJS v1.5.9
-	 * (c) 2010-2016 Google, Inc. http://angularjs.org
+	 * @license AngularJS v1.6.3
+	 * (c) 2010-2017 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
 	(function(window, angular) {'use strict';
@@ -58442,6 +60199,7 @@
 	var isDefined;
 	var lowercase;
 	var noop;
+	var nodeContains;
 	var htmlParser;
 	var htmlSanitizeWriter;
 	
@@ -58642,6 +60400,11 @@
 	  htmlParser = htmlParserImpl;
 	  htmlSanitizeWriter = htmlSanitizeWriterImpl;
 	
+	  nodeContains = window.Node.prototype.contains || /** @this */ function(arg) {
+	    // eslint-disable-next-line no-bitwise
+	    return !!(this.compareDocumentPosition(arg) & 16);
+	  };
+	
 	  // Regular Expressions for parsing tags and attributes
 	  var SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
 	    // Match everything outside of normal chars and " (quote character)
@@ -58802,16 +60565,16 @@
 	
 	      var nextNode;
 	      if (!(nextNode = node.firstChild)) {
-	      if (node.nodeType === 1) {
+	        if (node.nodeType === 1) {
 	          handler.end(node.nodeName.toLowerCase());
 	        }
-	        nextNode = node.nextSibling;
+	        nextNode = getNonDescendant('nextSibling', node);
 	        if (!nextNode) {
 	          while (nextNode == null) {
-	            node = node.parentNode;
+	            node = getNonDescendant('parentNode', node);
 	            if (node === inertBodyElement) break;
-	            nextNode = node.nextSibling;
-	          if (node.nodeType === 1) {
+	            nextNode = getNonDescendant('nextSibling', node);
+	            if (node.nodeType === 1) {
 	              handler.end(node.nodeName.toLowerCase());
 	            }
 	          }
@@ -58923,28 +60686,36 @@
 	   * @param node Root element to process
 	   */
 	  function stripCustomNsAttrs(node) {
-	    if (node.nodeType === window.Node.ELEMENT_NODE) {
-	      var attrs = node.attributes;
-	      for (var i = 0, l = attrs.length; i < l; i++) {
-	        var attrNode = attrs[i];
-	        var attrName = attrNode.name.toLowerCase();
-	        if (attrName === 'xmlns:ns1' || attrName.lastIndexOf('ns1:', 0) === 0) {
-	          node.removeAttributeNode(attrNode);
-	          i--;
-	          l--;
+	    while (node) {
+	      if (node.nodeType === window.Node.ELEMENT_NODE) {
+	        var attrs = node.attributes;
+	        for (var i = 0, l = attrs.length; i < l; i++) {
+	          var attrNode = attrs[i];
+	          var attrName = attrNode.name.toLowerCase();
+	          if (attrName === 'xmlns:ns1' || attrName.lastIndexOf('ns1:', 0) === 0) {
+	            node.removeAttributeNode(attrNode);
+	            i--;
+	            l--;
+	          }
 	        }
 	      }
-	    }
 	
-	    var nextNode = node.firstChild;
-	    if (nextNode) {
-	      stripCustomNsAttrs(nextNode);
-	    }
+	      var nextNode = node.firstChild;
+	      if (nextNode) {
+	        stripCustomNsAttrs(nextNode);
+	      }
 	
-	    nextNode = node.nextSibling;
-	    if (nextNode) {
-	      stripCustomNsAttrs(nextNode);
+	      node = getNonDescendant('nextSibling', node);
 	    }
+	  }
+	
+	  function getNonDescendant(propName, node) {
+	    // An element is clobbered if its `propName` property points to one of its descendants
+	    var nextNode = node[propName];
+	    if (nextNode && nodeContains.call(node, nextNode)) {
+	      throw $sanitizeMinErr('elclob', 'Failed to sanitize html because the element is clobbered: {0}', node.outerHTML || node.outerText);
+	    }
+	    return nextNode;
 	  }
 	}
 	
@@ -58957,7 +60728,9 @@
 	
 	
 	// define ngSanitize module and register $sanitize service
-	angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
+	angular.module('ngSanitize', [])
+	  .provider('$sanitize', $SanitizeProvider)
+	  .info({ angularVersion: '1.6.3' });
 	
 	/**
 	 * @ngdoc filter
@@ -59160,7 +60933,7 @@
 
 
 /***/ },
-/* 155 */
+/* 190 */
 /***/ function(module, exports) {
 
 	angular.module('angularPayments', []);;angular.module('angularPayments')
