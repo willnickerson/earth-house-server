@@ -54,41 +54,41 @@
 	
 	var _components2 = _interopRequireDefault(_components);
 	
-	var _services = __webpack_require__(102);
+	var _services = __webpack_require__(106);
 	
 	var _services2 = _interopRequireDefault(_services);
 	
-	__webpack_require__(119);
+	__webpack_require__(123);
 	
-	var _angularUiRouter = __webpack_require__(121);
+	var _angularUiRouter = __webpack_require__(125);
 	
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 	
-	var _angularUiRouterDefault = __webpack_require__(191);
+	var _angularUiRouterDefault = __webpack_require__(195);
 	
 	var _angularUiRouterDefault2 = _interopRequireDefault(_angularUiRouterDefault);
 	
-	var _routes = __webpack_require__(192);
+	var _routes = __webpack_require__(196);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _angularScroll = __webpack_require__(193);
+	var _angularScroll = __webpack_require__(197);
 	
 	var _angularScroll2 = _interopRequireDefault(_angularScroll);
 	
-	var _gsap = __webpack_require__(196);
+	var _gsap = __webpack_require__(200);
 	
 	var _gsap2 = _interopRequireDefault(_gsap);
 	
-	var _angularAnimate = __webpack_require__(198);
+	var _angularAnimate = __webpack_require__(202);
 	
 	var _angularAnimate2 = _interopRequireDefault(_angularAnimate);
 	
-	var _angularSanitize = __webpack_require__(200);
+	var _angularSanitize = __webpack_require__(204);
 	
 	var _angularSanitize2 = _interopRequireDefault(_angularSanitize);
 	
-	var _angularPayments = __webpack_require__(202);
+	var _angularPayments = __webpack_require__(206);
 	
 	var _angularPayments2 = _interopRequireDefault(_angularPayments);
 	
@@ -34030,28 +34030,28 @@
 		"./admin/content/checkout/checkout-cms.js": 22,
 		"./admin/content/contact/contact-cms.js": 24,
 		"./admin/content/content.js": 26,
-		"./admin/content/image-slider/image-slider-cms.js": 28,
-		"./admin/content/pickups/pickups-cms.js": 30,
-		"./admin/content/shop/shop-cms.js": 34,
-		"./admin/login/login.js": 36,
-		"./admin/mail-list/mail.js": 38,
-		"./admin/orders/orders.js": 40,
-		"./app/app.js": 42,
-		"./articles/articles.js": 44,
-		"./checkout/checkout.js": 48,
-		"./checkout/success/success.js": 52,
-		"./contact/contact.js": 56,
-		"./footer-content/footer-content.js": 60,
-		"./header-content/header-content.js": 64,
-		"./hero-image/hero-image.js": 68,
-		"./home/home.js": 72,
-		"./landing/landing.js": 76,
-		"./mail-list/mail-list.js": 80,
-		"./markets/markets.js": 84,
-		"./nav-bar/nav-bar.js": 88,
-		"./shop/all/all.js": 92,
-		"./shop/item/item.js": 94,
-		"./shop/shop.js": 98
+		"./admin/content/image-slider/image-slider-cms.js": 30,
+		"./admin/content/pickups/pickups-cms.js": 32,
+		"./admin/content/shop/shop-cms.js": 36,
+		"./admin/login/login.js": 40,
+		"./admin/mail-list/mail.js": 42,
+		"./admin/orders/orders.js": 44,
+		"./app/app.js": 46,
+		"./articles/articles.js": 48,
+		"./checkout/checkout.js": 52,
+		"./checkout/success/success.js": 56,
+		"./contact/contact.js": 60,
+		"./footer-content/footer-content.js": 64,
+		"./header-content/header-content.js": 68,
+		"./hero-image/hero-image.js": 72,
+		"./home/home.js": 76,
+		"./landing/landing.js": 80,
+		"./mail-list/mail-list.js": 84,
+		"./markets/markets.js": 88,
+		"./nav-bar/nav-bar.js": 92,
+		"./shop/all/all.js": 96,
+		"./shop/item/item.js": 98,
+		"./shop/shop.js": 102
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -34154,7 +34154,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-img {\n  width: 100%;\n  border-bottom: 3px solid #AAA; }\n\n.container {\n  width: 80%;\n  margin: 5% auto 10% auto; }\n  .container img {\n    margin-top: 20px;\n    z-index: -1;\n    width: 100%; }\n  .container section img {\n    max-width: 90%;\n    margin: 20px auto; }\n  .container h1 {\n    font-size: 3em;\n    text-align: center; }\n  .container h2 {\n    margin-top: 0;\n    margin-bottom: 2%;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em; }\n  .container h3 {\n    font-family: \"Amatic SC\", cursive;\n    width: 90%;\n    margin: 20px auto;\n    font-size: 2.2em;\n    color: #AAA; }\n  .container p {\n    width: 90%;\n    margin: 0 auto;\n    text-indent: 25px;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.4em;\n    margin-top: 16px;\n    font-weight: 600;\n    line-height: 1.3; }\n  .container .section-divider {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    width: 70%;\n    margin-left: auto;\n    margin-right: auto;\n    height: 1px;\n    background-color: rgba(200, 200, 200, 0.7);\n    border: none; }\n  .container .about-text {\n    position: relative; }\n  .container .behind-text {\n    position: absolute;\n    top: 0;\n    margin-top: 0; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_header-background.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/components/about/about.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE7BL;EACI,YAAW;EACX,8BAA6B,EAChC;;AAED;EACI,WAAU;EACV,yBAAwB,EAiE3B;EAnED;IAIQ,iBAAgB;IAChB,YAAW;IACX,YACJ,EAAE;EAPN;IAWY,eAAc;IACd,kBAAiB,EACpB;EAbT;IAiBQ,eAAc;IACd,mBACJ,EAAE;EAnBN;IAsBQ,cAAa;IACb,kBAAiB;IACjB,kCChC8B;IDiC9B,eAAc,EACjB;EA1BL;IA6BQ,kCCrC8B;IDsC9B,WAAU;IACV,kBAAiB;IACjB,iBAAgB;IAChB,YAAW,EACd;EAlCL;IAqCQ,WAAU;IACV,eAAc;IACd,kBAAiB;IACjB,wCC/C8B;IDgD9B,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB,EACnB;EA7CL;IAgDQ,eAAc;IACd,kBAAiB;IACjB,WAAU;IACV,kBAAiB;IACjB,mBAAkB;IAClB,YAAW;IACX,2CAAsC;IACtC,aAAY,EACf;EAxDL;IA2DQ,mBAAkB,EACrB;EA5DL;IA+DQ,mBAAkB;IAClB,OAAM;IACN,cAAa,EAChB","file":"about.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'fonts';\n@import 'header-background';\n\n.header-img {\n    width: 100%;\n    border-bottom: 3px solid #AAA;\n}\n\n.container {\n    width: 80%;\n    margin: 5% auto 10% auto;\n    img {\n        margin-top: 20px;\n        z-index: -1;\n        width: 100%\n    }\n\n    section {\n        img {\n            max-width: 90%;\n            margin: 20px auto;\n        }\n    }\n\n    h1 {\n        font-size: 3em;\n        text-align: center\n    }\n\n    h2 {\n        margin-top: 0;\n        margin-bottom: 2%;\n        font-family: $decorative-font;\n        font-size: 3em;\n    }\n\n    h3 {\n        font-family: $decorative-font;\n        width: 90%;\n        margin: 20px auto;\n        font-size: 2.2em;\n        color: #AAA;\n    }\n\n    p {\n        width: 90%;\n        margin: 0 auto;\n        text-indent: 25px;\n        font-family: $main-font;\n        font-size: 1.4em;\n        margin-top: 16px;\n        font-weight: 600;\n        line-height: 1.3;\n    }\n\n    .section-divider {\n        margin-top: 5%;\n        margin-bottom: 5%;\n        width: 70%;\n        margin-left: auto;\n        margin-right: auto;\n        height: 1px;\n        background-color: rgba(200,200,200,.7);\n        border: none;\n    }\n\n    .about-text {\n        position: relative;\n    }\n\n    .behind-text {\n        position: absolute;\n        top: 0;\n        margin-top: 0;\n    }\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-img {\n  width: 100%;\n  border-bottom: 3px solid #AAA; }\n\n.container {\n  width: 80%;\n  margin: 5% auto 10% auto; }\n  .container img {\n    margin-top: 20px;\n    z-index: -1;\n    width: 100%; }\n  .container section img {\n    max-width: 90%;\n    margin: 20px auto; }\n  .container h1 {\n    font-size: 3em;\n    text-align: center; }\n  .container h2 {\n    margin-top: 0;\n    margin-bottom: 2%;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em; }\n  .container h3 {\n    font-family: \"Amatic SC\", cursive;\n    width: 90%;\n    margin: 20px auto;\n    font-size: 2.2em;\n    color: #AAA; }\n  .container p {\n    width: 90%;\n    margin: 0 auto;\n    text-indent: 25px;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.4em;\n    margin-top: 16px;\n    font-weight: 600;\n    line-height: 1.3; }\n  .container .section-divider {\n    margin-top: 5%;\n    margin-bottom: 5%;\n    width: 70%;\n    margin-left: auto;\n    margin-right: auto;\n    height: 1px;\n    background-color: rgba(200, 200, 200, 0.7);\n    border: none; }\n  .container .about-text {\n    position: relative; }\n  .container .behind-text {\n    position: absolute;\n    top: 0;\n    margin-top: 0; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_header-background.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/components/about/about.scss","/Users/Will/freelance/earth-house/app/src/components/about/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE7BL;EACI,YAAW;EACX,8BAA6B,EAChC;;AAED;EACI,WAAU;EACV,yBAAwB,EAiE3B;EAnED;IAIQ,iBAAgB;IAChB,YAAW;IACX,YACJ,EAAE;EAPN;IAWY,eAAc;IACd,kBAAiB,EACpB;EAbT;IAiBQ,eAAc;IACd,mBACJ,EAAE;EAnBN;IAsBQ,cAAa;IACb,kBAAiB;IACjB,kCChC8B;IDiC9B,eAAc,EACjB;EA1BL;IA6BQ,kCCrC8B;IDsC9B,WAAU;IACV,kBAAiB;IACjB,iBAAgB;IAChB,YAAW,EACd;EAlCL;IAqCQ,WAAU;IACV,eAAc;IACd,kBAAiB;IACjB,wCC/C8B;IDgD9B,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB;IAChB,iBAAgB,EACnB;EA7CL;IAgDQ,eAAc;IACd,kBAAiB;IACjB,WAAU;IACV,kBAAiB;IACjB,mBAAkB;IAClB,YAAW;IACX,2CAAsC;IACtC,aAAY,EACf;EAxDL;IA2DQ,mBAAkB,EACrB;EA5DL;IA+DQ,mBAAkB;IAClB,OAAM;IACN,cAAa,EAChB","file":"about.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'fonts';\n@import 'header-background';\n\n.header-img {\n    width: 100%;\n    border-bottom: 3px solid #AAA;\n}\n\n.container {\n    width: 80%;\n    margin: 5% auto 10% auto;\n    img {\n        margin-top: 20px;\n        z-index: -1;\n        width: 100%\n    }\n\n    section {\n        img {\n            max-width: 90%;\n            margin: 20px auto;\n        }\n    }\n\n    h1 {\n        font-size: 3em;\n        text-align: center\n    }\n\n    h2 {\n        margin-top: 0;\n        margin-bottom: 2%;\n        font-family: $decorative-font;\n        font-size: 3em;\n    }\n\n    h3 {\n        font-family: $decorative-font;\n        width: 90%;\n        margin: 20px auto;\n        font-size: 2.2em;\n        color: #AAA;\n    }\n\n    p {\n        width: 90%;\n        margin: 0 auto;\n        text-indent: 25px;\n        font-family: $main-font;\n        font-size: 1.4em;\n        margin-top: 16px;\n        font-weight: 600;\n        line-height: 1.3;\n    }\n\n    .section-divider {\n        margin-top: 5%;\n        margin-bottom: 5%;\n        width: 70%;\n        margin-left: auto;\n        margin-right: auto;\n        height: 1px;\n        background-color: rgba(200,200,200,.7);\n        border: none;\n    }\n\n    .about-text {\n        position: relative;\n    }\n\n    .behind-text {\n        position: absolute;\n        top: 0;\n        margin-top: 0;\n    }\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n"],"sourceRoot":""}]);
 	
 	// exports
 
@@ -34499,19 +34499,17 @@
 	    var _this = this;
 	
 	    this.styles = _admin4.default;
-	    //delete this eventually
-	    this.$onInit = function () {
-	        // this.credentials = {
-	        //     username: 'test',
-	        //     password: '123'
-	        // };
 	
-	        // this.signin();
+	    this.$onInit = function () {
+	        _this.ordersClass = [_this.styles.active];
+	        _this.contentClass = [];
+	        _this.mailClass = [];
+	        _this.navArray = [_this.contentClass, _this.ordersClass, _this.mailClass];
 	    };
 	    this.signin = function () {
 	        authService.signin(_this.credentials).then(function (data) {
 	            _this.token = data.token;
-	            $state.go('admin.content');
+	            $state.go('admin.orders');
 	        });
 	    };
 	    this.logOut = function () {
@@ -34519,13 +34517,31 @@
 	        delete _this.token;
 	    };
 	    //TODO: ADD email and notes section to each order as well as in model on the server side!
+	
+	    this.changeClass = function (state) {
+	
+	        _this.navArray.forEach(function (navItem) {
+	            console.log(navItem);
+	            navItem.pop();
+	        });
+	
+	        if (state === 'orders') {
+	            _this.ordersClass.push(_this.styles.active);
+	        }
+	        if (state === 'content') {
+	            _this.contentClass.push(_this.styles.active);
+	        }
+	        if (state === 'mail') {
+	            _this.mailClass.push(_this.styles.active);
+	        }
+	    };
 	}
 
 /***/ },
 /* 15 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"admin-header\">\n\n</div>\n\n<div class=\"admin-body\">\n    <div class=\"login\" ng-if=\"!$ctrl.token\">\n        <h2>Login</h2>\n        <form ng-submit=\"$ctrl.signin()\">\n            <label for=\"username\">username</label>\n            <input type=\"text\" ng-model=\"$ctrl.credentials.username\">\n            <label for=\"password\">password</label>\n            <input type=\"text\" ng-model=\"$ctrl.credentials.password\">\n            <button type=\"submit\">Submit</button>\n        </form>\n    </div>\n\n    <ul class=\"admin-nav\" ng-if=\"$ctrl.token\">\n        <li>\n            <a ui-sref=\"admin.orders\">orders</a>\n        </li>\n        <li>\n            <a ui-sref=\"admin.content\">content</a>\n        </li>\n        <li>\n            <a ui-sref=\"admin.mail\">email list</a>\n        </li>\n        <li>\n            <a ng-click=\"$ctrl.logOut()\">logout</a>\n        </li>\n    </ul>\n\n    <ui-view name=\"main\" token=\"$ctrl.token\"></ui-view>\n</div>\n\n";
+	module.exports = "<div class=\"admin-header\">\n</div>\n\n<div class=\"admin-body\">\n    <div class=\"login\" ng-if=\"!$ctrl.token\">\n        <h2>Login</h2>\n        <form ng-submit=\"$ctrl.signin()\">\n            <label for=\"username\">username</label>\n            <input type=\"text\" ng-model=\"$ctrl.credentials.username\">\n            <label for=\"password\">password</label>\n            <input type=\"text\" ng-model=\"$ctrl.credentials.password\">\n            <button type=\"submit\">Submit</button>\n        </form>\n    </div>\n    <div class=\"admin-container\">\n        <ul class=\"admin-nav\" ng-if=\"$ctrl.token\">\n            <li>\n                <a ng-class=\"$ctrl.ordersClass\" ng-click=\"$ctrl.changeClass('orders')\" ui-sref=\"admin.orders\">orders</a>\n            </li>\n            <li>\n                <a ng-class=\"$ctrl.contentClass\" ng-click=\"$ctrl.changeClass('content')\" ui-sref=\"admin.content\">content</a>\n            </li>\n            <li>\n                <a ng-class=\"$ctrl.mailClass\" ng-click=\"$ctrl.changeClass('mail')\" ui-sref=\"admin.mail\">email list</a>\n            </li>\n            <li>\n                <a ng-click=\"$ctrl.logOut()\">logout</a>\n            </li>\n        </ul>\n    </div>\n\n    <ui-view name=\"main\" token=\"$ctrl.token\"></ui-view>\n</div>\n\n";
 
 /***/ },
 /* 16 */
@@ -34562,10 +34578,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".admin-header {\n  height: 170px;\n  background-color: #323232; }\n\n.admin-body {\n  min-height: 85vh;\n  width: 90%;\n  margin: 0 auto 100px auto; }\n  .admin-body a {\n    color: blue; }\n  .admin-body a:hover {\n    text-decoration: underline; }\n\ninput.article-title {\n  display: block; }\n\n.thumbnail {\n  max-width: 100px; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/src/components/admin/admin.scss","/Users/Will/freelance/earth-house/app/src/components/admin/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,cAAa;EACb,0BCFiB,EDGpB;;AAED;EACI,iBAAgB;EAChB,WAAU;EACV,0BAAyB,EAO5B;EAVD;IAKQ,YAAW,EACd;EANL;IAQQ,2BAA0B,EAC7B;;AAGL;EACI,eAAc,EACjB;;AAED;EACI,iBAAgB,EACnB","file":"admin.scss","sourcesContent":["@import 'colors';\n\n.admin-header {\n    height: 170px;\n    background-color: $black;\n}\n\n.admin-body {\n    min-height: 85vh;\n    width: 90%;\n    margin: 0 auto 100px auto;\n    a {\n        color: blue;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n}\n\ninput.article-title {\n    display: block;\n}\n\n.thumbnail {\n    max-width: 100px;\n}\n\n\n","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
+	exports.push([module.id, ".admin-header {\n  height: 170px;\n  background-color: #323232; }\n\n.admin-body {\n  min-height: 85vh;\n  width: 90%;\n  margin: 0 auto 100px auto; }\n  .admin-body a {\n    color: blue; }\n  .admin-body a:hover {\n    text-decoration: underline; }\n  .admin-body li {\n    margin-bottom: 20px; }\n  .admin-body hr {\n    margin: 45px auto;\n    border: none;\n    width: 85%;\n    height: 1px;\n    background-color: rgba(200, 200, 200, 0.7); }\n  .admin-body button {\n    font-size: 1em;\n    margin: 5px;\n    border-radius: 10%;\n    background-color: rgba(200, 200, 200, 0.7);\n    border: none; }\n  .admin-body button:hover {\n    cursor: pointer; }\n  .admin-body .delete-button {\n    background-color: red;\n    color: white; }\n  .admin-body h4 span {\n    font-weight: 500; }\n  .admin-body input {\n    margin-right: 15px;\n    resize: horizontal; }\n  .admin-body input:active {\n    width: auto; }\n  .admin-body input:focus {\n    min-width: 200px; }\n\ninput.article-title {\n  display: block; }\n\n.thumbnail {\n  max-width: 100px;\n  margin: 20px 50px; }\n\n.admin-nav {\n  text-align: center;\n  margin: 0; }\n  .admin-nav li {\n    display: inline-block;\n    width: 15%;\n    text-align: center;\n    font-size: 1.5em;\n    margin-bottom: 0; }\n\n.admin-sub-nav li {\n  display: inline-block;\n  margin-right: 35px;\n  font-size: 1.2em;\n  margin-bottom: 0; }\n\n.admin-sub-header {\n  float: left;\n  margin: 0 35px 0 0;\n  font-size: 2.35em; }\n\n.admin-centered-header {\n  text-align: center;\n  font-size: 2.7em; }\n\n.admin-container {\n  margin-top: 15px;\n  border: 1px solid rgba(200, 200, 200, 0.7);\n  padding: 15px 0 15px 20px; }\n\n.KZQ8yi7nJ456RBy0Ngaq5 {\n  text-decoration: underline; }\n\n._2C_AvO5msKZ51elakItd9w {\n  text-decoration: none; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/src/components/admin/admin.scss","/Users/Will/freelance/earth-house/app/src/components/admin/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAEA;EACI,cAAa;EACb,0BCFiB,EDGpB;;AAED;EACI,iBAAgB;EAChB,WAAU;EACV,0BAAyB,EAkD5B;EArDD;IAKQ,YAAW,EACd;EANL;IAQQ,2BAA0B,EAC7B;EATL;IAWQ,oBACJ,EAAE;EAZN;IAcQ,kBAAiB;IACjB,aAAY;IACZ,WAAU;IACV,YAAW;IACX,2CCxBwB,EDyB3B;EAnBL;IAqBQ,eAAc;IACd,YAAW;IACX,mBAAkB;IAClB,2CC9BwB;ID+BxB,aAAY,EACf;EA1BL;IA4BQ,gBAAe,EAClB;EA7BL;IA+BQ,sBAAqB;IACrB,aAAY,EACf;EAjCL;IAoCY,iBAAgB,EACnB;EArCT;IAwCQ,mBAAkB;IAClB,mBAAkB,EACrB;EA1CL;IA6CQ,YAAW,EACd;EA9CL;IAiDQ,iBAAgB,EACnB;;AAKL;EACI,eAAc,EACjB;;AAED;EACI,iBAAgB;EAChB,kBAAiB,EACpB;;AAED;EACI,mBAAkB;EAClB,UAAS,EAQZ;EAVD;IAIQ,sBAAqB;IACrB,WAAU;IACV,mBAAkB;IAClB,iBAAgB;IAChB,iBAAgB,EACnB;;AAGL;EAEQ,sBAAqB;EACrB,mBAAkB;EAClB,iBAAgB;EAChB,iBAAgB,EACnB;;AAGL;EACI,YAAW;EACX,mBAAkB;EAClB,kBAAiB,EACpB;;AAED;EACI,mBAAkB;EAClB,iBAAgB,EACnB;;AAED;EACI,iBAAgB;EAChB,2CCxG4B;EDyG5B,0BAAyB,EAC5B;;AAGD;EACI,2BAA0B,EAC7B;;AAED;EACI,sBAAqB,EACxB","file":"admin.scss","sourcesContent":["@import 'colors';\n\n.admin-header {\n    height: 170px;\n    background-color: $black;\n}\n\n.admin-body {\n    min-height: 85vh;\n    width: 90%;\n    margin: 0 auto 100px auto;\n    a {\n        color: blue;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    li {\n        margin-bottom: 20px\n    }\n    hr {\n        margin: 45px auto;\n        border: none;\n        width: 85%;\n        height: 1px;\n        background-color: $lightgrey;\n    }\n    button {\n        font-size: 1em;\n        margin: 5px;\n        border-radius: 10%;\n        background-color: $lightgrey;\n        border: none;\n    }\n    button:hover {\n        cursor: pointer;\n    }\n    .delete-button {\n        background-color: red;\n        color: white;\n    }\n    h4 {\n        span {\n            font-weight: 500;\n        }\n    }\n    input {\n        margin-right: 15px;\n        resize: horizontal;\n    }\n\n    input:active {\n        width: auto;\n    }\n\n    input:focus {\n        min-width: 200px;\n    }\n\n\n}\n\ninput.article-title {\n    display: block;\n}\n\n.thumbnail {\n    max-width: 100px;\n    margin: 20px 50px;\n}\n\n.admin-nav {\n    text-align: center;\n    margin: 0;\n    li {\n        display: inline-block;\n        width: 15%;\n        text-align: center;\n        font-size: 1.5em;\n        margin-bottom: 0;\n    }\n}\n\n.admin-sub-nav {\n    li {\n        display: inline-block;\n        margin-right: 35px;\n        font-size: 1.2em;\n        margin-bottom: 0;\n    }\n}\n\n.admin-sub-header {\n    float: left;\n    margin: 0 35px 0 0;\n    font-size: 2.35em;\n}\n\n.admin-centered-header {\n    text-align: center;\n    font-size: 2.7em;\n}\n\n.admin-container {\n    margin-top: 15px;\n    border: 1px solid $lightgrey;\n    padding: 15px 0 15px 20px;\n}\n\n\n:local(.active) {\n    text-decoration: underline;\n}\n\n:local(.inactive) {\n    text-decoration: none;\n}\n\n\n\n","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
-
+	exports.locals = {
+		"active": "KZQ8yi7nJ456RBy0Ngaq5",
+		"inactive": "_2C_AvO5msKZ51elakItd9w"
+	};
 
 /***/ },
 /* 18 */
@@ -34668,7 +34687,7 @@
 /* 19 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2>About</h2>\n\n<ul>\n    <li ng-repeat=\"article in $ctrl.aboutArticles\">\n        <div class=\"cms-title\">\n            <label>Title: </label>\n            <input class=\"article-title\" type=\"text\" ng-model=\"article.title\">\n            <label>visible</label>\n            <select ng-model=\"article.visible\">\n                <option ng-value=\"true\">true</option>\n                <option ng-value=\"false\">false</option>\n            </select>\n            <label>position</label>\n            <select ng-model=\"article.position\">\n                <option ng-repeat=\"position in $ctrl.positions\" ng-value=\"position\">{{position}}</option>\n            </select>\n        </div>\n\n        <div class=\"cms-img\">\n            <label>Image: </label>\n            <input type=\"text\" ng-model=\"article.imgUrl\">\n            <img class=\"thumbnail\" ng-if=\"article.imgUrl !== '#'\" src=\"{{article.imgUrl}}\">\n            <p ng-if=\"article.imgUrl === '#'\">No image provided</p>\n        </div>\n\n        <div class=\"cms-text\">\n            <label>Text: </label>\n            <textarea cols=\"130\" rows=\"20\" ng-model=\"article.text\"></textarea>      \n        </div>\n\n        <button ng-click=\"$ctrl.updateArticle(article)\">Update</button>\n        <button ng-click=\"$ctrl.deleteArticle(article)\">Delete</button>\n        <hr>\n    </li>\n</ul>\n\n<div class=\"add-article\">\n    <h2>New Article</h2>\n    <form ng-submit=\"$ctrl.addArticle()\">\n        <label>Title: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newArticle.title\">\n        <label>Image: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newArticle.imgUrl\">\n        <label>Text: </label>\n        <textarea cols=\"130\" rows=\"20\" ng-model=\"$ctrl.newArticle.text\"></textarea>\n        <button type=\"submit\">Add article</button>\n    </form>\n</div>";
+	module.exports = "<h2 class=\"admin-centered-header\">About</h2>\n\n<ul>\n    <li ng-repeat=\"article in $ctrl.aboutArticles\">\n        <div class=\"cms-title\">\n                <label>Title: </label>\n                <input type=\"text\" ng-model=\"article.title\">\n            <label>Visible: </label>\n            <select ng-model=\"article.visible\">\n                <option ng-value=\"true\">true</option>\n                <option ng-value=\"false\">false</option>\n            </select>\n            <label>position</label>\n            <select ng-model=\"article.position\">\n                <option ng-repeat=\"position in $ctrl.positions\" ng-value=\"position\">{{position}}</option>\n            </select>\n        </div>\n\n        <div class=\"cms-img\">\n            <label>Image: </label>\n            <input type=\"text\" ng-model=\"article.imgUrl\">\n            <img class=\"thumbnail\" ng-if=\"article.imgUrl !== '#'\" src=\"{{article.imgUrl}}\">\n            <!--<p ng-if=\"article.imgUrl === '#'\">No image provided</p>-->\n        </div>\n\n        <div class=\"cms-text\">\n            <h4>Text: </h4>\n            <textarea cols=\"130\" rows=\"20\" ng-model=\"article.text\"></textarea>      \n        </div>\n        <div>\n            <button ng-click=\"$ctrl.updateArticle(article)\">Update</button>\n            <button class=\"delete-button\" ng-click=\"$ctrl.deleteArticle(article)\">Delete</button>\n        </div>\n        <hr>\n    </li>\n</ul>\n\n<div class=\"add-article\">\n    <h2 class=\"admin-centered-header\">New Article</h2>\n    <form ng-submit=\"$ctrl.addArticle()\">\n        <label>Title: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newArticle.title\">\n        <label>Image: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newArticle.imgUrl\">\n        <h4>Text: </h4>\n        <textarea cols=\"130\" rows=\"20\" ng-model=\"$ctrl.newArticle.text\"></textarea>\n        <div>\n            <button type=\"submit\">Add article</button>\n       </div>\n    </form>\n</div>";
 
 /***/ },
 /* 20 */
@@ -34731,7 +34750,7 @@
 /* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1>Articles</h1>\n\n<ul>\n    <li ng-repeat=\"article in $ctrl.articles\">\n        <form ng-submit=\"$ctrl.update(article)\">\n            <label>title: </label>\n            <input type=\"text\" ng-model=\"article.title\" required>\n\n            <label>image url: </label>\n            <input type=\"text\" ng-model=\"article.imgUrl\">\n            <img class=\"thumbnail\" ng-if=\"article.imgUrl !== ''\" ng-src=\"{{article.imgUrl}}\">\n            <p ng-if=\"article.imgUrl === ''\">No image proved</p>\n\n            <label>text: </label>\n            <input type=\"text\" ng-model=\"article.text\">\n\n            <label>link: </label>\n            <input type=\"text\" ng-model=\"article.link\">\n            <button type=\"submit\">update</button>\n        </form>\n        <hr>\n    </li>\n</ul>";
+	module.exports = "<h2 class=\"admin-centered-header\">Articles</h2>\n\n<ul>\n    <li ng-repeat=\"article in $ctrl.articles\">\n        <form ng-submit=\"$ctrl.update(article)\">\n            <label>title: </label>\n            <input type=\"text\" ng-model=\"article.title\" required>\n\n            <label>image url: </label>\n            <input type=\"text\" ng-model=\"article.imgUrl\">\n            <img class=\"thumbnail\" ng-if=\"article.imgUrl !== ''\" ng-src=\"{{article.imgUrl}}\">\n            <p ng-if=\"article.imgUrl === ''\">No image proved</p>\n\n            <label>link: </label>\n            <input type=\"text\" ng-model=\"article.link\">\n\n            <h4>Text: </h4>\n            <textarea ng-model=\"article.text\" cols=\"80\" rows=\"10\"></textarea>\n            <div>\n                <button type=\"submit\">update</button>\n            </div>\n        </form>\n        <hr>\n    </li>\n</ul>";
 
 /***/ },
 /* 22 */
@@ -34788,7 +34807,7 @@
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2>Checkout</h2>\n\n<form ng-submit=\"$ctrl.update()\">\n    <div>\n        <label>text: </label>\n        <textarea cols=\"80\" rows=\"10\" ng-model=\"$ctrl.checkoutContent.text\"></textarea>\n    </div>\n\n    <div>\n        <label>pickup text: </label>\n        <textarea cols=\"80\" rows=\"10\" ng-model=\"$ctrl.checkoutContent.pickupText\"></textarea>      \n    </div>\n    <div>\n        <label>delivery text: </label>\n        <textarea cols=\"80\" rows=\"10\" ng-model=\"$ctrl.checkoutContent.deliveryText\"></textarea>       \n    </div>\n    <div>\n        <label>pickup clickable</label>\n        <select ng-model=\"$ctrl.checkoutContent.pickup\">\n            <option ng-value=\"true\">true</option>\n            <option ng-value=\"false\">false</option>\n        </select>     \n    </div>\n    <div>\n        <label>delivery clickable</label>\n        <select ng-model=\"$ctrl.checkoutContent.delivery\">\n            <option ng-value=\"true\">true</option>\n            <option ng-value=\"false\">false</option>\n        </select>      \n    </div>\n    <button type=\"submit\">update</button>\n</form>";
+	module.exports = "<h2 class=\"admin-centered-header\">Checkout</h2>\n\n<form ng-submit=\"$ctrl.update()\">\n    <div>\n        <h4>info text: </h4>\n        <textarea cols=\"80\" rows=\"10\" ng-model=\"$ctrl.checkoutContent.text\"></textarea>\n    </div>\n\n    <div>\n        <h4>pickup text: </h4>\n        <textarea cols=\"80\" rows=\"10\" ng-model=\"$ctrl.checkoutContent.pickupText\"></textarea>      \n    </div>\n    <div>\n        <h4>delivery text: </h4>\n        <textarea cols=\"80\" rows=\"10\" ng-model=\"$ctrl.checkoutContent.deliveryText\"></textarea>       \n    </div>\n    <div>\n        <h4>Checkout Variables: </h4>\n        <label>min purchase: $</label>\n        <input type=\"text\" ng-model=\"$ctrl.checkoutContent.minPurchase\">\n    </div>\n    <div>\n        <label>pickup clickable</label>\n        <select ng-model=\"$ctrl.checkoutContent.pickup\">\n            <option ng-value=\"true\">true</option>\n            <option ng-value=\"false\">false</option>\n        </select>     \n    </div>\n    <div>\n        <label>delivery clickable</label>\n        <select ng-model=\"$ctrl.checkoutContent.delivery\">\n            <option ng-value=\"true\">true</option>\n            <option ng-value=\"false\">false</option>\n        </select>      \n    </div>\n    <button type=\"submit\">update</button>\n</form>";
 
 /***/ },
 /* 24 */
@@ -34848,7 +34867,7 @@
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2>Contact</h2>\n\n<form ng-submit=\"$ctrl.update()\">\n    <label>info text: </label>\n    <textarea cols=\"100\" rows=\"10\" ng-model=\"$ctrl.contactInfo.text\"></textarea>\n\n    <div>\n        <h3>Contact</h3>\n        <label>phone: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.phone\">\n\n        <label>email: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.email\">\n    </div>\n\n    <div>\n        <h3>Socials</h3>\n        <label>facebook: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.facebook\">\n\n        <label>instagram: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.instagram\">\n\n        <label>twitter: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.twitter\">\n    </div>\n\n    <div>\n        <button type=\"submit\">update</button>\n    </div>\n</form>\n";
+	module.exports = "<h2 class=\"admin-centered-header\">Contact</h2>\n\n<form ng-submit=\"$ctrl.update()\">\n    <h4>info text: </h4>\n    <textarea cols=\"100\" rows=\"10\" ng-model=\"$ctrl.contactInfo.text\"></textarea>\n\n    <div>\n        <h3>Contact</h3>\n        <label>phone: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.phone\">\n\n        <label>email: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.email\">\n    </div>\n\n    <div>\n        <h3>Socials</h3>\n        <label>facebook: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.facebook\">\n\n        <label>instagram: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.instagram\">\n\n        <label>twitter: </label>\n        <input type=\"text\" ng-model=\"$ctrl.contactInfo.twitter\">\n    </div>\n\n    <div>\n        <button type=\"submit\">update</button>\n    </div>\n</form>\n";
 
 /***/ },
 /* 26 */
@@ -34863,6 +34882,10 @@
 	var _content = __webpack_require__(27);
 	
 	var _content2 = _interopRequireDefault(_content);
+	
+	var _content3 = __webpack_require__(28);
+	
+	var _content4 = _interopRequireDefault(_content3);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34885,6 +34908,8 @@
 	        if (!_this.token) $state.go('admin.login');
 	    };
 	
+	    this.styles = _content4.default;
+	
 	    this.contentToManage = 'slider';
 	
 	    this.setCms = function (content) {
@@ -34897,10 +34922,50 @@
 /* 27 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1>Content</h1>\n\n<ul>\n    <li>\n        <a ng-click=\"$ctrl.setCms('slider')\">Image Slider</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('articles')\">Articles</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('shop')\">Shop</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('about')\">About</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('pickups')\">Pickups</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('contact')\">Contact</a>\n    </li>\n    <li>\n        <a ng-click=\"$ctrl.setCms('checkout')\">Checkout</a>\n    </li>\n</ul>\n\n<image-slider-cms ng-if=\"$ctrl.contentToManage === 'slider'\" token=\"$ctrl.token\"></image-slider-cms>\n<articles-cms ng-if=\"$ctrl.contentToManage === 'articles'\" token=\"$ctrl.token\"></articles-cms>\n<shop-cms ng-if=\"$ctrl.contentToManage === 'shop'\" token=\"$ctrl.token\"></shop-cms>\n<about-cms ng-if=\"$ctrl.contentToManage === 'about'\"  aboutArticles=\"$ctrl.aboutArticles\" token=\"$ctrl.token\"></about-cms>\n<contact-cms ng-if=\"$ctrl.contentToManage === 'contact'\" token=\"$ctrl.token\"></contact-cms>\n<checkout-cms ng-if=\"$ctrl.contentToManage === 'checkout'\" token=\"$ctrl.token\"></checkout-cms>\n";
+	module.exports = "<div class=\"admin-container clearfix\">\n    <h1 class=\"admin-sub-header\">Content</h1>\n\n    <ul class=\"admin-sub-nav\">\n        <li>\n            <a ng-class=\"{selected: $ctrl.contentToManage == 'slider'}\" ng-click=\"$ctrl.setCms('slider')\">Image Slider</a>\n        </li>\n        <li>\n            <a ng-class=\"{selected: $ctrl.contentToManage == 'articles'}\" ng-click=\"$ctrl.setCms('articles')\">Articles</a>\n        </li>\n        <li>\n            <a ng-class=\"{selected: $ctrl.contentToManage == 'shop'}\" ng-click=\"$ctrl.setCms('shop')\">Shop</a>\n        </li>\n        <li>\n            <a ng-class=\"{selected: $ctrl.contentToManage == 'about'}\" ng-click=\"$ctrl.setCms('about')\">About</a>\n        </li>\n        <li>\n            <a ng-class=\"{selected: $ctrl.contentToManage == 'pickups'}\" ng-click=\"$ctrl.setCms('pickups')\">Pickups</a>\n        </li>\n        <li>\n            <a ng-class=\"{selected: $ctrl.contentToManage == 'contact'}\" ng-click=\"$ctrl.setCms('contact')\">Contact</a>\n        </li>\n        <li>\n            <a ng-class=\"{selected: $ctrl.contentToManage == 'checkout'}\" ng-click=\"$ctrl.setCms('checkout')\">Checkout</a>\n        </li>\n    </ul>\n</div>\n\n<div class=\"admin-container\">\n    <image-slider-cms ng-if=\"$ctrl.contentToManage === 'slider'\" token=\"$ctrl.token\"></image-slider-cms>\n    <articles-cms ng-if=\"$ctrl.contentToManage === 'articles'\" token=\"$ctrl.token\"></articles-cms>\n    <shop-cms ng-if=\"$ctrl.contentToManage === 'shop'\" token=\"$ctrl.token\"></shop-cms>\n    <about-cms ng-if=\"$ctrl.contentToManage === 'about'\"  aboutArticles=\"$ctrl.aboutArticles\" token=\"$ctrl.token\"></about-cms>\n    <pickups-cms ng-if=\"$ctrl.contentToManage === 'pickups'\" token=\"$ctrl.token\"></pickups-cms>\n    <contact-cms ng-if=\"$ctrl.contentToManage === 'contact'\" token=\"$ctrl.token\"></contact-cms>\n    <checkout-cms ng-if=\"$ctrl.contentToManage === 'checkout'\" token=\"$ctrl.token\"></checkout-cms>\n</div>\n";
 
 /***/ },
 /* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(29);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(13)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./content.scss", function() {
+				var newContent = require("!!../../../../node_modules/css-loader/index.js?sourceMap!../../../../node_modules/sass-loader/index.js?sourceMap!./content.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(12)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".selected {\n  text-decoration: underline; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/content/src/components/admin/content/content.scss"],"names":[],"mappings":"AAAA;EACI,2BAA0B,EAC7B","file":"content.scss","sourcesContent":[".selected {\n    text-decoration: underline;\n}"],"sourceRoot":""}]);
+	
+	// exports
+
+
+/***/ },
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34909,7 +34974,7 @@
 	    value: true
 	});
 	
-	var _imageSliderCms = __webpack_require__(29);
+	var _imageSliderCms = __webpack_require__(31);
 	
 	var _imageSliderCms2 = _interopRequireDefault(_imageSliderCms);
 	
@@ -34958,13 +35023,13 @@
 	}
 
 /***/ },
-/* 29 */
+/* 31 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2>Image Slider</h2>\n\n<h3>Slides</h3>\n\n<ul>\n    <li ng-repeat=\"slide in $ctrl.slides\">\n        <label>name: </label>\n        <input type=\"text\" ng-model=\"slide.name\">\n\n        <label>image url: </label>\n        <input type=\"text\" ng-model=\"slide.imgUrl\">\n        <img ng-src=\"{{slide.imgUrl}}\" class=\"thumbnail\">\n\n        <label>text: </label>\n        <input type=\"text\" ng-model=\"slide.text\">\n\n        <label>link: </label>\n        <input type=\"text\" ng-model=\"slide.link\">\n\n        <label>show: </label>\n        <select ng-model=\"slide.show\">\n            <option ng-value=\"true\">true</option>\n            <option ng-value=\"false\">false</option>\n        </select>\n\n        <button ng-click=\"$ctrl.update(slide)\">update</button>\n        <button ng-click=\"$ctrl.delete(slide)\">delete</button>\n\n        <hr>\n    </li>\n</ul>\n\n<h3>Add slide</h3>\n\n<form ng-submit=\"$ctrl.addSlide()\">\n    <label>name: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.name\" required>\n    <label>image url: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.imgUrl\" required>\n    <img class=\"thumbnail\" ng-src=\"{{$ctrl.newSlide.imgUrl}}\">\n    <label>text: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.text\">\n    <label>link to: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.link\">\n    <button type=\"submit\">create</button>\n</form>";
+	module.exports = "<h2 class=\"admin-centered-header\">Image Slider</h2>\n\n<h3 class=\"admin-subheader\">Slides</h3>\n\n<ul>\n    <li ng-repeat=\"slide in $ctrl.slides\">\n        <label>name: </label>\n        <input type=\"text\" ng-model=\"slide.name\">\n\n        <label>image url: </label>\n        <input type=\"text\" ng-model=\"slide.imgUrl\">\n        <img ng-src=\"{{slide.imgUrl}}\" class=\"thumbnail\">\n\n\n        <label>link: </label>\n        <input type=\"text\" ng-model=\"slide.link\">\n\n        <label>show: </label>\n        <select ng-model=\"slide.show\">\n            <option ng-value=\"true\">true</option>\n            <option ng-value=\"false\">false</option>\n        </select>\n        <h4>text: </h4>\n        <textarea ng-model=\"slide.text\" cols=\"60\" rows=\"5\"></textarea>\n        <div>\n            <button class=\"delete-button\" ng-click=\"$ctrl.update(slide)\">update</button>\n            <button ng-click=\"$ctrl.delete(slide)\">delete</button>\n        </div>\n\n        <hr>\n    </li>\n</ul>\n\n<h3>Add slide</h3>\n\n<form ng-submit=\"$ctrl.addSlide()\">\n    <label>name: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.name\" required>\n    <label>image url: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.imgUrl\" required>\n    <img class=\"thumbnail\" ng-src=\"{{$ctrl.newSlide.imgUrl}}\">\n    <label>text: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.text\">\n    <label>link to: </label>\n    <input type=\"text\" ng-model=\"$ctrl.newSlide.link\">\n    <button type=\"submit\">create</button>\n</form>";
 
 /***/ },
-/* 30 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34973,11 +35038,11 @@
 	    value: true
 	});
 	
-	var _pickupsCms = __webpack_require__(31);
+	var _pickupsCms = __webpack_require__(33);
 	
 	var _pickupsCms2 = _interopRequireDefault(_pickupsCms);
 	
-	var _pickupsCms3 = __webpack_require__(32);
+	var _pickupsCms3 = __webpack_require__(34);
 	
 	var _pickupsCms4 = _interopRequireDefault(_pickupsCms3);
 	
@@ -35010,7 +35075,6 @@
 	        }
 	
 	        pickupService.getAll().then(function (pickups) {
-	            //alphabetize
 	
 	            pickups.forEach(function (pickup) {
 	                var startDate = new Date(pickup.start).toDateString();
@@ -35034,13 +35098,16 @@
 	            formatedPickup[key] = pickup[key];
 	        });
 	
-	        formatedPickup.start = new Date(dateService.dateObjToString(pickup.start));
+	        formatedPickup.start = new Date(pickup.start.month + ' ' + pickup.start.date + ' ' + pickup.start.year);
+	        formatedPickup.day = new Date(pickup.start.month + ' ' + pickup.start.date + ' ' + pickup.start.year).toDateString().split(' ')[0];
 	        formatedPickup.end = new Date(dateService.dateObjToString(pickup.end));
 	        formatedPickup.startTime = pickup.startTime.value;
 	        formatedPickup.endTime = pickup.endTime.value;
 	
-	        pickupService.update(formatedPickup, _this.token).then(function (updated) {
-	            return console.log(updated);
+	        console.log('in update function', formatedPickup);
+	
+	        pickupService.update(formatedPickup, _this.token).then(function () {
+	            return pickupService.get;
 	        });
 	    };
 	    this.add = function () {
@@ -35065,19 +35132,19 @@
 	}
 
 /***/ },
-/* 31 */
+/* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2>Pickup Locations</h2>\n<table ng-class=\"$ctrl.styles.table\">\n    <tr>\n        <th>name: </th>\n        <th>start date: </th>\n        <th>end date: </th>\n        <th>day: </th>\n        <th>start time: </th>\n        <th>end time: </th>\n        <th>link: </th>\n        <th>show: </th>\n        <th>edit: </th>\n\n    </tr>\n    <tr ng-repeat=\"pickup in $ctrl.pickups\">\n        <td><input type=\"text\" ng-model=\"pickup.name\"></td>\n        <td>\n            <select ng-model=\"pickup.start.month\" ng-options=\"month for month in $ctrl.months\">\n                <option ng-repeat=\"month in $ctrl.months\" ng-value=\"{{month}}\">{{month}}</option>\n            </select>\n            <input type=\"text\" ng-model=\"pickup.start.date\">\n        </td>\n        <td>\n            <select ng-model=\"pickup.end.month\" ng-options=\"month for month in $ctrl.months\"></select>\n            <input type=\"text\" ng-model=\"pickup.end.date\">\n        </td>\n        <td>{{pickup.day}}</td>\n        <td><select ng-model=\"pickup.startTime\" ng-options=\"hour as hour.time for hour in $ctrl.hours track by hour.value\"></select></td>\n        <td><select ng-model=\"pickup.endTime\" ng-options=\"hour as hour.time for hour in $ctrl.hours track by hour.value\"></select></td>\n        <td><input type=\"text\" ng-model=\"pickup.link\"></td>\n        <td>\n            <select ng-model=\"pickup.show\">\n                <option ng-value=\"true\">true</option>\n                <option ng-value=\"false\">false</option>\n            </select>\n        </td>\n        <td>\n            <button ng-click=\"$ctrl.update(pickup)\">update</button>\n            <button ng-click=\"$ctrl.delete(pickup)\">delete</button>\n        </td>\n    </tr>\n</table>\n<h2>Add New</h2>\n<form ng-submit=\"$ctrl.add()\">\n    <h4>General</h4>\n    <label>name: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.name\">\n    <label>link: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.link\">\n    <h4>Start date: </h4>\n    <label>month: </label>\n    <select ng-model=\"$ctrl.new.start.month\">\n        <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n    </select>\n    <label>date: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.start.date\"></input>\n    <label>year: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.start.year\"></input>\n\n    <h4>End date: </h4>\n    <label>month: </label>\n    <select ng-model=\"$ctrl.new.end.month\">\n        <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n    </select>\n    <label>date: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.end.date\"></input>\n    <label>year: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.end.year\"></input>\n\n    <h4>times: </h4>\n    <label>start time: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.startTime\">\n\n    <label>end time: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.endTime\">\n\n    <button type=\"submit\">Add pickup</button>\n</form>\n";
+	module.exports = "<h2>Pickup Locations: </h2>\n<table ng-class=\"$ctrl.styles.table\">\n    <tr>\n        <th>name: </th>\n        <th>start date: </th>\n        <th>end date: </th>\n        <th>day: </th>\n        <th>start time: </th>\n        <th>end time: </th>\n        <th>link: </th>\n        <th>show: </th>\n        <th>edit: </th>\n\n    </tr>\n    <tr ng-repeat=\"pickup in $ctrl.pickups\">\n        <td><input type=\"text\" ng-model=\"pickup.name\"></td>\n        <td>\n            <select ng-model=\"pickup.start.month\" ng-options=\"month for month in $ctrl.months\">\n                <option ng-repeat=\"month in $ctrl.months\" ng-value=\"{{month}}\">{{month}}</option>\n            </select>\n            <input type=\"text\" ng-model=\"pickup.start.date\">\n        </td>\n        <td>\n            <select ng-model=\"pickup.end.month\" ng-options=\"month for month in $ctrl.months\"></select>\n            <input type=\"text\" ng-model=\"pickup.end.date\">\n        </td>\n        <td>{{pickup.day}}</td>\n        <td><select ng-model=\"pickup.startTime\" ng-options=\"hour as hour.time for hour in $ctrl.hours track by hour.value\"></select></td>\n        <td><select ng-model=\"pickup.endTime\" ng-options=\"hour as hour.time for hour in $ctrl.hours track by hour.value\"></select></td>\n        <td><input type=\"text\" ng-model=\"pickup.link\"></td>\n        <td>\n            <select ng-model=\"pickup.show\">\n                <option ng-value=\"true\">true</option>\n                <option ng-value=\"false\">false</option>\n            </select>\n        </td>\n        <td>\n            <button ng-click=\"$ctrl.update(pickup)\">update</button>\n            <button class=\"delete-button\" ng-click=\"$ctrl.delete(pickup)\">delete</button>\n        </td>\n    </tr>\n</table>\n<h2 class=\"admin-centered-header\">Add New</h2>\n<form ng-submit=\"$ctrl.add()\">\n    <h4>General</h4>\n    <label>name: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.name\">\n    <label>link: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.link\">\n    <h4>Start date: </h4>\n    <label>month: </label>\n    <select ng-model=\"$ctrl.new.start.month\">\n        <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n    </select>\n    <label>date: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.start.date\"></input>\n    <label>year: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.start.year\"></input>\n\n    <h4>End date: </h4>\n    <label>month: </label>\n    <select ng-model=\"$ctrl.new.end.month\">\n        <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n    </select>\n    <label>date: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.end.date\"></input>\n    <label>year: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.end.year\"></input>\n\n    <h4>times: </h4>\n    <label>start time: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.startTime\">\n\n    <label>end time: </label>\n    <input type=\"text\" ng-model=\"$ctrl.new.endTime\">\n\n    <button type=\"submit\">Add pickup</button>\n</form>\n";
 
 /***/ },
-/* 32 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(33);
+	var content = __webpack_require__(35);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35097,7 +35164,7 @@
 	}
 
 /***/ },
-/* 33 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35105,7 +35172,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._2IibBvNEpZ2_Q8z3l21uW8 td {\n  border: 1px solid black;\n  text-align: center;\n  padding: 5px; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/content/pickups/src/components/admin/content/pickups/pickups-cms.scss"],"names":[],"mappings":"AAAA;EAEQ,wBAAuB;EACvB,mBAAkB;EAClB,aAAY,EACf","file":"pickups-cms.scss","sourcesContent":[":local(.table) {\n    td {\n        border: 1px solid black;\n        text-align: center;\n        padding: 5px;\n    }\n}"],"sourceRoot":""}]);
+	exports.push([module.id, "._2IibBvNEpZ2_Q8z3l21uW8 td {\n  border: 1px solid black;\n  text-align: center;\n  padding: 1px; }\n  ._2IibBvNEpZ2_Q8z3l21uW8 td input {\n    margin: 0; }\n  ._2IibBvNEpZ2_Q8z3l21uW8 td select {\n    margin: 0; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/content/pickups/src/components/admin/content/pickups/pickups-cms.scss"],"names":[],"mappings":"AAAA;EAEQ,wBAAuB;EACvB,mBAAkB;EAClB,aAAY,EAOf;EAXL;IAMY,UAAS,EACZ;EAPT;IASY,UAAS,EACZ","file":"pickups-cms.scss","sourcesContent":[":local(.table) {\n    td {\n        border: 1px solid black;\n        text-align: center;\n        padding: 1px;\n        input {\n            margin: 0;\n        }\n        select {\n            margin: 0;\n        }\n    }\n}"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -35113,7 +35180,7 @@
 	};
 
 /***/ },
-/* 34 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35122,9 +35189,13 @@
 	    value: true
 	});
 	
-	var _shopCms = __webpack_require__(35);
+	var _shopCms = __webpack_require__(37);
 	
 	var _shopCms2 = _interopRequireDefault(_shopCms);
+	
+	var _shopCms3 = __webpack_require__(38);
+	
+	var _shopCms4 = _interopRequireDefault(_shopCms3);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -35142,6 +35213,7 @@
 	function controller(juiceService, ingredientService, dateService, shopService) {
 	    var _this = this;
 	
+	    this.styles = _shopCms4.default;
 	    this.$onInit = function () {
 	        _this.show = 'content';
 	        _this.juices = [];
@@ -35239,13 +35311,55 @@
 	}
 
 /***/ },
-/* 35 */
+/* 37 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1>Shop</h1>\n<ul>\n    <li><a ng-click=\"$ctrl.show = 'content'\">content</a></li>\n    <li><a ng-click=\"$ctrl.show = 'juices'\">juices</a></li>\n    <li><a ng-click=\"$ctrl.show = 'ingredients'\">ingredients</a></li>\n</ul>\n<div ng-if=\"$ctrl.show === 'content'\">\n    <h2>Shop Content</h2>\n    <form ng-submit=\"$ctrl.updateContent()\">\n        <label>header image: </label>\n        <input type=\"text\" ng-model=\"$ctrl.shopContent.imgUrl\">\n        <label>button text: </label>\n        <input type=\"text\" ng-model=\"$ctrl.shopContent.buttonText\">\n        <button type=\"submit\">update</button>\n    </form>\n</div>\n<div ng-if=\"$ctrl.show === 'juices'\">\n    <h2>Juices</h2>\n    <ul>\n        <li ng-repeat=\"juice in $ctrl.juices\">\n            <form ng-submit=\"$ctrl.updateJuice(juice)\">\n                <label>name: </label>\n                <input type=\"text\" ng-model=\"juice.name\">\n                <label>image: </label>\n                <input type=\"text\" ng-model=\"juice.imgUrl\">\n                <img class=\"thumbnail\" ng-src=\"{{juice.imgUrl}}\">\n                <label >price: $</label>\n                <input type=\"text\" ng-model=\"juice.price\">\n                <label>description: </label>\n                <textarea cols=\"80\" rows=\"8\" ng-model=\"juice.description\"></textarea>\n                <button type=\"submit\">update</button>\n            </form>\n            <button ng-click=\"$ctrl.deleteJuice(juice)\">Delete Juice</button>\n            <h3>ingredients</h3>\n            <ul>\n                <li ng-repeat=\"ingredient in juice.ingredients\">\n                    {{ingredient.name}}\n                    <button ng-click=\"$ctrl.removeIngredient(juice, ingredient)\">remove</button>\n                </li>\n            </ul>\n            <select ng-model=\"ingredientToAdd\" ng-options=\"ingredient as ingredient.name for ingredient in $ctrl.ingredients\">\n            </select>\n            <button ng-click=\"$ctrl.addIngredient(juice, ingredientToAdd)\">Add ingredient</button>\n            <hr>\n        </li>\n    </ul>\n\n    <h2>Add new juice</h2>\n\n    <form ng-submit=\"$ctrl.createJuice()\">\n        <label>name: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newJuice.name\">\n        <label>image url: </label>\n        <img class=\"thumbnail\" ng-src=\"{{$ctrl.newJuice.imgUrl}}\">\n        <input type=\"text\" ng-model=\"$ctrl.newJuice.imgUrl\">\n        <label>price: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newJuice.price\">\n        <label>description: </label>\n        <textarea id=\"\" cols=\"80\" rows=\"8\" ng-model=\"$ctrl.newJuice.description\"></textarea>\n        <button type=\"submit\">Create</button>\n    </form>\n</div>\n\n<div ng-if=\"$ctrl.show === 'ingredients'\">\n    <h2>Ingredients</h2>\n    <ul>\n        <li ng-repeat=\"ingredient in $ctrl.ingredients\">\n            <form ng-submit=\"$ctrl.updateIngredient(ingredient)\">\n                <label>name: </label>\n                <input type=\"text\" ng-model=\"ingredient.name\">\n                <label>image: </label>\n                <input type=\"text\" ng-model=\"ingredient.imgUrl\">\n                <img class=\"thumbnail\" ng-src=\"{{ingredient.imgUrl}}\">\n                <label>description: </label>\n                <textarea cols=\"80\" rows=\"8\" ng-model=\"ingredient.description\"></textarea>\n                <button type=\"submit\">update</button>\n            </form>\n            <button ng-click=\"$ctrl.deleteIngredient(ingredient)\">delete</button>\n            <hr>\n        </li>\n    </ul>\n\n    <h2>Add new Ingredient</h2>\n    <form ng-submit=\"$ctrl.createIngredient()\">\n        <label>Name: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newIngredient.name\">\n        <label>Image url: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newIngredient.imgUrl\">\n        <img class=\"thumbnail\" src=\"{{$ctrl.newIngredient.imgUrl}}\">\n        <label>description: </label>\n        <textarea cols=\"80\" rows=\"15\" ng-model=\"$ctrl.newIngredient.description\"></textarea>\n        <button type=\"submit\">Add</button>\n    </form>\n</div>\n\n";
+	module.exports = "<div class=\"clearfix\">\n    <h2 class=\"admin-sub-header\">Shop</h2>\n    <ul class=\"admin-sub-nav\">\n        <li><a ng-class=\"{selected: $ctrl.show == 'content'}\" ng-click=\"$ctrl.show = 'content'\">content</a></li>\n        <li><a ng-class=\"{selected: $ctrl.show == 'juices'}\" ng-click=\"$ctrl.show = 'juices'\">juices</a></li>\n        <li><a ng-class=\"{selected: $ctrl.show == 'ingredients'}\" ng-click=\"$ctrl.show = 'ingredients'\">ingredients</a></li>\n    </ul>\n</div>\n\n<div ng-if=\"$ctrl.show === 'content'\">\n    <h3 class=\"admin-centered-header\">Shop Content</h3>\n    <form ng-submit=\"$ctrl.updateContent()\">\n        <label>header image: </label>\n        <input type=\"text\" ng-model=\"$ctrl.shopContent.imgUrl\">\n        <label>button text: </label>\n        <input type=\"text\" ng-model=\"$ctrl.shopContent.buttonText\">\n        <div>\n            <button type=\"submit\">update</button>\n        </div>\n    </form>\n</div>\n<div ng-if=\"$ctrl.show === 'juices'\">\n    <h3 class=\"admin-centered-header\">Juices</h3>\n    <ul>\n        <li ng-repeat=\"juice in $ctrl.juices\">\n            <form ng-submit=\"$ctrl.updateJuice(juice)\">\n                <label>name: </label>\n                <input type=\"text\" ng-model=\"juice.name\">\n                <label>image: </label>\n                <input type=\"text\" ng-model=\"juice.imgUrl\">\n                <img class=\"thumbnail\" ng-src=\"{{juice.imgUrl}}\">\n                <label >price: $</label>\n                <input type=\"text\" ng-model=\"juice.price\">\n                <h4>description: </h4>\n                <textarea cols=\"80\" rows=\"8\" ng-model=\"juice.description\"></textarea>\n                <div>\n                    <button type=\"submit\">update</button>\n                    <button class=\"delete-button\" ng-click=\"$ctrl.deleteJuice(juice)\">Delete Juice</button>\n                </div>\n            </form>\n            <h3>ingredients</h3>\n            <ul ng-class=\"$ctrl.styles.list\">\n                <li ng-repeat=\"ingredient in juice.ingredients\">\n                    {{ingredient.name}}\n                    <button class=\"delete-button\" ng-click=\"$ctrl.removeIngredient(juice, ingredient)\">remove</button>\n                </li>\n            </ul>\n            <select ng-model=\"ingredientToAdd\" ng-options=\"ingredient as ingredient.name for ingredient in $ctrl.ingredients\">\n            </select>\n            <button ng-click=\"$ctrl.addIngredient(juice, ingredientToAdd)\">Add ingredient</button>\n            <hr>\n        </li>\n    </ul>\n\n    <h3 class=\"admin-centered-header\">Add new juice</h3>\n\n    <form ng-submit=\"$ctrl.createJuice()\">\n        <div>\n            <label>name: </label>\n            <input type=\"text\" ng-model=\"$ctrl.newJuice.name\">\n            <label>image url: </label>\n            <input type=\"text\" ng-model=\"$ctrl.newJuice.imgUrl\">\n            <img class=\"thumbnail\" ng-src=\"{{$ctrl.newJuice.imgUrl}}\">\n        </div>\n        <label>price: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newJuice.price\">\n        <h4>description: </h4>\n        <textarea cols=\"80\" rows=\"5\" ng-model=\"$ctrl.newJuice.description\"></textarea>\n        <div>\n            <button type=\"submit\">Create</button>\n        </div>\n    </form>\n</div>\n\n<div ng-if=\"$ctrl.show === 'ingredients'\">\n    <h3 class=\"admin-centered-header\">Ingredients</h3>\n    <ul>\n        <li ng-repeat=\"ingredient in $ctrl.ingredients\">\n            <form ng-submit=\"$ctrl.updateIngredient(ingredient)\">\n                <label>name: </label>\n                <input type=\"text\" ng-model=\"ingredient.name\">\n                <label>image: </label>\n                <input type=\"text\" ng-model=\"ingredient.imgUrl\">\n                <img class=\"thumbnail\" ng-src=\"{{ingredient.imgUrl}}\">\n                <h4>description: </h4>\n                <textarea cols=\"80\" rows=\"8\" ng-model=\"ingredient.description\"></textarea>\n                <div>\n                    <button type=\"submit\">update</button>\n                    <button class=\"delete-button\" ng-click=\"$ctrl.deleteIngredient(ingredient)\">delete</button>\n                </div>\n            </form>\n            <hr>\n        </li>\n    </ul>\n\n    <h3 class=\"admin-centered-header\">Add new Ingredient</h3>\n    <form ng-submit=\"$ctrl.createIngredient()\">\n        <label>Name: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newIngredient.name\">\n        <label>Image url: </label>\n        <input type=\"text\" ng-model=\"$ctrl.newIngredient.imgUrl\">\n        <img class=\"thumbnail\" src=\"{{$ctrl.newIngredient.imgUrl}}\">\n        <h4>description: </h4>\n        <textarea cols=\"80\" rows=\"8\" ng-model=\"$ctrl.newIngredient.description\"></textarea>\n        <div>\n            <button type=\"submit\">Add</button>\n        </div>\n    </form>\n</div>\n\n";
 
 /***/ },
-/* 36 */
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(39);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(13)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../../../../node_modules/css-loader/index.js?sourceMap!../../../../../node_modules/sass-loader/index.js?sourceMap!./shop-cms.scss", function() {
+				var newContent = require("!!../../../../../node_modules/css-loader/index.js?sourceMap!../../../../../node_modules/sass-loader/index.js?sourceMap!./shop-cms.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(12)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "._1_mzwIXuRms1zIS_upkKrg li {\n  margin: 5px; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/admin/content/shop/src/components/admin/content/shop/shop-cms.scss"],"names":[],"mappings":"AAAA;EAEQ,YAAW,EACd","file":"shop-cms.scss","sourcesContent":[":local(.list) {\n    li {\n        margin: 5px;\n    }\n}"],"sourceRoot":""}]);
+	
+	// exports
+	exports.locals = {
+		"list": "_1_mzwIXuRms1zIS_upkKrg"
+	};
+
+/***/ },
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35254,7 +35368,7 @@
 	    value: true
 	});
 	
-	var _login = __webpack_require__(37);
+	var _login = __webpack_require__(41);
 	
 	var _login2 = _interopRequireDefault(_login);
 	
@@ -35265,13 +35379,13 @@
 	};
 
 /***/ },
-/* 37 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = "<h1>Please login</h1>\n";
 
 /***/ },
-/* 38 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35280,7 +35394,7 @@
 	    value: true
 	});
 	
-	var _mail = __webpack_require__(39);
+	var _mail = __webpack_require__(43);
 	
 	var _mail2 = _interopRequireDefault(_mail);
 	
@@ -35312,13 +35426,13 @@
 	}
 
 /***/ },
-/* 39 */
+/* 43 */
 /***/ function(module, exports) {
 
 	module.exports = "<h2>Email List</h2>\n\n<ul>\n    <li ng-repeat=\"email in $ctrl.mailList\">{{email.email}},</li>\n</ul>";
 
 /***/ },
-/* 40 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35327,7 +35441,7 @@
 	    value: true
 	});
 	
-	var _orders = __webpack_require__(41);
+	var _orders = __webpack_require__(45);
 	
 	var _orders2 = _interopRequireDefault(_orders);
 	
@@ -35342,9 +35456,9 @@
 	};
 	
 	
-	controller.$inject = ['orderService', '$state', 'orderPickupService', 'dateService'];
+	controller.$inject = ['orderService', '$state', 'orderPickupService', 'dateService', 'pickupService', '$window'];
 	
-	function controller(orderService, $state, orderPickupService, dateService) {
+	function controller(orderService, $state, orderPickupService, dateService, pickupService, $window) {
 	    var _this = this;
 	
 	    this.days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -35354,6 +35468,13 @@
 	        if (_this.token) {
 	            _this.getOrders();
 	            _this.getPickups();
+	
+	            pickupService.getAll().then(function (data) {
+	                _this.pickupLocations = data;
+	                var all = { _id: 'all', name: 'all' };
+	                _this.pickupLocations.push(all);
+	                _this.filterLocation = all;
+	            });
 	        } else $state.go('admin.login');
 	        _this.type = 'pickup';
 	    };
@@ -35364,55 +35485,69 @@
 	        });
 	    };
 	
+	    this.logChange = function () {
+	        console.log(_this.filterLocation);
+	    };
+	
+	    this.set = function (type) {
+	        _this.type = type;
+	    };
+	
 	    this.getPickups = function () {
 	        orderPickupService.getAll(_this.token).then(function (data) {
 	            data.sort(function (curr, next) {
 	                return new Date(curr.pickupDate) - new Date(next.pickupDate);
 	            });
 	            data.forEach(function (order) {
+	                order.unsavedCompleted = order.completed;
 	                order.date = new Date(order.date).toDateString();
 	                order.pickupDate = dateService.dateStringToObj(new Date(order.pickupDate).toDateString());
 	                console.log(order.pickupDate);
 	            });
 	            _this.pickups = data;
-	            console.log(_this.pickups);
+	            console.log('pickups', _this.pickups);
 	        });
 	    };
 	
 	    this.removePickup = function (order) {
-	        var index = _this.orders.indexOf(order);
-	        orderPickupService.deleteOrder(order._id, _this.token).then(function (data) {
-	            console.log(data);
-	            _this.pickups.splice(index, 1);
-	        });
+	        var prompt = $window.prompt('Are you sure you want to delete this order? Once it is deleted, it is gone forever! (y/n)');
+	        if (prompt === 'y') {
+	            var index = _this.orders.indexOf(order);
+	            orderPickupService.deleteOrder(order._id, _this.token).then(function () {
+	                _this.pickups.splice(index, 1);
+	            });
+	        } else {
+	            return;
+	        }
 	    };
 	
 	    this.updatePickup = function (order) {
 	        var copy = {};
+	        order.completed = order.unsavedCompleted;
+	
 	        Object.keys(order).forEach(function (key) {
 	            copy[key] = order[key];
 	        });
+	
+	        delete copy.unsavedCompleted;
 	        copy.date = new Date(copy.date);
 	        copy.pickup = copy.pickup._id;
 	        copy.pickupDate = dateService.dateObjToString(copy.pickupDate);
-	        console.log('copy of the order', copy);
 	        orderPickupService.updateOrder(copy._id, copy, _this.token).then(function (updated) {
 	            return console.log(updated);
 	        });
 	    };
 	
 	    this.removeOrder = function (order) {
+	        $window.alert('Are you sure you want to delete this order?');
 	        var index = _this.orders.indexOf(order);
-	        orderService.deleteOrder(order._id, _this.token).then(function (data) {
-	            console.log(data);
+	        orderService.deleteOrder(order._id, _this.token).then(function () {
 	            _this.orders.splice(index, 1);
 	        });
 	    };
 	    this.updateOrder = function (update) {
 	        _this.calcNewTotal(update);
-	        console.log('update function called', update);
-	        orderService.updateOrder(update._id, update, _this.token).then(function (data) {
-	            console.log(data);
+	        orderService.updateOrder(update._id, update, _this.token).then(function () {
 	            _this.setOrderToUpdate(null);
 	        });
 	    };
@@ -35431,18 +35566,17 @@
 	    this.addItem = function (newItem) {
 	        _this.orderToUpdate.items.push(newItem);
 	        newItem = {};
-	        console.log(_this.orderToUpdate.items);
 	    };
 	}
 
 /***/ },
-/* 41 */
+/* 45 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"orders\" ng-if=\"$ctrl.token\">\n    <div class=\"static\" ng-if=\"!$ctrl.orderToUpdate\">\n        <h2>Orders</h2>\n\n        <h3>Filter</h3>\n        <button ng-click=\"$ctrl.type = 'pickup'\">pickups</button>\n        <button ng-click=\"$ctrl.type = 'delivery'\">deliveries</button>\n        <select ng-model=\"$ctrl.completed\" ng-init=\"$ctrl.completed = false\">\n            <option ng-value=\"false\">incomplete</option>\n            <option ng-value=\"true\">complete</option>\n            <option ng-value=\"'all'\">all</option>\n        </select>\n        <hr>\n        <div ng-if=\"$ctrl.type === 'pickup'\">\n            <h3>Pickups</h3>\n            <ul>\n                <li ng-repeat=\"order in $ctrl.pickups\" ng-if=\"order.completed === $ctrl.completed || $ctrl.completed === 'all'\">\n                    <h4>Name: {{order.name}}</h4>\n                        <h4>\n                            Pickup: {{order.pickup.name}}, on \n                            <select ng-model=\"order.pickupDate.day\">\n                                <option ng-repeat=\"day in $ctrl.days\" ng-value=\"day\">{{day}}</option>\n                            </select>\n                            <select ng-model=\"order.pickupDate.month\">\n                                <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n                            </select>\n                            <input type=\"text\" ng-model=\"order.pickupDate.date\"> \n                        </h4>\n                        <p>order placed: {{order.date}}</p>\n                        <a ng-href=\"mailto:{{order.email}}\">{{order.email}}</a>\n                        <h5>total: ${{order.total}}.00</h5>\n                        <h4>Items</h4>\n                        <table class=\"order-items\">\n                            <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                            <tr ng-repeat=\"item in order.items\">\n                                <td>{{item.name}}</td>\n                                <td>{{item.quantity}}</td>\n                                <td>${{item.subTotal}}.00</td>\n                            </tr>\n                        </table>\n                        <h5>complete:</h5>\n                        <select ng-model=\"order.completed\" ng-change=\"$ctrl.updatePickup(order)\">\n                            <option ng-value=\"true\">completed</option>\n                            <option ng-value=\"false\">incomplete</option>\n                        </select>\n                        <h5>Notes:</h5>\n                        <textarea ng-model=\"order.notes\" cols=\"100\" rows=\"4\">{{order.notes}}</textarea>\n                        <div>\n                            <button ng-click=\"$ctrl.removePickup(order)\">delete</button>\n                            <button ng-click=\"$ctrl.updatePickup(order)\">update</button>\n                        </div>\n                        <hr>\n\n                </li>\n            </ul>\n        </div>\n        <div ng-if=\"$ctrl.type === 'delivery'\">\n            <h3>Deliveries</h3>\n            <ul>\n                <li ng-repeat=\"order in $ctrl.orders\" ng-if=\"order.completed === $ctrl.completed || $ctrl.completed === 'all'\">\n                        <h4>{{order.name}}</h4>\n                        <p>{{order.date}}</p>\n                        <a ng-href=\"mailto:{{order.email}}\">{{order.email}}</a>\n                        <h5>total: ${{order.total}}.00</h5>\n                        <h4>Items</h4>\n                        <table class=\"order-items\">\n                            <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                            <tr ng-repeat=\"item in order.items\">\n                                <td>{{item.name}}</td>\n                                <td>{{item.quantity}}</td>\n                                <td>${{item.subTotal}}.00</td>\n                            </tr>\n                        </table>\n                        <h5>\n                            Address: {{order.address.line_1}}, {{order.address.line_2 || ' '}} \n                            <br>\n                            {{order.address.city}}, {{order.address.state}}, {{order.address.zip}}\n                        </h5>\n                        <h5>complete: {{order.completed}}</h5>\n                        <p>Notes: {{order.notes}}</p>\n                        <button ng-click=\"$ctrl.removeOrder(order)\">delete</button>\n                        <button ng-click=\"$ctrl.setOrderToUpdate(order)\">edit</button>\n                        <hr>\n                </li>\n            </ul>\n        </div>\n    </div>\n    <div class=\"update\" ng-if=\"$ctrl.orderToUpdate\">\n        <h2>Update Form</h2>\n        <form>\n            <label>Name:</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.name\" placeholder=\"{{orderToUpdate.name}}\">\n            <label>Total: $</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.total\" placeholder=\"{{orderToUpdate.total}}\">\n            <label>Email: </label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.email\" placeholder=\"{{orderToUpdate.email}}\">\n            <h4>Completed:</h4>\n            <select ng-model=\"$ctrl.orderToUpdate.completed\" ng-init=\"$ctrl.orderToUpdate.completed\">\n                <option ng-value=\"false\">incomplete</option>\n                <option ng-value=\"true\">complete</option>\n            </select>\n                \n            <h4>Items</h4>\n            <table>\n                <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                <tr ng-repeat=\"item in $ctrl.orderToUpdate.items\">\n                    <td><input type=\"text\" ng-model=\"item.name\" ng-value=\"item.name\" placeholder=\"{{item.name}}\"></td>\n                    <td><input type=\"text\" ng-value=\"item.quantity\" ng-model=\"item.quantity\" placeholder=\"{{item.quantity}}\"></td>\n                    <td ng-value=\"item.quantity * item.price\" ng-model=\"item.subTotal\">${{item.quantity * item.price}}.00</td>\n                </tr>\n            </table>\n            <table>\n                <tr><th>item</th><th>price</th><th>qty.</th><th>subtotal</th></tr>\n                <tr>\n                    <td><input type=\"text\" placeholder=\"new item name\" ng-model=\"newItem.name\"></td>\n                    <td><input type=\"text\" placeholder=\"price\" ng-init=\"newItem.price = 0\" ng-model=\"newItem.price\"></td>\n                    <td><input type=\"text\" placeholder=\"qty\" ng-init=\"newItem.quantity = 0\" ng-model=\"newItem.quantity\"></td>\n                    <td>subtotal: ${{newItem.price * newItem.quantity}}.00</td>\n                </tr>\n                <tr>\n                    <td><button ng-click=\"$ctrl.addItem(newItem)\">add item</button></td>\n                </tr>\n            </table>\n\n        <h5>Address</h4>\n\n        <label>Line 1:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_1}}\" ng-model=\"$ctrl.orderToUpdate.address.line_1\">\n        <label>Line 2:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_2}}\" ng-model=\"$ctrl.orderToUpdate.address.line_2\">\n        <label>City:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.city}}\" ng-model=\"$ctrl.orderToUpdate.address.city\">\n        <label>State</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.state}}\" ng-model=\"$ctrl.orderToUpdate.address.state\">\n        <label>Zip</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.zip}}\" ng-model=\"$ctrl.orderToUpdate.address.zip\">\n\n        <label>Notes:</label>\n        <textarea placeholder=\"{{$ctrl.orderToUpdate.notes}}\" ng-model=\"$ctrl.orderToUpdate.notes\">\n        </textarea>\n        </form>\n        <button ng-click=\"$ctrl.updateOrder($ctrl.orderToUpdate)\">update</button>\n        <button ng-click=\"$ctrl.setOrderToUpdate(null)\">cancel</button>\n    </div>\n</div>";
+	module.exports = "<div class=\"orders\" ng-if=\"$ctrl.token\">\n    <div class=\"static\" ng-if=\"!$ctrl.orderToUpdate\">\n        <h2 class=\"admin-centered-header\">Orders</h2>\n\n        <div class=\"clearfix\">\n            <h3 class=\"admin-sub-header\">Filter</h3>\n            <ul class=\"admin-sub-nav\">\n                <li>\n                    <a ng-class=\"{selected: $ctrl.type == 'pickup'}\" ng-click=\"$ctrl.set('pickup')\">pickups</a>\n                </li>\n                <li>\n                    <a ng-class=\"{selected: $ctrl.type == 'delivery'}\" ng-click=\"$ctrl.set('delivery')\">deliveries</a>\n                </li>\n            </ul>\n        </div>\n        <label>complete: </label>\n        <select ng-model=\"$ctrl.completed\" ng-init=\"$ctrl.completed = false\">\n            <option ng-value=\"false\">incomplete</option>\n            <option ng-value=\"true\">complete</option>\n            <option ng-value=\"'all'\">all</option>\n        </select>\n        <label ng-if=\"$ctrl.type ==='pickup'\">location: </label>\n        <select ng-change=\"$ctrl.logChange()\" \n                ng-model=\"$ctrl.filterLocation\" \n                ng-if=\"$ctrl.type ==='pickup'\" \n                ng-options=\"pickup as pickup.name for pickup in $ctrl.pickupLocations track by pickup._id\">\n        </select>\n        <hr>\n\n\n        <div ng-if=\"$ctrl.type === 'pickup'\">\n            <h3 class=\"admin-centered-header\">Pickups</h3>\n            <ul>\n                <li ng-repeat=\"order in $ctrl.pickups\" ng-if=\"(order.completed === $ctrl.completed || $ctrl.completed === 'all') && ($ctrl.filterLocation._id === 'all' || $ctrl.filterLocation._id === order.pickup._id)\">\n                    <h4>Name: <span>{{order.name}}</span></h4>\n                        <h4>\n                            Pickup: {{order.pickup.name}}, on \n                            <select ng-model=\"order.pickupDate.day\">\n                                <option ng-repeat=\"day in $ctrl.days\" ng-value=\"day\">{{day}}</option>\n                            </select>\n                            <select ng-model=\"order.pickupDate.month\">\n                                <option ng-repeat=\"month in $ctrl.months\" ng-value=\"month\">{{month}}</option>\n                            </select>\n                            <input type=\"text\" ng-model=\"order.pickupDate.date\"> \n                        </h4>\n                        <p>order placed: {{order.date}}</p>\n                        <p><a ng-href=\"tel:{{order.phone}}\">phone: {{order.phone}} </a></p>\n                        <p><a ng-href=\"mailto:{{order.email}}\">email: {{order.email}}</a></p>\n                        <h5>total: ${{order.total}}.00</h5>\n                        <h4>Items</h4>\n                        <table class=\"order-items\">\n                            <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                            <tr ng-repeat=\"item in order.items\">\n                                <td>{{item.name}}</td>\n                                <td>{{item.quantity}}</td>\n                                <td>${{item.subTotal}}.00</td>\n                            </tr>\n                        </table>\n                        <h4>complete:</h4>\n                        <select ng-model=\"order.unsavedCompleted\">\n                            <option ng-value=\"true\">completed</option>\n                            <option ng-value=\"false\">incomplete</option>\n                        </select>\n                        <h4>Notes:</h4>\n                        <textarea ng-model=\"order.notes\" cols=\"100\" rows=\"4\">{{order.notes}}</textarea>\n                        <div>\n                            <button class=\"delete-button\" ng-click=\"$ctrl.removePickup(order)\">delete</button>\n                            <button ng-click=\"$ctrl.updatePickup(order)\">update</button>\n                        </div>\n                        <hr>\n\n                </li>\n            </ul>\n        </div>\n        <div ng-if=\"$ctrl.type === 'delivery'\">\n            <h3 class=\"admin-centered-header\">Deliveries</h3>\n            <ul>\n                <li ng-repeat=\"order in $ctrl.orders\" ng-if=\"order.completed === $ctrl.completed || $ctrl.completed === 'all'\">\n                        <h4>Name: <span>{{order.name}}</span></h4>\n                        <p>{{order.date}}</p>\n                        <a ng-href=\"mailto:{{order.email}}\">{{order.email}}</a>\n                        <h5>total: ${{order.total}}.00</h5>\n                        <h4>Items</h4>\n                        <table class=\"order-items\">\n                            <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                            <tr ng-repeat=\"item in order.items\">\n                                <td>{{item.name}}</td>\n                                <td>{{item.quantity}}</td>\n                                <td>${{item.subTotal}}.00</td>\n                            </tr>\n                        </table>\n                        <h5>\n                            Address: {{order.address.line_1}}, {{order.address.line_2 || ' '}} \n                            <br>\n                            {{order.address.city}}, {{order.address.state}}, {{order.address.zip}}\n                        </h5>\n                        <h5>complete: {{order.completed}}</h5>\n                        <p>Notes: {{order.notes}}</p>\n                        <button class=\"delete-button\" ng-click=\"$ctrl.removeOrder(order)\">delete</button>\n                        <button ng-click=\"$ctrl.setOrderToUpdate(order)\">edit</button>\n                        <hr>\n                </li>\n            </ul>\n        </div>\n    </div>\n    <div class=\"update\" ng-if=\"$ctrl.orderToUpdate\">\n        <h2>Update Form</h2>\n        <form>\n            <label>Name:</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.name\" placeholder=\"{{orderToUpdate.name}}\">\n            <label>Total: $</label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.total\" placeholder=\"{{orderToUpdate.total}}\">\n            <label>Email: </label>\n            <input type=\"text\" ng-model=\"$ctrl.orderToUpdate.email\" placeholder=\"{{orderToUpdate.email}}\">\n            <h4>Completed:</h4>\n            <select ng-model=\"$ctrl.orderToUpdate.completed\" ng-init=\"$ctrl.orderToUpdate.completed\">\n                <option ng-value=\"false\">incomplete</option>\n                <option ng-value=\"true\">complete</option>\n            </select>\n                \n            <h4>Items</h4>\n            <table>\n                <tr><th>item</th><th>qty.</th><th>subtotal</th></tr>\n                <tr ng-repeat=\"item in $ctrl.orderToUpdate.items\">\n                    <td><input type=\"text\" ng-model=\"item.name\" ng-value=\"item.name\" placeholder=\"{{item.name}}\"></td>\n                    <td><input type=\"text\" ng-value=\"item.quantity\" ng-model=\"item.quantity\" placeholder=\"{{item.quantity}}\"></td>\n                    <td ng-value=\"item.quantity * item.price\" ng-model=\"item.subTotal\">${{item.quantity * item.price}}.00</td>\n                </tr>\n            </table>\n            <table>\n                <tr><th>item</th><th>price</th><th>qty.</th><th>subtotal</th></tr>\n                <tr>\n                    <td><input type=\"text\" placeholder=\"new item name\" ng-model=\"newItem.name\"></td>\n                    <td><input type=\"text\" placeholder=\"price\" ng-init=\"newItem.price = 0\" ng-model=\"newItem.price\"></td>\n                    <td><input type=\"text\" placeholder=\"qty\" ng-init=\"newItem.quantity = 0\" ng-model=\"newItem.quantity\"></td>\n                    <td>subtotal: ${{newItem.price * newItem.quantity}}.00</td>\n                </tr>\n                <tr>\n                    <td><button ng-click=\"$ctrl.addItem(newItem)\">add item</button></td>\n                </tr>\n            </table>\n\n        <h5>Address</h4>\n\n        <label>Line 1:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_1}}\" ng-model=\"$ctrl.orderToUpdate.address.line_1\">\n        <label>Line 2:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.line_2}}\" ng-model=\"$ctrl.orderToUpdate.address.line_2\">\n        <label>City:</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.city}}\" ng-model=\"$ctrl.orderToUpdate.address.city\">\n        <label>State</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.state}}\" ng-model=\"$ctrl.orderToUpdate.address.state\">\n        <label>Zip</label>\n        <input type=\"text\" placeholder=\"{{$ctrl.orderToUpdate.address.zip}}\" ng-model=\"$ctrl.orderToUpdate.address.zip\">\n\n        <label>Notes:</label>\n        <textarea placeholder=\"{{$ctrl.orderToUpdate.notes}}\" ng-model=\"$ctrl.orderToUpdate.notes\">\n        </textarea>\n        </form>\n        <button ng-click=\"$ctrl.updateOrder($ctrl.orderToUpdate)\">update</button>\n        <button ng-click=\"$ctrl.setOrderToUpdate(null)\">cancel</button>\n    </div>\n</div>";
 
 /***/ },
-/* 42 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35451,7 +35585,7 @@
 	    value: true
 	});
 	
-	var _app = __webpack_require__(43);
+	var _app = __webpack_require__(47);
 	
 	var _app2 = _interopRequireDefault(_app);
 	
@@ -35497,13 +35631,13 @@
 	}
 
 /***/ },
-/* 43 */
+/* 47 */
 /***/ function(module, exports) {
 
 	module.exports = "<header>\n    <header-content cart=\"$ctrl.cart\"></header-content>\n</header>\n\n<main>\n    <ui-view cart=\"$ctrl.cart\" initializeCart=\"$ctrl.initializeCart\" hasSeenLanding=\"$ctrl.hasSeenLanding\"></ui-view>\n</main>\n\n<footer>\n    <footer-content></footer-content>\n</footer>";
 
 /***/ },
-/* 44 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35512,11 +35646,11 @@
 	    value: true
 	});
 	
-	var _articles = __webpack_require__(45);
+	var _articles = __webpack_require__(49);
 	
 	var _articles2 = _interopRequireDefault(_articles);
 	
-	var _articles3 = __webpack_require__(46);
+	var _articles3 = __webpack_require__(50);
 	
 	var _articles4 = _interopRequireDefault(_articles3);
 	
@@ -35546,19 +35680,19 @@
 	}
 
 /***/ },
-/* 45 */
+/* 49 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"loading-bar\"></div>\n\n<section class=\"articles clearfix\">\n    <div ng-repeat=\"article in $ctrl.articles\" class=\"article\">\n        <div class=\"text-button\">\n            <a href=\"{{article.link}}\">{{article.title}}</a>\n        </div>\n        <div class=\"frame\">\n            <img ng-if=\"article.imgUrl !== ''\" ng-src=\"{{article.imgUrl}}\">\n            <p ng-if=\"article.text !== ''\">{{article.text}}</p>\n        </div>\n    </div>\n</section>";
 
 /***/ },
-/* 46 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(47);
+	var content = __webpack_require__(51);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35578,7 +35712,7 @@
 	}
 
 /***/ },
-/* 47 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35586,7 +35720,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".loading-bar {\n  position: absolute;\n  height: 5px;\n  background-color: #FFC107;\n  opacity: .6;\n  animation-name: slidein;\n  animation-duration: 5s;\n  animation-iteration-count: infinite; }\n\n@keyframes slidein {\n  from {\n    width: 0%; }\n  to {\n    width: 100%; } }\n\n._3s_IS80UJioh8cYdbDVsfX {\n  width: 50%; }\n\n._375W6Dz1ygJWh5oeNqxjER {\n  width: 100%; }\n\n.articles {\n  border-top: 5px solid rgba(200, 200, 200, 0.7);\n  background-color: #fafafa;\n  margin: 0;\n  padding: 2px 0 0 0; }\n\n.text-button {\n  font-family: \"Amatic SC\", cursive;\n  font-size: 2.5em;\n  text-align: center;\n  border: 5px solid #323232;\n  background-color: #323232;\n  margin: 5px auto 0 auto; }\n  .text-button a {\n    color: white;\n    font-weight: 700;\n    transition: all .3s ease; }\n\n.frame {\n  background-color: rgba(200, 200, 200, 0.7);\n  margin: 3px auto 0 auto;\n  padding: 5px; }\n  .frame p {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.3em;\n    text-indent: 50px;\n    font-weight: bold;\n    width: 90%;\n    margin: 10px auto 5px auto; }\n\n.text-button:hover a {\n  color: #FFC107; }\n\n@media all and (max-width: 750px) {\n  .article {\n    width: 100%; }\n  .text-button {\n    width: 90%; }\n  .frame {\n    width: 90%; } }\n\n@media all and (min-width: 751px) {\n  .article {\n    width: 33.33%;\n    float: left;\n    margin-bottom: 10px;\n    margin-top: 3px; }\n  .text-button {\n    width: 95%; }\n  .frame {\n    width: 95%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/articles/src/components/articles/articles.scss","/Users/Will/freelance/earth-house/app/src/components/articles/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/articles/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,YAAW;EACX,0BCNkB;EDOlB,YAAW;EACX,wBAAuB;EACvB,uBAAsB;EACtB,oCAAmC,EACtC;;AAED;EACI;IACI,UAAS,EAAA;EAGb;IACI,YAAW,EAAA,EAAA;;AAInB;EACI,WAAU,EACb;;AAED;EACI,YAAW,EACd;;AAED;EACI,+CC/B4B;EDgC5B,0BAAkC;EAClC,UAAS;EACT,mBAAkB,EACrB;;AAED;EACI,kCEvCkC;EFwClC,iBAAgB;EAChB,mBAAkB;EAClB,0BCxCiB;EDyCjB,0BCzCiB;ED0CjB,wBAAuB,EAO1B;EAbD;IAQQ,aAAY;IACZ,iBAAgB;IAChB,yBAAwB,EAC3B;;AAGL;EACK,2CCpD2B;EDqD3B,wBAAuB;EACvB,aAAY,EAShB;EAZD;IAKQ,wCExD8B;IFyD9B,iBAAgB;IAChB,kBAAiB;IACjB,kBAAiB;IACjB,WAAU;IACV,2BAA0B,EAC7B;;AAGL;EAEI,eCpEkB,EDqEjB;;AAGD;EACI;IACI,YAAW,EACd;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa;IACb,YAAW;IACX,oBAAmB;IACnB,gBAAe,EAClB;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA","file":"articles.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.loading-bar {\n    position: absolute;\n    height: 5px;\n    background-color: $accent-color;\n    opacity: .6;\n    animation-name: slidein;\n    animation-duration: 5s;\n    animation-iteration-count: infinite;\n}\n\n@keyframes slidein {\n    from {\n        width: 0%; \n    }\n\n    to {\n        width: 100%;\n    }\n}\n\n:local(.start) {\n    width: 50%;\n}\n\n:local(.done) {\n    width: 100%;\n}\n\n.articles {\n    border-top: 5px solid $lightgrey;\n    background-color: rgb(250,250,250);\n    margin: 0;\n    padding: 2px 0 0 0;\n}\n\n.text-button {\n    font-family: $decorative-font;\n    font-size: 2.5em;\n    text-align: center;\n    border: 5px solid $black;\n    background-color: $black;\n    margin: 5px auto 0 auto;\n    a { \n        color: white;\n        font-weight: 700;\n        transition: all .3s ease;\n    }\n\n}\n.frame {\n     background-color: $lightgrey; \n     margin: 3px auto 0 auto;\n     padding: 5px;\n    p {\n        font-family: $main-font;\n        font-size: 1.3em;\n        text-indent: 50px;\n        font-weight: bold;\n        width: 90%;\n        margin: 10px auto 5px auto;\n    }\n}\n\n.text-button:hover {\n    a {\n    color: $accent-color;\n    }\n}\n\n    @media all and (max-width: 750px) {\n        .article {\n            width: 100%;\n        }\n\n        .text-button {\n            width: 90%;\n        }\n        .frame {\n            width: 90%;\n        }\n    }\n\n    @media all and (min-width: 751px) {\n        .article {\n            width: 33.33%;\n            float: left;\n            margin-bottom: 10px;\n            margin-top: 3px;\n        }\n\n        .text-button {\n            width: 95%;\n        }\n        .frame {\n            width: 95%;\n        }\n    }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	exports.push([module.id, ".loading-bar {\n  position: absolute;\n  height: 5px;\n  background-color: #FFC107;\n  opacity: .6;\n  animation-name: slidein;\n  animation-duration: 5s;\n  animation-iteration-count: infinite; }\n\n@keyframes slidein {\n  from {\n    width: 0%; }\n  to {\n    width: 100%; } }\n\n._3s_IS80UJioh8cYdbDVsfX {\n  width: 50%; }\n\n._375W6Dz1ygJWh5oeNqxjER {\n  width: 100%; }\n\n.articles {\n  border-top: 5px solid rgba(200, 200, 200, 0.7);\n  background-color: #fafafa;\n  margin: 0;\n  padding: 2px 0 0 0; }\n\n.text-button {\n  font-family: \"Amatic SC\", cursive;\n  font-size: 2.5em;\n  text-align: center;\n  border: 5px solid #323232;\n  background-color: #323232;\n  margin: 5px auto 0 auto; }\n  .text-button a {\n    color: white;\n    font-weight: 700;\n    transition: all .3s ease; }\n\n.frame {\n  background-color: rgba(200, 200, 200, 0.7);\n  margin: 3px auto 0 auto;\n  padding: 5px; }\n  .frame p {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.3em;\n    text-indent: 50px;\n    font-weight: bold;\n    width: 90%;\n    margin: 10px auto 5px auto; }\n\n.text-button:hover a {\n  color: #FFC107; }\n\n@media all and (max-width: 750px) {\n  .article {\n    width: 100%; }\n  .text-button {\n    width: 90%; }\n  .frame {\n    width: 90%; } }\n\n@media all and (min-width: 751px) {\n  .article {\n    width: 33.33%;\n    float: left;\n    margin-bottom: 10px;\n    margin-top: 3px; }\n  .text-button {\n    width: 95%; }\n  .frame {\n    width: 95%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/articles/src/components/articles/articles.scss","/Users/Will/freelance/earth-house/app/src/components/articles/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/articles/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,YAAW;EACX,0BCNkB;EDOlB,YAAW;EACX,wBAAuB;EACvB,uBAAsB;EACtB,oCAAmC,EACtC;;AAED;EACI;IACI,UAAS,EAAA;EAGb;IACI,YAAW,EAAA,EAAA;;AAInB;EACI,WAAU,EACb;;AAED;EACI,YAAW,EACd;;AAED;EACI,+CC/B4B;EDgC5B,0BAAkC;EAClC,UAAS;EACT,mBAAkB,EACrB;;AAED;EACI,kCEvCkC;EFwClC,iBAAgB;EAChB,mBAAkB;EAClB,0BCxCiB;EDyCjB,0BCzCiB;ED0CjB,wBAAuB,EAO1B;EAbD;IAQQ,aAAY;IACZ,iBAAgB;IAChB,yBAAwB,EAC3B;;AAGL;EACK,2CCpD2B;EDqD3B,wBAAuB;EACvB,aAAY,EAShB;EAZD;IAKQ,wCExD8B;IFyD9B,iBAAgB;IAChB,kBAAiB;IACjB,kBAAiB;IACjB,WAAU;IACV,2BAA0B,EAC7B;;AAGL;EAEI,eCpEkB,EDqEjB;;AAGD;EACI;IACI,YAAW,EACd;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa;IACb,YAAW;IACX,oBAAmB;IACnB,gBAAe,EAClB;EAED;IACI,WAAU,EACb;EACD;IACI,WAAU,EACb,EAAA","file":"articles.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.loading-bar {\n    position: absolute;\n    height: 5px;\n    background-color: $accent-color;\n    opacity: .6;\n    animation-name: slidein;\n    animation-duration: 5s;\n    animation-iteration-count: infinite;\n}\n\n@keyframes slidein {\n    from {\n        width: 0%; \n    }\n\n    to {\n        width: 100%;\n    }\n}\n\n:local(.start) {\n    width: 50%;\n}\n\n:local(.done) {\n    width: 100%;\n}\n\n.articles {\n    border-top: 5px solid $lightgrey;\n    background-color: rgb(250,250,250);\n    margin: 0;\n    padding: 2px 0 0 0;\n}\n\n.text-button {\n    font-family: $decorative-font;\n    font-size: 2.5em;\n    text-align: center;\n    border: 5px solid $black;\n    background-color: $black;\n    margin: 5px auto 0 auto;\n    a { \n        color: white;\n        font-weight: 700;\n        transition: all .3s ease;\n    }\n\n}\n.frame {\n     background-color: $lightgrey; \n     margin: 3px auto 0 auto;\n     padding: 5px;\n    p {\n        font-family: $main-font;\n        font-size: 1.3em;\n        text-indent: 50px;\n        font-weight: bold;\n        width: 90%;\n        margin: 10px auto 5px auto;\n    }\n}\n\n.text-button:hover {\n    a {\n    color: $accent-color;\n    }\n}\n\n    @media all and (max-width: 750px) {\n        .article {\n            width: 100%;\n        }\n\n        .text-button {\n            width: 90%;\n        }\n        .frame {\n            width: 90%;\n        }\n    }\n\n    @media all and (min-width: 751px) {\n        .article {\n            width: 33.33%;\n            float: left;\n            margin-bottom: 10px;\n            margin-top: 3px;\n        }\n\n        .text-button {\n            width: 95%;\n        }\n        .frame {\n            width: 95%;\n        }\n    }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -35595,7 +35729,7 @@
 	};
 
 /***/ },
-/* 48 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35604,11 +35738,11 @@
 	    value: true
 	});
 	
-	var _checkout = __webpack_require__(49);
+	var _checkout = __webpack_require__(53);
 	
 	var _checkout2 = _interopRequireDefault(_checkout);
 	
-	var _checkout3 = __webpack_require__(50);
+	var _checkout3 = __webpack_require__(54);
 	
 	var _checkout4 = _interopRequireDefault(_checkout3);
 	
@@ -35623,9 +35757,9 @@
 	};
 	
 	
-	controller.$inject = ['paymentService', '$scope', '$state', 'pickupService', 'dateService', 'orderPickupService', 'checkoutContentService'];
+	controller.$inject = ['paymentService', '$scope', '$state', 'pickupService', 'dateService', 'orderPickupService', 'checkoutContentService', '$document'];
 	
-	function controller(paymentService, $scope, $state, pickupService, dateService, orderPickupService, checkoutContentService) {
+	function controller(paymentService, $scope, $state, pickupService, dateService, orderPickupService, checkoutContentService, $document) {
 	    var _this = this;
 	
 	    this.styles = _checkout4.default;
@@ -35644,7 +35778,6 @@
 	    this.total = 0;
 	    this.cityArray = ['Portland', 'Beaverton', 'Vancouver', 'Gresham', 'Lake Oswego'];
 	    this.confirmCart = false;
-	    this.minPurchase = 50;
 	    this.invalidAddress = false;
 	    //we will use min purchase to ensure that you cannot checkout unless you total is greater than this number
 	
@@ -35660,11 +35793,14 @@
 	                    pickupText: '',
 	                    deliveryText: '',
 	                    pickup: false,
-	                    cdelivery: false
+	                    delivery: false,
+	                    minPurchase: 50
 	                };
 	            } else {
 	                _this.content = data[0];
 	            }
+	            _this.minPurchase = _this.content.minPurchase;
+	
 	            _this.pickupStyle = [_this.styles.method];
 	            _this.deliveryStyle = [_this.styles.method];
 	            if (_this.content.pickup) {
@@ -35685,6 +35821,12 @@
 	            dateService.alphabetize(pickups);
 	            _this.pickups = pickups;
 	        });
+	    };
+	
+	    var checkoutRegion = angular.element(document.getElementById('checkout-region')); //eslint-disable-line
+	
+	    this.goToCheckout = function () {
+	        $document.scrollToElement(checkoutRegion, 0, 600);
 	    };
 	
 	    this.selectMethod = function (method) {
@@ -35711,11 +35853,17 @@
 	        } else {
 	            return;
 	        }
+	        _this.goToCheckout();
 	    };
 	
 	    this.confirmPickup = function () {
+	        var startDate = new Date(_this.pickup.start).getTime();
 	        var currentTime = Date.now();
-	        _this.timeLimit = currentTime + 1000 * 60 * 60 * 48; //48 hours from the current time;
+	        if (startDate > currentTime) {
+	            _this.timeLimit = startDate;
+	        } else {
+	            _this.timeLimit = currentTime + 1000 * 60 * 60 * 48; //48 hours from the current time;
+	        }
 	        for (var i = 0; i < 8; i++) {
 	            var date = new Date(3600000 * 24 * i + _this.timeLimit);
 	            var day = date.toDateString().split(' ')[0];
@@ -35726,7 +35874,6 @@
 	        }
 	        _this.pickup.startPretty = dateService.hourValuetoObj(_this.pickup.startTime).time;
 	        _this.pickup.endPretty = dateService.hourValuetoObj(_this.pickup.endTime).time;
-	        console.log(_this.pickupDate);
 	    };
 	
 	    this.updateTotals = function () {
@@ -35741,7 +35888,6 @@
 	    };
 	
 	    this.updateCart = function (item, newQunatity) {
-	        //do we want to completely remove item if the new quant is 0?
 	        var index = this.cart.items.indexOf(item);
 	        this.cart.items[index].quantity = newQunatity;
 	        this.updateTotals();
@@ -35788,7 +35934,6 @@
 	    };
 	
 	    this.setOrderInfo = function () {
-	        console.log('in set info');
 	        $scope.orderType = _this.orderType;
 	        $scope.orderInfo = {
 	            name: _this.address.firstName + ' ' + _this.address.lastName,
@@ -35797,7 +35942,6 @@
 	            total: _this.total
 	        };
 	        if ($scope.orderType === 'delivery') {
-	            console.log('this is a delivery');
 	            $scope.orderInfo.address = {
 	                line_1: _this.address.line1,
 	                line_2: _this.address.line2,
@@ -35807,7 +35951,7 @@
 	            };
 	        }
 	        if ($scope.orderType === 'pickup') {
-	            console.log('this is a pickup');
+	            $scope.orderInfo.phone = _this.phone;
 	            $scope.orderInfo.pickup = _this.pickup._id;
 	            $scope.orderInfo.pickupDate = _this.pickupDate;
 	        }
@@ -35823,7 +35967,6 @@
 	        } else {
 	            //we need to put an order into our db and send the _id as the metadata to stripe
 	            if ($scope.orderType === 'delivery') {
-	                console.log('calling service to make delivery order');
 	                paymentService.createOrder($scope.orderInfo).then(function (data) {
 	                    var orderId = data._id;
 	                    var paymentInfo = {
@@ -35836,9 +35979,7 @@
 	                    $state.go('success');
 	                });
 	            } else {
-	                console.log('calling service to make pickup orders', $scope.orderInfo);
 	                orderPickupService.create($scope.orderInfo).then(function (data) {
-	                    console.log(data);
 	                    var orderId = data._id;
 	                    var paymentInfo = {
 	                        stripeToken: result.id,
@@ -35855,19 +35996,19 @@
 	}
 
 /***/ },
-/* 49 */
+/* 53 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"checkout\">\n    <div class=\"cart-edit\" ng-if=\"!$ctrl.confirmCart\">\n        <h2>Ordering Online</h2>\n        <p ng-bind-html=\"$ctrl.content.text\"></p>\n        <h2>Shopping Cart</h2>\n        \n        <div ng-if=\"$ctrl.cartEmpty\">\n            <p class=\"empty-cart\">There is nothing in your cart</p>\n            <a ui-sref=\"shop\">Keep shopping!</a>\n        </div>\n        \n        <div class=\"cart-table\" ng-if=\"!$ctrl.cartEmpty\">\n            <table>\n                <thead>\n                    <tr>\n                        <th>Product</th>\n                        <th>Price</th>\n                        <th colspan=\"2\">Quantity</th>\n                        <th></th>\n                        <th>Total</th>\n                    </tr>\n                </thead>\n\n                <tbody>\n                    <tr ng-repeat=\"item in $ctrl.cart.items\">\n                        <td>\n                            {{item.name}}\n                        </td>\n                        <td>\n                            ${{item.price}}.00\n                        </td>\n                        <td>\n                            <select ng-model=\"item.quantity\">\n                                <option ng-value=\"item.quantity\">\n                                    {{item.quantity}}\n                                </option>\n                                <option ng-value=\"number\" ng-repeat=\"number in $ctrl.selectArray\">\n                                    {{number}}\n                                </option>\n                            </select>\n                        </td>\n                        <td>\n                            <button ng-click=\"$ctrl.updateCart(item, item.quantity)\">Update</button>\n                        </td>\n                        <td>\n                            <span class=\"remove-item\" ng-click=\"$ctrl.removeItem(item)\">x remove</span>\n                        </td>\n                        <td class=\"total\">${{item.subTotal}}.00</td>\n                    </tr>\n                </tbody>\n\n                <tfoot>\n                    <tr>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td><span class=\"bold\">Total:</span></td>\n                        <td class=\"total\"> ${{$ctrl.total}}.00</td>\n                    </tr>\n                </tfoot>\n            </table>\n            <h3 ng-if=\"$ctrl.total < $ctrl.minPurchase\">Online purchases must be over ${{$ctrl.minPurchase}}.00</h3>\n            <div class=\"form-bottom\">\n                <a ui-sref=\"shop\">Keep shopping!</a>\n                <button class=\"confirm-cart\" ng-if=\"$ctrl.total > $ctrl.minPurchase\" ng-click=\"$ctrl.confirmCart = true\">Confirm Cart</button>\n            </div>\n\n        </div>\n    </div>\n\n\n    <div class=\"cart\" ng-if=\"$ctrl.confirmCart\">\n        <h2>Your Order <a ng-click=\"$ctrl.confirmCart = false\">edit</a></h2>\n        <table>\n            <thead>\n                <th>Product</th>\n                <th></th>\n                <th>Quantity</th>\n                <th>Total</th>\n            </thead>\n            <tbody>\n                <tr ng-repeat=\"item in $ctrl.cart.items\">\n                    <td>{{item.name}}</td>\n                    <td>x</td>\n                    <td class=\"quant\">{{item.quantity}}</td>\n                    <td class=\"total\">${{item.price * item.quantity}}.00</td>\n                </tr>\n            </tbody>\n            <tfoot>\n                <td></td>\n                <td></td>\n                <td></td>\n                <td class=\"total\">\n                    <span class=\"bold\">Total:</span>${{$ctrl.total}}.00\n                </td>\n            </tfoot>\n        </table>\n        \n    </div>\n\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.confirmCart && !$ctrl.showPayment\">\n        <h2>Select your delivery method</h2>\n        <div ng-class=\"$ctrl.pickupStyle\" ng-click=\"$ctrl.selectMethod('pickup')\">\n            <h2>Pickup</h2>\n            <p>{{$ctrl.content.pickupText}}</p>\n        </div>\n        <div ng-class=\"$ctrl.deliveryStyle\" ng-click=\"$ctrl.selectMethod('delivery')\">\n            <h2>Delivery</h2>\n            <p>{{$ctrl.content.deliveryText}}</p>\n        </div>\n    </div>\n\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.showAddressForm && $ctrl.confirmCart\">\n        <h2>Delivery Info</h2>\n\n        <form name=\"address-form\" ng-submit=\"$ctrl.showPaymentDiv()\">\n            <h4>Name for order*</h4>\n            <input placeholder=\"first name\" ng-model=\"$ctrl.address.firstName\" required>\n            <input placeholder=\"last name\" ng-model=\"$ctrl.address.lastName\" required>\n            <h4>Email*</h4>\n            <input type=\"email\" placeholder=\"enter a valid email address\" ng-model=\"$ctrl.address.email\" required>\n            <input type=\"email\" placeholder=\"confirm email address\" ng-model=\"$ctrl.address.emailCheck\" required> \n            <p class=\"warning\" ng-if=\"$ctrl.emailWarning\">Make sure your email addresses are the same!!!!</p>\n            <h4>Adress for delivery*</h4>\n            <input placeholder=\"street line 1\" ng-model=\"$ctrl.address.line1\" required>\n            <input placeholder=\"street line 2\" ng-model=\"$ctrl.address.line2\">\n            <select name=\"city\" ng-model=\"$ctrl.address.city\" placeholder=\"city\" required>\n                <option value=\"\" disable selected>city</option>\n                <option ng-repeat=\"city in $ctrl.cityArray\" ng-value=\"city\" ng-required=\"required\">{{city}}</option>\n            </select>\n            <select name=\"state\" ng-model=\"$ctrl.address.state\" required>\n                <option value=\"\" disable selected>state</option>\n                <option value=\"Oregon\">Oregon</option>\n                <option value=\"Washington\">Washington</option>\n            </select>\n            <input name=\"zip\" placeholder=\"zip code\" ng-model=\"$ctrl.address.zip\" required>\n            <button type=\"submit\">Checkout</button>\n            <div ng-show=\"$ctrl.invalidAddress\">\n                Make sure you have filled out all of the required address fields!\n            </div>\n        </form>\n    </div>\n\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.showPickupForm && $ctrl.confirmCart\">\n        <h2>Pickup Info</h2>\n        <form ng-submit=\"$ctrl.showPaymentDiv()\">\n            <select class=\"location-select\" ng-model=\"$ctrl.pickup\" ng-change=\"$ctrl.confirmPickup()\" ng-options=\"pickup as pickup.name for pickup in $ctrl.pickups track by pickup._id\">\n                <option value=\"\">select your location</option>\n            </select>\n            <p class=\"pickup-message\" ng-if=\"$ctrl.pickup\">Pick up at {{$ctrl.pickup.name}} on {{$ctrl.pickupDate.toDateString()}}, between {{$ctrl.pickup.startPretty}} and {{$ctrl.pickup.endPretty}}.</p>\n            <h4>Name for order*</h4>\n                <input placeholder=\"first name\" ng-model=\"$ctrl.address.firstName\" required>\n                <input placeholder=\"last name\" ng-model=\"$ctrl.address.lastName\" required>\n            <h4>Email*</h4>\n            <input type=\"email\" placeholder=\"enter a valid email address\" ng-model=\"$ctrl.address.email\" required>\n            <input type=\"email\" placeholder=\"confirm email address\" ng-model=\"$ctrl.address.emailCheck\" required> \n            <p class=\"warning\" ng-if=\"$ctrl.emailWarning\">Make sure your email addresses are the same!!!!</p>\n            <button ng-if=\"$ctrl.pickup\" type=\"submit\">Confirm</button>\n        </form>\n    </div>\n\n    <div class=\"payment\" ng-show=\"$ctrl.showPayment && !$ctrl.showAddressForm && !$ctrl.showPickupForm\">\n        <div class=\"address-table\" ng-if=\"$ctrl.orderType === 'delivery'\">\n            <h2>Delivery Info <a ng-click=\"$ctrl.showAddressForm = true; $ctrl.showPayment = false\">edit</a></h2>\n            <p><span class=\"bold\">name: </span>{{$ctrl.address.firstName}} {{$ctrl.address.lastName}}<p>\n            <p><span class=\"bold\">email for order: </span>{{$ctrl.address.email}}</p>\n            <h4>Address: </h4>\n            <p>{{$ctrl.address.line1}}</p>\n            <p>{{$ctrl.address.line2}}</p>\n            <p>{{$ctrl.address.city}}, {{$ctrl.address.state}} {{$ctrl.address.zip}}</p>\n        </div>\n        <div class=\"address-table\" ng-if=\"$ctrl.orderType === 'pickup'\">\n            <h2>Pickup Info <a ng-click=\"$ctrl.showPickupForm = true; $ctrl.showPayment = false\">edit</a></h2>\n            <p ng-if=\"$ctrl.pickup\">Pick up at {{$ctrl.pickup.name}} on {{$ctrl.pickupDate.toDateString()}}, between {{$ctrl.pickup.startPretty}} and {{$ctrl.pickup.endPretty}}.</p>\n        </div>\n\n\n        <h3>Payment Information</h3>\n        <form stripe-form=\"stripeCallback\" name=\"checkoutForm\">\n            <input ng-model=\"number\" placeholder=\"Card Number\" payments-format=\"card\" payments-validate=\"card\" name=\"card\">\n            <input ng-model=\"expiry\" placeholder=\"Expiration\" payments-formate=\"expiry\" payments-validate=\"expiry\" name=\"expiry\">\n            <input ng-model=\"cvc\" placeholder=\"CVC\" payments-format=\"cvc\" payments-validate=\"cvc\" name=\"cvc\">\n            <button type=\"submit\">Place Order!</button>\n        </form>\n\n        <div ng-show=\"invalidPayment\">\n            There was a problem processing your card. Make sure you entered all of your payment information correctly.\n        </div>\n    </div>\n</div>\n\n\n\n";
+	module.exports = "<div class=\"checkout\">\n    <div class=\"cart-edit\" ng-if=\"!$ctrl.confirmCart\">\n        <h2>Ordering Online</h2>\n        <p ng-bind-html=\"$ctrl.content.text\"></p>\n        <h2>Shopping Cart</h2>\n        \n        <div ng-if=\"$ctrl.cartEmpty\">\n            <p class=\"empty-cart\">There is nothing in your cart</p>\n            <a ui-sref=\"shop\">Keep shopping!</a>\n        </div>\n        \n        <div class=\"cart-table\" ng-if=\"!$ctrl.cartEmpty\">\n            <table>\n                <thead>\n                    <tr>\n                        <th>Product</th>\n                        <th>Price</th>\n                        <th colspan=\"2\">Quantity</th>\n                        <th></th>\n                        <th>Total</th>\n                    </tr>\n                </thead>\n\n                <tbody>\n                    <tr ng-repeat=\"item in $ctrl.cart.items\">\n                        <td>\n                            {{item.name}}\n                        </td>\n                        <td>\n                            ${{item.price}}.00\n                        </td>\n                        <td>\n                            <select ng-model=\"item.quantity\">\n                                <option ng-value=\"item.quantity\">\n                                    {{item.quantity}}\n                                </option>\n                                <option ng-value=\"number\" ng-repeat=\"number in $ctrl.selectArray\">\n                                    {{number}}\n                                </option>\n                            </select>\n                        </td>\n                        <td>\n                            <button ng-click=\"$ctrl.updateCart(item, item.quantity)\">Update</button>\n                        </td>\n                        <td>\n                            <span class=\"remove-item\" ng-click=\"$ctrl.removeItem(item)\">x remove</span>\n                        </td>\n                        <td class=\"total\">${{item.subTotal}}.00</td>\n                    </tr>\n                </tbody>\n\n                <tfoot>\n                    <tr>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td></td>\n                        <td><span class=\"bold\">Total:</span></td>\n                        <td class=\"total\"> ${{$ctrl.total}}.00</td>\n                    </tr>\n                </tfoot>\n            </table>\n            <h3 ng-if=\"$ctrl.total < $ctrl.minPurchase\">Online purchases must be over ${{$ctrl.minPurchase}}.00</h3>\n            <div class=\"form-bottom\">\n                <a ui-sref=\"shop\">Keep shopping!</a>\n                <button class=\"confirm-cart\" ng-if=\"$ctrl.total > $ctrl.minPurchase\" ng-click=\"$ctrl.confirmCart = true\">Confirm Cart</button>\n            </div>\n\n        </div>\n    </div>\n\n\n    <div class=\"cart\" ng-if=\"$ctrl.confirmCart\">\n        <h2>Your Order <a ng-click=\"$ctrl.confirmCart = false\">edit</a></h2>\n        <table>\n            <thead>\n                <th>Product</th>\n                <th></th>\n                <th>Quantity</th>\n                <th>Total</th>\n            </thead>\n            <tbody>\n                <tr ng-repeat=\"item in $ctrl.cart.items\">\n                    <td>{{item.name}}</td>\n                    <td>x</td>\n                    <td class=\"quant\">{{item.quantity}}</td>\n                    <td class=\"total\">${{item.price * item.quantity}}.00</td>\n                </tr>\n            </tbody>\n            <tfoot>\n                <td></td>\n                <td></td>\n                <td></td>\n                <td class=\"total\">\n                    <span class=\"bold\">Total:</span>${{$ctrl.total}}.00\n                </td>\n            </tfoot>\n        </table>\n        \n    </div>\n\n    <div class=\"checkoutInfo clearfix\" ng-if=\"$ctrl.confirmCart && !$ctrl.showPayment\">\n        <h2>Select your delivery method</h2>\n        \n        <div ng-class=\"$ctrl.styles.container\">\n            <div ng-class=\"$ctrl.pickupStyle\" ng-click=\"$ctrl.selectMethod('pickup')\">\n                <h2>Pickup</h2>\n                <p ng-if=\"$ctrl.content.pickup\">{{$ctrl.content.pickupText}}</p>\n            </div>\n            <div ng-if=\"!$ctrl.content.pickup\" class=\"coming-soon\">\n                <h2>Coming Soon!</h2>\n            </div>\n        </div>\n\n        <div ng-class=\"$ctrl.styles.container\">\n            <div ng-class=\"$ctrl.deliveryStyle\" ng-click=\"$ctrl.selectMethod('delivery')\">\n                <h2>Delivery</h2>\n                <p ng-if=\"$ctrl.content.delivery\">{{$ctrl.content.deliveryText}}</p>\n            </div>\n            <div ng-if=\"!$ctrl.content.delivery\" class=\"coming-soon\">\n                <h2>Coming Soon!</h2>\n            </div>\n        </div>\n    </div>\n\n    <div id=\"checkout-region\">\n        \n    </div>\n\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.showAddressForm && $ctrl.confirmCart\">\n        <h2>Delivery Info</h2>\n\n        <form name=\"address-form\" ng-submit=\"$ctrl.showPaymentDiv()\">\n            <h4>Name for order*</h4>\n            <input placeholder=\"first name\" ng-model=\"$ctrl.address.firstName\" required>\n            <input placeholder=\"last name\" ng-model=\"$ctrl.address.lastName\" required>\n            <h4>Email*</h4>\n            <input type=\"email\" placeholder=\"enter a valid email address\" ng-model=\"$ctrl.address.email\" required>\n            <input type=\"email\" placeholder=\"confirm email address\" ng-model=\"$ctrl.address.emailCheck\" required> \n            <p class=\"warning\" ng-if=\"$ctrl.emailWarning\">Make sure your email addresses are the same!!!!</p>\n            <h4>Adress for delivery*</h4>\n            <input placeholder=\"street line 1\" ng-model=\"$ctrl.address.line1\" required>\n            <input placeholder=\"street line 2\" ng-model=\"$ctrl.address.line2\">\n            <select name=\"city\" ng-model=\"$ctrl.address.city\" placeholder=\"city\" required>\n                <option value=\"\" disable selected>city</option>\n                <option ng-repeat=\"city in $ctrl.cityArray\" ng-value=\"city\" ng-required=\"required\">{{city}}</option>\n            </select>\n            <select name=\"state\" ng-model=\"$ctrl.address.state\" required>\n                <option value=\"\" disable selected>state</option>\n                <option value=\"Oregon\">Oregon</option>\n                <option value=\"Washington\">Washington</option>\n            </select>\n            <input name=\"zip\" placeholder=\"zip code\" ng-model=\"$ctrl.address.zip\" required>\n            <button type=\"submit\">Checkout</button>\n            <div ng-show=\"$ctrl.invalidAddress\">\n                Make sure you have filled out all of the required address fields!\n            </div>\n        </form>\n    </div>\n\n    <div class=\"checkoutInfo\" ng-if=\"$ctrl.showPickupForm && $ctrl.confirmCart\">\n        <h2>Pickup Info</h2>\n        <form ng-submit=\"$ctrl.showPaymentDiv()\">\n            <select class=\"location-select\" ng-model=\"$ctrl.pickup\" ng-change=\"$ctrl.confirmPickup()\" ng-options=\"pickup as pickup.name for pickup in $ctrl.pickups track by pickup._id\">\n                <option value=\"\">select your location</option>\n            </select>\n            <p class=\"pickup-message\" ng-if=\"$ctrl.pickup\">Pick up at {{$ctrl.pickup.name}} on {{$ctrl.pickupDate.toDateString()}}, between {{$ctrl.pickup.startPretty}} and {{$ctrl.pickup.endPretty}}.</p>\n            <h4>Name for order*</h4>\n                <input placeholder=\"first name\" ng-model=\"$ctrl.address.firstName\" required>\n                <input placeholder=\"last name\" ng-model=\"$ctrl.address.lastName\" required>\n            <h4>Phone Number*</h4>\n            <input type=\"tel\" ng-model=\"$ctrl.phone\" required>\n            <h4>Email*</h4>\n            <input type=\"email\" placeholder=\"enter a valid email address\" ng-model=\"$ctrl.address.email\" required>\n            <input type=\"email\" placeholder=\"confirm email address\" ng-model=\"$ctrl.address.emailCheck\" required> \n            <p class=\"warning\" ng-if=\"$ctrl.emailWarning\">Make sure your email addresses are the same!!!!</p>\n            <button ng-if=\"$ctrl.pickup\" type=\"submit\">Confirm</button>\n        </form>\n    </div>\n\n    <div class=\"payment\" ng-show=\"$ctrl.showPayment && !$ctrl.showAddressForm && !$ctrl.showPickupForm\">\n        <div class=\"address-table\" ng-if=\"$ctrl.orderType === 'delivery'\">\n            <h2>Delivery Info <a ng-click=\"$ctrl.showAddressForm = true; $ctrl.showPayment = false\">edit</a></h2>\n            <p><span class=\"bold\">name: </span>{{$ctrl.address.firstName}} {{$ctrl.address.lastName}}<p>\n            <p><span class=\"bold\">email for order: </span>{{$ctrl.address.email}}</p>\n            <h4>Address: </h4>\n            <p>{{$ctrl.address.line1}}</p>\n            <p>{{$ctrl.address.line2}}</p>\n            <p>{{$ctrl.address.city}}, {{$ctrl.address.state}} {{$ctrl.address.zip}}</p>\n        </div>\n        <div class=\"address-table\" ng-if=\"$ctrl.orderType === 'pickup'\">\n            <h2>Pickup Info <a ng-click=\"$ctrl.showPickupForm = true; $ctrl.showPayment = false\">edit</a></h2>\n            <p ng-if=\"$ctrl.pickup\">Pick up at {{$ctrl.pickup.name}} on {{$ctrl.pickupDate.toDateString()}}, between {{$ctrl.pickup.startPretty}} and {{$ctrl.pickup.endPretty}}.</p>\n        </div>\n\n\n        <h3>Payment Information</h3>\n        <form stripe-form=\"stripeCallback\" name=\"checkoutForm\">\n            <input ng-model=\"number\" placeholder=\"Card Number\" payments-format=\"card\" payments-validate=\"card\" name=\"card\">\n            <input ng-model=\"expiry\" placeholder=\"Expiration\" payments-formate=\"expiry\" payments-validate=\"expiry\" name=\"expiry\">\n            <input ng-model=\"cvc\" placeholder=\"CVC\" payments-format=\"cvc\" payments-validate=\"cvc\" name=\"cvc\">\n            <button type=\"submit\">Place Order!</button>\n        </form>\n\n        <div ng-show=\"invalidPayment\">\n            There was a problem processing your card. Make sure you entered all of your payment information correctly.\n        </div>\n    </div>\n</div>\n\n\n\n";
 
 /***/ },
-/* 50 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(51);
+	var content = __webpack_require__(55);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35887,7 +36028,7 @@
 	}
 
 /***/ },
-/* 51 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35895,10 +36036,11 @@
 	
 	
 	// module
-	exports.push([module.id, "._1cQZz7BvW97PCxZT9GaQ37 {\n  border: 3px solid #323232;\n  background-color: rgba(200, 200, 200, 0.7);\n  width: 35%;\n  float: left;\n  margin: 20px 5% 70px 5%;\n  border-radius: 2%;\n  padding: 20px;\n  transition: all .35s ease; }\n  ._1cQZz7BvW97PCxZT9GaQ37 h2 {\n    text-align: center; }\n  ._1cQZz7BvW97PCxZT9GaQ37 p {\n    text-indent: 20px; }\n\n._1xU_MbxIIzSJN5_udQgSDP:hover {\n  color: white;\n  background-color: black;\n  cursor: pointer; }\n\n.BTuVRPKr6K6rrR_ueUQpm {\n  color: white;\n  background-color: black; }\n\n.CVOgkpok2dfnzt-UqWtYl {\n  opacity: .4; }\n\n.checkout {\n  width: 90%;\n  min-height: 70vh;\n  margin: 0 auto;\n  margin-bottom: 10%;\n  font-size: .87em; }\n  .checkout h2 {\n    font-family: \"Amatic SC\", cursive;\n    margin-top: 2%;\n    margin-bottom: 2%;\n    font-size: 2.5em; }\n    .checkout h2 a {\n      font-size: .4em;\n      font-family: sans-serif;\n      font-weight: 500;\n      margin-left: 2%; }\n  .checkout h4 {\n    margin: 3% 0; }\n  .checkout p {\n    margin-bottom: 2%;\n    margin-top: 1%; }\n  .checkout a {\n    color: #0b0080;\n    transition: all .35s ease;\n    text-decoration: underline; }\n  .checkout table {\n    width: 100%;\n    margin-bottom: 3%; }\n  .checkout .cart-table tr {\n    height: 50px; }\n  .checkout .quant {\n    text-align: center; }\n  .checkout .total {\n    text-align: right; }\n  .checkout .bold {\n    font-weight: bold;\n    font-size: 1em;\n    color: black;\n    display: inline;\n    margin: 0; }\n  .checkout span {\n    display: block;\n    color: red;\n    font-size: .75em;\n    margin-left: 2%; }\n  .checkout button {\n    background: none;\n    font-size: .75em;\n    line-height: .5em; }\n  .checkout .confirm-cart {\n    float: right; }\n  .checkout input, .checkout textarea, .checkout select, .checkout button {\n    -webkit-appearance: none;\n    border: 1px solid #555;\n    padding: 0.5em;\n    font-size: .75em;\n    line-height: .8em;\n    background: #fff;\n    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n    -webkit-box-shadow: 1px 1px 1px #fff;\n    -webkit-border-radius: 0.5em; }\n  .checkout input {\n    line-height: .75em;\n    font-size: .75em;\n    margin: 2%; }\n  .checkout .location-select {\n    margin-bottom: 20px; }\n  .checkout .pickup-message {\n    color: black; }\n\n.remove-item {\n  color: red;\n  text-decoration: underline; }\n\n.ng-invalid, .warning {\n  color: red; }\n\n@media all and (min-width: 500px) {\n  .checkout {\n    font-size: 1em; } }\n\n@media all and (min-width: 700px) {\n  .checkout {\n    font-size: 1.25em;\n    margin-top: 3%;\n    width: 80%; }\n    .checkout table {\n      width: 90%;\n      margin: 0 auto; }\n    .checkout h4 {\n      margin: 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/checkout/src/components/checkout/checkout.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,0BCFiB;EDGjB,2CCJ4B;EDK5B,WAAU;EACV,YAAW;EACX,wBAAuB;EACvB,kBAAiB;EACjB,cAAa;EAOb,0BAAyB,EAC5B;EAfD;IASQ,mBAAkB,EACrB;EAVL;IAYQ,kBAAiB,EACpB;;AAIL;EACI,aAAY;EACZ,wBAAuB;EACvB,gBAAe,EAClB;;AACD;EACI,aAAY;EACZ,wBAAuB,EAC1B;;AACD;EACI,YAAW,EACd;;AACD;EACI,WAAU;EACV,iBAAgB;EAChB,eAAc;EACd,mBAAkB;EAClB,iBAAgB,EA+FnB;EApGD;IAQQ,kCExC8B;IFyC9B,eAAc;IACd,kBAAiB;IACjB,iBAAgB,EAOnB;IAlBL;MAaY,gBAAe;MACf,wBAAuB;MACvB,iBAAgB;MAChB,gBAAe,EAClB;EAjBT;IAqBQ,aAAY,EACf;EAtBL;IAyBQ,kBAAiB;IACjB,eAAc,EACjB;EA3BL;IA6BQ,eC1DiB;ID2DjB,0BAAyB;IACzB,2BAA0B,EAC7B;EAhCL;IAmCQ,YAAW;IACX,kBAAiB,EACpB;EArCL;IAwCY,aAAY,EACf;EAzCT;IA6CQ,mBAAkB,EACrB;EA9CL;IAiDQ,kBAAiB,EACpB;EAlDL;IAqDQ,kBAAiB;IACjB,eAAc;IACd,aAAY;IACZ,gBAAe;IACf,UAAS,EACZ;EA1DL;IA6DQ,eAAc;IACd,WAAU;IACV,iBAAgB;IAChB,gBAAe,EAClB;EAjEL;IAoEQ,iBAAgB;IAChB,iBAAgB;IAChB,kBAAiB,EACpB;EAvEL;IA0EQ,aAAY,EACf;EA3EL;IA8EQ,yBAAwB;IACxB,uBAAsB;IACtB,eAAc;IACd,iBAAgB;IAChB,kBAAiB;IACjB,iBAAgB;IAChB,kFAAiF;IACjF,qCAAoC;IACpC,6BAA4B,EAC/B;EAvFL;IAyFQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU,EACb;EA5FL;IA8FQ,oBAAmB,EACtB;EA/FL;IAkGQ,aAAY,EACf;;AAML;EACI,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,WAAU,EACb;;AAGD;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,kBAAiB;IACjB,eAAc;IACd,WAAU,EASb;IAZD;MAKQ,WAAU;MACV,eAAc,EACjB;IAPL;MAUQ,UAAS,EACZ,EAAA","file":"checkout.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n:local(.method) {\n    border: 3px solid $black;\n    background-color: $lightgrey;\n    width: 35%;\n    float: left;\n    margin: 20px 5% 70px 5%;\n    border-radius: 2%;\n    padding: 20px;\n    h2 {\n        text-align: center;\n    }\n    p {\n        text-indent: 20px;\n    }\n    transition: all .35s ease;\n}\n\n:local(.clickable):hover {\n    color: white;\n    background-color: black;\n    cursor: pointer;\n}\n:local(.active) {\n    color: white;\n    background-color: black;\n}\n:local(.inactive) {\n    opacity: .4;\n}\n.checkout {\n    width: 90%;\n    min-height: 70vh;\n    margin: 0 auto;\n    margin-bottom: 10%;\n    font-size: .87em;\n\n    h2 {\n        font-family: $decorative-font;\n        margin-top: 2%;\n        margin-bottom: 2%;\n        font-size: 2.5em;\n        a {\n            font-size: .4em;\n            font-family: sans-serif;\n            font-weight: 500;\n            margin-left: 2%;\n        }\n    }\n\n    h4 {\n        margin: 3% 0;\n    }\n\n    p {\n        margin-bottom: 2%;\n        margin-top: 1%;\n    }\n    a {\n        color: $link-blue;\n        transition: all .35s ease;\n        text-decoration: underline;\n    }\n\n    table {\n        width: 100%;\n        margin-bottom: 3%;\n    }\n    .cart-table {\n        tr {\n            height: 50px;\n        }\n    }\n\n    .quant {\n        text-align: center;\n    }\n\n    .total {\n        text-align: right;\n    }\n\n    .bold {\n        font-weight: bold;\n        font-size: 1em;\n        color: black;\n        display: inline;\n        margin: 0;\n    }\n\n    span {\n        display: block;\n        color: red;\n        font-size: .75em;\n        margin-left: 2%;\n    }\n\n    button {\n        background: none;\n        font-size: .75em;\n        line-height: .5em;\n    }\n\n    .confirm-cart {\n        float: right;\n    }\n\n    input, textarea, select, button {\n        -webkit-appearance: none;\n        border: 1px solid #555;\n        padding: 0.5em;\n        font-size: .75em;\n        line-height: .8em;\n        background: #fff;\n        background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n        -webkit-box-shadow: 1px 1px 1px #fff;\n        -webkit-border-radius: 0.5em;\n    }\n    input {\n        line-height: .75em;\n        font-size: .75em;\n        margin: 2%;\n    }\n    .location-select {\n        margin-bottom: 20px;\n    }\n\n    .pickup-message {\n        color: black;\n    }\n}\n\n\n\n\n.remove-item {\n    color: red;\n    text-decoration: underline;\n}\n\n.ng-invalid, .warning {\n    color: red;\n}\n\n\n@media all and (min-width: 500px) {\n    .checkout {\n        font-size: 1em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .checkout {\n        font-size: 1.25em;\n        margin-top: 3%;\n        width: 80%;\n        table {\n            width: 90%;\n            margin: 0 auto;\n        }\n\n        h4 {\n            margin: 0;\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	exports.push([module.id, "._2dVzU_t9C3VueEp182WnLf {\n  position: relative;\n  width: 80%;\n  margin: 25px auto; }\n  ._2dVzU_t9C3VueEp182WnLf .coming-soon {\n    color: #323232;\n    margin: 0;\n    opacity: 1;\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 36%; }\n    ._2dVzU_t9C3VueEp182WnLf .coming-soon h2 {\n      text-align: center;\n      width: 100%;\n      font-size: 2.7em; }\n\n._1cQZz7BvW97PCxZT9GaQ37 {\n  border: 3px solid #323232;\n  background-color: rgba(200, 200, 200, 0.7);\n  border-radius: 2%;\n  min-height: 110px;\n  padding: 20px;\n  transition: all .35s ease; }\n  ._1cQZz7BvW97PCxZT9GaQ37 h2 {\n    text-align: center; }\n  ._1cQZz7BvW97PCxZT9GaQ37 p {\n    text-indent: 20px; }\n\n._1xU_MbxIIzSJN5_udQgSDP:hover {\n  color: white;\n  background-color: #323232;\n  cursor: pointer; }\n\n.BTuVRPKr6K6rrR_ueUQpm {\n  color: white;\n  background-color: #323232; }\n\n.CVOgkpok2dfnzt-UqWtYl {\n  opacity: .4; }\n\n.checkout {\n  width: 90%;\n  min-height: 70vh;\n  margin: 0 auto;\n  margin-bottom: 10%;\n  font-size: .87em; }\n  .checkout h2 {\n    font-family: \"Amatic SC\", cursive;\n    margin-top: 2%;\n    margin-bottom: 2%;\n    font-size: 2.5em; }\n    .checkout h2 a {\n      font-size: .4em;\n      font-family: sans-serif;\n      font-weight: 500;\n      margin-left: 2%; }\n  .checkout h4 {\n    margin: 3% 0; }\n  .checkout p {\n    margin-bottom: 2%;\n    margin-top: 1%; }\n  .checkout a {\n    color: #0b0080;\n    transition: all .35s ease;\n    text-decoration: underline; }\n  .checkout table {\n    width: 100%;\n    margin-bottom: 3%; }\n  .checkout .cart-table tr {\n    height: 50px; }\n  .checkout .quant {\n    text-align: center; }\n  .checkout .total {\n    text-align: right; }\n  .checkout .bold {\n    font-weight: bold;\n    font-size: 1em;\n    color: black;\n    display: inline;\n    margin: 0; }\n  .checkout span {\n    display: block;\n    color: red;\n    font-size: .75em;\n    margin-left: 2%; }\n  .checkout button {\n    background: none;\n    font-size: .75em;\n    line-height: .5em; }\n  .checkout .confirm-cart {\n    float: right; }\n  .checkout input, .checkout textarea, .checkout select, .checkout button {\n    -webkit-appearance: none;\n    border: 1px solid #555;\n    padding: 0.5em;\n    font-size: .75em;\n    line-height: .8em;\n    background: #fff;\n    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n    -webkit-box-shadow: 1px 1px 1px #fff;\n    -webkit-border-radius: 0.5em; }\n  .checkout input {\n    line-height: .75em;\n    font-size: .75em;\n    margin: 2%; }\n  .checkout .location-select {\n    margin-bottom: 20px; }\n  .checkout .pickup-message {\n    color: black; }\n\n.remove-item {\n  color: red;\n  text-decoration: underline; }\n\n.ng-invalid, .warning {\n  color: red; }\n\n@media all and (min-width: 500px) {\n  .checkout {\n    font-size: 1em; } }\n\n@media all and (min-width: 700px) {\n  .checkout {\n    font-size: 1.25em;\n    margin-top: 3%;\n    width: 80%; }\n    .checkout table {\n      width: 90%;\n      margin: 0 auto; }\n    .checkout h4 {\n      margin: 0; } }\n\n@media all and (min-width: 600px) {\n  ._2dVzU_t9C3VueEp182WnLf {\n    width: 35%;\n    float: left;\n    margin: 20px 5% 70px 5%; }\n  ._1cQZz7BvW97PCxZT9GaQ37 {\n    min-height: 170px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/checkout/src/components/checkout/checkout.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/checkout/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,WAAU;EACV,kBAAiB,EAepB;EAlBD;IAUQ,eCXa;IDYb,UAAS;IACT,WAAU;IACV,mBAAkB;IAClB,QAAO;IACP,SAAQ;IACR,SAAQ,EACX;IAjBL;MAMY,mBAAkB;MAClB,YAAW;MACX,iBAAgB,EACnB;;AAUT;EACI,0BCrBiB;EDsBjB,2CCvB4B;EDwB5B,kBAAiB;EACjB,kBAAiB;EACjB,cAAa;EAOb,0BAAyB,EAC5B;EAbD;IAOQ,mBAAkB,EACrB;EARL;IAUQ,kBAAiB,EACpB;;AAIL;EACI,aAAY;EACZ,0BCrCiB;EDsCjB,gBAAe,EAClB;;AACD;EACI,aAAY;EACZ,0BC1CiB,ED2CpB;;AACD;EACI,YAAW,EACd;;AACD;EACI,WAAU;EACV,iBAAgB;EAChB,eAAc;EACd,mBAAkB;EAClB,iBAAgB,EA+FnB;EApGD;IAQQ,kCEzD8B;IF0D9B,eAAc;IACd,kBAAiB;IACjB,iBAAgB,EAOnB;IAlBL;MAaY,gBAAe;MACf,wBAAuB;MACvB,iBAAgB;MAChB,gBAAe,EAClB;EAjBT;IAqBQ,aAAY,EACf;EAtBL;IAyBQ,kBAAiB;IACjB,eAAc,EACjB;EA3BL;IA6BQ,eC3EiB;ID4EjB,0BAAyB;IACzB,2BAA0B,EAC7B;EAhCL;IAmCQ,YAAW;IACX,kBAAiB,EACpB;EArCL;IAwCY,aAAY,EACf;EAzCT;IA6CQ,mBAAkB,EACrB;EA9CL;IAiDQ,kBAAiB,EACpB;EAlDL;IAqDQ,kBAAiB;IACjB,eAAc;IACd,aAAY;IACZ,gBAAe;IACf,UAAS,EACZ;EA1DL;IA6DQ,eAAc;IACd,WAAU;IACV,iBAAgB;IAChB,gBAAe,EAClB;EAjEL;IAoEQ,iBAAgB;IAChB,iBAAgB;IAChB,kBAAiB,EACpB;EAvEL;IA0EQ,aAAY,EACf;EA3EL;IA8EQ,yBAAwB;IACxB,uBAAsB;IACtB,eAAc;IACd,iBAAgB;IAChB,kBAAiB;IACjB,iBAAgB;IAChB,kFAAiF;IACjF,qCAAoC;IACpC,6BAA4B,EAC/B;EAvFL;IAyFQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU,EACb;EA5FL;IA8FQ,oBAAmB,EACtB;EA/FL;IAkGQ,aAAY,EACf;;AAML;EACI,WAAU;EACV,2BAA0B,EAC7B;;AAED;EACI,WAAU,EACb;;AAGD;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,kBAAiB;IACjB,eAAc;IACd,WAAU,EASb;IAZD;MAKQ,WAAU;MACV,eAAc,EACjB;IAPL;MAUQ,UAAS,EACZ,EAAA;;AAIT;EACI;IACI,WAAU;IACV,YAAW;IACX,wBAAuB,EAC1B;EAED;IACI,kBAAiB,EACpB,EAAA","file":"checkout.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n:local(.container) {\n    position: relative;\n    width: 80%;\n    margin: 25px auto;\n    .coming-soon {\n        h2{\n            text-align: center;\n            width: 100%;\n            font-size: 2.7em;\n        }\n        color: $black;\n        margin: 0;\n        opacity: 1;\n        position: absolute;\n        left: 0;\n        right: 0;\n        top: 36%;\n    }\n}\n:local(.method) {\n    border: 3px solid $black;\n    background-color: $lightgrey;\n    border-radius: 2%;\n    min-height: 110px;\n    padding: 20px;\n    h2 {\n        text-align: center;\n    }\n    p {\n        text-indent: 20px;\n    }\n    transition: all .35s ease;\n}\n\n:local(.clickable):hover {\n    color: white;\n    background-color: $black;\n    cursor: pointer;\n}\n:local(.active) {\n    color: white;\n    background-color: $black;\n}\n:local(.inactive) {\n    opacity: .4;\n}\n.checkout {\n    width: 90%;\n    min-height: 70vh;\n    margin: 0 auto;\n    margin-bottom: 10%;\n    font-size: .87em;\n\n    h2 {\n        font-family: $decorative-font;\n        margin-top: 2%;\n        margin-bottom: 2%;\n        font-size: 2.5em;\n        a {\n            font-size: .4em;\n            font-family: sans-serif;\n            font-weight: 500;\n            margin-left: 2%;\n        }\n    }\n\n    h4 {\n        margin: 3% 0;\n    }\n\n    p {\n        margin-bottom: 2%;\n        margin-top: 1%;\n    }\n    a {\n        color: $link-blue;\n        transition: all .35s ease;\n        text-decoration: underline;\n    }\n\n    table {\n        width: 100%;\n        margin-bottom: 3%;\n    }\n    .cart-table {\n        tr {\n            height: 50px;\n        }\n    }\n\n    .quant {\n        text-align: center;\n    }\n\n    .total {\n        text-align: right;\n    }\n\n    .bold {\n        font-weight: bold;\n        font-size: 1em;\n        color: black;\n        display: inline;\n        margin: 0;\n    }\n\n    span {\n        display: block;\n        color: red;\n        font-size: .75em;\n        margin-left: 2%;\n    }\n\n    button {\n        background: none;\n        font-size: .75em;\n        line-height: .5em;\n    }\n\n    .confirm-cart {\n        float: right;\n    }\n\n    input, textarea, select, button {\n        -webkit-appearance: none;\n        border: 1px solid #555;\n        padding: 0.5em;\n        font-size: .75em;\n        line-height: .8em;\n        background: #fff;\n        background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));\n        -webkit-box-shadow: 1px 1px 1px #fff;\n        -webkit-border-radius: 0.5em;\n    }\n    input {\n        line-height: .75em;\n        font-size: .75em;\n        margin: 2%;\n    }\n    .location-select {\n        margin-bottom: 20px;\n    }\n\n    .pickup-message {\n        color: black;\n    }\n}\n\n\n\n\n.remove-item {\n    color: red;\n    text-decoration: underline;\n}\n\n.ng-invalid, .warning {\n    color: red;\n}\n\n\n@media all and (min-width: 500px) {\n    .checkout {\n        font-size: 1em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .checkout {\n        font-size: 1.25em;\n        margin-top: 3%;\n        width: 80%;\n        table {\n            width: 90%;\n            margin: 0 auto;\n        }\n\n        h4 {\n            margin: 0;\n        }\n    }\n}\n\n@media all and (min-width: 600px) {\n    :local(.container) {\n        width: 35%;\n        float: left;\n        margin: 20px 5% 70px 5%;\n    }\n\n    :local(.method) {\n        min-height: 170px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
+		"container": "_2dVzU_t9C3VueEp182WnLf",
 		"method": "_1cQZz7BvW97PCxZT9GaQ37",
 		"clickable": "_1xU_MbxIIzSJN5_udQgSDP",
 		"active": "BTuVRPKr6K6rrR_ueUQpm",
@@ -35906,7 +36048,7 @@
 	};
 
 /***/ },
-/* 52 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35915,11 +36057,11 @@
 	    value: true
 	});
 	
-	var _success = __webpack_require__(53);
+	var _success = __webpack_require__(57);
 	
 	var _success2 = _interopRequireDefault(_success);
 	
-	var _success3 = __webpack_require__(54);
+	var _success3 = __webpack_require__(58);
 	
 	var _success4 = _interopRequireDefault(_success3);
 	
@@ -35944,19 +36086,19 @@
 	}
 
 /***/ },
-/* 53 */
+/* 57 */
 /***/ function(module, exports) {
 
 	module.exports = "<!--TODO: make this a substate of checkout?-->\n<div class=\"container\" ng-class=\"$ctrl.styles.success\">   \n    <h2>Thank you for your order!</h2>\n    <p>You will recieve and email with your order summary. If you have any questions in the meantime, feel free to send us an email or call. <a ui-sref=\"home\">Back to home</a></p>\n</div>";
 
 /***/ },
-/* 54 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(55);
+	var content = __webpack_require__(59);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -35976,7 +36118,7 @@
 	}
 
 /***/ },
-/* 55 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -35992,7 +36134,7 @@
 	};
 
 /***/ },
-/* 56 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36001,11 +36143,11 @@
 	    value: true
 	});
 	
-	var _contact = __webpack_require__(57);
+	var _contact = __webpack_require__(61);
 	
 	var _contact2 = _interopRequireDefault(_contact);
 	
-	var _contact3 = __webpack_require__(58);
+	var _contact3 = __webpack_require__(62);
 	
 	var _contact4 = _interopRequireDefault(_contact3);
 	
@@ -36042,19 +36184,19 @@
 	}
 
 /***/ },
-/* 57 */
+/* 61 */
 /***/ function(module, exports) {
 
 	module.exports = "<div ng-class=\"$ctrl.styles.contact\">\n    <h2>Contact</h2>\n    <p class=\"contact-info\">{{$ctrl.contactInfo.text}}</p>\n    <ul>\n        <li>\n            <p>email: <a href=\"{{$ctrl.contactInfo.email}}\">{{$ctrl.contactInfo.email}}</a><p>\n        </li>\n        <li>\n        <p>phone: <a href=\"{{$ctrl.contactInfo.phone}}\">{{$ctrl.contactInfo.phone}}</a></p>\n        </li>\n        <li>\n            <p>social media:</p> \n        </li>\n        <li>\n            <p>\n                <a ng-if=\"$ctrl.contactInfo.instagram !== '#'\" href=\"{{$ctrl.contactInfo.instagram}}\"><span class=\"icon-instagram\"></span></a> \n                <a ng-if=\"$ctrl.contactInfo.facebook !== '#'\"href=\"{{$ctrl.contactInfo.facebook}}\"><span class=\"icon-facebook2\"></span></a>\n                <a ng-if=\"$ctrl.contactInfo.twitter !== '#'\" href=\"{{$ctrl.contactInfo.twitter}}\"><span class=\"icon-twitter\"></span></a>\n            </p>\n        </li>\n    </ul>\n</div>\n";
 
 /***/ },
-/* 58 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(59);
+	var content = __webpack_require__(63);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36074,7 +36216,7 @@
 	}
 
 /***/ },
-/* 59 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36082,7 +36224,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._2-wh2eGpFOzRsplfQde1xu {\n  background-color: white;\n  min-height: 70vh;\n  width: 85%;\n  margin: 0 auto;\n  margin-top: 5%;\n  margin-bottom: 5%; }\n  ._2-wh2eGpFOzRsplfQde1xu ul, ._2-wh2eGpFOzRsplfQde1xu li, ._2-wh2eGpFOzRsplfQde1xu p {\n    margin-left: 0;\n    margin-right: 0;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._2-wh2eGpFOzRsplfQde1xu ul {\n    text-align: center;\n    font-size: 1.5em;\n    width: 80%;\n    margin: 0 auto; }\n  ._2-wh2eGpFOzRsplfQde1xu a {\n    color: black;\n    transition: all .3s ease; }\n  ._2-wh2eGpFOzRsplfQde1xu a:hover {\n    text-decoration: underline; }\n  ._2-wh2eGpFOzRsplfQde1xu h2 {\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em;\n    margin: 0 0 5% 0; }\n  ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n    font-size: 1.2em;\n    margin: 2% 0 10% 0;\n    text-indent: 25px; }\n  ._2-wh2eGpFOzRsplfQde1xu span {\n    margin: 0 1%; }\n  ._2-wh2eGpFOzRsplfQde1xu .icon-instagram:hover, ._2-wh2eGpFOzRsplfQde1xu .icon-facebook2:hover {\n    text-decoration: none; }\n\n@media all and (min-width: 500px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.2em; } }\n\n@media all and (min-width: 700px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 900px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    width: 75%;\n    font-size: 1.5em; }\n    ._2-wh2eGpFOzRsplfQde1xu h2 {\n      font-size: 4em;\n      margin-top: 2%; }\n    ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n      margin: 2% 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/contact/src/components/contact/contact.scss","/Users/Will/freelance/earth-house/app/src/components/contact/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,wBAAuB;EACvB,iBAAgB;EAChB,WAAU;EACV,eAAc;EACd,eAAc;EACd,kBAAiB,EAoCpB;EA1CD;IAQQ,eAAc;IACd,gBAAe;IACf,wCCZ8B,EDajC;EAXL;IAaQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU;IACV,eAAc,EACjB;EAjBL;IAmBQ,aAAY;IACZ,yBAAwB,EAC3B;EArBL;IAuBQ,2BAA0B,EAC7B;EAxBL;IA0BQ,mBAAkB;IAClB,kCC9B8B;ID+B9B,eAAc;IACd,iBAAgB,EACnB;EA9BL;IAgCQ,iBAAgB;IAChB,mBAAkB;IAClB,kBAAiB,EACpB;EAnCL;IAqCQ,aAAY,EACf;EAtCL;IAwCQ,sBAAqB,EACxB;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,WAAU;IACV,iBAAgB,EAQnB;IAVD;MAIQ,eAAc;MACd,eAAc,EACjB;IANL;MAQQ,aAAY,EACf,EAAA","file":"contact.scss","sourcesContent":["@import 'fonts';\n@import 'colors';\n\n:local(.contact) {\n    background-color: white;\n    min-height: 70vh;\n    width: 85%;\n    margin: 0 auto;\n    margin-top: 5%;\n    margin-bottom: 5%;\n    ul, li, p {\n        margin-left: 0;\n        margin-right: 0;\n        font-family: $main-font;\n    }\n    ul {\n        text-align: center;\n        font-size: 1.5em;\n        width: 80%;\n        margin: 0 auto;\n    }\n    a {\n        color: black;\n        transition: all .3s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    h2 {\n        text-align: center;\n        font-family: $decorative-font;\n        font-size: 3em;\n        margin: 0 0 5% 0;\n    }\n    .contact-info {\n        font-size: 1.2em;\n        margin: 2% 0 10% 0;\n        text-indent: 25px;\n    }\n    span {\n        margin: 0 1%;\n    }\n    .icon-instagram:hover, .icon-facebook2:hover {\n        text-decoration: none;\n    }\n}\n\n@media all and (min-width: 500px) {\n    :local(.contact) {\n        font-size: 1.2em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    :local(.contact) {\n        font-size: 1.5em;\n    }\n}\n\n@media all and (min-width: 900px) {\n    :local(.contact) {\n        width: 75%;\n        font-size: 1.5em;\n        h2 {\n            font-size: 4em;\n            margin-top: 2%;\n        }\n        .contact-info {\n            margin: 2% 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	exports.push([module.id, "._2-wh2eGpFOzRsplfQde1xu {\n  background-color: white;\n  min-height: 85vh;\n  width: 85%;\n  margin: 0 auto;\n  margin-top: 5%;\n  margin-bottom: 5%; }\n  ._2-wh2eGpFOzRsplfQde1xu ul, ._2-wh2eGpFOzRsplfQde1xu li, ._2-wh2eGpFOzRsplfQde1xu p {\n    margin-left: 0;\n    margin-right: 0;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._2-wh2eGpFOzRsplfQde1xu ul {\n    text-align: center;\n    font-size: 1.5em;\n    width: 80%;\n    margin: 0 auto; }\n  ._2-wh2eGpFOzRsplfQde1xu a {\n    color: black;\n    transition: all .3s ease; }\n  ._2-wh2eGpFOzRsplfQde1xu a:hover {\n    text-decoration: underline; }\n  ._2-wh2eGpFOzRsplfQde1xu h2 {\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em;\n    margin: 0 0 5% 0; }\n  ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n    font-size: 1.2em;\n    margin: 2% 0 10% 0;\n    text-indent: 25px; }\n  ._2-wh2eGpFOzRsplfQde1xu span {\n    margin: 0 1%; }\n  ._2-wh2eGpFOzRsplfQde1xu .icon-instagram:hover, ._2-wh2eGpFOzRsplfQde1xu .icon-facebook2:hover {\n    text-decoration: none; }\n\n@media all and (min-width: 500px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.2em; } }\n\n@media all and (min-width: 700px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 900px) {\n  ._2-wh2eGpFOzRsplfQde1xu {\n    width: 75%;\n    font-size: 1.5em; }\n    ._2-wh2eGpFOzRsplfQde1xu h2 {\n      font-size: 4em;\n      margin-top: 2%; }\n    ._2-wh2eGpFOzRsplfQde1xu .contact-info {\n      margin: 2% 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/contact/src/components/contact/contact.scss","/Users/Will/freelance/earth-house/app/src/components/contact/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,wBAAuB;EACvB,iBAAgB;EAChB,WAAU;EACV,eAAc;EACd,eAAc;EACd,kBAAiB,EAoCpB;EA1CD;IAQQ,eAAc;IACd,gBAAe;IACf,wCCZ8B,EDajC;EAXL;IAaQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU;IACV,eAAc,EACjB;EAjBL;IAmBQ,aAAY;IACZ,yBAAwB,EAC3B;EArBL;IAuBQ,2BAA0B,EAC7B;EAxBL;IA0BQ,mBAAkB;IAClB,kCC9B8B;ID+B9B,eAAc;IACd,iBAAgB,EACnB;EA9BL;IAgCQ,iBAAgB;IAChB,mBAAkB;IAClB,kBAAiB,EACpB;EAnCL;IAqCQ,aAAY,EACf;EAtCL;IAwCQ,sBAAqB,EACxB;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,WAAU;IACV,iBAAgB,EAQnB;IAVD;MAIQ,eAAc;MACd,eAAc,EACjB;IANL;MAQQ,aAAY,EACf,EAAA","file":"contact.scss","sourcesContent":["@import 'fonts';\n@import 'colors';\n\n:local(.contact) {\n    background-color: white;\n    min-height: 85vh;\n    width: 85%;\n    margin: 0 auto;\n    margin-top: 5%;\n    margin-bottom: 5%;\n    ul, li, p {\n        margin-left: 0;\n        margin-right: 0;\n        font-family: $main-font;\n    }\n    ul {\n        text-align: center;\n        font-size: 1.5em;\n        width: 80%;\n        margin: 0 auto;\n    }\n    a {\n        color: black;\n        transition: all .3s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    h2 {\n        text-align: center;\n        font-family: $decorative-font;\n        font-size: 3em;\n        margin: 0 0 5% 0;\n    }\n    .contact-info {\n        font-size: 1.2em;\n        margin: 2% 0 10% 0;\n        text-indent: 25px;\n    }\n    span {\n        margin: 0 1%;\n    }\n    .icon-instagram:hover, .icon-facebook2:hover {\n        text-decoration: none;\n    }\n}\n\n@media all and (min-width: 500px) {\n    :local(.contact) {\n        font-size: 1.2em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    :local(.contact) {\n        font-size: 1.5em;\n    }\n}\n\n@media all and (min-width: 900px) {\n    :local(.contact) {\n        width: 75%;\n        font-size: 1.5em;\n        h2 {\n            font-size: 4em;\n            margin-top: 2%;\n        }\n        .contact-info {\n            margin: 2% 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -36090,7 +36232,7 @@
 	};
 
 /***/ },
-/* 60 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36099,11 +36241,11 @@
 	    value: true
 	});
 	
-	var _footerContent = __webpack_require__(61);
+	var _footerContent = __webpack_require__(65);
 	
 	var _footerContent2 = _interopRequireDefault(_footerContent);
 	
-	var _footerContent3 = __webpack_require__(62);
+	var _footerContent3 = __webpack_require__(66);
 	
 	var _footerContent4 = _interopRequireDefault(_footerContent3);
 	
@@ -36117,19 +36259,19 @@
 	};
 
 /***/ },
-/* 61 */
+/* 65 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"footer-container clearfix\">\n     <!--<div class=\"footer-category\">\n        <h3>Shop</h3>\n        <ul>\n            <li>Buy Online</li>\n            <li>Buy in Person</li>\n        </ul>\n    </div>\n\n\n     <div class=\"footer-category\">\n        <h3>About</h3>\n        <ul>\n            <li>Our Juices</li>\n            <li>Our Mission</li>\n            <li>Our Customers</li>\n            <li>Our team</li>\n        </ul>\n    </div>\n\n\n     <div class=\"footer-category\">\n        <h3>Social Media</h3>\n        <ul>\n            <li>Instagram</li>\n            <li>Facebook</li>\n            <li>Twitter</li>\n        </ul>\n    </div>\n\n\n     <div class=\"footer-category\">\n        <h3>Contact</h3>\n        <ul>\n            <li>(XXX)XXX-XXXX</li>\n            <li>xxxxx@xxx.com</li>\n        </ul>\n    </div>-->\n    <div class=\"footer-contact\">\n        <ul>\n            <li><a href=\"tel:1-510-590-7431\">(503)888-8888</a></li>\n            <li><a href=\"mailto:wnickers@willamette.edu\">youremailgoeshere@email.com</a></li>\n            <li><span>&#169;2017 Earth House Juice Co.<span></li>\n        </ul>\n    </div>\n</div>";
 
 /***/ },
-/* 62 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(63);
+	var content = __webpack_require__(67);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36149,7 +36291,7 @@
 	}
 
 /***/ },
-/* 63 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36157,13 +36299,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".footer-container {\n  background-color: #323232;\n  width: 100%;\n  color: rgba(200, 200, 200, 0.7);\n  border-top: 1px solid rgba(200, 200, 200, 0.7); }\n\n.footer-contact {\n  text-align: center;\n  margin: 8% auto 10% auto;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: .75em; }\n  .footer-contact ul {\n    list-style-type: none; }\n  .footer-contact li {\n    margin: 20px 0; }\n  .footer-contact a {\n    color: rgba(200, 200, 200, 0.7); }\n  .footer-contact a:hover {\n    text-decoration: underline; }\n  .footer-contact span {\n    font-style: italic; }\n\n@media all and (min-width: 450px) {\n  .footer-contact {\n    font-size: 1em; } }\n\n@media all and (min-width: 600px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 8% auto 8% auto; } }\n\n@media all and (min-width: 800px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 5% auto 5% auto; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/footer-content/src/components/footer-content/footer-content.scss","/Users/Will/freelance/earth-house/app/src/components/footer-content/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/footer-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,0BCFiB;EDGjB,YAAW;EACX,gCCL4B;EDM5B,+CCN4B,EDO/B;;AAED;EACI,mBAAkB;EAClB,yBAAwB;EACxB,wCEZkC;EFalC,iBAAgB,EAgBnB;EApBD;IAMQ,sBAAqB,EACxB;EAPL;IASQ,eAAc,EACjB;EAVL;IAYQ,gCCrBwB,EDsB3B;EAbL;IAeQ,2BAA0B,EAC7B;EAhBL;IAkBQ,mBAAkB,EACrB;;AAGL;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA","file":"footer-content.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.footer-container {\n    background-color: $black;\n    width: 100%;\n    color: $lightgrey;\n    border-top: 1px solid $lightgrey;\n}\n\n.footer-contact {\n    text-align: center;\n    margin: 8% auto 10% auto;\n    font-family: $main-font;\n    font-size: .75em;\n    ul {\n        list-style-type: none; \n    }\n    li {\n        margin: 20px 0;\n    }\n    a {\n        color: $lightgrey;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    span {\n        font-style: italic;\n    }\n}\n\n@media all and (min-width: 450px) {\n    .footer-contact {\n        font-size: 1em; \n    }\n}\n\n@media all and (min-width: 600px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 8% auto 8% auto;\n    }\n}\n\n@media all and (min-width: 800px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 5% auto 5% auto;\n    }\n}\n\n// .footer-category:last-child {\n//     border-right: none;\n// }\n\n// @media all and (max-width: 650px) {\n//     .footer-container {\n//         div {\n//             margin-top: 25px;\n//             width: 49.5%;\n//             height: 170px;\n//             }\n//     }\n\n//     .footer-category:nth-child(2) {\n//         border-right: none;\n//     }\n// }\n\n\n\n\n    // padding-bottom: 25px;\n\n    // div {\n    //     margin-top: 25px;\n    //     height: 80%;\n    //     width: 24%;\n    //     float: left;\n    //     border-right: .12em solid $lightgrey;\n    //     h3 {\n    //         margin-top: 0;\n    //         text-align: center;\n    //         font-size: 1em;\n    //     }\n\n        // ul{\n        //     list-style-type: none;\n        //     margin: 0 auto;\n        //     // height: 200px;\n        //     li {\n        //         // padding-left: 50px;\n        //         margin: 15px 0;\n        //         font-size: 1.2em;\n        //         // font-size: .85em;\n        //         font-family: $main-font;\n        //         font-weight: lighter;\n        //         width: 100%;   \n        //     }\n        // }\n    // }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	exports.push([module.id, ".footer-container {\n  background-color: #323232;\n  width: 100%;\n  color: rgba(200, 200, 200, 0.7);\n  border-top: 1px solid rgba(200, 200, 200, 0.7); }\n\n.footer-contact {\n  text-align: center;\n  margin: 8% auto 10% auto;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: .75em; }\n  .footer-contact ul {\n    list-style-type: none; }\n  .footer-contact li {\n    margin: 20px 0; }\n  .footer-contact a {\n    color: rgba(200, 200, 200, 0.7); }\n  .footer-contact a:hover {\n    text-decoration: underline; }\n  .footer-contact span {\n    font-style: italic; }\n\n@media all and (min-width: 450px) {\n  .footer-contact {\n    font-size: 1em; } }\n\n@media all and (min-width: 600px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 8% auto 8% auto; } }\n\n@media all and (min-width: 800px) {\n  .footer-contact {\n    font-size: 1em;\n    margin: 5% auto 5% auto; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/footer-content/src/components/footer-content/footer-content.scss","/Users/Will/freelance/earth-house/app/src/components/footer-content/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/footer-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,0BCFiB;EDGjB,YAAW;EACX,gCCL4B;EDM5B,+CCN4B,EDO/B;;AAED;EACI,mBAAkB;EAClB,yBAAwB;EACxB,wCEZkC;EFalC,iBAAgB,EAgBnB;EApBD;IAMQ,sBAAqB,EACxB;EAPL;IASQ,eAAc,EACjB;EAVL;IAYQ,gCCrBwB,EDsB3B;EAbL;IAeQ,2BAA0B,EAC7B;EAhBL;IAkBQ,mBAAkB,EACrB;;AAGL;EACI;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA;;AAGL;EACI;IACI,eAAc;IACd,wBAAuB,EAC1B,EAAA","file":"footer-content.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.footer-container {\n    background-color: $black;\n    width: 100%;\n    color: $lightgrey;\n    border-top: 1px solid $lightgrey;\n}\n\n.footer-contact {\n    text-align: center;\n    margin: 8% auto 10% auto;\n    font-family: $main-font;\n    font-size: .75em;\n    ul {\n        list-style-type: none; \n    }\n    li {\n        margin: 20px 0;\n    }\n    a {\n        color: $lightgrey;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    span {\n        font-style: italic;\n    }\n}\n\n@media all and (min-width: 450px) {\n    .footer-contact {\n        font-size: 1em; \n    }\n}\n\n@media all and (min-width: 600px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 8% auto 8% auto;\n    }\n}\n\n@media all and (min-width: 800px) {\n    .footer-contact {\n        font-size: 1em; \n        margin: 5% auto 5% auto;\n    }\n}\n\n// .footer-category:last-child {\n//     border-right: none;\n// }\n\n// @media all and (max-width: 650px) {\n//     .footer-container {\n//         div {\n//             margin-top: 25px;\n//             width: 49.5%;\n//             height: 170px;\n//             }\n//     }\n\n//     .footer-category:nth-child(2) {\n//         border-right: none;\n//     }\n// }\n\n\n\n\n    // padding-bottom: 25px;\n\n    // div {\n    //     margin-top: 25px;\n    //     height: 80%;\n    //     width: 24%;\n    //     float: left;\n    //     border-right: .12em solid $lightgrey;\n    //     h3 {\n    //         margin-top: 0;\n    //         text-align: center;\n    //         font-size: 1em;\n    //     }\n\n        // ul{\n        //     list-style-type: none;\n        //     margin: 0 auto;\n        //     // height: 200px;\n        //     li {\n        //         // padding-left: 50px;\n        //         margin: 15px 0;\n        //         font-size: 1.2em;\n        //         // font-size: .85em;\n        //         font-family: $main-font;\n        //         font-weight: lighter;\n        //         width: 100%;   \n        //     }\n        // }\n    // }","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 64 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36172,11 +36314,11 @@
 	    value: true
 	});
 	
-	var _headerContent = __webpack_require__(65);
+	var _headerContent = __webpack_require__(69);
 	
 	var _headerContent2 = _interopRequireDefault(_headerContent);
 	
-	var _headerContent3 = __webpack_require__(66);
+	var _headerContent3 = __webpack_require__(70);
 	
 	var _headerContent4 = _interopRequireDefault(_headerContent3);
 	
@@ -36206,19 +36348,19 @@
 	}
 
 /***/ },
-/* 65 */
+/* 69 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"header-container\" id=\"header-height\">\n    <div class=\"left\">\n        <h1 class=\"main-title\">Earth House</h1>\n            <nav-bar></nav-bar>\n        <div class=\"mobile-nav\" ng-show=\"$ctrl.nav\" ng-click=\"$ctrl.toggleNav()\">\n            <nav-bar></nav-bar>\n        </div>\n    </div>\n\n\n    <div class=\"right\">\n        <a ui-sref=\"checkout\" class=\"cart-icon\">\n            <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1489538579/cart-icon_zewzhg.png\">\n            <h5 class=\"total-items\">{{$ctrl.cart.totalItems}}</h5>\n        </a>\n        <div class=\"socials\">\n            <!--<a href=\"https://twitter.com/\">\n                <span class=\"icon-twitter\"></span>\n            </a>-->\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n        <div class=\"hamburger\">\n            <a ng-click=\"$ctrl.toggleNav()\">\n                <span class=\"icon-menu\"></span>\n            </a>\n        </div>\n    </div>\n</div>\n<div class=\"header-background\" ng-if=\"('about' | isState) || ('contact' | isState) || ('checkout' | isState) || ('success' | isState) || ('markets' | isState)\"></div>";
+	module.exports = "<div class=\"header-container\" id=\"header-height\">\n    <div class=\"left\">\n        <h1 class=\"main-title\">Earth House</h1>\n            <nav-bar></nav-bar>\n        <div class=\"mobile-nav\" ng-show=\"$ctrl.nav\" ng-click=\"$ctrl.toggleNav()\">\n            <nav-bar></nav-bar>\n        </div>\n    </div>\n\n\n    <div class=\"right\">\n        <a ui-sref=\"checkout\" class=\"cart-icon\">\n            <img src=\"http://res.cloudinary.com/lejipni8p/image/upload/v1489538579/cart-icon_zewzhg.png\">\n            <h5 class=\"total-items\">{{$ctrl.cart.totalItems}}</h5>\n        </a>\n        <div class=\"socials\">\n            <a href=\"https://www.facebook.com/\">\n                <span class=\"icon-facebook2\"></span>\n            </a>\n            <a href=\"https://www.instagram.com/\">\n                <span class=\"icon-instagram\"></span>\n            </a>\n        </div>\n        <div class=\"hamburger\">\n            <a ng-click=\"$ctrl.toggleNav()\">\n                <span class=\"icon-menu\"></span>\n            </a>\n        </div>\n    </div>\n</div>\n<div class=\"header-background\" ng-if=\"('about' | isState) || ('contact' | isState) || ('checkout' | isState) || ('success' | isState) || ('markets' | isState)\"></div>";
 
 /***/ },
-/* 66 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(67);
+	var content = __webpack_require__(71);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36238,7 +36380,7 @@
 	}
 
 /***/ },
-/* 67 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36246,13 +36388,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-container {\n  width: 100%;\n  position: absolute;\n  z-index: 1;\n  color: white; }\n  .header-container .left {\n    float: left;\n    margin-top: -5px; }\n  .header-container .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right; }\n    .header-container .right span {\n      margin-right: 20px; }\n  .header-container h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white; }\n  .header-container .cart-icon {\n    position: relative;\n    float: left; }\n    .header-container .cart-icon img {\n      max-width: none; }\n  .header-container .cart-icon:hover > .total-items {\n    color: #FFC107; }\n  .header-container .icon-facebook2:before {\n    content: \"\\EA91\";\n    font-size: 1.9em; }\n  .header-container .icon-instagram:before {\n    content: \"\\EA92\";\n    font-size: 1.9em; }\n  .header-container .icon-twitter:before {\n    content: \"\\EA96\";\n    font-size: 1.9em; }\n  .header-container .icon-menu:before {\n    content: \"\\E9BD\";\n    font-size: 2em; }\n  .header-container a:hover {\n    color: #FFC107; }\n\n.total-items {\n  display: inline-block;\n  position: absolute;\n  color: white;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.5em;\n  font-weight: bold;\n  margin: 0; }\n\n.socials {\n  float: right; }\n\n.hamburger {\n  display: none;\n  float: left; }\n\n@media all and (max-width: 550px) {\n  .header-container nav-bar {\n    display: none; }\n  .header-container .mobile-nav nav-bar {\n    display: block;\n    margin-top: 5px; }\n  .header-container .left {\n    float: none;\n    margin-top: -5px;\n    width: 100%;\n    z-index: 1; }\n    .header-container .left h1 {\n      float: left;\n      margin: 0 1%;\n      font-size: 2.9em;\n      font-weight: 900; }\n  .header-container .right {\n    margin-top: 5px; }\n    .header-container .right span {\n      margin-right: 10px; }\n  .header-container .socials {\n    display: none; }\n  .cart-icon img {\n    width: 36px;\n    margin-right: 5px; }\n  .total-items {\n    font-size: .9em;\n    top: 4px;\n    right: 15px; }\n  .hamburger {\n    display: block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  .header-container .left {\n    max-width: 250px; }\n    .header-container .left h1 {\n      font-size: 4em; }\n  .header-container .right {\n    margin-top: 15px; }\n    .header-container .right .icon-facebook2:before, .header-container .right .icon-instagram:before, .header-container .right .icon-twitter:before, .header-container .right .icon-cart:before {\n      font-size: 1.5em; }\n    .header-container .right span {\n      margin-right: 15px; }\n  .cart-icon img {\n    width: 35px;\n    margin-right: 15px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1em;\n    top: -1px;\n    right: 25px; } }\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n  .header-container .left {\n    width: 350px; }\n  .cart-icon img {\n    width: 45px;\n    margin-right: 20px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1.2em;\n    top: 1px;\n    right: 34px; } }\n\n@media all and (min-width: 1083px) {\n  .header-container .left {\n    width: 500px; }\n    .header-container .left h1 {\n      font-size: 7em; }\n  .header-container .right .icon-facebook2:before, .header-container .right .icon-twitter:before, .header-container .right .icon-instagram:before, .header-container .right .icon-cart:before {\n    font-size: 2.2em; }\n  .cart-icon img {\n    margin-top: -8px;\n    margin-right: 19px;\n    width: 55px; }\n  .total-items {\n    bottom: 23px;\n    right: 35px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_header-background.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/components/header-content/header-content.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE5BL;EACQ,YAAW;EACX,mBAAkB;EAClB,WAAU;EACV,aAAY,EAqDnB;EAzDD;IAMY,YAAW;IACX,iBAAgB,EACnB;EART;IAUY,iBAAgB;IAChB,aAAY;IACZ,kBAAiB,EAIpB;IAhBT;MAcgB,mBAAkB,EACrB;EAfb;IAkBY,iBAAgB;IAChB,eAAc;IACd,kCAAiC;IACjC,eAAc;IACd,aAAY,EACf;EAvBT;IAyBY,mBAAkB;IAClB,YAAW,EAId;IA9BT;MA4BgB,gBAAe,EAClB;EA7Bb;IAiCY,eDrCU,ECsCb;EAlCT;IAqCY,iBAAgB;IAChB,iBAAgB,EACnB;EAvCT;IA0CY,iBAAgB;IAChB,iBAAgB,EACnB;EA5CT;IA+CY,iBAAgB;IAChB,iBAAgB,EACnB;EAjDT;IAmDY,iBAAgB;IAChB,eAAc,EACjB;EArDT;IAuDY,eD3DU,EC4Db;;AAGT;EACI,sBAAqB;EACrB,mBAAkB;EAClB,aAAY;EACZ,wCClEkC;EDmElC,iBAAgB;EAChB,kBAAiB;EACjB,UAAS,EACZ;;AACD;EACI,aAAY,EACf;;AAED;EACI,cAAa;EACb,YAAW,EACd;;AAGD;EACI;IAEQ,cAAa,EAChB;EAHL;IAKQ,eAAc;IACd,gBAAe,EAClB;EAPL;IASQ,YAAW;IACX,iBAAgB;IAChB,YAAW;IACX,WAAU,EAOb;IAnBL;MAcY,YAAW;MACX,aAAY;MACZ,iBAAgB;MAChB,iBAAgB,EACnB;EAlBT;IAqBQ,gBAAe,EAIlB;IAzBL;MAuBY,mBAAkB,EACrB;EAxBT;IA2BQ,cAAa,EAChB;EAEL;IAEQ,YAAW;IACX,kBAAiB,EAEpB;EAEL;IACI,gBAAe;IACf,SAAQ;IACR,YAAW,EACd;EACD;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IAEQ,iBAAgB,EAInB;IANL;MAIY,eAAc,EACjB;EALT;IASQ,iBAAgB,EAOnB;IAhBL;MAWY,iBAAgB,EACnB;IAZT;MAcY,mBAAkB,EACrB;EAGT;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,eAAc;IACd,UAAS;IACT,YAAW,EACd,EAAA;;AAIL;EACI;IAEQ,aAAY,EACf;EAEL;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,iBAAgB;IAChB,SAAQ;IACR,YAAW,EACd,EAAA;;AAGL;EACI;IAEQ,aAAY,EAIf;IANL;MAIY,eAAc,EACjB;EALT;IASY,iBAAgB,EACnB;EAGT;IAEQ,iBAAgB;IAChB,mBAAkB;IAClB,YAAW,EACd;EAEL;IACI,aAAY;IACZ,YAAW,EACd,EAAA","file":"header-content.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'colors';\n@import 'fonts';\n@import 'header-background';\n\n.header-container {\n        width: 100%;\n        position: absolute;\n        z-index: 1;\n        color: white;\n        .left {\n            float: left;\n            margin-top: -5px;\n        }\n        .right {\n            margin-top: 20px;\n            float: right;\n            text-align: right;\n            span {\n                margin-right: 20px;\n            }\n        }\n        h1 {\n            text-align: left;\n            margin: 0 20px;\n            font-family: 'Amatic SC', cursive;\n            font-size: 6em;\n            color: white;\n        }\n        .cart-icon {\n            position: relative;\n            float: left;\n            img{\n                max-width: none;\n            }\n        }\n\n        .cart-icon:hover > .total-items {\n            color: $accent-color;\n        }\n\n        .icon-facebook2:before {\n            content: \"\\ea91\";\n            font-size: 1.9em;\n        }\n\n        .icon-instagram:before {\n            content: \"\\ea92\";\n            font-size: 1.9em;\n        }\n\n        .icon-twitter:before {\n            content: \"\\ea96\";\n            font-size: 1.9em;\n        }\n        .icon-menu:before {\n            content: \"\\e9bd\";\n            font-size: 2em;\n        }\n        a:hover {\n            color: $accent-color;\n        }\n}\n\n.total-items {\n    display: inline-block;\n    position: absolute;\n    color: white;\n    font-family: $main-font;\n    font-size: 1.5em;\n    font-weight: bold;\n    margin: 0;\n}\n.socials {\n    float: right;\n}\n\n.hamburger {\n    display: none;\n    float: left;\n}\n\n\n@media all and (max-width: 550px) {\n    .header-container {\n        nav-bar {\n            display: none;\n        }\n        .mobile-nav nav-bar {\n            display: block;\n            margin-top: 5px;\n        }\n        .left {\n            float: none;\n            margin-top: -5px;\n            width: 100%;\n            z-index: 1;\n            h1 {\n                float: left;\n                margin: 0 1%;\n                font-size: 2.9em;\n                font-weight: 900;\n            }\n        }\n        .right {\n            margin-top: 5px;\n            span {\n                margin-right: 10px;\n            }\n        }\n        .socials {\n            display: none;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 36px;\n            margin-right: 5px;\n            \n        }\n    }\n    .total-items {\n        font-size: .9em;\n        top: 4px;\n        right: 15px;\n    }\n    .hamburger {\n        display: block;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    .header-container {\n        .left {\n            max-width: 250px;\n            h1 {\n                font-size: 4em;\n            }\n        }\n\n        .right {\n            margin-top: 15px;\n            .icon-facebook2:before, .icon-instagram:before, .icon-twitter:before, .icon-cart:before {\n                font-size: 1.5em;\n            }\n            span {\n                margin-right: 15px;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            width: 35px;\n            margin-right: 15px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1em;\n        top: -1px;\n        right: 25px;\n    }\n\n}\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n    .header-container {\n        .left {\n            width: 350px;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 45px;\n            margin-right: 20px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1.2em;\n        top: 1px;\n        right: 34px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-container {\n        .left {\n            width: 500px;\n            h1 {\n                font-size: 7em;\n            }\n        }\n        .right {\n            .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n                font-size: 2.2em;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            margin-top: -8px;\n            margin-right: 19px;\n            width: 55px;\n        }\n    }\n    .total-items {\n        bottom: 23px;\n        right: 35px;\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	exports.push([module.id, ".header-background {\n  background-color: #58afac;\n  background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n  background-size: 100%;\n  height: 60px;\n  width: 100%;\n  position: relative;\n  top: 0;\n  left: 0;\n  border-bottom: 1px solid rgba(200, 200, 200, 0.7); }\n\n@media all and (min-width: 550px) {\n  .header-background {\n    height: 125px; } }\n\n@media all and (min-width: 700px) {\n  .header-background {\n    height: 160px; } }\n\n@media all and (min-width: 1083px) {\n  .header-background {\n    height: 180px; } }\n\n.header-container {\n  width: 100%;\n  position: absolute;\n  z-index: 1;\n  color: white; }\n  .header-container .left {\n    float: left;\n    margin-top: -5px; }\n  .header-container .right {\n    margin-top: 20px;\n    float: right;\n    text-align: right; }\n    .header-container .right span {\n      margin-right: 20px; }\n  .header-container h1 {\n    text-align: left;\n    margin: 0 20px;\n    font-family: 'Amatic SC', cursive;\n    font-size: 6em;\n    color: white; }\n  .header-container .cart-icon {\n    position: relative;\n    float: left; }\n    .header-container .cart-icon img {\n      max-width: none; }\n  .header-container .cart-icon:hover > .total-items {\n    color: #FFC107; }\n  .header-container .icon-facebook2:before {\n    content: \"\\EA91\";\n    font-size: 1.9em; }\n  .header-container .icon-instagram:before {\n    content: \"\\EA92\";\n    font-size: 1.9em; }\n  .header-container .icon-twitter:before {\n    content: \"\\EA96\";\n    font-size: 1.9em; }\n  .header-container .icon-menu:before {\n    content: \"\\E9BD\";\n    font-size: 2em; }\n  .header-container a:hover {\n    color: #FFC107; }\n\n.total-items {\n  display: inline-block;\n  position: absolute;\n  color: white;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.5em;\n  font-weight: bold;\n  margin: 0; }\n\n.socials {\n  float: right; }\n\n.hamburger {\n  display: none;\n  float: left; }\n\n@media all and (max-width: 550px) {\n  .header-container nav-bar {\n    display: none; }\n  .header-container .mobile-nav nav-bar {\n    display: block;\n    margin-top: 5px; }\n  .header-container .left {\n    float: none;\n    margin-top: -5px;\n    width: 100%;\n    z-index: 1; }\n    .header-container .left h1 {\n      float: left;\n      margin: 0 1%;\n      font-size: 2.9em;\n      font-weight: 900; }\n  .header-container .right {\n    margin-top: 5px; }\n    .header-container .right span {\n      margin-right: 10px; }\n  .header-container .socials {\n    display: none; }\n  .cart-icon img {\n    width: 36px;\n    margin-right: 5px; }\n  .total-items {\n    font-size: .9em;\n    top: 4px;\n    right: 15px; }\n  .hamburger {\n    display: block; } }\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n  .header-container .left {\n    max-width: 250px; }\n    .header-container .left h1 {\n      font-size: 4em; }\n  .header-container .right {\n    margin-top: 15px; }\n    .header-container .right .icon-facebook2:before, .header-container .right .icon-instagram:before, .header-container .right .icon-twitter:before, .header-container .right .icon-cart:before {\n      font-size: 1.5em; }\n    .header-container .right span {\n      margin-right: 15px; }\n  .cart-icon img {\n    width: 35px;\n    margin-right: 15px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1em;\n    top: -1px;\n    right: 25px; } }\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n  .header-container .left {\n    width: 350px; }\n  .cart-icon img {\n    width: 45px;\n    margin-right: 20px;\n    margin-top: -5px; }\n  .total-items {\n    font-size: 1.2em;\n    top: 1px;\n    right: 34px; } }\n\n@media all and (min-width: 1083px) {\n  .header-container .left {\n    width: 500px; }\n    .header-container .left h1 {\n      font-size: 7em; }\n  .header-container .right .icon-facebook2:before, .header-container .right .icon-twitter:before, .header-container .right .icon-instagram:before, .header-container .right .icon-cart:before {\n    font-size: 2.2em; }\n  .cart-icon img {\n    margin-top: -8px;\n    margin-right: 19px;\n    width: 55px; }\n  .total-items {\n    bottom: 23px;\n    right: 35px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_header-background.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/components/header-content/header-content.scss","/Users/Will/freelance/earth-house/app/src/components/header-content/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAEA;EAEI,0BAAiC;EACjC,2HAA0H;EAC1H,sBAAqB;EACrB,aAAY;EACZ,YAAW;EACX,mBAAkB;EAClB,OAAM;EACN,QAAO;EACP,kDCX4B,EDa/B;;AAGD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AE5BL;EACQ,YAAW;EACX,mBAAkB;EAClB,WAAU;EACV,aAAY,EAqDnB;EAzDD;IAMY,YAAW;IACX,iBAAgB,EACnB;EART;IAUY,iBAAgB;IAChB,aAAY;IACZ,kBAAiB,EAIpB;IAhBT;MAcgB,mBAAkB,EACrB;EAfb;IAkBY,iBAAgB;IAChB,eAAc;IACd,kCAAiC;IACjC,eAAc;IACd,aAAY,EACf;EAvBT;IAyBY,mBAAkB;IAClB,YAAW,EAId;IA9BT;MA4BgB,gBAAe,EAClB;EA7Bb;IAiCY,eDrCU,ECsCb;EAlCT;IAqCY,iBAAgB;IAChB,iBAAgB,EACnB;EAvCT;IA0CY,iBAAgB;IAChB,iBAAgB,EACnB;EA5CT;IA+CY,iBAAgB;IAChB,iBAAgB,EACnB;EAjDT;IAmDY,iBAAgB;IAChB,eAAc,EACjB;EArDT;IAuDY,eD3DU,EC4Db;;AAGT;EACI,sBAAqB;EACrB,mBAAkB;EAClB,aAAY;EACZ,wCClEkC;EDmElC,iBAAgB;EAChB,kBAAiB;EACjB,UAAS,EACZ;;AACD;EACI,aAAY,EACf;;AAED;EACI,cAAa;EACb,YAAW,EACd;;AAGD;EACI;IAEQ,cAAa,EAChB;EAHL;IAKQ,eAAc;IACd,gBAAe,EAClB;EAPL;IASQ,YAAW;IACX,iBAAgB;IAChB,YAAW;IACX,WAAU,EAOb;IAnBL;MAcY,YAAW;MACX,aAAY;MACZ,iBAAgB;MAChB,iBAAgB,EACnB;EAlBT;IAqBQ,gBAAe,EAIlB;IAzBL;MAuBY,mBAAkB,EACrB;EAxBT;IA2BQ,cAAa,EAChB;EAEL;IAEQ,YAAW;IACX,kBAAiB,EAEpB;EAEL;IACI,gBAAe;IACf,SAAQ;IACR,YAAW,EACd;EACD;IACI,eAAc,EACjB,EAAA;;AAGL;EACI;IAEQ,iBAAgB,EAInB;IANL;MAIY,eAAc,EACjB;EALT;IASQ,iBAAgB,EAOnB;IAhBL;MAWY,iBAAgB,EACnB;IAZT;MAcY,mBAAkB,EACrB;EAGT;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,eAAc;IACd,UAAS;IACT,YAAW,EACd,EAAA;;AAIL;EACI;IAEQ,aAAY,EACf;EAEL;IAEQ,YAAW;IACX,mBAAkB;IAClB,iBAAgB,EACnB;EAEL;IACI,iBAAgB;IAChB,SAAQ;IACR,YAAW,EACd,EAAA;;AAGL;EACI;IAEQ,aAAY,EAIf;IANL;MAIY,eAAc,EACjB;EALT;IASY,iBAAgB,EACnB;EAGT;IAEQ,iBAAgB;IAChB,mBAAkB;IAClB,YAAW,EACd;EAEL;IACI,aAAY;IACZ,YAAW,EACd,EAAA","file":"header-content.scss","sourcesContent":["@import 'colors';\n\n.header-background {\n    // background-color: $black;\n    background-color: rgb(88,175,172);\n    background-image: url(\"http://res.cloudinary.com/lejipni8p/image/upload/v1482867039/earth%20house/wood-banner_rbetwp.jpg\");\n    background-size: 100%;\n    height: 60px;\n    width: 100%;\n    position: relative;\n    top: 0;\n    left: 0;\n    border-bottom: 1px solid $lightgrey;\n    \n}\n\n\n@media all and (min-width: 550px) {\n    .header-background {\n        height: 125px;\n    }\n}\n\n@media all and (min-width: 700px) {\n    .header-background {\n        height: 160px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-background {\n        height: 180px;\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","@import 'colors';\n@import 'fonts';\n@import 'header-background';\n\n.header-container {\n        width: 100%;\n        position: absolute;\n        z-index: 1;\n        color: white;\n        .left {\n            float: left;\n            margin-top: -5px;\n        }\n        .right {\n            margin-top: 20px;\n            float: right;\n            text-align: right;\n            span {\n                margin-right: 20px;\n            }\n        }\n        h1 {\n            text-align: left;\n            margin: 0 20px;\n            font-family: 'Amatic SC', cursive;\n            font-size: 6em;\n            color: white;\n        }\n        .cart-icon {\n            position: relative;\n            float: left;\n            img{\n                max-width: none;\n            }\n        }\n\n        .cart-icon:hover > .total-items {\n            color: $accent-color;\n        }\n\n        .icon-facebook2:before {\n            content: \"\\ea91\";\n            font-size: 1.9em;\n        }\n\n        .icon-instagram:before {\n            content: \"\\ea92\";\n            font-size: 1.9em;\n        }\n\n        .icon-twitter:before {\n            content: \"\\ea96\";\n            font-size: 1.9em;\n        }\n        .icon-menu:before {\n            content: \"\\e9bd\";\n            font-size: 2em;\n        }\n        a:hover {\n            color: $accent-color;\n        }\n}\n\n.total-items {\n    display: inline-block;\n    position: absolute;\n    color: white;\n    font-family: $main-font;\n    font-size: 1.5em;\n    font-weight: bold;\n    margin: 0;\n}\n.socials {\n    float: right;\n}\n\n.hamburger {\n    display: none;\n    float: left;\n}\n\n\n@media all and (max-width: 550px) {\n    .header-container {\n        nav-bar {\n            display: none;\n        }\n        .mobile-nav nav-bar {\n            display: block;\n            margin-top: 5px;\n        }\n        .left {\n            float: none;\n            margin-top: -5px;\n            width: 100%;\n            z-index: 1;\n            h1 {\n                float: left;\n                margin: 0 1%;\n                font-size: 2.9em;\n                font-weight: 900;\n            }\n        }\n        .right {\n            margin-top: 5px;\n            span {\n                margin-right: 10px;\n            }\n        }\n        .socials {\n            display: none;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 36px;\n            margin-right: 5px;\n            \n        }\n    }\n    .total-items {\n        font-size: .9em;\n        top: 4px;\n        right: 15px;\n    }\n    .hamburger {\n        display: block;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 700px) {\n    .header-container {\n        .left {\n            max-width: 250px;\n            h1 {\n                font-size: 4em;\n            }\n        }\n\n        .right {\n            margin-top: 15px;\n            .icon-facebook2:before, .icon-instagram:before, .icon-twitter:before, .icon-cart:before {\n                font-size: 1.5em;\n            }\n            span {\n                margin-right: 15px;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            width: 35px;\n            margin-right: 15px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1em;\n        top: -1px;\n        right: 25px;\n    }\n\n}\n\n@media all and (min-width: 701px) and (max-width: 1083px) {\n    .header-container {\n        .left {\n            width: 350px;\n        }\n    }\n    .cart-icon {\n        img {\n            width: 45px;\n            margin-right: 20px;\n            margin-top: -5px;\n        }   \n    }\n    .total-items {\n        font-size: 1.2em;\n        top: 1px;\n        right: 34px;\n    }\n}\n\n@media all and (min-width: 1083px) {\n    .header-container {\n        .left {\n            width: 500px;\n            h1 {\n                font-size: 7em;\n            }\n        }\n        .right {\n            .icon-facebook2:before, .icon-twitter:before, .icon-instagram:before, .icon-cart:before {\n                font-size: 2.2em;\n            }\n        }\n    }\n    .cart-icon {\n        img {\n            margin-top: -8px;\n            margin-right: 19px;\n            width: 55px;\n        }\n    }\n    .total-items {\n        bottom: 23px;\n        right: 35px;\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 68 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36261,11 +36403,11 @@
 	    value: true
 	});
 	
-	var _heroImage = __webpack_require__(69);
+	var _heroImage = __webpack_require__(73);
 	
 	var _heroImage2 = _interopRequireDefault(_heroImage);
 	
-	var _heroImage3 = __webpack_require__(70);
+	var _heroImage3 = __webpack_require__(74);
 	
 	var _heroImage4 = _interopRequireDefault(_heroImage3);
 	
@@ -36346,19 +36488,19 @@
 	}
 
 /***/ },
-/* 69 */
+/* 73 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"slider\">\n    <div ng-repeat=\"slide in $ctrl.slidesVisible\">\n        <img ng-hide=\"!$ctrl.isCurrIndex($index)\"\n            ng-src=\"{{slide.imgUrl}}\"\n             class=\"slide-image slide-animation \">\n         <div ng-if=\"$ctrl.isCurrIndex($index)\"\n            class=\"slide-text fade\">\n            <p ng-if=\"slide.link !== '#'\"><a href=\"{{slide.link}}\">{{$ctrl.currText}}</a></p>\n            <p ng-if=\"slide.link === '#'\"><a ui-sref=\"shop\">{{$ctrl.currText}}</a></p>\n         </div>\n    </div>\n   \n    <nav class=\"slider-nav\">\n        <div class=\"wrapper\">\n            <ul class=\"dots\">\n                <li class=\"dot\" ng-repeat=\"slide in $ctrl.slidesVisible\">\n                    <a href=\"#\" \n                        ng-class=\"{'active': $ctrl.isCurrIndex($index)}\"\n                        ng-click=\"$ctrl.setCurrIndex($index)\"></a>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</div>\n\n\n";
 
 /***/ },
-/* 70 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(71);
+	var content = __webpack_require__(75);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36378,7 +36520,7 @@
 	}
 
 /***/ },
-/* 71 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36386,13 +36528,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".fade.ng-enter {\n  transition: .5s linear all;\n  opacity: 0; }\n\n.fade.ng-enter.ng-enter-active {\n  opacity: 1; }\n\n.fade.ng-leave {\n  transition: .5s linear all;\n  opacity: 1; }\n\n.fade.ng-leave.ng-leave-active {\n  opacity: 0; }\n\n.slide-text {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  width: 100%;\n  z-index: 1002; }\n  .slide-text p {\n    font-size: 1em;\n    color: white;\n    font-weight: bold;\n    text-align: center;\n    margin-bottom: 3%; }\n  .slide-text a {\n    font-size: 1.5em;\n    font-family: \"Amatic SC\", cursive;\n    display: block;\n    transition: .5s ease all; }\n  .slide-text a:hover {\n    color: #FFC107; }\n\n.slider {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden; }\n\n.slide-image {\n  position: absolute;\n  top: 0;\n  left: 0; }\n\n.slider-nav {\n  text-align: center;\n  display: block;\n  position: absolute;\n  z-index: 1002;\n  left: 0;\n  bottom: -4px;\n  right: 0;\n  height: 48px; }\n\n.nonDraggableImage {\n  -webkit-user-drag: none; }\n\n.slider-nav .wrapper {\n  margin: 0 auto;\n  width: 100%;\n  padding: 1em 0 .8em; }\n\n.slider-nav ul {\n  margin: 0;\n  width: 100%; }\n\n.slider-nav .dot, .slider-nav .dot a {\n  display: inline-block;\n  zoom: 1; }\n\n.dots .dot {\n  position: relative;\n  margin: 0 10px;\n  width: 12px;\n  height: 12px; }\n\n.dots .dot a {\n  position: absolute;\n  top: 2px;\n  left: 2px;\n  width: 6px;\n  height: 6px;\n  text-indent: 100%;\n  white-space: nowrap;\n  overflow: hidden;\n  background: #FFF;\n  border: 1px solid transparent;\n  outline: none;\n  -webkit-box-shadow: none;\n  -moz-box-shadow: none;\n  box-shadow: none;\n  -webkit-border-radius: 50%;\n  -moz-border-radius: 50%;\n  border-radius: 50%;\n  -webkit-transition: background-color 1s, border-color 1s;\n  -moz-transition: background-color 1s, border-color 1s;\n  transition: background-color 1s, border-color 1s; }\n\n.dots .dot a.active {\n  border-color: #FFC107;\n  background-color: #FFC107; }\n\n.arrow {\n  position: absolute;\n  z-index: 1002;\n  display: block;\n  top: 50%;\n  margin-top: -35px;\n  width: auto;\n  height: auto;\n  outline: none;\n  cursor: pointer;\n  color: white;\n  font-size: 4em;\n  border: 5px solid rgba(255, 255, 255, 0); }\n\n.arrow.prev {\n  opacity: 0.2;\n  left: 5%;\n  transition: 0.2s linear all; }\n\n.arrow.next {\n  opacity: 0.2;\n  right: 5%;\n  transition: 0.3s linear all; }\n\n.arrow:hover {\n  opacity: 1;\n  -webkit-transform: scale(1.2);\n  -ms-transform: scale(1.2);\n  transform: scale(1.2); }\n\n@media all and (max-width: 358px) {\n  .slider {\n    height: 210px; } }\n\n@media all and (min-width: 359px) and (max-width: 450px) {\n  .slider {\n    height: 250px; } }\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n  .slider {\n    height: 295px; } }\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n  .slider a {\n    font-size: 2em;\n    margin-bottom: 1%; }\n  .slide-text a {\n    font-size: 2em; } }\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n  .slider {\n    height: 350px; } }\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n  .slider {\n    height: 410px; }\n  .slide-text a {\n    font-size: 2.5em; } }\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n  .slider {\n    height: 440px; }\n  .slide-text a {\n    font-size: 3em; } }\n\n@media all and (max-width: 700px) {\n  .slider-nav {\n    height: 35px; }\n  .slider-nav .wrapper {\n    padding-bottom: 0;\n    bottom: 0; }\n  .dots .dot {\n    margin: 0 5px;\n    width: 12px;\n    height: 12px; }\n  .dots .dot a {\n    height: 4px;\n    width: 4px; } }\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n  .slider {\n    height: 500px; }\n  .slide-text a {\n    font-size: 3.5em;\n    margin-bottom: 10px; } }\n\n@media all and (min-width: 816px) {\n  .slider {\n    height: 550px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n  .slider img {\n    top: -35px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n  .slider img {\n    top: -60px; }\n  .slide-text a {\n    font-size: 5em; } }\n\n@media all and (min-width: 1200px) {\n  .slider {\n    height: 600px; }\n    .slider img {\n      top: -93px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_fade-text.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/components/hero-image/hero-image.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAAA;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;AAED;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;ACZD;EACI,mBAAkB;EAClB,UAAS;EACT,SAAQ;EACR,YAAW;EACX,cAAa,EAmBhB;EAxBD;IAOQ,eAAc;IACd,aAAY;IACZ,kBAAiB;IACjB,mBAAkB;IAElB,kBAAiB,EACpB;EAbL;IAeQ,iBAAgB;IAChB,kCCpB8B;IDqB9B,eAAc;IACd,yBAAwB,EAC3B;EAnBL;IAqBQ,eEzBc,EF0BjB;;AAIL;EACI,mBAAkB;EAClB,YAAW;EACX,cAAa;EACb,iBAAgB,EACnB;;AAED;EACI,mBAAkB;EAClB,OAAM;EACN,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,mBAAkB;EAClB,cAAa;EACb,QAAO;EACP,aAAY;EACZ,SAAQ;EACR,aAAY,EACf;;AAED;EACI,wBAAuB,EAC1B;;AAED;EACI,eAAc;EACd,YAAW;EACX,oBAAmB,EACtB;;AAGD;EACI,UAAS;EACT,YAAW,EACd;;AAED;EACI,sBAAqB;EACrB,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,YAAW;EACX,aAAY,EACf;;AAED;EACI,mBAAkB;EAClB,SAAQ;EACR,UAAS;EACT,WAAU;EACV,YAAW;EACX,kBAAiB;EACjB,oBAAmB;EACnB,iBAAgB;EAChB,iBAAgB;EAChB,8BAA6B;EAC7B,cAAa;EACb,yBAAwB;EACxB,sBAAqB;EACrB,iBAAgB;EAChB,2BAA0B;EAC1B,wBAAuB;EACvB,mBAAkB;EAClB,yDAAwD;EACxD,sDAAqD;EACrD,iDAAgD,EACnD;;AAED;EAEI,sBE3GkB;EF4GlB,0BE5GkB,EF6GrB;;AAED;EACI,mBAAkB;EAClB,cAAa;EACb,eAAc;EACd,SAAQ;EACR,kBAAiB;EACjB,YAAW;EACX,aAAY;EACZ,cAAa;EACb,gBAAe;EACf,aAAY;EACZ,eAAc;EACd,yCAAqC,EACxC;;AAED;EACI,aAAY;EACZ,SAAQ;EAER,4BAA2B,EAC9B;;AAED;EACI,aAAY;EACZ,UAAS;EACT,4BAA2B,EAC9B;;AAED;EACI,WAAU;EACV,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB,EACxB;;AACD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IAEQ,eAAc;IACd,kBAAiB,EACpB;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB,EACnB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EAEI;IACI,aAAY,EACf;EACD;IACI,kBAAiB;IACjB,UAAS,EACZ;EAED;IACI,cAAa;IACb,YAAW;IACX,aAAY,EACf;EACD;IACI,YAAW;IACX,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB;IAChB,oBAAmB,EACtB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAIhB;IALD;MAGQ,WAAU,EACb,EAAA","file":"hero-image.scss","sourcesContent":[".fade.ng-enter {\n    transition: .5s linear all;\n    opacity: 0;\n}\n\n.fade.ng-enter.ng-enter-active {\n    opacity: 1;\n}\n\n.fade.ng-leave {\n    transition: .5s linear all;\n    opacity: 1;\n}\n\n.fade.ng-leave.ng-leave-active {\n    opacity: 0;\n}","@import 'fade-text';\n@import 'fonts';\n@import 'colors';\n\n.slide-text {\n    position: absolute;\n    bottom: 0;\n    right: 0;\n    width: 100%;\n    z-index: 1002;\n    p {\n        font-size: 1em;\n        color: white;\n        font-weight: bold;\n        text-align: center;\n\n        margin-bottom: 3%;\n    }\n    a {\n        font-size: 1.5em;\n        font-family: $decorative-font;\n        display: block;\n        transition: .5s ease all;\n    }\n    a:hover {\n        color: $accent-color;\n    }\n\n}\n\n.slider {\n    position: relative;\n    width: 100%;\n    height: 100vh;\n    overflow: hidden;\n}\n\n.slide-image {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n\n.slider-nav {\n    text-align: center;\n    display: block;\n    position: absolute;\n    z-index: 1002;\n    left: 0;\n    bottom: -4px;\n    right: 0;\n    height: 48px;\n}\n\n.nonDraggableImage{\n    -webkit-user-drag: none;\n}\n\n.slider-nav .wrapper {\n    margin: 0 auto;\n    width: 100%;\n    padding: 1em 0 .8em;\n}\n\n\n.slider-nav ul {\n    margin: 0;\n    width: 100%;\n}\n\n.slider-nav .dot, .slider-nav .dot a {\n    display: inline-block;\n    zoom: 1;\n}\n\n.dots .dot {\n    position: relative;\n    margin: 0 10px;\n    width: 12px;\n    height: 12px;\n}\n\n.dots .dot a {\n    position: absolute;\n    top: 2px;\n    left: 2px;\n    width: 6px;\n    height: 6px;\n    text-indent: 100%;\n    white-space: nowrap;\n    overflow: hidden;\n    background: #FFF;\n    border: 1px solid transparent;\n    outline: none;\n    -webkit-box-shadow: none;\n    -moz-box-shadow: none;\n    box-shadow: none;\n    -webkit-border-radius: 50%;\n    -moz-border-radius: 50%;\n    border-radius: 50%;\n    -webkit-transition: background-color 1s, border-color 1s;\n    -moz-transition: background-color 1s, border-color 1s;\n    transition: background-color 1s, border-color 1s;\n}\n\n.dots .dot a.active {\n    // border-color: #FFF;\n    border-color: $accent-color;\n    background-color: $accent-color;\n}\n\n.arrow {\n    position: absolute;\n    z-index: 1002;\n    display: block;\n    top: 50%;\n    margin-top: -35px;\n    width: auto;\n    height: auto;\n    outline: none;\n    cursor: pointer;\n    color: white;\n    font-size: 4em; \n    border: 5px solid rgba(255,255,255,0);\n}\n\n.arrow.prev {\n    opacity: 0.2;\n    left: 5%;\n    \n    transition: 0.2s linear all;\n}\n\n.arrow.next {\n    opacity: 0.2;\n    right: 5%;\n    transition: 0.3s linear all;\n}\n\n.arrow:hover {\n    opacity: 1;\n    -webkit-transform: scale(1.2);\n    -ms-transform: scale(1.2);\n    transform: scale(1.2);\n}\n@media all and (max-width: 358px) {\n    .slider {\n        height: 210px;\n    }\n}\n\n@media all and (min-width:359px) and (max-width: 450px) {\n    .slider {\n        height: 250px;\n    }\n}\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n    .slider {\n        height: 295px;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n    .slider {\n        a {\n            font-size: 2em;\n            margin-bottom: 1%;\n        }\n    }\n    .slide-text {\n        a {\n            font-size: 2em;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n    .slider {\n        height: 350px; \n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n    .slider {\n        height: 410px; \n    }\n    .slide-text {\n        a {\n            font-size: 2.5em;\n        }\n    }\n}\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n    .slider {\n        height: 440px; \n    }\n    .slide-text {\n        a {\n            font-size: 3em;\n        }\n    }\n}\n\n@media all and (max-width: 700px) {\n\n    .slider-nav {\n        height: 35px;\n    }\n    .slider-nav .wrapper {\n        padding-bottom: 0;\n        bottom: 0;\n    }\n\n    .dots .dot {\n        margin: 0 5px;\n        width: 12px;\n        height: 12px;\n    }\n    .dots .dot a {\n        height: 4px;\n        width: 4px;\n    }\n}\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n    .slider {\n        height: 500px;\n    }\n    .slide-text {\n        a { \n            font-size: 3.5em;\n            margin-bottom: 10px;\n        }\n    }\n}\n\n@media all and (min-width: 816px) {\n    .slider {\n        height: 550px;\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n    .slider {\n        img {\n            top: -35px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n    .slider {\n        img {\n            top: -60px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 5em;\n        }\n    }\n}\n\n@media all and (min-width: 1200px) {\n    .slider {\n        height: 600px;\n        img {\n            top: -93px;\n        }\n    }\n}\n\n\n\n\n\n\n\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
+	exports.push([module.id, ".fade.ng-enter {\n  transition: .5s linear all;\n  opacity: 0; }\n\n.fade.ng-enter.ng-enter-active {\n  opacity: 1; }\n\n.fade.ng-leave {\n  transition: .5s linear all;\n  opacity: 1; }\n\n.fade.ng-leave.ng-leave-active {\n  opacity: 0; }\n\n.slide-text {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  width: 100%;\n  z-index: 1002; }\n  .slide-text p {\n    font-size: 1em;\n    color: white;\n    font-weight: bold;\n    text-align: center;\n    margin-bottom: 3%; }\n  .slide-text a {\n    font-size: 1.5em;\n    font-family: \"Amatic SC\", cursive;\n    display: block;\n    transition: .5s ease all; }\n  .slide-text a:hover {\n    color: #FFC107; }\n\n.slider {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden; }\n\n.slide-image {\n  position: absolute;\n  top: 0;\n  left: 0; }\n\n.slider-nav {\n  text-align: center;\n  display: block;\n  position: absolute;\n  z-index: 1002;\n  left: 0;\n  bottom: -4px;\n  right: 0;\n  height: 48px; }\n\n.nonDraggableImage {\n  -webkit-user-drag: none; }\n\n.slider-nav .wrapper {\n  margin: 0 auto;\n  width: 100%;\n  padding: 1em 0 .8em; }\n\n.slider-nav ul {\n  margin: 0;\n  width: 100%; }\n\n.slider-nav .dot, .slider-nav .dot a {\n  display: inline-block;\n  zoom: 1; }\n\n.dots .dot {\n  position: relative;\n  margin: 0 10px;\n  width: 12px;\n  height: 12px; }\n\n.dots .dot a {\n  position: absolute;\n  top: 2px;\n  left: 2px;\n  width: 6px;\n  height: 6px;\n  text-indent: 100%;\n  white-space: nowrap;\n  overflow: hidden;\n  background: #FFF;\n  border: 1px solid transparent;\n  outline: none;\n  -webkit-box-shadow: none;\n  -moz-box-shadow: none;\n  box-shadow: none;\n  -webkit-border-radius: 50%;\n  -moz-border-radius: 50%;\n  border-radius: 50%;\n  -webkit-transition: background-color 1s, border-color 1s;\n  -moz-transition: background-color 1s, border-color 1s;\n  transition: background-color 1s, border-color 1s; }\n\n.dots .dot a.active {\n  border-color: #FFC107;\n  background-color: #FFC107; }\n\n.arrow {\n  position: absolute;\n  z-index: 1002;\n  display: block;\n  top: 50%;\n  margin-top: -35px;\n  width: auto;\n  height: auto;\n  outline: none;\n  cursor: pointer;\n  color: white;\n  font-size: 4em;\n  border: 5px solid rgba(255, 255, 255, 0); }\n\n.arrow.prev {\n  opacity: 0.2;\n  left: 5%;\n  transition: 0.2s linear all; }\n\n.arrow.next {\n  opacity: 0.2;\n  right: 5%;\n  transition: 0.3s linear all; }\n\n.arrow:hover {\n  opacity: 1;\n  -webkit-transform: scale(1.2);\n  -ms-transform: scale(1.2);\n  transform: scale(1.2); }\n\n@media all and (max-width: 358px) {\n  .slider {\n    height: 210px; } }\n\n@media all and (min-width: 359px) and (max-width: 450px) {\n  .slider {\n    height: 250px; } }\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n  .slider {\n    height: 295px; } }\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n  .slider a {\n    font-size: 2em;\n    margin-bottom: 1%; }\n  .slide-text a {\n    font-size: 2em; } }\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n  .slider {\n    height: 350px; } }\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n  .slider {\n    height: 410px; }\n  .slide-text a {\n    font-size: 2.5em; } }\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n  .slider {\n    height: 440px; }\n  .slide-text a {\n    font-size: 3em; } }\n\n@media all and (max-width: 700px) {\n  .slider-nav {\n    height: 35px; }\n  .slider-nav .wrapper {\n    padding-bottom: 0;\n    bottom: 0; }\n  .dots .dot {\n    margin: 0 5px;\n    width: 12px;\n    height: 12px; }\n  .dots .dot a {\n    height: 4px;\n    width: 4px; } }\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n  .slider {\n    height: 500px; }\n  .slide-text a {\n    font-size: 3.5em;\n    margin-bottom: 10px; } }\n\n@media all and (min-width: 816px) {\n  .slider {\n    height: 550px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n  .slider img {\n    top: -35px; }\n  .slide-text a {\n    font-size: 4em; } }\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n  .slider img {\n    top: -60px; }\n  .slide-text a {\n    font-size: 5em; } }\n\n@media all and (min-width: 1200px) {\n  .slider {\n    height: 600px; }\n    .slider img {\n      top: -93px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_fade-text.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/components/hero-image/hero-image.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/hero-image/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAAA;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;AAED;EACI,2BAA0B;EAC1B,WAAU,EACb;;AAED;EACI,WAAU,EACb;;ACZD;EACI,mBAAkB;EAClB,UAAS;EACT,SAAQ;EACR,YAAW;EACX,cAAa,EAmBhB;EAxBD;IAOQ,eAAc;IACd,aAAY;IACZ,kBAAiB;IACjB,mBAAkB;IAElB,kBAAiB,EACpB;EAbL;IAeQ,iBAAgB;IAChB,kCCpB8B;IDqB9B,eAAc;IACd,yBAAwB,EAC3B;EAnBL;IAqBQ,eEzBc,EF0BjB;;AAIL;EACI,mBAAkB;EAClB,YAAW;EACX,cAAa;EACb,iBAAgB,EACnB;;AAED;EACI,mBAAkB;EAClB,OAAM;EACN,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,mBAAkB;EAClB,cAAa;EACb,QAAO;EACP,aAAY;EACZ,SAAQ;EACR,aAAY,EACf;;AAED;EACI,wBAAuB,EAC1B;;AAED;EACI,eAAc;EACd,YAAW;EACX,oBAAmB,EACtB;;AAGD;EACI,UAAS;EACT,YAAW,EACd;;AAED;EACI,sBAAqB;EACrB,QAAO,EACV;;AAED;EACI,mBAAkB;EAClB,eAAc;EACd,YAAW;EACX,aAAY,EACf;;AAED;EACI,mBAAkB;EAClB,SAAQ;EACR,UAAS;EACT,WAAU;EACV,YAAW;EACX,kBAAiB;EACjB,oBAAmB;EACnB,iBAAgB;EAChB,iBAAgB;EAChB,8BAA6B;EAC7B,cAAa;EACb,yBAAwB;EACxB,sBAAqB;EACrB,iBAAgB;EAChB,2BAA0B;EAC1B,wBAAuB;EACvB,mBAAkB;EAClB,yDAAwD;EACxD,sDAAqD;EACrD,iDAAgD,EACnD;;AAED;EAEI,sBE3GkB;EF4GlB,0BE5GkB,EF6GrB;;AAED;EACI,mBAAkB;EAClB,cAAa;EACb,eAAc;EACd,SAAQ;EACR,kBAAiB;EACjB,YAAW;EACX,aAAY;EACZ,cAAa;EACb,gBAAe;EACf,aAAY;EACZ,eAAc;EACd,yCAAqC,EACxC;;AAED;EACI,aAAY;EACZ,SAAQ;EAER,4BAA2B,EAC9B;;AAED;EACI,aAAY;EACZ,UAAS;EACT,4BAA2B,EAC9B;;AAED;EACI,WAAU;EACV,8BAA6B;EAC7B,0BAAyB;EACzB,sBAAqB,EACxB;;AACD;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IAEQ,eAAc;IACd,kBAAiB,EACpB;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB,EACnB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EAEI;IACI,aAAY,EACf;EACD;IACI,kBAAiB;IACjB,UAAS,EACZ;EAED;IACI,cAAa;IACb,YAAW;IACX,aAAY,EACf;EACD;IACI,YAAW;IACX,WAAU,EACb,EAAA;;AAGL;EACI;IACI,cAAa,EAChB;EACD;IAEQ,iBAAgB;IAChB,oBAAmB,EACtB,EAAA;;AAIT;EACI;IACI,cAAa,EAChB;EACD;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,WAAU,EACb;EAEL;IAEQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,cAAa,EAIhB;IALD;MAGQ,WAAU,EACb,EAAA","file":"hero-image.scss","sourcesContent":[".fade.ng-enter {\n    transition: .5s linear all;\n    opacity: 0;\n}\n\n.fade.ng-enter.ng-enter-active {\n    opacity: 1;\n}\n\n.fade.ng-leave {\n    transition: .5s linear all;\n    opacity: 1;\n}\n\n.fade.ng-leave.ng-leave-active {\n    opacity: 0;\n}","@import 'fade-text';\n@import 'fonts';\n@import 'colors';\n\n.slide-text {\n    position: absolute;\n    bottom: 0;\n    right: 0;\n    width: 100%;\n    z-index: 1002;\n    p {\n        font-size: 1em;\n        color: white;\n        font-weight: bold;\n        text-align: center;\n\n        margin-bottom: 3%;\n    }\n    a {\n        font-size: 1.5em;\n        font-family: $decorative-font;\n        display: block;\n        transition: .5s ease all;\n    }\n    a:hover {\n        color: $accent-color;\n    }\n\n}\n\n.slider {\n    position: relative;\n    width: 100%;\n    height: 100vh;\n    overflow: hidden;\n}\n\n.slide-image {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n\n.slider-nav {\n    text-align: center;\n    display: block;\n    position: absolute;\n    z-index: 1002;\n    left: 0;\n    bottom: -4px;\n    right: 0;\n    height: 48px;\n}\n\n.nonDraggableImage{\n    -webkit-user-drag: none;\n}\n\n.slider-nav .wrapper {\n    margin: 0 auto;\n    width: 100%;\n    padding: 1em 0 .8em;\n}\n\n\n.slider-nav ul {\n    margin: 0;\n    width: 100%;\n}\n\n.slider-nav .dot, .slider-nav .dot a {\n    display: inline-block;\n    zoom: 1;\n}\n\n.dots .dot {\n    position: relative;\n    margin: 0 10px;\n    width: 12px;\n    height: 12px;\n}\n\n.dots .dot a {\n    position: absolute;\n    top: 2px;\n    left: 2px;\n    width: 6px;\n    height: 6px;\n    text-indent: 100%;\n    white-space: nowrap;\n    overflow: hidden;\n    background: #FFF;\n    border: 1px solid transparent;\n    outline: none;\n    -webkit-box-shadow: none;\n    -moz-box-shadow: none;\n    box-shadow: none;\n    -webkit-border-radius: 50%;\n    -moz-border-radius: 50%;\n    border-radius: 50%;\n    -webkit-transition: background-color 1s, border-color 1s;\n    -moz-transition: background-color 1s, border-color 1s;\n    transition: background-color 1s, border-color 1s;\n}\n\n.dots .dot a.active {\n    // border-color: #FFF;\n    border-color: $accent-color;\n    background-color: $accent-color;\n}\n\n.arrow {\n    position: absolute;\n    z-index: 1002;\n    display: block;\n    top: 50%;\n    margin-top: -35px;\n    width: auto;\n    height: auto;\n    outline: none;\n    cursor: pointer;\n    color: white;\n    font-size: 4em; \n    border: 5px solid rgba(255,255,255,0);\n}\n\n.arrow.prev {\n    opacity: 0.2;\n    left: 5%;\n    \n    transition: 0.2s linear all;\n}\n\n.arrow.next {\n    opacity: 0.2;\n    right: 5%;\n    transition: 0.3s linear all;\n}\n\n.arrow:hover {\n    opacity: 1;\n    -webkit-transform: scale(1.2);\n    -ms-transform: scale(1.2);\n    transform: scale(1.2);\n}\n@media all and (max-width: 358px) {\n    .slider {\n        height: 210px;\n    }\n}\n\n@media all and (min-width:359px) and (max-width: 450px) {\n    .slider {\n        height: 250px;\n    }\n}\n\n@media all and (min-width: 451px) and (max-width: 550px) {\n    .slider {\n        height: 295px;\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 750px) {\n    .slider {\n        a {\n            font-size: 2em;\n            margin-bottom: 1%;\n        }\n    }\n    .slide-text {\n        a {\n            font-size: 2em;\n        }\n    }\n}\n\n@media all and (min-width: 551px) and (max-width: 600px) {\n    .slider {\n        height: 350px; \n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 650px) {\n    .slider {\n        height: 410px; \n    }\n    .slide-text {\n        a {\n            font-size: 2.5em;\n        }\n    }\n}\n\n@media all and (min-width: 651px) and (max-width: 750px) {\n    .slider {\n        height: 440px; \n    }\n    .slide-text {\n        a {\n            font-size: 3em;\n        }\n    }\n}\n\n@media all and (max-width: 700px) {\n\n    .slider-nav {\n        height: 35px;\n    }\n    .slider-nav .wrapper {\n        padding-bottom: 0;\n        bottom: 0;\n    }\n\n    .dots .dot {\n        margin: 0 5px;\n        width: 12px;\n        height: 12px;\n    }\n    .dots .dot a {\n        height: 4px;\n        width: 4px;\n    }\n}\n\n@media all and (min-width: 750px) and (max-width: 815px) {\n    .slider {\n        height: 500px;\n    }\n    .slide-text {\n        a { \n            font-size: 3.5em;\n            margin-bottom: 10px;\n        }\n    }\n}\n\n@media all and (min-width: 816px) {\n    .slider {\n        height: 550px;\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1000px) and (max-width: 1100px) {\n    .slider {\n        img {\n            top: -35px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1100px) and (max-width: 1200px) {\n    .slider {\n        img {\n            top: -60px;\n        }\n    }\n    .slide-text {\n        a { \n            font-size: 5em;\n        }\n    }\n}\n\n@media all and (min-width: 1200px) {\n    .slider {\n        height: 600px;\n        img {\n            top: -93px;\n        }\n    }\n}\n\n\n\n\n\n\n\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 72 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36401,11 +36543,11 @@
 	    value: true
 	});
 	
-	var _home = __webpack_require__(73);
+	var _home = __webpack_require__(77);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
-	var _home3 = __webpack_require__(74);
+	var _home3 = __webpack_require__(78);
 	
 	var _home4 = _interopRequireDefault(_home3);
 	
@@ -36426,19 +36568,19 @@
 	}
 
 /***/ },
-/* 73 */
+/* 77 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"home\">\n    <hero-image slides=\"$ctrl.slides\"></hero-image>\n    <articles articles=\"$ctrl.articles\"></articles>\n    <mail-list></mail-list>\n</div>\n";
 
 /***/ },
-/* 74 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(75);
+	var content = __webpack_require__(79);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36458,7 +36600,7 @@
 	}
 
 /***/ },
-/* 75 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36472,7 +36614,7 @@
 
 
 /***/ },
-/* 76 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36481,11 +36623,11 @@
 	    value: true
 	});
 	
-	var _landing = __webpack_require__(77);
+	var _landing = __webpack_require__(81);
 	
 	var _landing2 = _interopRequireDefault(_landing);
 	
-	var _landing3 = __webpack_require__(78);
+	var _landing3 = __webpack_require__(82);
 	
 	var _landing4 = _interopRequireDefault(_landing3);
 	
@@ -36499,19 +36641,19 @@
 	};
 
 /***/ },
-/* 77 */
+/* 81 */
 /***/ function(module, exports) {
 
 	module.exports = "<img src=\"https://github.com/willnickerson/earth-house-juice/blob/master/blue-spread.jpeg?raw=true\">\n";
 
 /***/ },
-/* 78 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(79);
+	var content = __webpack_require__(83);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36531,7 +36673,7 @@
 	}
 
 /***/ },
-/* 79 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36545,7 +36687,7 @@
 
 
 /***/ },
-/* 80 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36554,11 +36696,11 @@
 	    value: true
 	});
 	
-	var _mailList = __webpack_require__(81);
+	var _mailList = __webpack_require__(85);
 	
 	var _mailList2 = _interopRequireDefault(_mailList);
 	
-	var _mailList3 = __webpack_require__(82);
+	var _mailList3 = __webpack_require__(86);
 	
 	var _mailList4 = _interopRequireDefault(_mailList3);
 	
@@ -36585,19 +36727,19 @@
 	}
 
 /***/ },
-/* 81 */
+/* 85 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"mail-list\">\n    <div ng-class=\"$ctrl.styles.title\">\n        <h4>Join Our Mailing List</h4>\n    </div>\n    <div ng-class=\"$ctrl.styles.content\">\n    <form ng-submit=\"$ctrl.join()\">\n        <input type=\"email\" ng-model=\"$ctrl.email.email\"> \n        <button>Join</button>\n    </form>\n    <p>\n        Stay up to date with our latest news, deals, and more.\n        <span ng-if=\"$ctrl.showMessage\">We have added you to our email list!</span>\n    </p>\n    </div>\n</div>";
 
 /***/ },
-/* 82 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(83);
+	var content = __webpack_require__(87);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36617,7 +36759,7 @@
 	}
 
 /***/ },
-/* 83 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36625,7 +36767,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".mail-list {\n  margin-bottom: 20px; }\n\n.F_wAMDr_CPhXJGBytqvTW {\n  font-family: \"Amatic SC\", cursive;\n  font-size: 2.5em;\n  text-align: center;\n  background: #323232;\n  border: 5px solid #323232;\n  color: white;\n  width: 90%;\n  margin: 5px auto 5px auto; }\n  .F_wAMDr_CPhXJGBytqvTW h4 {\n    margin: 0; }\n\n._1vOvRv2SPjaWREBP3PuGHs {\n  width: 90%;\n  margin: 0 auto 5px auto;\n  background-color: rgba(200, 200, 200, 0.7);\n  padding: 5px; }\n  ._1vOvRv2SPjaWREBP3PuGHs form {\n    margin: 20px auto 0 auto;\n    width: 80%;\n    text-align: center; }\n  ._1vOvRv2SPjaWREBP3PuGHs p {\n    font-family: \"Josefin Sans\", sans-serif;\n    text-align: center;\n    width: 80%;\n    font-size: 1.3em;\n    font-weight: bold;\n    margin: 20px auto; }\n  ._1vOvRv2SPjaWREBP3PuGHs span {\n    display: block;\n    margin-top: 10px;\n    font-family: \"Amatic SC\", cursive; }\n  ._1vOvRv2SPjaWREBP3PuGHs button {\n    margin-left: 5px;\n    border-radius: 10%;\n    background-color: #FFC107;\n    color: white;\n    border: none;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-weight: bold;\n    font-size: 1.3em;\n    padding: 5px 10px; }\n  ._1vOvRv2SPjaWREBP3PuGHs input {\n    border: none;\n    height: 20px;\n    width: 180px; }\n  ._1vOvRv2SPjaWREBP3PuGHs button:hover {\n    cursor: pointer; }\n\n@media all and (min-width: 751px) {\n  .F_wAMDr_CPhXJGBytqvTW {\n    width: 95%;\n    margin: 0 auto 3px auto; }\n  ._1vOvRv2SPjaWREBP3PuGHs {\n    width: 95%;\n    margin: 0 auto 30px auto;\n    input-height: 20px; }\n    ._1vOvRv2SPjaWREBP3PuGHs p {\n      margin-bottom: 50px; }\n    ._1vOvRv2SPjaWREBP3PuGHs button {\n      font-size: 1.5em;\n      padding: 3px 20px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/mail-list/src/components/mail-list/mail-list.scss","/Users/Will/freelance/earth-house/app/src/components/mail-list/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/mail-list/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAGA;EACI,oBAAmB,EACtB;;AAED;EACI,kCCRkC;EDSlC,iBAAgB;EAChB,mBAAkB;EAClB,oBETiB;EFUjB,0BEViB;EFWjB,aAAY;EACZ,WAAU;EACV,0BAAyB,EAI5B;EAZD;IAUQ,UAAS,EACZ;;AAGL;EACI,WAAU;EACV,wBAAuB;EACvB,2CEvB4B;EFwB5B,aAAY,EAsCf;EA1CD;IAMQ,yBAAwB;IACxB,WAAU;IACV,mBAAkB,EACrB;EATL;IAWQ,wCC/B8B;IDgC9B,mBAAkB;IAClB,WAAU;IACV,iBAAgB;IAChB,kBAAiB;IACjB,kBAAiB,EACpB;EAjBL;IAmBQ,eAAc;IACd,iBAAgB;IAChB,kCC1C8B,ED2CjC;EAtBL;IAwBQ,iBAAgB;IAChB,mBAAkB;IAClB,0BE/Cc;IFgDd,aAAY;IACZ,aAAY;IACZ,wCCjD8B;IDkD9B,kBAAiB;IACjB,iBAAgB;IAChB,kBAAiB,EACpB;EAjCL;IAmCQ,aAAY;IACZ,aAAY;IACZ,aAAY,EACf;EAtCL;IAwCQ,gBAAe,EAClB;;AAGL;EACI;IACI,WAAU;IACV,wBAAuB,EAC1B;EAED;IACI,WAAU;IACV,yBAAwB;IAKpB,mBAAY,EAMnB;IAbD;MAIQ,oBAAmB,EACtB;IALL;MAUQ,iBAAgB;MAChB,kBAAiB,EACpB,EAAA","file":"mail-list.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.mail-list {\n    margin-bottom: 20px;\n}\n\n:local(.title) {\n    font-family: $decorative-font;\n    font-size: 2.5em;\n    text-align: center;\n    background: $black;\n    border: 5px solid $black;\n    color: white;\n    width: 90%;\n    margin: 5px auto 5px auto;\n    h4 {\n        margin: 0;\n    }\n}\n\n:local(.content) {\n    width: 90%;\n    margin: 0 auto 5px auto;\n    background-color: $lightgrey;\n    padding: 5px;\n    form {\n        margin: 20px auto 0 auto;\n        width: 80%;\n        text-align: center;\n    }\n    p {\n        font-family: $main-font;\n        text-align: center;\n        width: 80%;\n        font-size: 1.3em;\n        font-weight: bold;\n        margin: 20px auto;\n    }\n    span {\n        display: block;\n        margin-top: 10px;\n        font-family: $decorative-font;\n    }\n    button {\n        margin-left: 5px;\n        border-radius: 10%;\n        background-color: $accent-color;\n        color: white;\n        border: none;\n        font-family: $main-font;\n        font-weight: bold;\n        font-size: 1.3em;\n        padding: 5px 10px;\n    }\n    input {\n        border: none;\n        height: 20px;\n        width: 180px;\n    }\n    button:hover {\n        cursor: pointer;\n    }\n}\n\n@media all and (min-width: 751px) {\n    :local(.title) {\n        width: 95%;\n        margin: 0 auto 3px auto;\n    }\n\n    :local(.content) {\n        width: 95%;\n        margin: 0 auto 30px auto;\n        p {\n            margin-bottom: 50px;\n        }\n        input: {\n            height: 20px;\n        }\n        button {\n            font-size: 1.5em;\n            padding: 3px 20px;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
+	exports.push([module.id, ".mail-list {\n  margin-bottom: 20px; }\n\n.F_wAMDr_CPhXJGBytqvTW {\n  font-family: \"Amatic SC\", cursive;\n  font-size: 2.5em;\n  text-align: center;\n  background: #323232;\n  border: 5px solid #323232;\n  color: white;\n  width: 90%;\n  margin: 5px auto 5px auto; }\n  .F_wAMDr_CPhXJGBytqvTW h4 {\n    margin: 0; }\n\n._1vOvRv2SPjaWREBP3PuGHs {\n  width: 90%;\n  margin: 0 auto 5px auto;\n  background-color: rgba(200, 200, 200, 0.7);\n  padding: 5px; }\n  ._1vOvRv2SPjaWREBP3PuGHs form {\n    margin: 20px auto 0 auto;\n    width: 80%;\n    text-align: center; }\n  ._1vOvRv2SPjaWREBP3PuGHs p {\n    font-family: \"Josefin Sans\", sans-serif;\n    text-align: center;\n    width: 80%;\n    font-size: 1.3em;\n    font-weight: bold;\n    margin: 20px auto; }\n  ._1vOvRv2SPjaWREBP3PuGHs span {\n    display: block;\n    margin-top: 10px;\n    font-size: 1.8em;\n    font-family: \"Amatic SC\", cursive; }\n  ._1vOvRv2SPjaWREBP3PuGHs button {\n    margin-left: 5px;\n    border-radius: 10%;\n    background-color: #FFC107;\n    color: white;\n    border: none;\n    font-family: \"Josefin Sans\", sans-serif;\n    font-weight: bold;\n    font-size: 1.3em;\n    padding: 5px 10px; }\n  ._1vOvRv2SPjaWREBP3PuGHs input {\n    border: none;\n    height: 20px;\n    width: 180px; }\n  ._1vOvRv2SPjaWREBP3PuGHs button:hover {\n    cursor: pointer; }\n\n@media all and (min-width: 751px) {\n  .F_wAMDr_CPhXJGBytqvTW {\n    width: 95%;\n    margin: 0 auto 3px auto; }\n  ._1vOvRv2SPjaWREBP3PuGHs {\n    width: 95%;\n    margin: 0 auto 30px auto;\n    input-height: 20px; }\n    ._1vOvRv2SPjaWREBP3PuGHs p {\n      margin-bottom: 50px; }\n    ._1vOvRv2SPjaWREBP3PuGHs button {\n      font-size: 1.5em;\n      padding: 3px 20px; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/mail-list/src/components/mail-list/mail-list.scss","/Users/Will/freelance/earth-house/app/src/components/mail-list/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/mail-list/src/scss/partials/_colors.scss"],"names":[],"mappings":"AAGA;EACI,oBAAmB,EACtB;;AAED;EACI,kCCRkC;EDSlC,iBAAgB;EAChB,mBAAkB;EAClB,oBETiB;EFUjB,0BEViB;EFWjB,aAAY;EACZ,WAAU;EACV,0BAAyB,EAI5B;EAZD;IAUQ,UAAS,EACZ;;AAGL;EACI,WAAU;EACV,wBAAuB;EACvB,2CEvB4B;EFwB5B,aAAY,EAuCf;EA3CD;IAMQ,yBAAwB;IACxB,WAAU;IACV,mBAAkB,EACrB;EATL;IAWQ,wCC/B8B;IDgC9B,mBAAkB;IAClB,WAAU;IACV,iBAAgB;IAChB,kBAAiB;IACjB,kBAAiB,EACpB;EAjBL;IAmBQ,eAAc;IACd,iBAAgB;IAChB,iBAAgB;IAChB,kCC3C8B,ED4CjC;EAvBL;IAyBQ,iBAAgB;IAChB,mBAAkB;IAClB,0BEhDc;IFiDd,aAAY;IACZ,aAAY;IACZ,wCClD8B;IDmD9B,kBAAiB;IACjB,iBAAgB;IAChB,kBAAiB,EACpB;EAlCL;IAoCQ,aAAY;IACZ,aAAY;IACZ,aAAY,EACf;EAvCL;IAyCQ,gBAAe,EAClB;;AAGL;EACI;IACI,WAAU;IACV,wBAAuB,EAC1B;EAED;IACI,WAAU;IACV,yBAAwB;IAKpB,mBAAY,EAMnB;IAbD;MAIQ,oBAAmB,EACtB;IALL;MAUQ,iBAAgB;MAChB,kBAAiB,EACpB,EAAA","file":"mail-list.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.mail-list {\n    margin-bottom: 20px;\n}\n\n:local(.title) {\n    font-family: $decorative-font;\n    font-size: 2.5em;\n    text-align: center;\n    background: $black;\n    border: 5px solid $black;\n    color: white;\n    width: 90%;\n    margin: 5px auto 5px auto;\n    h4 {\n        margin: 0;\n    }\n}\n\n:local(.content) {\n    width: 90%;\n    margin: 0 auto 5px auto;\n    background-color: $lightgrey;\n    padding: 5px;\n    form {\n        margin: 20px auto 0 auto;\n        width: 80%;\n        text-align: center;\n    }\n    p {\n        font-family: $main-font;\n        text-align: center;\n        width: 80%;\n        font-size: 1.3em;\n        font-weight: bold;\n        margin: 20px auto;\n    }\n    span {\n        display: block;\n        margin-top: 10px;\n        font-size: 1.8em;\n        font-family: $decorative-font;\n    }\n    button {\n        margin-left: 5px;\n        border-radius: 10%;\n        background-color: $accent-color;\n        color: white;\n        border: none;\n        font-family: $main-font;\n        font-weight: bold;\n        font-size: 1.3em;\n        padding: 5px 10px;\n    }\n    input {\n        border: none;\n        height: 20px;\n        width: 180px;\n    }\n    button:hover {\n        cursor: pointer;\n    }\n}\n\n@media all and (min-width: 751px) {\n    :local(.title) {\n        width: 95%;\n        margin: 0 auto 3px auto;\n    }\n\n    :local(.content) {\n        width: 95%;\n        margin: 0 auto 30px auto;\n        p {\n            margin-bottom: 50px;\n        }\n        input: {\n            height: 20px;\n        }\n        button {\n            font-size: 1.5em;\n            padding: 3px 20px;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -36634,7 +36776,7 @@
 	};
 
 /***/ },
-/* 84 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36643,11 +36785,11 @@
 	    value: true
 	});
 	
-	var _markets = __webpack_require__(85);
+	var _markets = __webpack_require__(89);
 	
 	var _markets2 = _interopRequireDefault(_markets);
 	
-	var _markets3 = __webpack_require__(86);
+	var _markets3 = __webpack_require__(90);
 	
 	var _markets4 = _interopRequireDefault(_markets3);
 	
@@ -36680,19 +36822,19 @@
 	}
 
 /***/ },
-/* 85 */
+/* 89 */
 /***/ function(module, exports) {
 
 	module.exports = "<div ng-class=\"$ctrl.styles.markets\">\n    <h2>Farmer's Market Schedule</h2>\n\n    <ul>\n        <li ng-repeat=\"market in $ctrl.markets\">\n            {{market.name}}\n            <p>{{market.day}} from {{market.start.month}} {{market.start.date}} - {{market.end.month}} {{market.end.date}}</p>\n            <p ng-if=\"market.link !== '#'\"><a href=\"{{market.link}}\">{{market.link}}</a></p>\n            <div class=\"divider\"></div>\n        </li>\n    </ul>\n</div>\n\n";
 
 /***/ },
-/* 86 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(87);
+	var content = __webpack_require__(91);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36712,7 +36854,7 @@
 	}
 
 /***/ },
-/* 87 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36720,7 +36862,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._1qC4in9TZIKjVeVbsOrd5o {\n  background-color: white;\n  min-height: 70vh;\n  width: 85%;\n  margin: 0 auto;\n  margin-top: 5%;\n  margin-bottom: 100px;\n  font-size: 1.4em; }\n  ._1qC4in9TZIKjVeVbsOrd5o ul, ._1qC4in9TZIKjVeVbsOrd5o li, ._1qC4in9TZIKjVeVbsOrd5o p {\n    margin-left: 0;\n    margin-right: 0;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._1qC4in9TZIKjVeVbsOrd5o .divider {\n    border-bottom: 1px solid #777;\n    width: 20%;\n    margin: 50px auto; }\n  ._1qC4in9TZIKjVeVbsOrd5o p {\n    font-size: .7em;\n    color: #777; }\n  ._1qC4in9TZIKjVeVbsOrd5o ul {\n    text-align: center;\n    font-size: 1.5em;\n    width: 80%;\n    margin: 0 auto; }\n  ._1qC4in9TZIKjVeVbsOrd5o a {\n    color: #777;\n    transition: all .3s ease; }\n  ._1qC4in9TZIKjVeVbsOrd5o a:hover {\n    text-decoration: underline; }\n  ._1qC4in9TZIKjVeVbsOrd5o h2 {\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em;\n    margin: 0 0 5% 0; }\n  ._1qC4in9TZIKjVeVbsOrd5o .contact-info {\n    font-size: 1.2em;\n    margin: 2% 0 10% 0;\n    text-indent: 25px; }\n  ._1qC4in9TZIKjVeVbsOrd5o span {\n    margin: 0 1%; }\n  ._1qC4in9TZIKjVeVbsOrd5o .icon-instagram:hover, ._1qC4in9TZIKjVeVbsOrd5o .icon-facebook2:hover {\n    text-decoration: none; }\n\n@media all and (min-width: 500px) {\n  ._31WCW7pXEx6Y7dATrqdWcK {\n    font-size: 1.2em; } }\n\n@media all and (min-width: 700px) {\n  ._31WCW7pXEx6Y7dATrqdWcK {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 900px) {\n  ._31WCW7pXEx6Y7dATrqdWcK {\n    width: 75%;\n    font-size: 1.5em; }\n    ._31WCW7pXEx6Y7dATrqdWcK h2 {\n      font-size: 4em;\n      margin-top: 2%; }\n    ._31WCW7pXEx6Y7dATrqdWcK .contact-info {\n      margin: 2% 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/markets/src/components/markets/markets.scss","/Users/Will/freelance/earth-house/app/src/components/markets/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,wBAAuB;EACvB,iBAAgB;EAChB,WAAU;EACV,eAAc;EACd,eAAc;EACd,qBAAoB;EACpB,iBAAgB,EA6CnB;EApDD;IASQ,eAAc;IACd,gBAAe;IACf,wCCb8B,EDcjC;EAZL;IAcQ,8BAA6B;IAC7B,WAAU;IACV,kBAAiB,EACpB;EAjBL;IAmBQ,gBAAe;IACf,YAAW,EACd;EArBL;IAuBQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU;IACV,eAAc,EACjB;EA3BL;IA6BQ,YAAW;IACX,yBAAwB,EAC3B;EA/BL;IAiCQ,2BAA0B,EAC7B;EAlCL;IAoCQ,mBAAkB;IAClB,kCCxC8B;IDyC9B,eAAc;IACd,iBAAgB,EACnB;EAxCL;IA0CQ,iBAAgB;IAChB,mBAAkB;IAClB,kBAAiB,EACpB;EA7CL;IA+CQ,aAAY,EACf;EAhDL;IAkDQ,sBAAqB,EACxB;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,WAAU;IACV,iBAAgB,EAQnB;IAVD;MAIQ,eAAc;MACd,eAAc,EACjB;IANL;MAQQ,aAAY,EACf,EAAA","file":"markets.scss","sourcesContent":["@import 'fonts';\n@import 'colors';\n\n:local(.markets) {\n    background-color: white;\n    min-height: 70vh;\n    width: 85%;\n    margin: 0 auto;\n    margin-top: 5%;\n    margin-bottom: 100px;\n    font-size: 1.4em;\n    ul, li, p {\n        margin-left: 0;\n        margin-right: 0;\n        font-family: $main-font;\n    }\n    .divider {\n        border-bottom: 1px solid #777;\n        width: 20%;\n        margin: 50px auto;\n    }\n    p {\n        font-size: .7em;\n        color: #777;\n    }\n    ul {\n        text-align: center;\n        font-size: 1.5em;\n        width: 80%;\n        margin: 0 auto;\n    }\n    a {\n        color: #777;\n        transition: all .3s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    h2 {\n        text-align: center;\n        font-family: $decorative-font;\n        font-size: 3em;\n        margin: 0 0 5% 0;\n    }\n    .contact-info {\n        font-size: 1.2em;\n        margin: 2% 0 10% 0;\n        text-indent: 25px;\n    }\n    span {\n        margin: 0 1%;\n    }\n    .icon-instagram:hover, .icon-facebook2:hover {\n        text-decoration: none;\n    }\n}\n\n@media all and (min-width: 500px) {\n    :local(.contact) {\n        font-size: 1.2em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    :local(.contact) {\n        font-size: 1.5em;\n    }\n}\n\n@media all and (min-width: 900px) {\n    :local(.contact) {\n        width: 75%;\n        font-size: 1.5em;\n        h2 {\n            font-size: 4em;\n            margin-top: 2%;\n        }\n        .contact-info {\n            margin: 2% 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	exports.push([module.id, "._1qC4in9TZIKjVeVbsOrd5o {\n  background-color: white;\n  min-height: 70vh;\n  width: 85%;\n  margin: 0 auto;\n  margin-top: 5%;\n  margin-bottom: 100px;\n  font-size: 1.4em; }\n  ._1qC4in9TZIKjVeVbsOrd5o ul, ._1qC4in9TZIKjVeVbsOrd5o li, ._1qC4in9TZIKjVeVbsOrd5o p {\n    margin-left: 0;\n    margin-right: 0;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._1qC4in9TZIKjVeVbsOrd5o .divider {\n    border-bottom: 1px solid #777;\n    width: 20%;\n    margin: 50px auto; }\n  ._1qC4in9TZIKjVeVbsOrd5o p {\n    font-size: .7em;\n    color: #777; }\n  ._1qC4in9TZIKjVeVbsOrd5o ul {\n    text-align: center;\n    font-size: 1.5em;\n    width: 80%;\n    margin: 0 auto; }\n  ._1qC4in9TZIKjVeVbsOrd5o a {\n    color: #777;\n    transition: all .3s ease; }\n  ._1qC4in9TZIKjVeVbsOrd5o a:hover {\n    text-decoration: underline; }\n  ._1qC4in9TZIKjVeVbsOrd5o h2 {\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 3em;\n    margin: 0 0 5% 0; }\n  ._1qC4in9TZIKjVeVbsOrd5o .contact-info {\n    font-size: 1.2em;\n    margin: 2% 0 10% 0;\n    text-indent: 25px; }\n  ._1qC4in9TZIKjVeVbsOrd5o span {\n    margin: 0 1%; }\n  ._1qC4in9TZIKjVeVbsOrd5o .icon-instagram:hover, ._1qC4in9TZIKjVeVbsOrd5o .icon-facebook2:hover {\n    text-decoration: none; }\n\n@media all and (min-width: 500px) {\n  ._31WCW7pXEx6Y7dATrqdWcK {\n    font-size: 1.2em; } }\n\n@media all and (min-width: 700px) {\n  ._31WCW7pXEx6Y7dATrqdWcK {\n    font-size: 1.5em; } }\n\n@media all and (min-width: 900px) {\n  ._31WCW7pXEx6Y7dATrqdWcK {\n    width: 75%;\n    font-size: 1.5em; }\n    ._31WCW7pXEx6Y7dATrqdWcK h2 {\n      font-size: 4em;\n      margin-top: 2%; }\n    ._31WCW7pXEx6Y7dATrqdWcK .contact-info {\n      margin: 2% 0; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/markets/src/components/markets/markets.scss","/Users/Will/freelance/earth-house/app/src/components/markets/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,wBAAuB;EACvB,iBAAgB;EAChB,WAAU;EACV,eAAc;EACd,eAAc;EACd,qBAAoB;EACpB,iBAAgB,EA6CnB;EApDD;IASQ,eAAc;IACd,gBAAe;IACf,wCCb8B,EDcjC;EAZL;IAcQ,8BAA6B;IAC7B,WAAU;IACV,kBAAiB,EACpB;EAjBL;IAmBQ,gBAAe;IACf,YAAW,EACd;EArBL;IAuBQ,mBAAkB;IAClB,iBAAgB;IAChB,WAAU;IACV,eAAc,EACjB;EA3BL;IA6BQ,YAAW;IACX,yBAAwB,EAC3B;EA/BL;IAiCQ,2BAA0B,EAC7B;EAlCL;IAoCQ,mBAAkB;IAClB,kCCxC8B;IDyC9B,eAAc;IACd,iBAAgB,EACnB;EAxCL;IA0CQ,iBAAgB;IAChB,mBAAkB;IAClB,kBAAiB,EACpB;EA7CL;IA+CQ,aAAY,EACf;EAhDL;IAkDQ,sBAAqB,EACxB;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,iBAAgB,EACnB,EAAA;;AAGL;EACI;IACI,WAAU;IACV,iBAAgB,EAQnB;IAVD;MAIQ,eAAc;MACd,eAAc,EACjB;IANL;MAQQ,aAAY,EACf,EAAA","file":"markets.scss","sourcesContent":["@import 'fonts';\n@import 'colors';\n\n:local(.markets) {\n    background-color: white;\n    min-height: 70vh;\n    width: 85%;\n    margin: 0 auto;\n    margin-top: 5%;\n    margin-bottom: 100px;\n    font-size: 1.4em;\n    ul, li, p {\n        margin-left: 0;\n        margin-right: 0;\n        font-family: $main-font;\n    }\n    .divider {\n        border-bottom: 1px solid #777;\n        width: 20%;\n        margin: 50px auto;\n    }\n    p {\n        font-size: .7em;\n        color: #777;\n    }\n    ul {\n        text-align: center;\n        font-size: 1.5em;\n        width: 80%;\n        margin: 0 auto;\n    }\n    a {\n        color: #777;\n        transition: all .3s ease;\n    }\n    a:hover {\n        text-decoration: underline;\n    }\n    h2 {\n        text-align: center;\n        font-family: $decorative-font;\n        font-size: 3em;\n        margin: 0 0 5% 0;\n    }\n    .contact-info {\n        font-size: 1.2em;\n        margin: 2% 0 10% 0;\n        text-indent: 25px;\n    }\n    span {\n        margin: 0 1%;\n    }\n    .icon-instagram:hover, .icon-facebook2:hover {\n        text-decoration: none;\n    }\n}\n\n@media all and (min-width: 500px) {\n    :local(.contact) {\n        font-size: 1.2em;\n    }\n}\n\n@media all and (min-width: 700px) {\n    :local(.contact) {\n        font-size: 1.5em;\n    }\n}\n\n@media all and (min-width: 900px) {\n    :local(.contact) {\n        width: 75%;\n        font-size: 1.5em;\n        h2 {\n            font-size: 4em;\n            margin-top: 2%;\n        }\n        .contact-info {\n            margin: 2% 0;\n        }\n    }\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -36729,7 +36871,7 @@
 	};
 
 /***/ },
-/* 88 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36738,11 +36880,11 @@
 	    value: true
 	});
 	
-	var _navBar = __webpack_require__(89);
+	var _navBar = __webpack_require__(93);
 	
 	var _navBar2 = _interopRequireDefault(_navBar);
 	
-	var _navBar3 = __webpack_require__(90);
+	var _navBar3 = __webpack_require__(94);
 	
 	var _navBar4 = _interopRequireDefault(_navBar3);
 	
@@ -36764,19 +36906,19 @@
 	}
 
 /***/ },
-/* 89 */
+/* 93 */
 /***/ function(module, exports) {
 
 	module.exports = "<nav class=\"site-navigation\">\n    <ul><li ng-class=\"$ctrl.styles.hamburger\"><span class=\"icon-cross\"></span></li>\n        <li ui-sref=\"home\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Home</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"shop\" ng-class=\"$ctrl.navVisibility\" class=\"link\"link>Shop</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref='about' ng-class=\"$ctrl.navVisibility\" class=\"link\">About</li>\n        <li class=\"mid-dot\">&middot;</li>\n        <li ui-sref=\"contact\" ng-class=\"$ctrl.navVisibility\" class=\"link\">Contact</li>\n    </ul>\n</nav>";
 
 /***/ },
-/* 90 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(91);
+	var content = __webpack_require__(95);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36796,7 +36938,7 @@
 	}
 
 /***/ },
-/* 91 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36812,7 +36954,7 @@
 	};
 
 /***/ },
-/* 92 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36821,7 +36963,7 @@
 	    value: true
 	});
 	
-	var _all = __webpack_require__(93);
+	var _all = __webpack_require__(97);
 	
 	var _all2 = _interopRequireDefault(_all);
 	
@@ -36831,7 +36973,7 @@
 	    template: _all2.default,
 	    bindings: {
 	        juices: '<',
-	        gotoItem: '<',
+	        goToItems: '<',
 	        selectArray: '<',
 	        addToCart: '<',
 	        cart: '='
@@ -36839,13 +36981,13 @@
 	};
 
 /***/ },
-/* 93 */
+/* 97 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"clearfix\">\n    <h2 class=\"item-header\">Our Juices</h2>\n    <!--<p class=\"item-text\"> Online store coming soon! In the meantime feel free to email us and place an order.</p>-->\n</div>\n<section class=\"items\">\n\n        <ul>\n            <li class=\"item\" ng-repeat=\"juice in $ctrl.juices\">\n                <img src=\"{{juice.imgUrl}}\"\n                    ui-sref=\"shop.item({\n                    id: juice._id})\">\n                <div class=\"item-info\">\n                    <h3 ui-sref=\"shop.item({\n                    id: juice._id})\">{{juice.name}}</h3>\n                    <p>${{juice.price}}.00</p>\n                    <select ng-model=\"juice.quantity\">\n                        <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                    </select>\n                    <button ng-click=\"$ctrl.addToCart(juice)\">Add to Cart</button>\n                    <p class=\"cart-message\" ng-if=\"juice.cartMessage\">{{juice.messageNum}} added to cart</p>\n                    <p class=\"cart-message\" ng-if=\"juice.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n                </div>\n            </li>\n        </ul>\n</section>";
+	module.exports = "<div class=\"clearfix\">\n    <h2 class=\"item-header\">Our Juices</h2>\n    <!--<p class=\"item-text\"> Online store coming soon! In the meantime feel free to email us and place an order.</p>-->\n</div>\n<section class=\"items\">\n\n        <ul>\n            <li class=\"item\" ng-repeat=\"juice in $ctrl.juices\">\n                <img src=\"{{juice.imgUrl}}\"\n                    ng-click=\"$ctrl.goToItems()\"\n                    ui-sref=\"shop.item({\n                    id: juice._id})\">\n                <div class=\"item-info\">\n                    <h3 ui-sref=\"shop.item({\n                    id: juice._id})\"\n                    ng-click=\"$ctrl.goToItems()\">{{juice.name}}</h3>\n                    <p>${{juice.price}}.00</p>\n                    <select ng-model=\"juice.quantity\">\n                        <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                    </select>\n                    <button ng-click=\"$ctrl.addToCart(juice)\">Add to Cart</button>\n                    <p class=\"cart-message\" ng-if=\"juice.cartMessage\">{{juice.messageNum}} added to cart</p>\n                    <p class=\"cart-message\" ng-if=\"juice.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n                </div>\n            </li>\n        </ul>\n</section>";
 
 /***/ },
-/* 94 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36854,11 +36996,11 @@
 	    value: true
 	});
 	
-	var _item = __webpack_require__(95);
+	var _item = __webpack_require__(99);
 	
 	var _item2 = _interopRequireDefault(_item);
 	
-	var _item3 = __webpack_require__(96);
+	var _item3 = __webpack_require__(100);
 	
 	var _item4 = _interopRequireDefault(_item3);
 	
@@ -36891,19 +37033,19 @@
 	}
 
 /***/ },
-/* 95 */
+/* 99 */
 /***/ function(module, exports) {
 
 	module.exports = "<div ng-class=\"$ctrl.styles.item\" class=\"clearfix\">\n    <div class=\"description\">\n        <div ng-class=\"$ctrl.styles.header\" class=\"clearfix\">\n            <h2 class=\"item-name\">{{$ctrl.item.name}}</h2>\n            <form ng-class=\"$ctrl.styles.purchase\" ng-submit=\"$ctrl.addToCart($ctrl.item)\">\n                <p>price: ${{$ctrl.item.price}}.00</p>\n                <select ng-model=\"$ctrl.item.quantity\">\n                    <option ng-repeat=\"number in $ctrl.selectArray\" ng-value=\"number\">{{number}}</option>\n                </select>\n                <button type=\"submit\">Add to Cart</button>\n                <p class=\"cart-message\" ng-if=\"$ctrl.item.cartMessage\">{{$ctrl.item.messageNum}} added to cart</p>\n                <p class=\"cart-message\" ng-if=\"$ctrl.item.checkoutMessage\" ui-sref=\"checkout\">Go to cart</p>\n            </form>\n        </div>\n        <p class=\"item-description\">{{$ctrl.item.description}} <a ui-sref=\"shop.all\">&larr;Back to all juices</a></p>    \n    </div>\n    <div class=\"item-img\">\n        <img src=\"{{$ctrl.item.imgUrl}}\">\n    </div>\n\n    <div ng-class=\"$ctrl.styles.ingredients\" class=\"clearfix\">\n        <h3>Ingredients</h3>\n        <div class=\"list\" ng-style=\"$ctrl.listHeight\">\n            <ul>\n                <li ng-repeat=\"ingredient in $ctrl.item.ingredients\">\n                    <img class=\"ingredient\" src=\"{{ingredient.imgUrl}}\">\n                    <p><span>{{ingredient.name}}. </span>{{ingredient.description}}</p>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n";
 
 /***/ },
-/* 96 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(97);
+	var content = __webpack_require__(101);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -36923,7 +37065,7 @@
 	}
 
 /***/ },
-/* 97 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -36931,7 +37073,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._3OG3TBtarmYa_z6yiUJZd2 {\n  margin-bottom: 2%;\n  margin-top: 3%; }\n\n._3f2vxcW1iaK4PZrN4XVAAk {\n  float: right;\n  position: relative;\n  margin-top: 3%;\n  margin-bottom: 20px;\n  text-align: center; }\n  ._3f2vxcW1iaK4PZrN4XVAAk p {\n    margin-top: 0;\n    margin-bottom: 1.5%;\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n._3h9JlplhoP1sjXURIB9eh5 {\n  margin-bottom: 5%;\n  width: 93%;\n  margin: 0 auto; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 2.5em;\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    margin: 0 0 3% 0;\n    float: left; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.1em;\n    width: 45%;\n    float: right;\n    text-indent: 20px;\n    margin-top: 0;\n    margin-right: 3%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description a {\n      color: blue;\n      display: block; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 40%;\n    display: inline-block;\n    margin: -2% 4% 0 4%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img img {\n      width: 100%; }\n\n._3BnfWeDF7prcG64xUHo_PS {\n  width: 100%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 2.5em;\n    font-family: \"Amatic SC\", cursive;\n    text-align: center;\n    margin: 0; }\n  ._3BnfWeDF7prcG64xUHo_PS li {\n    float: left;\n    width: 49%;\n    margin-bottom: 5%; }\n  ._3BnfWeDF7prcG64xUHo_PS img {\n    width: 70%;\n    margin: 0 auto; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    width: 70%;\n    margin: 0 auto;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._3BnfWeDF7prcG64xUHo_PS span {\n    font-family: \"Amatic SC\", cursive;\n    font-size: 2em;\n    font-weight: bold; }\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS p {\n    font-size: 1.15em; } }\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 4em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.5em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 3.5em; } }\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0 0 0 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    float: none;\n    text-align: center; }\n    ._3f2vxcW1iaK4PZrN4XVAAk p {\n      margin-bottom: .5%; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 4.9em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: -2%;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 3% 0 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 45%;\n      margin: -1% 0 0 0; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    text-align: center;\n    float: none; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      margin-top: 1%;\n      margin-bottom: 1%;\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 ._3OG3TBtarmYa_z6yiUJZd2 {\n      width: 50%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 6em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: 0;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 2% 5% 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 22%;\n      margin: 0% 10% 0 13%; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em;\n      width: 85%; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS img {\n      width: 60%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) and (min-width: 1060px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 20%;\n    margin: 0 10% 0 15%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/item/src/components/shop/item/item.scss","/Users/Will/freelance/earth-house/app/src/components/shop/item/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAIA;EACI,kBAAiB;EACjB,eAAc,EACjB;;AACD;EACI,aAAY;EACZ,mBAAkB;EAClB,eAAc;EACd,oBAAmB;EAQnB,mBAAkB,EACrB;EAbD;IAMQ,cAAa;IACb,oBAAmB;IACnB,iBAAgB;IAChB,YAAW;IACX,+CChBqC,EDiBxC;;AAGL;EACI,kBAAiB;EACjB,WAAU;EACV,eAAc,EAgCjB;EAnCD;IAMQ,iBAAgB;IAChB,mBAAkB;IAClB,kCC9B8B;ID+B9B,iBAAgB;IAChB,YAAW,EACd;EAXL;IAcQ,wCCnC8B;IDoC9B,iBAAgB;IAChB,WAAU;IACV,aAAY;IACZ,kBAAiB;IACjB,cAAa;IACb,iBAAgB,EAKnB;IAzBL;MAsBY,YAAW;MACX,eAAc,EACjB;EAxBT;IA4BQ,WAAU;IACV,sBAAqB;IACrB,oBAAmB,EAItB;IAlCL;MAgCY,YAAW,EACd;;AAKT;EACI,YAAW,EA6Bd;EA9BD;IAGQ,iBAAgB;IAChB,kCChE8B;IDiE9B,mBAAkB;IAClB,UAAS,EACZ;EAPL;IAUQ,YAAW;IACX,WAAU;IACV,kBAAiB,EACpB;EAbL;IAgBQ,WAAU;IACV,eAAc,EACjB;EAlBL;IAoBQ,WAAU;IACV,eAAc;IACd,wCCjF8B,EDkFjC;EAvBL;IA0BQ,kCCtF8B;IDuF9B,eAAc;IACd,kBAAiB,EACpB;;AAIL;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,kBAAiB,EACpB,EAAA;;AAKb;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,iBAAgB,EACnB,EAAA;;AAKb;EACI;IACI,YAAW;IACX,WAAU;IACV,gBAAe,EAClB;EAED;IACI,YAAW;IACX,mBAAkB,EAIrB;IAND;MAIQ,mBAAkB,EACrB;EAEL;IACI,mBAAkB;IAClB,WAAU,EAuBb;IAzBD;MAIQ,eAAc,EACjB;IALL;MAOQ,iBAAgB;MAChB,YAAW;MACX,YAAW;MACX,cAAa;MACb,iBAAgB;MAChB,iBAAgB,EACnB;IAbL;MAeQ,WAAU;MACV,iBAAgB;MAChB,iBAAgB;MAChB,aAAY,EACf;IAnBL;MAqBQ,YAAW;MACX,WAAU;MACV,kBAAiB,EACpB;EAIL;IACI,WAAU;IACV,aAAY,EA2Bf;IA7BD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc,EACjB;IARL;MAUQ,kBAAiB,EACpB;IAXL;MAaQ,iBAAgB,EACnB;IAdL;MAgBQ,YAAW;MACX,UAAS,EACZ;IAlBL;MAqBQ,qDAAiD;MACjD,oBAAmB,EACtB;IAvBL;MA0BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAIT;EACQ;IACI,YAAW;IACX,WAAU;IACV,UAAS,EACZ;EACD;IACI,mBAAkB;IAClB,YAAW,EACd;EACD;IACA,mBAAkB;IAClB,WAAU,EA6Bb;IA/BG;MAKI,eAAc;MACd,kBAAiB;MACjB,eAAc,EACjB;IARD;MAUI,WAAU,EACb;IAXD;MAaI,eAAc;MACd,YAAW;MACX,YAAW;MACX,cAAa;MACb,eAAc;MACd,iBAAgB,EACnB;IAnBD;MAqBI,WAAU;MACV,iBAAgB;MAChB,kBAAiB;MACjB,aAAY,EACf;IAzBD;MA2BI,YAAW;MACX,WAAU;MACV,qBAAoB,EACvB;EAIL;IACI,WAAU;IACV,aAAY,EA+Bf;IAjCD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc;MACd,WAAU,EACb;IATL;MAWQ,kBAAiB,EACpB;IAZL;MAcQ,WAAU,EACb;IAfL;MAiBQ,iBAAgB,EACnB;IAlBL;MAoBQ,YAAW;MACX,UAAS,EACZ;IAtBL;MAyBQ,qDAAiD;MACjD,oBAAmB,EACtB;IA3BL;MA8BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAGL;EACI;IAEQ,WAAU;IACV,oBAAmB,EACtB,EAAA","file":"item.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n\n:local(.header) {\n    margin-bottom: 2%;\n    margin-top: 3%;\n}\n:local(.purchase) {\n    float: right;\n    position: relative;\n    margin-top: 3%;\n    margin-bottom: 20px;\n    p {\n        margin-top: 0;\n        margin-bottom: 1.5%;\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n    text-align: center;\n}\n:local(.item) {\n    margin-bottom: 5%;\n    width: 93%;\n    margin: 0 auto;\n\n    .item-name {\n        font-size: 2.5em;\n        text-align: center;\n        font-family: $decorative-font;\n        margin: 0 0 3% 0;\n        float: left;\n    }\n\n    .item-description {\n        font-family: $main-font;\n        font-size: 1.1em;\n        width: 45%;\n        float: right;\n        text-indent: 20px;\n        margin-top: 0;\n        margin-right: 3%;\n        a {\n            color: blue;\n            display: block;\n        }\n    }\n\n    .item-img {\n        width: 40%;\n        display: inline-block;\n        margin: -2% 4% 0 4%;\n        img {\n            width: 100%;\n        }\n    }\n}\n\n\n:local(.ingredients) {\n    width: 100%;\n    h3 {\n        font-size: 2.5em;\n        font-family: $decorative-font;\n        text-align: center;\n        margin: 0;\n    }\n\n    li {\n        float: left;\n        width: 49%;\n        margin-bottom: 5%;\n    }\n\n    img {\n        width: 70%;\n        margin: 0 auto;\n    }\n    p {\n        width: 70%;\n        margin: 0 auto;\n        font-family: $main-font;\n    }\n\n    span {\n        font-family: $decorative-font;\n        font-size: 2em;\n        font-weight: bold;\n    }\n}\n\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n    :local(.item) {\n        .item-name{\n            font-size: 3em;\n        }\n        .item-description {\n            font-size: 1.3em;\n        }  \n  \n        :local(.ingredients) {\n            p {\n                font-size: 1.15em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n    :local(.item) {\n        .item-name {\n            font-size: 4em;\n        }\n        .item-description {\n            font-size: 1.5em;\n        }\n\n        :local(.ingredients) {\n            h3 {\n                font-size: 3.5em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n    :local(.header) {\n        float: left;\n        width: 50%;\n        margin: 0 0 0 0;\n    }\n\n    :local(.purchase) {\n        float: none;\n        text-align: center;\n        p {\n            margin-bottom: .5%;\n        }\n    }\n    :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n        .description {\n            overflow: auto;\n        }\n        .item-name {\n            font-size: 4.9em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: -2%;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 3% 0 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 45%;\n            margin: -1% 0 0 0;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n}\n\n@media all and (min-width: 820px) {\n        :local(.header) {\n            float: left;\n            width: 50%;\n            margin: 0;\n        }\n        :local(.purchase) {\n            text-align: center;\n            float: none;\n        }\n        :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n\n        .description {\n            margin-top: 1%;\n            margin-bottom: 1%;\n            overflow: auto;\n        }\n        :local(.header) {\n            width: 50%;\n        }\n        .item-name {\n            font-size: 6em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: 0;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 2% 5% 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 22%;\n            margin: 0% 10% 0 13%;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n            width: 85%;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        img {\n            width: 60%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n\n    @media all and (min-width: 1060px) {\n        :local(.item) {\n            .item-img {\n                width: 20%;\n                margin: 0 10% 0 15%;\n            }\n        }\n    }\n\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	exports.push([module.id, "._3OG3TBtarmYa_z6yiUJZd2 {\n  margin-bottom: 2%;\n  margin-top: 3%; }\n\n._3f2vxcW1iaK4PZrN4XVAAk {\n  float: right;\n  position: relative;\n  margin-top: 3%;\n  margin-bottom: 20px;\n  text-align: center; }\n  ._3f2vxcW1iaK4PZrN4XVAAk p {\n    margin-top: 0;\n    margin-bottom: 1.5%;\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n._3h9JlplhoP1sjXURIB9eh5 {\n  margin-bottom: 5%;\n  width: 93%;\n  margin: 0 auto; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 2.5em;\n    text-align: center;\n    font-family: \"Amatic SC\", cursive;\n    margin: 0 0 3% 0;\n    float: left; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-family: \"Josefin Sans\", sans-serif;\n    font-size: 1.1em;\n    width: 45%;\n    float: right;\n    text-indent: 20px;\n    margin-top: 0;\n    margin-right: 3%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description a {\n      color: blue;\n      display: block; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 40%;\n    display: inline-block;\n    margin: -2% 4% 0 4%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img img {\n      width: 100%; }\n\n._3BnfWeDF7prcG64xUHo_PS {\n  width: 100%; }\n  ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 2.5em;\n    font-family: \"Amatic SC\", cursive;\n    text-align: center;\n    margin: 0; }\n  ._3BnfWeDF7prcG64xUHo_PS li {\n    float: left;\n    width: 49%;\n    margin-bottom: 5%; }\n  ._3BnfWeDF7prcG64xUHo_PS img {\n    width: 70%;\n    margin: 0 auto; }\n  ._3BnfWeDF7prcG64xUHo_PS p {\n    width: 70%;\n    margin: 0 auto;\n    font-family: \"Josefin Sans\", sans-serif; }\n  ._3BnfWeDF7prcG64xUHo_PS span {\n    font-family: \"Amatic SC\", cursive;\n    font-size: 2em;\n    font-weight: bold; }\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.3em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS p {\n    font-size: 1.15em; } }\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n    font-size: 4em; }\n  ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n    font-size: 1.5em; }\n  ._3h9JlplhoP1sjXURIB9eh5 ._3BnfWeDF7prcG64xUHo_PS h3 {\n    font-size: 3.5em; } }\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0 0 0 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    float: none;\n    text-align: center; }\n    ._3f2vxcW1iaK4PZrN4XVAAk p {\n      margin-bottom: .5%; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 4.9em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: -2%;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 3% 0 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 45%;\n      margin: -1% 0 0 0; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) {\n  ._3OG3TBtarmYa_z6yiUJZd2 {\n    float: left;\n    width: 50%;\n    margin: 0; }\n  ._3f2vxcW1iaK4PZrN4XVAAk {\n    text-align: center;\n    float: none; }\n  ._3h9JlplhoP1sjXURIB9eh5 {\n    margin-bottom: 10%;\n    width: 95%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .description {\n      margin-top: 1%;\n      margin-bottom: 1%;\n      overflow: auto; }\n    ._3h9JlplhoP1sjXURIB9eh5 ._3OG3TBtarmYa_z6yiUJZd2 {\n      width: 50%; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-name {\n      font-size: 6em;\n      float: left;\n      width: 100%;\n      margin-top: 0;\n      margin-left: 0;\n      margin-bottom: 0; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-description {\n      width: 45%;\n      font-size: 1.3em;\n      margin: 2% 5% 0 0;\n      float: right; }\n    ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n      float: left;\n      width: 22%;\n      margin: 0% 10% 0 13%; }\n  ._3BnfWeDF7prcG64xUHo_PS {\n    width: 55%;\n    float: right; }\n    ._3BnfWeDF7prcG64xUHo_PS h3 {\n      font-size: 4.5em; }\n    ._3BnfWeDF7prcG64xUHo_PS p {\n      font-size: 1em;\n      width: 85%; }\n    ._3BnfWeDF7prcG64xUHo_PS li {\n      margin-bottom: 1%; }\n    ._3BnfWeDF7prcG64xUHo_PS img {\n      width: 60%; }\n    ._3BnfWeDF7prcG64xUHo_PS .list {\n      overflow: scroll; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar {\n      width: 10px;\n      height: 0; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-track {\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);\n      border-radius: 10px; }\n    ._3BnfWeDF7prcG64xUHo_PS .list::-webkit-scrollbar-thumb {\n      border-radius: 10px;\n      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); } }\n\n@media all and (min-width: 820px) and (min-width: 1060px) {\n  ._3h9JlplhoP1sjXURIB9eh5 .item-img {\n    width: 20%;\n    margin: 0 10% 0 15%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/item/src/components/shop/item/item.scss","/Users/Will/freelance/earth-house/app/src/components/shop/item/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAIA;EACI,kBAAiB;EACjB,eAAc,EACjB;;AACD;EACI,aAAY;EACZ,mBAAkB;EAClB,eAAc;EACd,oBAAmB;EAQnB,mBAAkB,EACrB;EAbD;IAMQ,cAAa;IACb,oBAAmB;IACnB,iBAAgB;IAChB,YAAW;IACX,+CChBqC,EDiBxC;;AAGL;EACI,kBAAiB;EACjB,WAAU;EACV,eAAc,EAgCjB;EAnCD;IAMQ,iBAAgB;IAChB,mBAAkB;IAClB,kCC9B8B;ID+B9B,iBAAgB;IAChB,YAAW,EACd;EAXL;IAcQ,wCCnC8B;IDoC9B,iBAAgB;IAChB,WAAU;IACV,aAAY;IACZ,kBAAiB;IACjB,cAAa;IACb,iBAAgB,EAKnB;IAzBL;MAsBY,YAAW;MACX,eAAc,EACjB;EAxBT;IA4BQ,WAAU;IACV,sBAAqB;IACrB,oBAAmB,EAItB;IAlCL;MAgCY,YAAW,EACd;;AAKT;EACI,YAAW,EA6Bd;EA9BD;IAGQ,iBAAgB;IAChB,kCChE8B;IDiE9B,mBAAkB;IAClB,UAAS,EACZ;EAPL;IAUQ,YAAW;IACX,WAAU;IACV,kBAAiB,EACpB;EAbL;IAgBQ,WAAU;IACV,eAAc,EACjB;EAlBL;IAoBQ,WAAU;IACV,eAAc;IACd,wCCjF8B,EDkFjC;EAvBL;IA0BQ,kCCtF8B;IDuF9B,eAAc;IACd,kBAAiB,EACpB;;AAIL;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,kBAAiB,EACpB,EAAA;;AAKb;EACI;IAEQ,eAAc,EACjB;EAHL;IAKQ,iBAAgB,EACnB;EANL;IAUY,iBAAgB,EACnB,EAAA;;AAKb;EACI;IACI,YAAW;IACX,WAAU;IACV,gBAAe,EAClB;EAED;IACI,YAAW;IACX,mBAAkB,EAIrB;IAND;MAIQ,mBAAkB,EACrB;EAEL;IACI,mBAAkB;IAClB,WAAU,EAuBb;IAzBD;MAIQ,eAAc,EACjB;IALL;MAOQ,iBAAgB;MAChB,YAAW;MACX,YAAW;MACX,cAAa;MACb,iBAAgB;MAChB,iBAAgB,EACnB;IAbL;MAeQ,WAAU;MACV,iBAAgB;MAChB,iBAAgB;MAChB,aAAY,EACf;IAnBL;MAqBQ,YAAW;MACX,WAAU;MACV,kBAAiB,EACpB;EAIL;IACI,WAAU;IACV,aAAY,EA2Bf;IA7BD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc,EACjB;IARL;MAUQ,kBAAiB,EACpB;IAXL;MAaQ,iBAAgB,EACnB;IAdL;MAgBQ,YAAW;MACX,UAAS,EACZ;IAlBL;MAqBQ,qDAAiD;MACjD,oBAAmB,EACtB;IAvBL;MA0BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAIT;EACQ;IACI,YAAW;IACX,WAAU;IACV,UAAS,EACZ;EACD;IACI,mBAAkB;IAClB,YAAW,EACd;EACD;IACA,mBAAkB;IAClB,WAAU,EA6Bb;IA/BG;MAKI,eAAc;MACd,kBAAiB;MACjB,eAAc,EACjB;IARD;MAUI,WAAU,EACb;IAXD;MAaI,eAAc;MACd,YAAW;MACX,YAAW;MACX,cAAa;MACb,eAAc;MACd,iBAAgB,EACnB;IAnBD;MAqBI,WAAU;MACV,iBAAgB;MAChB,kBAAiB;MACjB,aAAY,EACf;IAzBD;MA2BI,YAAW;MACX,WAAU;MACV,qBAAoB,EACvB;EAIL;IACI,WAAU;IACV,aAAY,EA+Bf;IAjCD;MAIQ,iBAAgB,EACnB;IALL;MAOQ,eAAc;MACd,WAAU,EACb;IATL;MAWQ,kBAAiB,EACpB;IAZL;MAcQ,WAAU,EACb;IAfL;MAiBQ,iBAAgB,EACnB;IAlBL;MAoBQ,YAAW;MACX,UAAS,EACZ;IAtBL;MAyBQ,qDAAiD;MACjD,oBAAmB,EACtB;IA3BL;MA8BQ,oBAAmB;MACnB,qDAAiD,EACpD,EAAA;;AAGL;EACI;IAEQ,WAAU;IACV,oBAAmB,EACtB,EAAA","file":"item.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n\n:local(.header) {\n    margin-bottom: 2%;\n    margin-top: 3%;\n}\n:local(.purchase) {\n    float: right;\n    position: relative;\n    margin-top: 3%;\n    margin-bottom: 20px;\n    p {\n        margin-top: 0;\n        margin-bottom: 1.5%;\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n    text-align: center;\n}\n:local(.item) {\n    margin-bottom: 5%;\n    width: 93%;\n    margin: 0 auto;\n\n    .item-name {\n        font-size: 2.5em;\n        text-align: center;\n        font-family: $decorative-font;\n        margin: 0 0 3% 0;\n        float: left;\n    }\n\n    .item-description {\n        font-family: $main-font;\n        font-size: 1.1em;\n        width: 45%;\n        float: right;\n        text-indent: 20px;\n        margin-top: 0;\n        margin-right: 3%;\n        a {\n            color: blue;\n            display: block;\n        }\n    }\n\n    .item-img {\n        width: 40%;\n        display: inline-block;\n        margin: -2% 4% 0 4%;\n        img {\n            width: 100%;\n        }\n    }\n}\n\n\n:local(.ingredients) {\n    width: 100%;\n    h3 {\n        font-size: 2.5em;\n        font-family: $decorative-font;\n        text-align: center;\n        margin: 0;\n    }\n\n    li {\n        float: left;\n        width: 49%;\n        margin-bottom: 5%;\n    }\n\n    img {\n        width: 70%;\n        margin: 0 auto;\n    }\n    p {\n        width: 70%;\n        margin: 0 auto;\n        font-family: $main-font;\n    }\n\n    span {\n        font-family: $decorative-font;\n        font-size: 2em;\n        font-weight: bold;\n    }\n}\n\n\n@media all and (min-width: 400px) and (max-width: 515px) {\n    :local(.item) {\n        .item-name{\n            font-size: 3em;\n        }\n        .item-description {\n            font-size: 1.3em;\n        }  \n  \n        :local(.ingredients) {\n            p {\n                font-size: 1.15em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 516px) and (max-width: 699px) {\n    :local(.item) {\n        .item-name {\n            font-size: 4em;\n        }\n        .item-description {\n            font-size: 1.5em;\n        }\n\n        :local(.ingredients) {\n            h3 {\n                font-size: 3.5em;\n            }\n        }\n    }\n}\n\n@media all and (min-width: 700px) and (max-width: 819px) {\n    :local(.header) {\n        float: left;\n        width: 50%;\n        margin: 0 0 0 0;\n    }\n\n    :local(.purchase) {\n        float: none;\n        text-align: center;\n        p {\n            margin-bottom: .5%;\n        }\n    }\n    :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n        .description {\n            overflow: auto;\n        }\n        .item-name {\n            font-size: 4.9em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: -2%;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 3% 0 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 45%;\n            margin: -1% 0 0 0;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n}\n\n@media all and (min-width: 820px) {\n        :local(.header) {\n            float: left;\n            width: 50%;\n            margin: 0;\n        }\n        :local(.purchase) {\n            text-align: center;\n            float: none;\n        }\n        :local(.item) {\n        margin-bottom: 10%;\n        width: 95%;\n\n        .description {\n            margin-top: 1%;\n            margin-bottom: 1%;\n            overflow: auto;\n        }\n        :local(.header) {\n            width: 50%;\n        }\n        .item-name {\n            font-size: 6em;\n            float: left;\n            width: 100%;\n            margin-top: 0;\n            margin-left: 0;\n            margin-bottom: 0;\n        }\n        .item-description {\n            width: 45%;\n            font-size: 1.3em;\n            margin: 2% 5% 0 0;\n            float: right;\n        }\n        .item-img {\n            float: left;\n            width: 22%;\n            margin: 0% 10% 0 13%;\n        }\n    }\n\n\n    :local(.ingredients) {\n        width: 55%;\n        float: right;\n        h3 {\n            font-size: 4.5em;\n        }\n        p {\n            font-size: 1em;\n            width: 85%;\n        }\n        li {\n            margin-bottom: 1%;\n        }\n        img {\n            width: 60%;\n        }\n        .list {\n            overflow: scroll;\n        }\n        .list::-webkit-scrollbar {\n            width: 10px;\n            height: 0;\n        }\n\n        .list::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n\n        .list::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n    }\n\n    @media all and (min-width: 1060px) {\n        :local(.item) {\n            .item-img {\n                width: 20%;\n                margin: 0 10% 0 15%;\n            }\n        }\n    }\n\n}\n\n","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n"],"sourceRoot":""}]);
 	
 	// exports
 	exports.locals = {
@@ -36942,7 +37084,7 @@
 	};
 
 /***/ },
-/* 98 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36951,11 +37093,11 @@
 	    value: true
 	});
 	
-	var _shop = __webpack_require__(99);
+	var _shop = __webpack_require__(103);
 	
 	var _shop2 = _interopRequireDefault(_shop);
 	
-	var _shop3 = __webpack_require__(100);
+	var _shop3 = __webpack_require__(104);
 	
 	var _shop4 = _interopRequireDefault(_shop3);
 	
@@ -36994,7 +37136,7 @@
 	    this.selectArray = [];
 	
 	    var items = angular.element(document.getElementById('items')); //eslint-disable-line
-	    this.gotoItems = function () {
+	    this.goToItems = function () {
 	        this.hasSeenLanding = true;
 	        $document.scrollToElement(items, 0, 600);
 	    };
@@ -37006,7 +37148,6 @@
 	    this.addToCart = function (juice) {
 	        var _this2 = this;
 	
-	        console.log('add to cart', juice.name, ':', juice.quantity);
 	        if (Number.isInteger(juice.quantity)) {
 	            var cartHasItem = false;
 	            var index = null;
@@ -37028,7 +37169,6 @@
 	            }
 	            this.cart.updateTotalItems();
 	            this.cart.storeCart();
-	            console.log(this.cart);
 	            juice.messageNum = juice.quantity;
 	            juice.checkoutMessage = false;
 	            juice.cartMessage = true;
@@ -37047,19 +37187,19 @@
 	}
 
 /***/ },
-/* 99 */
+/* 103 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"image-text\">\n    <div class=\"text-box\">\n        <button ng-click=\"$ctrl.gotoItems()\">{{$ctrl.content.buttonText}}</button>\n    </div>\n    <img ng-src=\"{{$ctrl.content.imgUrl}}\">\n</div>\n\n<div id=\"items\">\n    <ui-view autoscroll=\"$ctrl.hasSeenLanding\" name=\"main\" select-array=\"$ctrl.selectArray\" add-to-cart=\"$ctrl.addToCart\" quantity=\"$ctrl.quantity\" cart=\"$ctrl.cart\" goToItem=\"$ctrl.goToItem\"></ui-view>\n</div>\n\n";
+	module.exports = "<div class=\"image-text\">\n    <div class=\"text-box\">\n        <button ng-click=\"$ctrl.goToItems()\">{{$ctrl.content.buttonText}}</button>\n    </div>\n    <img ng-src=\"{{$ctrl.content.imgUrl}}\">\n</div>\n\n<div id=\"items\">\n    <ui-view autoscroll=\"$ctrl.hasSeenLanding\" name=\"main\" select-array=\"$ctrl.selectArray\" add-to-cart=\"$ctrl.addToCart\" quantity=\"$ctrl.quantity\" cart=\"$ctrl.cart\" go-to-items=\"$ctrl.goToItems\"></ui-view>\n</div>\n\n";
 
 /***/ },
-/* 100 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(101);
+	var content = __webpack_require__(105);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -37079,7 +37219,7 @@
 	}
 
 /***/ },
-/* 101 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -37087,13 +37227,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".image-text {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n  overflow: hidden;\n  border-bottom: 2px solid rgba(200, 200, 200, 0.7); }\n  .image-text .text-box {\n    position: absolute;\n    text-align: center;\n    width: 100%;\n    right: 0;\n    z-index: 1; }\n  .image-text img {\n    width: 100%;\n    display: block; }\n  .image-text button {\n    border-radius: 1px;\n    background-color: rgba(50, 50, 50, 0.1);\n    font-family: \"Amatic SC\", cursive;\n    display: none;\n    color: white;\n    font-weight: 600;\n    padding: 0 10px;\n    margin: 0 auto;\n    border: 3px solid white;\n    transition: all .3s ease; }\n  .image-text button:focus {\n    outline: 0; }\n  .image-text button:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #FFC107;\n    border-color: #FFC107;\n    background-color: transparent; }\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n  .image-text .text-box {\n    bottom: 5%; }\n  .image-text button {\n    display: block;\n    font-size: 3.5em; } }\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n  .image-text .text-box {\n    bottom: 12%; }\n  .image-text button {\n    display: block;\n    font-size: 4em; } }\n\n@media all and (min-width: 1181px) {\n  .image-text .text-box {\n    bottom: 18%; }\n  .image-text button {\n    display: block;\n    font-size: 4.5em; } }\n\n.cart-message {\n  position: absolute;\n  width: 100%; }\n\nsection.shop-info {\n  width: 60%;\n  margin: 0 auto;\n  position: relative; }\n  section.shop-info h1 {\n    font-size: 4em;\n    color: #8282ff;\n    margin: 0;\n    display: inline; }\n  section.shop-info p {\n    display: inline;\n    font-size: 1.25em; }\n  section.shop-info h2 {\n    font-size: 3em;\n    font-family: 'Montserrat', sans-serif;\n    text-align: center;\n    margin: 0; }\n\n.item-header {\n  font-size: 4.5em;\n  margin-left: 1%;\n  font-family: \"Amatic SC\", cursive;\n  width: 100%;\n  float: left; }\n\n.item-text {\n  margin-top: 4%;\n  width: 60%;\n  float: left;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em; }\n\n.items {\n  width: 80%;\n  margin: 0 auto; }\n  .items ul {\n    margin-top: 0;\n    margin-bottom: 10%; }\n\n.item {\n  position: relative;\n  margin-top: 40px;\n  margin: 0 auto;\n  display: inline-block; }\n  .item img {\n    width: 60%;\n    margin: 0 auto;\n    transition: all .5s ease; }\n  .item h3 {\n    margin-bottom: 0;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 1.5em;\n    transition: all .5s ease; }\n  .item p {\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n.item:hover {\n  cursor: pointer; }\n  .item:hover h3 {\n    color: #FFC107; }\n\n.item-info {\n  text-align: center; }\n  .item-info h4 {\n    margin-bottom: 0; }\n  .item-info p {\n    margin-top: 0; }\n\n@media all and (max-width: 600px) {\n  .item-header {\n    font-size: 3em;\n    margin-top: 1%;\n    margin-bottom: 5%;\n    margin-left: 2%; }\n  .item {\n    width: 50%;\n    margin-bottom: 20px; }\n    .item h3 {\n      margin-top: 5%; } }\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n  .items {\n    width: 85%; }\n  .item-header {\n    font-size: 5em;\n    margin: 1% 0 2% 3%; }\n  .item {\n    width: 33%; }\n    .item h3 {\n      font-size: 1.9em;\n      margin-top: 5%; } }\n\n@media all and (min-width: 851px) {\n  .items {\n    width: 80%; }\n  .item-header {\n    font-size: 6em;\n    margin: 2% 0 3% 3%; }\n  .item {\n    width: 33%;\n    margin-bottom: 3%; }\n    .item img {\n      width: 55%; }\n    .item h3 {\n      font-size: 2em;\n      margin-top: 2%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_image-text.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/components/shop/shop.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,sBAAqB;EACrB,YAAW;EACX,iBAAgB;EAChB,kDCP4B,EDoD/B;EAlDD;IASQ,mBAAkB;IAElB,mBAAkB;IAClB,YAAW;IACX,SAAQ;IACR,WAAU,EACb;EAfL;IAkBQ,YAAW;IACX,eAAc,EACjB;EApBL;IAuBQ,mBAAkB;IAClB,wCAAmC;IACnC,kCE5B8B;IF8B9B,cAAa;IACb,aAAY;IACZ,iBAAgB;IAEhB,gBAAe;IACf,eAAc;IACd,wBAAuB;IACvB,yBAAwB,EAC3B;EAnCL;IAsCQ,WAAU,EACb;EAvCL;IA2CQ,8BAA6B;IAC7B,0BAAyB;IACzB,sBAAqB;IACrB,eCjDc;IDkDd,sBClDc;IDmDd,8BAA6B,EAChC;;AAGL;EACI;IAEQ,WAAU,EACb;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AGnFT;EACI,mBAAkB;EAClB,YAAW,EACd;;AACD;EACI,WAAU;EACV,eAAc;EACd,mBAAkB,EAkBrB;EArBD;IAKQ,eAAc;IACd,eAAuB;IACvB,UAAS;IACT,gBAAe,EAClB;EATL;IAYQ,gBAAe;IACf,kBAAiB,EACpB;EAdL;IAgBQ,eAAc;IACd,sCAAqC;IACrC,mBAAkB;IAClB,UAAS,EACZ;;AAGL;EACI,iBAAgB;EAEhB,gBAAe;EAEf,kCDpCkC;ECqClC,YAAW;EACX,YAAW,EAEd;;AAED;EACI,eAAc;EACd,WAAU;EACV,YAAW;EACX,wCD7CkC;EC8ClC,iBACJ,EAAE;;AAIF;EACI,WAAU;EACV,eAAc,EAKjB;EAPD;IAIQ,cAAa;IACb,mBAAkB,EACrB;;AAGL;EACI,mBAAkB;EAClB,iBAAgB;EAEhB,eAAc;EAEd,sBAAqB,EAsBxB;EA5BD;IAQQ,WAAU;IACV,eAAc;IACd,yBAAwB,EAC3B;EAXL;IAaQ,iBAAgB;IAChB,kCD3E8B;IC4E9B,iBAAgB;IAChB,yBAAwB,EAC3B;EAjBL;IAwBQ,iBAAgB;IAChB,YAAW;IACX,+CDrFqC,ECsFxC;;AAEL;EACI,gBAAe,EAIlB;EALD;IAGQ,eF7Fc,EE8FjB;;AAeL;EACI,mBAAkB,EAOrB;EARD;IAGQ,iBAAgB,EACnB;EAJL;IAMQ,cAAa,EAChB;;AAGL;EACI;IACI,eAAc;IACd,eAAc;IACd,kBAAiB;IACjB,gBAAe,EAClB;EACD;IACI,WAAU;IACV,oBAAmB,EAItB;IAND;MAIQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EACrB;EAED;IACI,WAAU,EAKb;IAND;MAGQ,iBAAgB;MAChB,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EAErB;EAED;IACI,WAAU;IACV,kBAAiB,EAQpB;IAVD;MAIQ,WAAU,EACb;IALL;MAOQ,eAAc;MACd,eAAc,EACjB,EAAA","file":"shop.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.image-text {\n    position: relative;\n    display: inline-block;\n    width: 100%;\n    overflow: hidden;\n    border-bottom: 2px solid $lightgrey;\n\n\n    .text-box {\n        position: absolute;\n        // bottom: 8%;\n        text-align: center;\n        width: 100%;\n        right: 0;\n        z-index: 1;\n    }\n\n    img {\n        width: 100%;\n        display: block;\n    }\n\n    button {\n        border-radius: 1px;\n        background-color: rgba(50,50,50,.1);\n        font-family: $decorative-font;\n        // font-size: 2.7em;\n        display: none;\n        color: white;\n        font-weight: 600;\n        // display: block;\n        padding: 0 10px;\n        margin: 0 auto;\n        border: 3px solid white;\n        transition: all .3s ease;\n    }\n\n    button:focus {\n        outline: 0;\n    }\n\n    button:hover {\n        \n        -webkit-transform: scale(1.1);\n        -ms-transform: scale(1.1);\n        transform: scale(1.1);\n        color: $accent-color;\n        border-color: $accent-color;\n        background-color: transparent;\n    }\n}\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n    .image-text {\n        .text-box {\n            bottom: 5%;\n        }\n        button {\n            display: block;\n            font-size: 3.5em;\n        }\n    }\n}\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n    .image-text {\n        .text-box {\n            bottom: 12%;\n        }\n        button {\n            display: block;\n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1181px) {\n    .image-text {\n        .text-box {\n            bottom: 18%;\n        }\n        button {\n            display: block;\n            font-size: 4.5em;\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;","@import 'image-text';\n@import 'fonts';\n@import 'colors';\n\n.cart-message {\n    position: absolute;\n    width: 100%;\n}\nsection.shop-info {\n    width: 60%;\n    margin: 0 auto;\n    position: relative;\n    h1 {\n        font-size: 4em;\n        color: rgb(130,130,255);\n        margin: 0;\n        display: inline;\n    }\n\n    p{\n        display: inline;\n        font-size: 1.25em;\n    }\n    h2 {\n        font-size: 3em;\n        font-family: 'Montserrat', sans-serif; \n        text-align: center;\n        margin: 0;\n    }\n}\n\n.item-header {\n    font-size: 4.5em;\n    // margin: 1%  0 0 3%;\n    margin-left: 1%;\n    // margin-bottom: 5%;\n    font-family: $decorative-font;\n    width: 100%;\n    float: left;\n    \n}\n\n.item-text {\n    margin-top: 4%;\n    width: 60%;\n    float: left;\n    font-family: $main-font;\n    font-size: 1.2em\n}\n\n//we need to move these styles to a file specifically for the \"all\" view\n\n.items {\n    width: 80%;\n    margin: 0 auto;\n    ul {\n        margin-top: 0;\n        margin-bottom: 10%;\n    }\n}\n\n.item {\n    position: relative;\n    margin-top: 40px;\n    // margin-right: 10%;\n    margin: 0 auto;\n    // width: 17%;\n    display: inline-block;\n    img {\n        width: 60%;\n        margin: 0 auto;\n        transition: all .5s ease;\n    }\n    h3 {\n        margin-bottom: 0;\n        font-family: $decorative-font;\n        font-size: 1.5em;\n        transition: all .5s ease;\n    }\n\n    // h3:hover {\n    //     cursor: pointer;\n    //     color: $accent-color;\n    // }\n    p {\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n}\n.item:hover {\n    cursor: pointer;\n    h3 {\n        color: $accent-color;\n    }\n}\n.item:hover > img {\n    // opacity: .5;\n    // -webkit-filter: blur(1px);\n    // -webkit-filter: contrast(150%); \n}\n\n// .item:hover > h3 {\n//     color: $accent-color;\n// }\n\n\n\n\n.item-info {\n    text-align: center;\n    h4 {\n        margin-bottom: 0;   \n    }\n    p {\n        margin-top: 0;\n    }\n}\n\n@media all and (max-width: 600px) {\n    .item-header {\n        font-size: 3em;\n        margin-top: 1%;\n        margin-bottom: 5%;\n        margin-left: 2%;\n    }\n    .item {\n        width: 50%;\n        margin-bottom: 20px;\n        h3 {\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n    .items {\n        width: 85%;\n    }\n    .item-header {\n        font-size: 5em;\n        margin: 1% 0 2% 3%;\n    }\n\n    .item {\n        width: 33%;\n        h3 {\n            font-size: 1.9em;\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 851px) {\n    .items {\n        width: 80%;\n    }\n    .item-header {\n        font-size: 6em;\n        margin: 2% 0 3% 3%;\n\n    }\n\n    .item {\n        width: 33%;\n        margin-bottom: 3%;\n        img {\n            width: 55%;\n        }\n        h3 {\n            font-size: 2em;\n            margin-top: 2%;\n        }\n    }\n}\n\n"],"sourceRoot":""}]);
+	exports.push([module.id, ".image-text {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n  overflow: hidden;\n  border-bottom: 2px solid rgba(200, 200, 200, 0.7); }\n  .image-text .text-box {\n    position: absolute;\n    text-align: center;\n    width: 100%;\n    right: 0;\n    z-index: 1; }\n  .image-text img {\n    width: 100%;\n    display: block; }\n  .image-text button {\n    border-radius: 1px;\n    background-color: rgba(50, 50, 50, 0.1);\n    font-family: \"Amatic SC\", cursive;\n    display: none;\n    color: white;\n    font-weight: 600;\n    padding: 0 10px;\n    margin: 0 auto;\n    border: 3px solid white;\n    transition: all .3s ease; }\n  .image-text button:focus {\n    outline: 0; }\n  .image-text button:hover {\n    -webkit-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    transform: scale(1.1);\n    color: #FFC107;\n    border-color: #FFC107;\n    background-color: transparent; }\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n  .image-text .text-box {\n    bottom: 5%; }\n  .image-text button {\n    display: block;\n    font-size: 3.5em; } }\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n  .image-text .text-box {\n    bottom: 12%; }\n  .image-text button {\n    display: block;\n    font-size: 4em; } }\n\n@media all and (min-width: 1181px) {\n  .image-text .text-box {\n    bottom: 18%; }\n  .image-text button {\n    display: block;\n    font-size: 4.5em; } }\n\n.cart-message {\n  position: absolute;\n  width: 100%; }\n\nsection.shop-info {\n  width: 60%;\n  margin: 0 auto;\n  position: relative; }\n  section.shop-info h1 {\n    font-size: 4em;\n    color: #8282ff;\n    margin: 0;\n    display: inline; }\n  section.shop-info p {\n    display: inline;\n    font-size: 1.25em; }\n  section.shop-info h2 {\n    font-size: 3em;\n    font-family: 'Montserrat', sans-serif;\n    text-align: center;\n    margin: 0; }\n\n.item-header {\n  font-size: 4.5em;\n  margin-left: 1%;\n  font-family: \"Amatic SC\", cursive;\n  width: 100%;\n  float: left; }\n\n.item-text {\n  margin-top: 4%;\n  width: 60%;\n  float: left;\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em; }\n\n.items {\n  width: 80%;\n  margin: 0 auto; }\n  .items ul {\n    margin-top: 0;\n    margin-bottom: 10%; }\n\n.item {\n  position: relative;\n  margin-top: 40px;\n  margin: 0 auto;\n  display: inline-block; }\n  .item img {\n    width: 60%;\n    margin: 0 auto;\n    transition: all .5s ease; }\n  .item h3 {\n    margin-bottom: 0;\n    font-family: \"Amatic SC\", cursive;\n    font-size: 1.5em;\n    transition: all .5s ease; }\n  .item p {\n    font-weight: 300;\n    color: #999;\n    font-family: \"Open Sans Condensed\", sans-serif; }\n\n.item:hover {\n  cursor: pointer; }\n  .item:hover h3 {\n    color: #FFC107; }\n\n.item-info {\n  text-align: center; }\n  .item-info h4 {\n    margin-bottom: 0; }\n  .item-info p {\n    margin-top: 0; }\n\n@media all and (max-width: 600px) {\n  .item-header {\n    font-size: 3em;\n    margin-top: 1%;\n    margin-bottom: 5%;\n    margin-left: 2%; }\n  .item {\n    width: 50%;\n    margin-bottom: 20px; }\n    .item h3 {\n      margin-top: 5%; } }\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n  .items {\n    width: 85%; }\n  .item-header {\n    font-size: 5em;\n    margin: 1% 0 2% 3%; }\n  .item {\n    width: 33%; }\n    .item h3 {\n      font-size: 1.9em;\n      margin-top: 5%; } }\n\n@media all and (min-width: 851px) {\n  .items {\n    width: 80%; }\n  .item-header {\n    font-size: 6em;\n    margin: 2% 0 3% 3%; }\n  .item {\n    width: 33%;\n    margin-bottom: 3%; }\n    .item img {\n      width: 55%; }\n    .item h3 {\n      font-size: 2em;\n      margin-top: 2%; } }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_image-text.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_colors.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/scss/partials/_fonts.scss","/Users/Will/freelance/earth-house/app/src/components/shop/src/components/shop/shop.scss"],"names":[],"mappings":"AAGA;EACI,mBAAkB;EAClB,sBAAqB;EACrB,YAAW;EACX,iBAAgB;EAChB,kDCP4B,EDoD/B;EAlDD;IASQ,mBAAkB;IAElB,mBAAkB;IAClB,YAAW;IACX,SAAQ;IACR,WAAU,EACb;EAfL;IAkBQ,YAAW;IACX,eAAc,EACjB;EApBL;IAuBQ,mBAAkB;IAClB,wCAAmC;IACnC,kCE5B8B;IF8B9B,cAAa;IACb,aAAY;IACZ,iBAAgB;IAEhB,gBAAe;IACf,eAAc;IACd,wBAAuB;IACvB,yBAAwB,EAC3B;EAnCL;IAsCQ,WAAU,EACb;EAvCL;IA2CQ,8BAA6B;IAC7B,0BAAyB;IACzB,sBAAqB;IACrB,eCjDc;IDkDd,sBClDc;IDmDd,8BAA6B,EAChC;;AAGL;EACI;IAEQ,WAAU,EACb;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,eAAc,EACjB,EAAA;;AAIT;EACI;IAEQ,YAAW,EACd;EAHL;IAKQ,eAAc;IACd,iBAAgB,EACnB,EAAA;;AGnFT;EACI,mBAAkB;EAClB,YAAW,EACd;;AACD;EACI,WAAU;EACV,eAAc;EACd,mBAAkB,EAkBrB;EArBD;IAKQ,eAAc;IACd,eAAuB;IACvB,UAAS;IACT,gBAAe,EAClB;EATL;IAYQ,gBAAe;IACf,kBAAiB,EACpB;EAdL;IAgBQ,eAAc;IACd,sCAAqC;IACrC,mBAAkB;IAClB,UAAS,EACZ;;AAGL;EACI,iBAAgB;EAEhB,gBAAe;EAEf,kCDpCkC;ECqClC,YAAW;EACX,YAAW,EAEd;;AAED;EACI,eAAc;EACd,WAAU;EACV,YAAW;EACX,wCD7CkC;EC8ClC,iBACJ,EAAE;;AAIF;EACI,WAAU;EACV,eAAc,EAKjB;EAPD;IAIQ,cAAa;IACb,mBAAkB,EACrB;;AAGL;EACI,mBAAkB;EAClB,iBAAgB;EAEhB,eAAc;EAEd,sBAAqB,EAsBxB;EA5BD;IAQQ,WAAU;IACV,eAAc;IACd,yBAAwB,EAC3B;EAXL;IAaQ,iBAAgB;IAChB,kCD3E8B;IC4E9B,iBAAgB;IAChB,yBAAwB,EAC3B;EAjBL;IAwBQ,iBAAgB;IAChB,YAAW;IACX,+CDrFqC,ECsFxC;;AAEL;EACI,gBAAe,EAIlB;EALD;IAGQ,eF7Fc,EE8FjB;;AAeL;EACI,mBAAkB,EAOrB;EARD;IAGQ,iBAAgB,EACnB;EAJL;IAMQ,cAAa,EAChB;;AAGL;EACI;IACI,eAAc;IACd,eAAc;IACd,kBAAiB;IACjB,gBAAe,EAClB;EACD;IACI,WAAU;IACV,oBAAmB,EAItB;IAND;MAIQ,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EACrB;EAED;IACI,WAAU,EAKb;IAND;MAGQ,iBAAgB;MAChB,eAAc,EACjB,EAAA;;AAIT;EACI;IACI,WAAU,EACb;EACD;IACI,eAAc;IACd,mBAAkB,EAErB;EAED;IACI,WAAU;IACV,kBAAiB,EAQpB;IAVD;MAIQ,WAAU,EACb;IALL;MAOQ,eAAc;MACd,eAAc,EACjB,EAAA","file":"shop.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\n.image-text {\n    position: relative;\n    display: inline-block;\n    width: 100%;\n    overflow: hidden;\n    border-bottom: 2px solid $lightgrey;\n\n\n    .text-box {\n        position: absolute;\n        // bottom: 8%;\n        text-align: center;\n        width: 100%;\n        right: 0;\n        z-index: 1;\n    }\n\n    img {\n        width: 100%;\n        display: block;\n    }\n\n    button {\n        border-radius: 1px;\n        background-color: rgba(50,50,50,.1);\n        font-family: $decorative-font;\n        // font-size: 2.7em;\n        display: none;\n        color: white;\n        font-weight: 600;\n        // display: block;\n        padding: 0 10px;\n        margin: 0 auto;\n        border: 3px solid white;\n        transition: all .3s ease;\n    }\n\n    button:focus {\n        outline: 0;\n    }\n\n    button:hover {\n        \n        -webkit-transform: scale(1.1);\n        -ms-transform: scale(1.1);\n        transform: scale(1.1);\n        color: $accent-color;\n        border-color: $accent-color;\n        background-color: transparent;\n    }\n}\n\n@media all and (min-width: 780px) and (max-width: 980px) {\n    .image-text {\n        .text-box {\n            bottom: 5%;\n        }\n        button {\n            display: block;\n            font-size: 3.5em;\n        }\n    }\n}\n\n@media all and (min-width: 981px) and (max-width: 1180px) {\n    .image-text {\n        .text-box {\n            bottom: 12%;\n        }\n        button {\n            display: block;\n            font-size: 4em;\n        }\n    }\n}\n\n@media all and (min-width: 1181px) {\n    .image-text {\n        .text-box {\n            bottom: 18%;\n        }\n        button {\n            display: block;\n            font-size: 4.5em;\n        }\n    }\n}","$accent-color: #FFC107;\n$lightgrey: rgba(200,200,200,.7);\n$black: rgb(50,50,50);\n$link-blue: rgb(11,0,128);","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n","@import 'image-text';\n@import 'fonts';\n@import 'colors';\n\n.cart-message {\n    position: absolute;\n    width: 100%;\n}\nsection.shop-info {\n    width: 60%;\n    margin: 0 auto;\n    position: relative;\n    h1 {\n        font-size: 4em;\n        color: rgb(130,130,255);\n        margin: 0;\n        display: inline;\n    }\n\n    p{\n        display: inline;\n        font-size: 1.25em;\n    }\n    h2 {\n        font-size: 3em;\n        font-family: 'Montserrat', sans-serif; \n        text-align: center;\n        margin: 0;\n    }\n}\n\n.item-header {\n    font-size: 4.5em;\n    // margin: 1%  0 0 3%;\n    margin-left: 1%;\n    // margin-bottom: 5%;\n    font-family: $decorative-font;\n    width: 100%;\n    float: left;\n    \n}\n\n.item-text {\n    margin-top: 4%;\n    width: 60%;\n    float: left;\n    font-family: $main-font;\n    font-size: 1.2em\n}\n\n//we need to move these styles to a file specifically for the \"all\" view\n\n.items {\n    width: 80%;\n    margin: 0 auto;\n    ul {\n        margin-top: 0;\n        margin-bottom: 10%;\n    }\n}\n\n.item {\n    position: relative;\n    margin-top: 40px;\n    // margin-right: 10%;\n    margin: 0 auto;\n    // width: 17%;\n    display: inline-block;\n    img {\n        width: 60%;\n        margin: 0 auto;\n        transition: all .5s ease;\n    }\n    h3 {\n        margin-bottom: 0;\n        font-family: $decorative-font;\n        font-size: 1.5em;\n        transition: all .5s ease;\n    }\n\n    // h3:hover {\n    //     cursor: pointer;\n    //     color: $accent-color;\n    // }\n    p {\n        font-weight: 300;\n        color: #999;\n        font-family: $thin-font;\n    }\n}\n.item:hover {\n    cursor: pointer;\n    h3 {\n        color: $accent-color;\n    }\n}\n.item:hover > img {\n    // opacity: .5;\n    // -webkit-filter: blur(1px);\n    // -webkit-filter: contrast(150%); \n}\n\n// .item:hover > h3 {\n//     color: $accent-color;\n// }\n\n\n\n\n.item-info {\n    text-align: center;\n    h4 {\n        margin-bottom: 0;   \n    }\n    p {\n        margin-top: 0;\n    }\n}\n\n@media all and (max-width: 600px) {\n    .item-header {\n        font-size: 3em;\n        margin-top: 1%;\n        margin-bottom: 5%;\n        margin-left: 2%;\n    }\n    .item {\n        width: 50%;\n        margin-bottom: 20px;\n        h3 {\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 601px) and (max-width: 850px) {\n    .items {\n        width: 85%;\n    }\n    .item-header {\n        font-size: 5em;\n        margin: 1% 0 2% 3%;\n    }\n\n    .item {\n        width: 33%;\n        h3 {\n            font-size: 1.9em;\n            margin-top: 5%;\n        }\n    }\n}\n\n@media all and (min-width: 851px) {\n    .items {\n        width: 80%;\n    }\n    .item-header {\n        font-size: 6em;\n        margin: 2% 0 3% 3%;\n\n    }\n\n    .item {\n        width: 33%;\n        margin-bottom: 3%;\n        img {\n            width: 55%;\n        }\n        h3 {\n            font-size: 2em;\n            margin-top: 2%;\n        }\n    }\n}\n\n"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 102 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37116,7 +37256,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var context = __webpack_require__(103);
+	var context = __webpack_require__(107);
 	
 	var _module = _angular2.default.module('services', []);
 	
@@ -37128,25 +37268,25 @@
 	exports.default = _module.name;
 
 /***/ },
-/* 103 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./about-service.js": 104,
-		"./article-service.js": 105,
-		"./auth-service.js": 106,
-		"./checkout-content-service.js": 107,
-		"./contact-service.js": 108,
-		"./date-service.js": 109,
-		"./ingredient-service.js": 110,
-		"./juice-service.js": 111,
-		"./mail-service.js": 112,
-		"./order-pickup-service.js": 113,
-		"./order-service.js": 114,
-		"./payment-service.js": 115,
-		"./pickup-service.js": 116,
-		"./shop-service.js": 117,
-		"./slide-service.js": 118
+		"./about-service.js": 108,
+		"./article-service.js": 109,
+		"./auth-service.js": 110,
+		"./checkout-content-service.js": 111,
+		"./contact-service.js": 112,
+		"./date-service.js": 113,
+		"./ingredient-service.js": 114,
+		"./juice-service.js": 115,
+		"./mail-service.js": 116,
+		"./order-pickup-service.js": 117,
+		"./order-service.js": 118,
+		"./payment-service.js": 119,
+		"./pickup-service.js": 120,
+		"./shop-service.js": 121,
+		"./slide-service.js": 122
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -37159,11 +37299,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 103;
+	webpackContext.id = 107;
 
 
 /***/ },
-/* 104 */
+/* 108 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37223,7 +37363,7 @@
 	}
 
 /***/ },
-/* 105 */
+/* 109 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37269,7 +37409,7 @@
 	}
 
 /***/ },
-/* 106 */
+/* 110 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37291,7 +37431,7 @@
 	}
 
 /***/ },
-/* 107 */
+/* 111 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37337,7 +37477,7 @@
 	}
 
 /***/ },
-/* 108 */
+/* 112 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37383,7 +37523,7 @@
 	}
 
 /***/ },
-/* 109 */
+/* 113 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37451,7 +37591,7 @@
 	}
 
 /***/ },
-/* 110 */
+/* 114 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37513,7 +37653,7 @@
 	}
 
 /***/ },
-/* 111 */
+/* 115 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37575,7 +37715,7 @@
 	}
 
 /***/ },
-/* 112 */
+/* 116 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37618,7 +37758,7 @@
 	}
 
 /***/ },
-/* 113 */
+/* 117 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37648,9 +37788,6 @@
 	            return $http({
 	                method: 'POST',
 	                url: apiUrl + '/orders-pickup',
-	                // headers: {
-	                //     'Authorization': token
-	                // },
 	                data: order
 	            }).then(function (res) {
 	                return res.data;
@@ -37683,7 +37820,7 @@
 	}
 
 /***/ },
-/* 114 */
+/* 118 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37734,7 +37871,7 @@
 	}
 
 /***/ },
-/* 115 */
+/* 119 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37748,14 +37885,12 @@
 	function paymentService($http, apiUrl) {
 	    return {
 	        post: function post(paymentInfo) {
-	            console.log(paymentInfo);
 	            return $http.post(apiUrl + '/payments', paymentInfo).then(function (res) {
 	                return res.data;
 	            });
 	        },
 	        createOrder: function createOrder(orderInfo) {
 	            return $http.post(apiUrl + '/orders', orderInfo).then(function (res) {
-	                console.log('in payment service', res.data, res.data._id);
 	                return res.data;
 	            });
 	        }
@@ -37763,7 +37898,7 @@
 	}
 
 /***/ },
-/* 116 */
+/* 120 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37825,7 +37960,7 @@
 	}
 
 /***/ },
-/* 117 */
+/* 121 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37871,7 +38006,7 @@
 	}
 
 /***/ },
-/* 118 */
+/* 122 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37933,13 +38068,13 @@
 	}
 
 /***/ },
-/* 119 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(120);
+	var content = __webpack_require__(124);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(13)(content, {});
@@ -37959,7 +38094,7 @@
 	}
 
 /***/ },
-/* 120 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(12)();
@@ -37967,13 +38102,13 @@
 	
 	
 	// module
-	exports.push([module.id, "html {\n  font-size: 16px;\n  -webkit-font-smoothing: antialiased; }\n\nbody {\n  font-family: sans-serif;\n  margin: 0; }\n\nul {\n  list-style-type: none;\n  padding: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none;\n  color: white; }\n\na:hover {\n  cursor: pointer; }\n\n.link {\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em;\n  transition: all 0.5s ease; }\n\n.icon-arrow-down2:before {\n  content: \"\\EA3E\"; }\n\n.icon-arrow-right2:before {\n  content: \"\\EA3C\"; }\n\n.icon-arrow-left2:before {\n  content: \"\\EA40\"; }\n\n.clearfix {\n  overflow: auto; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/scss/src/scss/main.scss","/Users/Will/freelance/earth-house/app/src/scss/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,gBAAe;EACf,oCAAmC,EACtC;;AACD;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,sBAAqB;EACrB,WAAU,EACb;;AACD;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB;EACrB,aAAY,EACf;;AAED;EACI,gBAAe,EAClB;;AAED;EACI,wCClCkC;EDmClC,iBAAgB;EAChB,0BAAyB,EAC5B;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AACD;EACI,eAAc,EACjB","file":"main.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\nhtml {\n    font-size: 16px;\n    -webkit-font-smoothing: antialiased;\n}\nbody {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nul {\n    list-style-type: none;\n    padding: 0;\n}\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n    color: white;\n}\n\na:hover {\n    cursor: pointer;    \n}\n\n.link {\n    font-family: $main-font;\n    font-size: 1.2em;\n    transition: all 0.5s ease;\n}\n\n.icon-arrow-down2:before {\n  content: \"\\ea3e\";\n}\n\n.icon-arrow-right2:before {\n  content: \"\\ea3c\";\n}\n\n.icon-arrow-left2:before {\n  content: \"\\ea40\";\n}\n.clearfix {\n    overflow: auto;\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n$juice-font: 'Playfair Display', serif;"],"sourceRoot":""}]);
+	exports.push([module.id, "html {\n  font-size: 16px;\n  -webkit-font-smoothing: antialiased; }\n\nbody {\n  font-family: sans-serif;\n  margin: 0; }\n\nul {\n  list-style-type: none;\n  padding: 0; }\n\nimg {\n  max-width: 100%;\n  margin: 0;\n  padding: 0;\n  z-index: .5;\n  position: relative;\n  display: block; }\n\na {\n  text-decoration: none;\n  color: white; }\n\na:hover {\n  cursor: pointer; }\n\n.link {\n  font-family: \"Josefin Sans\", sans-serif;\n  font-size: 1.2em;\n  transition: all 0.5s ease; }\n\n.icon-arrow-down2:before {\n  content: \"\\EA3E\"; }\n\n.icon-arrow-right2:before {\n  content: \"\\EA3C\"; }\n\n.icon-arrow-left2:before {\n  content: \"\\EA40\"; }\n\n.clearfix {\n  overflow: auto; }\n", "", {"version":3,"sources":["/Users/Will/freelance/earth-house/app/src/scss/src/scss/main.scss","/Users/Will/freelance/earth-house/app/src/scss/src/scss/partials/_fonts.scss"],"names":[],"mappings":"AAGA;EACI,gBAAe;EACf,oCAAmC,EACtC;;AACD;EACI,wBAAuB;EACvB,UAAS,EACZ;;AAED;EACI,sBAAqB;EACrB,WAAU,EACb;;AACD;EACI,gBAAe;EACf,UAAS;EACT,WAAU;EACV,YAAW;EACX,mBAAkB;EAClB,eAAc,EACjB;;AAED;EACI,sBAAqB;EACrB,aAAY,EACf;;AAED;EACI,gBAAe,EAClB;;AAED;EACI,wCClCkC;EDmClC,iBAAgB;EAChB,0BAAyB,EAC5B;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AAED;EACE,iBAAgB,EACjB;;AACD;EACI,eAAc,EACjB","file":"main.scss","sourcesContent":["@import 'colors';\n@import 'fonts';\n\nhtml {\n    font-size: 16px;\n    -webkit-font-smoothing: antialiased;\n}\nbody {\n    font-family: sans-serif;\n    margin: 0;\n}\n\nul {\n    list-style-type: none;\n    padding: 0;\n}\nimg {\n    max-width: 100%;\n    margin: 0;\n    padding: 0;\n    z-index: .5;\n    position: relative;\n    display: block;\n}\n\na {\n    text-decoration: none;\n    color: white;\n}\n\na:hover {\n    cursor: pointer;    \n}\n\n.link {\n    font-family: $main-font;\n    font-size: 1.2em;\n    transition: all 0.5s ease;\n}\n\n.icon-arrow-down2:before {\n  content: \"\\ea3e\";\n}\n\n.icon-arrow-right2:before {\n  content: \"\\ea3c\";\n}\n\n.icon-arrow-left2:before {\n  content: \"\\ea40\";\n}\n.clearfix {\n    overflow: auto;\n}","$decorative-font: 'Amatic SC', cursive;\n$main-font: 'Josefin Sans', sans-serif;\n$thin-font: 'Open Sans Condensed', sans-serif;\n"],"sourceRoot":""}]);
 	
 	// exports
 
 
 /***/ },
-/* 121 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -37984,23 +38119,23 @@
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	var core = __webpack_require__(122);
+	var core = __webpack_require__(126);
 	exports.core = core;
-	__export(__webpack_require__(122));
-	__export(__webpack_require__(178));
-	__export(__webpack_require__(180));
+	__export(__webpack_require__(126));
 	__export(__webpack_require__(182));
-	__webpack_require__(186);
-	__webpack_require__(187);
-	__webpack_require__(188);
-	__webpack_require__(189);
+	__export(__webpack_require__(184));
+	__export(__webpack_require__(186));
 	__webpack_require__(190);
+	__webpack_require__(191);
+	__webpack_require__(192);
+	__webpack_require__(193);
+	__webpack_require__(194);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = "ui.router";
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 122 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -38011,21 +38146,21 @@
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(123));
-	__export(__webpack_require__(170));
-	__export(__webpack_require__(171));
-	__export(__webpack_require__(172));
-	__export(__webpack_require__(173));
+	__export(__webpack_require__(127));
 	__export(__webpack_require__(174));
 	__export(__webpack_require__(175));
 	__export(__webpack_require__(176));
-	__export(__webpack_require__(167));
-	__export(__webpack_require__(146));
 	__export(__webpack_require__(177));
+	__export(__webpack_require__(178));
+	__export(__webpack_require__(179));
+	__export(__webpack_require__(180));
+	__export(__webpack_require__(171));
+	__export(__webpack_require__(150));
+	__export(__webpack_require__(181));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 123 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38033,18 +38168,18 @@
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	/** @module common */ /** for typedoc */
-	__export(__webpack_require__(124));
-	__export(__webpack_require__(127));
 	__export(__webpack_require__(128));
-	__export(__webpack_require__(126));
-	__export(__webpack_require__(125));
-	__export(__webpack_require__(129));
+	__export(__webpack_require__(131));
+	__export(__webpack_require__(132));
 	__export(__webpack_require__(130));
+	__export(__webpack_require__(129));
 	__export(__webpack_require__(133));
+	__export(__webpack_require__(134));
+	__export(__webpack_require__(137));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 124 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -38056,9 +38191,9 @@
 	 * @module common
 	 */ /** for typedoc */
 	"use strict";
-	var predicates_1 = __webpack_require__(125);
-	var hof_1 = __webpack_require__(126);
-	var coreservices_1 = __webpack_require__(127);
+	var predicates_1 = __webpack_require__(129);
+	var hof_1 = __webpack_require__(130);
+	var coreservices_1 = __webpack_require__(131);
 	var w = typeof window === 'undefined' ? {} : window;
 	var angular = w.angular || {};
 	exports.fromJson = angular.fromJson || JSON.parse.bind(JSON);
@@ -38666,7 +38801,7 @@
 	//# sourceMappingURL=common.js.map
 
 /***/ },
-/* 125 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38677,7 +38812,7 @@
 	 *
 	 * @module common_predicates
 	 */ /** */
-	var hof_1 = __webpack_require__(126);
+	var hof_1 = __webpack_require__(130);
 	var toStr = Object.prototype.toString;
 	var tis = function (t) { return function (x) { return typeof (x) === t; }; };
 	exports.isUndefined = tis('undefined');
@@ -38714,7 +38849,7 @@
 	//# sourceMappingURL=predicates.js.map
 
 /***/ },
-/* 126 */
+/* 130 */
 /***/ function(module, exports) {
 
 	/**
@@ -38963,7 +39098,7 @@
 	//# sourceMappingURL=hof.js.map
 
 /***/ },
-/* 127 */
+/* 131 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38978,7 +39113,7 @@
 	//# sourceMappingURL=coreservices.js.map
 
 /***/ },
-/* 128 */
+/* 132 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39067,7 +39202,7 @@
 	//# sourceMappingURL=glob.js.map
 
 /***/ },
-/* 129 */
+/* 133 */
 /***/ function(module, exports) {
 
 	/**
@@ -39117,7 +39252,7 @@
 	//# sourceMappingURL=queue.js.map
 
 /***/ },
-/* 130 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -39128,12 +39263,12 @@
 	 * @module common_strings
 	 */ /** */
 	"use strict";
-	var predicates_1 = __webpack_require__(125);
-	var rejectFactory_1 = __webpack_require__(131);
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
-	var transition_1 = __webpack_require__(132);
-	var resolvable_1 = __webpack_require__(143);
+	var predicates_1 = __webpack_require__(129);
+	var rejectFactory_1 = __webpack_require__(135);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
+	var transition_1 = __webpack_require__(136);
+	var resolvable_1 = __webpack_require__(147);
 	/**
 	 * Returns a string shortened to a maximum length
 	 *
@@ -39273,7 +39408,7 @@
 	//# sourceMappingURL=strings.js.map
 
 /***/ },
-/* 131 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -39281,8 +39416,8 @@
 	 * @module transition
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(124);
-	var strings_1 = __webpack_require__(130);
+	var common_1 = __webpack_require__(128);
+	var strings_1 = __webpack_require__(134);
 	var RejectType;
 	(function (RejectType) {
 	    RejectType[RejectType["SUPERSEDED"] = 2] = "SUPERSEDED";
@@ -39352,27 +39487,27 @@
 	//# sourceMappingURL=rejectFactory.js.map
 
 /***/ },
-/* 132 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var trace_1 = __webpack_require__(133);
-	var coreservices_1 = __webpack_require__(127);
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var hof_1 = __webpack_require__(126);
-	var interface_1 = __webpack_require__(134);
-	var transitionHook_1 = __webpack_require__(135);
-	var hookRegistry_1 = __webpack_require__(137);
-	var hookBuilder_1 = __webpack_require__(138);
-	var node_1 = __webpack_require__(139);
-	var pathFactory_1 = __webpack_require__(142);
-	var targetState_1 = __webpack_require__(136);
-	var param_1 = __webpack_require__(140);
-	var resolvable_1 = __webpack_require__(143);
-	var rejectFactory_1 = __webpack_require__(131);
-	var resolveContext_1 = __webpack_require__(144);
-	var router_1 = __webpack_require__(146);
+	var trace_1 = __webpack_require__(137);
+	var coreservices_1 = __webpack_require__(131);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var hof_1 = __webpack_require__(130);
+	var interface_1 = __webpack_require__(138);
+	var transitionHook_1 = __webpack_require__(139);
+	var hookRegistry_1 = __webpack_require__(141);
+	var hookBuilder_1 = __webpack_require__(142);
+	var node_1 = __webpack_require__(143);
+	var pathFactory_1 = __webpack_require__(146);
+	var targetState_1 = __webpack_require__(140);
+	var param_1 = __webpack_require__(144);
+	var resolvable_1 = __webpack_require__(147);
+	var rejectFactory_1 = __webpack_require__(135);
+	var resolveContext_1 = __webpack_require__(148);
+	var router_1 = __webpack_require__(150);
 	/** @hidden */
 	var stateSelf = hof_1.prop("self");
 	/**
@@ -39965,7 +40100,7 @@
 	//# sourceMappingURL=transition.js.map
 
 /***/ },
-/* 133 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40004,9 +40139,9 @@
 	 * @coreapi
 	 * @module trace
 	 */ /** for typedoc */
-	var hof_1 = __webpack_require__(126);
-	var predicates_1 = __webpack_require__(125);
-	var strings_1 = __webpack_require__(130);
+	var hof_1 = __webpack_require__(130);
+	var predicates_1 = __webpack_require__(129);
+	var strings_1 = __webpack_require__(134);
 	/** @hidden */
 	function uiViewString(viewData) {
 	    if (!viewData)
@@ -40216,7 +40351,7 @@
 	//# sourceMappingURL=trace.js.map
 
 /***/ },
-/* 134 */
+/* 138 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -40236,18 +40371,18 @@
 	//# sourceMappingURL=interface.js.map
 
 /***/ },
-/* 135 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var common_1 = __webpack_require__(124);
-	var strings_1 = __webpack_require__(130);
-	var predicates_1 = __webpack_require__(125);
-	var hof_1 = __webpack_require__(126);
-	var trace_1 = __webpack_require__(133);
-	var coreservices_1 = __webpack_require__(127);
-	var rejectFactory_1 = __webpack_require__(131);
-	var targetState_1 = __webpack_require__(136);
+	var common_1 = __webpack_require__(128);
+	var strings_1 = __webpack_require__(134);
+	var predicates_1 = __webpack_require__(129);
+	var hof_1 = __webpack_require__(130);
+	var trace_1 = __webpack_require__(137);
+	var coreservices_1 = __webpack_require__(131);
+	var rejectFactory_1 = __webpack_require__(135);
+	var targetState_1 = __webpack_require__(140);
 	var defaultOptions = {
 	    current: common_1.noop,
 	    transition: null,
@@ -40387,7 +40522,7 @@
 	//# sourceMappingURL=transitionHook.js.map
 
 /***/ },
-/* 136 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -40395,8 +40530,8 @@
 	 * @module state
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
 	/**
 	 * Encapsulate the target (destination) state/params/options of a [[Transition]].
 	 *
@@ -40505,7 +40640,7 @@
 	//# sourceMappingURL=targetState.js.map
 
 /***/ },
-/* 137 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40513,10 +40648,10 @@
 	 * @coreapi
 	 * @module transition
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var interface_1 = __webpack_require__(134); // has or is using
-	var glob_1 = __webpack_require__(128);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var interface_1 = __webpack_require__(138); // has or is using
+	var glob_1 = __webpack_require__(132);
 	/**
 	 * Determines if the given state matches the matchCriteria
 	 *
@@ -40650,7 +40785,7 @@
 	//# sourceMappingURL=hookRegistry.js.map
 
 /***/ },
-/* 138 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -40658,10 +40793,10 @@
 	 * @module transition
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var interface_1 = __webpack_require__(134);
-	var transitionHook_1 = __webpack_require__(135);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var interface_1 = __webpack_require__(138);
+	var transitionHook_1 = __webpack_require__(139);
 	/**
 	 * This class returns applicable TransitionHooks for a specific Transition instance.
 	 *
@@ -40775,14 +40910,14 @@
 	//# sourceMappingURL=hookBuilder.js.map
 
 /***/ },
-/* 139 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module path */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
-	var param_1 = __webpack_require__(140);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
+	var param_1 = __webpack_require__(144);
 	/**
 	 * A node in a [[TreeChanges]] path
 	 *
@@ -40865,7 +41000,7 @@
 	//# sourceMappingURL=node.js.map
 
 /***/ },
-/* 140 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40873,11 +41008,11 @@
 	 * @internalapi
 	 * @module params
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
-	var predicates_1 = __webpack_require__(125);
-	var coreservices_1 = __webpack_require__(127);
-	var paramType_1 = __webpack_require__(141);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
+	var predicates_1 = __webpack_require__(129);
+	var coreservices_1 = __webpack_require__(131);
+	var paramType_1 = __webpack_require__(145);
 	var hasOwn = Object.prototype.hasOwnProperty;
 	var isShorthand = function (cfg) {
 	    return ["value", "type", "squash", "array", "dynamic"].filter(hasOwn.bind(cfg || {})).length === 0;
@@ -41043,13 +41178,13 @@
 	//# sourceMappingURL=param.js.map
 
 /***/ },
-/* 141 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module params */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
 	/**
 	 * An internal class which implements [[ParamTypeDefinition]].
 	 *
@@ -41185,15 +41320,15 @@
 	//# sourceMappingURL=paramType.js.map
 
 /***/ },
-/* 142 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @module path */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
-	var targetState_1 = __webpack_require__(136);
-	var node_1 = __webpack_require__(139);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
+	var targetState_1 = __webpack_require__(140);
+	var node_1 = __webpack_require__(143);
 	/**
 	 * This class contains functions which convert TargetStates, Nodes and paths from one type to another.
 	 */
@@ -41323,7 +41458,7 @@
 	//# sourceMappingURL=pathFactory.js.map
 
 /***/ },
-/* 143 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41331,11 +41466,11 @@
 	 * @coreapi
 	 * @module resolve
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var coreservices_1 = __webpack_require__(127);
-	var trace_1 = __webpack_require__(133);
-	var strings_1 = __webpack_require__(130);
-	var predicates_1 = __webpack_require__(125);
+	var common_1 = __webpack_require__(128);
+	var coreservices_1 = __webpack_require__(131);
+	var trace_1 = __webpack_require__(137);
+	var strings_1 = __webpack_require__(134);
+	var predicates_1 = __webpack_require__(129);
 	// TODO: explicitly make this user configurable
 	exports.defaultResolvePolicy = {
 	    when: "LAZY",
@@ -41460,20 +41595,20 @@
 	//# sourceMappingURL=resolvable.js.map
 
 /***/ },
-/* 144 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module resolve */
 	/** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
-	var trace_1 = __webpack_require__(133);
-	var coreservices_1 = __webpack_require__(127);
-	var interface_1 = __webpack_require__(145);
-	var resolvable_1 = __webpack_require__(143);
-	var pathFactory_1 = __webpack_require__(142);
-	var strings_1 = __webpack_require__(130);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
+	var trace_1 = __webpack_require__(137);
+	var coreservices_1 = __webpack_require__(131);
+	var interface_1 = __webpack_require__(149);
+	var resolvable_1 = __webpack_require__(147);
+	var pathFactory_1 = __webpack_require__(146);
+	var strings_1 = __webpack_require__(134);
 	var when = interface_1.resolvePolicies.when;
 	var ALL_WHENS = [when.EAGER, when.LAZY];
 	var EAGER_WHENS = [when.EAGER];
@@ -41664,7 +41799,7 @@
 	//# sourceMappingURL=resolveContext.js.map
 
 /***/ },
-/* 145 */
+/* 149 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -41683,7 +41818,7 @@
 	//# sourceMappingURL=interface.js.map
 
 /***/ },
-/* 146 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41691,16 +41826,16 @@
 	 * @coreapi
 	 * @module core
 	 */ /** */
-	var urlMatcherFactory_1 = __webpack_require__(147);
-	var urlRouter_1 = __webpack_require__(150);
-	var transitionService_1 = __webpack_require__(153);
-	var view_1 = __webpack_require__(161);
-	var stateRegistry_1 = __webpack_require__(162);
-	var stateService_1 = __webpack_require__(166);
-	var globals_1 = __webpack_require__(167);
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var urlService_1 = __webpack_require__(169);
+	var urlMatcherFactory_1 = __webpack_require__(151);
+	var urlRouter_1 = __webpack_require__(154);
+	var transitionService_1 = __webpack_require__(157);
+	var view_1 = __webpack_require__(165);
+	var stateRegistry_1 = __webpack_require__(166);
+	var stateService_1 = __webpack_require__(170);
+	var globals_1 = __webpack_require__(171);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var urlService_1 = __webpack_require__(173);
 	/** @hidden */
 	var _routerInstance = 0;
 	/**
@@ -41788,7 +41923,7 @@
 	//# sourceMappingURL=router.js.map
 
 /***/ },
-/* 147 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41796,11 +41931,11 @@
 	 * @internalapi
 	 * @module url
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var urlMatcher_1 = __webpack_require__(148);
-	var param_1 = __webpack_require__(140);
-	var paramTypes_1 = __webpack_require__(149);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var urlMatcher_1 = __webpack_require__(152);
+	var param_1 = __webpack_require__(144);
+	var paramTypes_1 = __webpack_require__(153);
 	/**
 	 * Factory for [[UrlMatcher]] instances.
 	 *
@@ -41919,7 +42054,7 @@
 	//# sourceMappingURL=urlMatcherFactory.js.map
 
 /***/ },
-/* 148 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41927,11 +42062,11 @@
 	 * @coreapi
 	 * @module url
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
-	var predicates_1 = __webpack_require__(125);
-	var param_1 = __webpack_require__(140);
-	var strings_1 = __webpack_require__(130);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
+	var predicates_1 = __webpack_require__(129);
+	var param_1 = __webpack_require__(144);
+	var strings_1 = __webpack_require__(134);
 	/** @hidden */
 	function quoteRegExp(string, param) {
 	    var surroundPattern = ['', ''], result = string.replace(/[\\\[\]\^$*+?.()|{}]/g, "\\$&");
@@ -42396,7 +42531,7 @@
 	//# sourceMappingURL=urlMatcher.js.map
 
 /***/ },
-/* 149 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42404,11 +42539,11 @@
 	 * @coreapi
 	 * @module params
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var hof_1 = __webpack_require__(126);
-	var coreservices_1 = __webpack_require__(127);
-	var paramType_1 = __webpack_require__(141);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var hof_1 = __webpack_require__(130);
+	var coreservices_1 = __webpack_require__(131);
+	var paramType_1 = __webpack_require__(145);
 	/**
 	 * A registry for parameter types.
 	 *
@@ -42555,7 +42690,7 @@
 	//# sourceMappingURL=paramTypes.js.map
 
 /***/ },
-/* 150 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42564,12 +42699,12 @@
 	 * @module url
 	 */
 	/** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var urlMatcher_1 = __webpack_require__(148);
-	var hof_1 = __webpack_require__(126);
-	var urlRule_1 = __webpack_require__(151);
-	var targetState_1 = __webpack_require__(136);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var urlMatcher_1 = __webpack_require__(152);
+	var hof_1 = __webpack_require__(130);
+	var urlRule_1 = __webpack_require__(155);
+	var targetState_1 = __webpack_require__(140);
 	/** @hidden */
 	function appendBasePath(url, isHtml5, absolute, baseHref) {
 	    if (baseHref === '/')
@@ -42804,7 +42939,7 @@
 	//# sourceMappingURL=urlRouter.js.map
 
 /***/ },
-/* 151 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42812,11 +42947,11 @@
 	 * @coreapi
 	 * @module url
 	 */ /** */
-	var urlMatcher_1 = __webpack_require__(148);
-	var predicates_1 = __webpack_require__(125);
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
-	var stateObject_1 = __webpack_require__(152);
+	var urlMatcher_1 = __webpack_require__(152);
+	var predicates_1 = __webpack_require__(129);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
+	var stateObject_1 = __webpack_require__(156);
 	/**
 	 * Creates a [[UrlRule]]
 	 *
@@ -43018,7 +43153,7 @@
 	//# sourceMappingURL=urlRule.js.map
 
 /***/ },
-/* 152 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -43026,8 +43161,8 @@
 	 * @module state
 	 */ /** for typedoc */
 	"use strict";
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
 	/**
 	 * Internal representation of a UI-Router state.
 	 *
@@ -43112,7 +43247,7 @@
 	//# sourceMappingURL=stateObject.js.map
 
 /***/ },
-/* 153 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43120,20 +43255,20 @@
 	 * @coreapi
 	 * @module transition
 	 */ /** for typedoc */
-	var interface_1 = __webpack_require__(134);
-	var transition_1 = __webpack_require__(132);
-	var hookRegistry_1 = __webpack_require__(137);
-	var resolve_1 = __webpack_require__(154);
-	var views_1 = __webpack_require__(155);
-	var url_1 = __webpack_require__(156);
-	var redirectTo_1 = __webpack_require__(157);
-	var onEnterExitRetain_1 = __webpack_require__(158);
-	var lazyLoad_1 = __webpack_require__(159);
-	var transitionEventType_1 = __webpack_require__(160);
-	var transitionHook_1 = __webpack_require__(135);
-	var predicates_1 = __webpack_require__(125);
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
+	var interface_1 = __webpack_require__(138);
+	var transition_1 = __webpack_require__(136);
+	var hookRegistry_1 = __webpack_require__(141);
+	var resolve_1 = __webpack_require__(158);
+	var views_1 = __webpack_require__(159);
+	var url_1 = __webpack_require__(160);
+	var redirectTo_1 = __webpack_require__(161);
+	var onEnterExitRetain_1 = __webpack_require__(162);
+	var lazyLoad_1 = __webpack_require__(163);
+	var transitionEventType_1 = __webpack_require__(164);
+	var transitionHook_1 = __webpack_require__(139);
+	var predicates_1 = __webpack_require__(129);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
 	/**
 	 * The default [[Transition]] options.
 	 *
@@ -43353,14 +43488,14 @@
 	//# sourceMappingURL=transitionService.js.map
 
 /***/ },
-/* 154 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module hooks */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var resolveContext_1 = __webpack_require__(144);
-	var hof_1 = __webpack_require__(126);
+	var common_1 = __webpack_require__(128);
+	var resolveContext_1 = __webpack_require__(148);
+	var hof_1 = __webpack_require__(130);
 	/**
 	 * A [[TransitionHookFn]] which resolves all EAGER Resolvables in the To Path
 	 *
@@ -43399,13 +43534,13 @@
 	//# sourceMappingURL=resolve.js.map
 
 /***/ },
-/* 155 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module hooks */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var coreservices_1 = __webpack_require__(127);
+	var common_1 = __webpack_require__(128);
+	var coreservices_1 = __webpack_require__(131);
 	/**
 	 * A [[TransitionHookFn]] which waits for the views to load
 	 *
@@ -43450,7 +43585,7 @@
 	//# sourceMappingURL=views.js.map
 
 /***/ },
-/* 156 */
+/* 160 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -43479,14 +43614,14 @@
 	//# sourceMappingURL=url.js.map
 
 /***/ },
-/* 157 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module hooks */ /** */
-	var predicates_1 = __webpack_require__(125);
-	var coreservices_1 = __webpack_require__(127);
-	var targetState_1 = __webpack_require__(136);
+	var predicates_1 = __webpack_require__(129);
+	var coreservices_1 = __webpack_require__(131);
+	var targetState_1 = __webpack_require__(140);
 	/**
 	 * A [[TransitionHookFn]] that redirects to a different state or params
 	 *
@@ -43520,7 +43655,7 @@
 	//# sourceMappingURL=redirectTo.js.map
 
 /***/ },
-/* 158 */
+/* 162 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -43580,11 +43715,11 @@
 	//# sourceMappingURL=onEnterExitRetain.js.map
 
 /***/ },
-/* 159 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var coreservices_1 = __webpack_require__(127);
+	var coreservices_1 = __webpack_require__(131);
 	/**
 	 * A [[TransitionHookFn]] that performs lazy loading
 	 *
@@ -43681,11 +43816,11 @@
 	//# sourceMappingURL=lazyLoad.js.map
 
 /***/ },
-/* 160 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var transitionHook_1 = __webpack_require__(135);
+	var transitionHook_1 = __webpack_require__(139);
 	/**
 	 * This class defines a type of hook, such as `onBefore` or `onEnter`.
 	 * Plugins can define custom hook types, such as sticky states does for `onInactive`.
@@ -43713,7 +43848,7 @@
 	//# sourceMappingURL=transitionEventType.js.map
 
 /***/ },
-/* 161 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43721,10 +43856,10 @@
 	 * @coreapi
 	 * @module view
 	 */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
-	var predicates_1 = __webpack_require__(125);
-	var trace_1 = __webpack_require__(133);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
+	var predicates_1 = __webpack_require__(129);
+	var trace_1 = __webpack_require__(137);
 	/**
 	 * The View service
 	 *
@@ -43986,7 +44121,7 @@
 	//# sourceMappingURL=view.js.map
 
 /***/ },
-/* 162 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -43994,11 +44129,11 @@
 	 * @module state
 	 */ /** for typedoc */
 	"use strict";
-	var stateMatcher_1 = __webpack_require__(163);
-	var stateBuilder_1 = __webpack_require__(164);
-	var stateQueueManager_1 = __webpack_require__(165);
-	var common_1 = __webpack_require__(124);
-	var hof_1 = __webpack_require__(126);
+	var stateMatcher_1 = __webpack_require__(167);
+	var stateBuilder_1 = __webpack_require__(168);
+	var stateQueueManager_1 = __webpack_require__(169);
+	var common_1 = __webpack_require__(128);
+	var hof_1 = __webpack_require__(130);
 	var StateRegistry = (function () {
 	    /** @internalapi */
 	    function StateRegistry(_router) {
@@ -44147,14 +44282,14 @@
 	//# sourceMappingURL=stateRegistry.js.map
 
 /***/ },
-/* 163 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module state */ /** for typedoc */
-	var predicates_1 = __webpack_require__(125);
-	var glob_1 = __webpack_require__(128);
-	var common_1 = __webpack_require__(124);
+	var predicates_1 = __webpack_require__(129);
+	var glob_1 = __webpack_require__(132);
+	var common_1 = __webpack_require__(128);
 	var StateMatcher = (function () {
 	    function StateMatcher(_states) {
 	        this._states = _states;
@@ -44211,17 +44346,17 @@
 	//# sourceMappingURL=stateMatcher.js.map
 
 /***/ },
-/* 164 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module state */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var strings_1 = __webpack_require__(130);
-	var hof_1 = __webpack_require__(126);
-	var resolvable_1 = __webpack_require__(143);
-	var coreservices_1 = __webpack_require__(127);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var strings_1 = __webpack_require__(134);
+	var hof_1 = __webpack_require__(130);
+	var resolvable_1 = __webpack_require__(147);
+	var coreservices_1 = __webpack_require__(131);
 	var parseUrl = function (url) {
 	    if (!predicates_1.isString(url))
 	        return false;
@@ -44489,14 +44624,14 @@
 	//# sourceMappingURL=stateBuilder.js.map
 
 /***/ },
-/* 165 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module state */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var stateObject_1 = __webpack_require__(152);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var stateObject_1 = __webpack_require__(156);
 	/** @internalapi */
 	var StateQueueManager = (function () {
 	    function StateQueueManager($registry, $urlRouter, states, builder, listeners) {
@@ -44582,7 +44717,7 @@
 	//# sourceMappingURL=stateQueueManager.js.map
 
 /***/ },
-/* 166 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44590,20 +44725,20 @@
 	 * @coreapi
 	 * @module state
 	 */ /** */
-	var common_1 = __webpack_require__(124);
-	var predicates_1 = __webpack_require__(125);
-	var queue_1 = __webpack_require__(129);
-	var coreservices_1 = __webpack_require__(127);
-	var pathFactory_1 = __webpack_require__(142);
-	var node_1 = __webpack_require__(139);
-	var transitionService_1 = __webpack_require__(153);
-	var rejectFactory_1 = __webpack_require__(131);
-	var targetState_1 = __webpack_require__(136);
-	var param_1 = __webpack_require__(140);
-	var glob_1 = __webpack_require__(128);
-	var resolveContext_1 = __webpack_require__(144);
-	var lazyLoad_1 = __webpack_require__(159);
-	var hof_1 = __webpack_require__(126);
+	var common_1 = __webpack_require__(128);
+	var predicates_1 = __webpack_require__(129);
+	var queue_1 = __webpack_require__(133);
+	var coreservices_1 = __webpack_require__(131);
+	var pathFactory_1 = __webpack_require__(146);
+	var node_1 = __webpack_require__(143);
+	var transitionService_1 = __webpack_require__(157);
+	var rejectFactory_1 = __webpack_require__(135);
+	var targetState_1 = __webpack_require__(140);
+	var param_1 = __webpack_require__(144);
+	var glob_1 = __webpack_require__(132);
+	var resolveContext_1 = __webpack_require__(148);
+	var lazyLoad_1 = __webpack_require__(163);
+	var hof_1 = __webpack_require__(130);
 	/**
 	 * Provides state related service functions
 	 *
@@ -45173,7 +45308,7 @@
 	//# sourceMappingURL=stateService.js.map
 
 /***/ },
-/* 167 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45181,9 +45316,9 @@
 	 * @coreapi
 	 * @module core
 	 */ /** */
-	var stateParams_1 = __webpack_require__(168);
-	var queue_1 = __webpack_require__(129);
-	var common_1 = __webpack_require__(124);
+	var stateParams_1 = __webpack_require__(172);
+	var queue_1 = __webpack_require__(133);
+	var common_1 = __webpack_require__(128);
 	/**
 	 * Global mutable state
 	 */
@@ -45215,12 +45350,12 @@
 	//# sourceMappingURL=globals.js.map
 
 /***/ },
-/* 168 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module params */ /** for typedoc */
-	var common_1 = __webpack_require__(124);
+	var common_1 = __webpack_require__(128);
 	var StateParams = (function () {
 	    function StateParams(params) {
 	        if (params === void 0) { params = {}; }
@@ -45258,7 +45393,7 @@
 	//# sourceMappingURL=stateParams.js.map
 
 /***/ },
-/* 169 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -45266,8 +45401,8 @@
 	 * @module url
 	 */ /** */
 	"use strict";
-	var coreservices_1 = __webpack_require__(127);
-	var common_1 = __webpack_require__(124);
+	var coreservices_1 = __webpack_require__(131);
+	var common_1 = __webpack_require__(128);
 	/** @hidden */
 	var makeStub = function (keys) {
 	    return keys.reduce(function (acc, key) { return (acc[key] = coreservices_1.notImplemented(key), acc); }, { dispose: common_1.noop });
@@ -45342,21 +45477,21 @@
 	//# sourceMappingURL=urlService.js.map
 
 /***/ },
-/* 170 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(140));
-	__export(__webpack_require__(149));
-	__export(__webpack_require__(168));
-	__export(__webpack_require__(141));
+	__export(__webpack_require__(144));
+	__export(__webpack_require__(153));
+	__export(__webpack_require__(172));
+	__export(__webpack_require__(145));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 171 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45364,12 +45499,12 @@
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	/** @module path */ /** for typedoc */
-	__export(__webpack_require__(139));
-	__export(__webpack_require__(142));
+	__export(__webpack_require__(143));
+	__export(__webpack_require__(146));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 172 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45377,30 +45512,30 @@
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	/** @module resolve */ /** for typedoc */
-	__export(__webpack_require__(145));
-	__export(__webpack_require__(143));
-	__export(__webpack_require__(144));
+	__export(__webpack_require__(149));
+	__export(__webpack_require__(147));
+	__export(__webpack_require__(148));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 173 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(164));
-	__export(__webpack_require__(152));
-	__export(__webpack_require__(163));
-	__export(__webpack_require__(165));
-	__export(__webpack_require__(162));
+	__export(__webpack_require__(168));
+	__export(__webpack_require__(156));
+	__export(__webpack_require__(167));
+	__export(__webpack_require__(169));
 	__export(__webpack_require__(166));
-	__export(__webpack_require__(136));
+	__export(__webpack_require__(170));
+	__export(__webpack_require__(140));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 174 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45419,44 +45554,44 @@
 	 * @preferred
 	 * @module transition
 	 */ /** for typedoc */
-	__export(__webpack_require__(134));
 	__export(__webpack_require__(138));
-	__export(__webpack_require__(137));
-	__export(__webpack_require__(131));
-	__export(__webpack_require__(132));
+	__export(__webpack_require__(142));
+	__export(__webpack_require__(141));
 	__export(__webpack_require__(135));
-	__export(__webpack_require__(160));
-	__export(__webpack_require__(153));
+	__export(__webpack_require__(136));
+	__export(__webpack_require__(139));
+	__export(__webpack_require__(164));
+	__export(__webpack_require__(157));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 175 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(148));
-	__export(__webpack_require__(147));
-	__export(__webpack_require__(150));
+	__export(__webpack_require__(152));
 	__export(__webpack_require__(151));
-	__export(__webpack_require__(169));
+	__export(__webpack_require__(154));
+	__export(__webpack_require__(155));
+	__export(__webpack_require__(173));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 176 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(161));
+	__export(__webpack_require__(165));
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 177 */
+/* 181 */
 /***/ function(module, exports) {
 
 	/**
@@ -45480,7 +45615,7 @@
 	//# sourceMappingURL=interface.js.map
 
 /***/ },
-/* 178 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45495,14 +45630,14 @@
 	 * @preferred
 	 */
 	/** for typedoc */
-	var angular_1 = __webpack_require__(179);
-	var ui_router_core_1 = __webpack_require__(122);
-	var views_1 = __webpack_require__(180);
-	var templateFactory_1 = __webpack_require__(181);
-	var stateProvider_1 = __webpack_require__(182);
-	var onEnterExitRetain_1 = __webpack_require__(183);
-	var locationServices_1 = __webpack_require__(184);
-	var urlRouterProvider_1 = __webpack_require__(185);
+	var angular_1 = __webpack_require__(183);
+	var ui_router_core_1 = __webpack_require__(126);
+	var views_1 = __webpack_require__(184);
+	var templateFactory_1 = __webpack_require__(185);
+	var stateProvider_1 = __webpack_require__(186);
+	var onEnterExitRetain_1 = __webpack_require__(187);
+	var locationServices_1 = __webpack_require__(188);
+	var urlRouterProvider_1 = __webpack_require__(189);
 	angular_1.ng.module("ui.router.angular1", []);
 	var mod_init = angular_1.ng.module('ui.router.init', []);
 	var mod_util = angular_1.ng.module('ui.router.util', ['ng', 'ui.router.init']);
@@ -45599,7 +45734,7 @@
 	//# sourceMappingURL=services.js.map
 
 /***/ },
-/* 179 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45609,11 +45744,11 @@
 	//# sourceMappingURL=angular.js.map
 
 /***/ },
-/* 180 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ui_router_core_1 = __webpack_require__(122);
+	var ui_router_core_1 = __webpack_require__(126);
 	function getNg1ViewConfigFactory() {
 	    var templateFactory = null;
 	    return function (path, view) {
@@ -45710,14 +45845,14 @@
 	//# sourceMappingURL=views.js.map
 
 /***/ },
-/* 181 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module view */
 	/** for typedoc */
-	var angular_1 = __webpack_require__(179);
-	var ui_router_core_1 = __webpack_require__(122);
+	var angular_1 = __webpack_require__(183);
+	var ui_router_core_1 = __webpack_require__(126);
 	/**
 	 * Service which manages loading of templates from a ViewConfig.
 	 */
@@ -45901,12 +46036,12 @@
 	//# sourceMappingURL=templateFactory.js.map
 
 /***/ },
-/* 182 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module ng1 */ /** for typedoc */
-	var ui_router_core_1 = __webpack_require__(122);
+	var ui_router_core_1 = __webpack_require__(126);
 	/**
 	 * @ngdoc object
 	 * @name ui.router.state.$stateProvider
@@ -46052,13 +46187,13 @@
 	//# sourceMappingURL=stateProvider.js.map
 
 /***/ },
-/* 183 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module ng1 */ /** */
-	var ui_router_core_1 = __webpack_require__(122);
-	var services_1 = __webpack_require__(178);
+	var ui_router_core_1 = __webpack_require__(126);
+	var services_1 = __webpack_require__(182);
 	/**
 	 * This is a [[StateBuilder.builder]] function for angular1 `onEnter`, `onExit`,
 	 * `onRetain` callback hooks on a [[Ng1StateDeclaration]].
@@ -46081,11 +46216,11 @@
 	//# sourceMappingURL=onEnterExitRetain.js.map
 
 /***/ },
-/* 184 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ui_router_core_1 = __webpack_require__(122);
+	var ui_router_core_1 = __webpack_require__(126);
 	/**
 	 * Implements UI-Router LocationServices and LocationConfig using Angular 1's $location service
 	 */
@@ -46160,13 +46295,13 @@
 	//# sourceMappingURL=locationServices.js.map
 
 /***/ },
-/* 185 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module url */ /** */
-	var ui_router_core_1 = __webpack_require__(122);
-	var ui_router_core_2 = __webpack_require__(122);
+	var ui_router_core_1 = __webpack_require__(126);
+	var ui_router_core_2 = __webpack_require__(126);
 	/**
 	 * Manages rules for client-side URL
 	 *
@@ -46368,7 +46503,7 @@
 	//# sourceMappingURL=urlRouterProvider.js.map
 
 /***/ },
-/* 186 */
+/* 190 */
 /***/ function(module, exports) {
 
 	/**
@@ -46730,7 +46865,7 @@
 	//# sourceMappingURL=injectables.js.map
 
 /***/ },
-/* 187 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46743,8 +46878,8 @@
 	 * @preferred
 	 * @module directives
 	 */ /** for typedoc */
-	var angular_1 = __webpack_require__(179);
-	var ui_router_core_1 = __webpack_require__(122);
+	var angular_1 = __webpack_require__(183);
+	var ui_router_core_1 = __webpack_require__(126);
 	/** @hidden */
 	function parseStateRef(ref) {
 	    var paramsOnly = ref.match(/^\s*({[^}]*})\s*$/), parsed;
@@ -47263,12 +47398,12 @@
 	//# sourceMappingURL=stateDirectives.js.map
 
 /***/ },
-/* 188 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @module state */ /** for typedoc */
 	"use strict";
-	var angular_1 = __webpack_require__(179);
+	var angular_1 = __webpack_require__(183);
 	/**
 	 * @ngdoc filter
 	 * @name ui.router.state.filter:isState
@@ -47311,7 +47446,7 @@
 	//# sourceMappingURL=stateFilters.js.map
 
 /***/ },
-/* 189 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47319,11 +47454,11 @@
 	 * @ng1api
 	 * @module directives
 	 */ /** for typedoc */
-	var angular_1 = __webpack_require__(179);
+	var angular_1 = __webpack_require__(183);
 	var angular_2 = __webpack_require__(1);
-	var ui_router_core_1 = __webpack_require__(122);
-	var views_1 = __webpack_require__(180);
-	var services_1 = __webpack_require__(178);
+	var ui_router_core_1 = __webpack_require__(126);
+	var views_1 = __webpack_require__(184);
+	var services_1 = __webpack_require__(182);
 	/**
 	 * `ui-view`: A viewport directive which is filled in by a view from the active state.
 	 *
@@ -47713,12 +47848,12 @@
 	//# sourceMappingURL=viewDirective.js.map
 
 /***/ },
-/* 190 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/** @module ng1 */ /** */
-	var angular_1 = __webpack_require__(179);
+	var angular_1 = __webpack_require__(183);
 	/** @hidden */
 	function $ViewScrollProvider() {
 	    var useAnchorScroll = false;
@@ -47740,7 +47875,7 @@
 	//# sourceMappingURL=viewScroll.js.map
 
 /***/ },
-/* 191 */
+/* 195 */
 /***/ function(module, exports) {
 
 	/**
@@ -47841,7 +47976,7 @@
 	})(window.angular);
 
 /***/ },
-/* 192 */
+/* 196 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47999,17 +48134,17 @@
 	}
 
 /***/ },
-/* 193 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(194);
+	__webpack_require__(198);
 	
 	module.exports = 'duScroll';
 
 
 /***/ },
-/* 194 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/**
@@ -48640,10 +48775,10 @@
 	  };
 	}]);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(195)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(199)(module)))
 
 /***/ },
-/* 195 */
+/* 199 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -48659,7 +48794,7 @@
 
 
 /***/ },
-/* 196 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -54705,7 +54840,7 @@
 							if (global) {
 								_globals[n] = _exports[n] = cl; //provides a way to avoid global namespace pollution. By default, the main classes like TweenLite, Power1, Strong, etc. are added to window unless a GreenSockGlobals is defined. So if you want to have things added to a custom object instead, just do something like window.GreenSockGlobals = {} before loading any GreenSock files. You can even set up an alias like window.GreenSockGlobals = windows.gs = {} so that you can access everything like gs.TweenLite. Also remember that ALL classes are added to the window.com.greensock object (in their respective packages, like com.greensock.easing.Power1, com.greensock.TweenLite, etc.)
 								hasModule = (typeof(module) !== "undefined" && module.exports);
-								if (!hasModule && "function" === "function" && __webpack_require__(197)){ //AMD
+								if (!hasModule && "function" === "function" && __webpack_require__(201)){ //AMD
 									!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() { return cl; }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 								} else if (hasModule){ //node
 									if (ns === moduleName) {
@@ -56522,7 +56657,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 197 */
+/* 201 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -56530,15 +56665,15 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 198 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(199);
+	__webpack_require__(203);
 	module.exports = 'ngAnimate';
 
 
 /***/ },
-/* 199 */
+/* 203 */
 /***/ function(module, exports) {
 
 	/**
@@ -60699,15 +60834,15 @@
 
 
 /***/ },
-/* 200 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(201);
+	__webpack_require__(205);
 	module.exports = 'ngSanitize';
 
 
 /***/ },
-/* 201 */
+/* 205 */
 /***/ function(module, exports) {
 
 	/**
@@ -61469,7 +61604,7 @@
 
 
 /***/ },
-/* 202 */
+/* 206 */
 /***/ function(module, exports) {
 
 	angular.module('angularPayments', []);;angular.module('angularPayments')
