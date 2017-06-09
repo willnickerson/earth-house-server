@@ -110,7 +110,7 @@
 	app.config(function ($windowProvider) {
 	    var $window = $windowProvider.$get();
 	    //TODO: put in drew's key
-	    $window.Stripe.setPublishableKey('pk_test_HS62OmJo7gCzA7fcN2ObL2rF');
+	    $window.Stripe.setPublishableKey('pk_live_gC3j9sfE9qRsYIUJkK8ZfKOY');
 	});
 	
 	app.run(function ($rootScope, $state, $transitions, $anchorScroll) {
